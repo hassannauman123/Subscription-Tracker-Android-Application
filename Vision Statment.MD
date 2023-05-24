@@ -24,4 +24,4 @@ Track-It is primarily designed for consumers who have multiple paid subscription
 
 ## When will Track-It be successful?
 
-The subscription Tracker project will be considered a success if at least 40% of a specific target user (consumers with at least 4 paid subscriptions) who start using the system continue to use the system after 1 year, or we are able to generate $250,000+ from ad revenue per year. 
+Track-It will be considered a success if at least 40% of a specific target user (consumers with at least 4 paid subscriptions) who start using the system continue to use the system after 1 year, or we are able to generate $250,000+ from ad revenue per year. 
