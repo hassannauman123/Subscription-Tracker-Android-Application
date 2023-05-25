@@ -13,7 +13,7 @@ Track-It will provide users the ability to remove subscriptions. It will also al
 
 Track-It will allow the user to be able to see an overview of the costs involved from all of the services they are subscribed to. This feature will help the users get a firm grasp of all their recurring costs and allow them to more efficiently and effectively create and stick to a budget. The ability to visualize all subscriptions will also help users to decide if some services are not being utilized enough to justify the cost. A user will also be reminded when a payment is due, eliminating the risk of incurring late fees.
 
-Track-It will also provide the ability for users to find new services they might be interested in and subscribed to those services. 
+Track-It will also provide the ability for users to find new services they might be interested in and subscribe to those services. 
 
 
 ## Track-It's Value
