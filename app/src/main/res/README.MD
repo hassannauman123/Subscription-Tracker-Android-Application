@@ -1,4 +1,4 @@
-XML layout files with sub-directories like:
+XML layout files here with sub-directories like:
 
 1. layout
 2. drawable
