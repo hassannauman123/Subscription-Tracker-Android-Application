@@ -33,12 +33,12 @@ public class AddSubscriptionActivity extends AppCompatActivity {
 
 
 
-        // ADD SUBSCRIPTION UTTON TARGET
+        // Add subscription button target
         Button button = (Button) findViewById(R.id.submit_sub_button);
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
 
-                clickedAddSubscriptionutton(v);
+                clickedAddSubscriptionutton(v); // Run this function when the user clicks the add subscripton button.
 
                 //setContentView(R.layout.activity_main);
                 //finish();
