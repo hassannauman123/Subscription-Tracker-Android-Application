@@ -14,7 +14,7 @@ import com.track_it.logic.*;
 
 
 // This class handles the presentation of the subscription page for the android app.
-
+//
 
 public class AddSubscriptionActivity extends AppCompatActivity {
 
