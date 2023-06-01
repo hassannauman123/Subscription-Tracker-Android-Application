@@ -1,4 +1,4 @@
-package com.track_it.logic.exception;
+package com.track_it.exception;
 
 public class DataBaseFullException extends RuntimeException
 {

@@ -7,10 +7,9 @@ import android.widget.EditText;
 import android.text.InputFilter;
 import android.text.Spanned;
 import android.widget.RadioButton;
-
 import com.track_it.R;
 import com.track_it.domainObject.SubscriptionObj;
-import com.track_it.logic.*;
+import com.track_it.logic.AddSubscriptionHandler;
 
 
 // This class handles the presentation of the subscription page for the android app.
