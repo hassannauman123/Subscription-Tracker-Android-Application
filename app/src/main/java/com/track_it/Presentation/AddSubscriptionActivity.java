@@ -4,46 +4,144 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import android.text.InputFilter;
 import android.text.Spanned;
-import com.track_it.R;
+import android.widget.RadioButton;
 
+import com.track_it.R;
+import com.track_it.domainObject.SubscriptionObj;
+import com.track_it.logic.*;
 
 
 // This class handles the presentation of the subscription page for the android app.
 
 
-public class AddSubscription extends AppCompatActivity {
+public class AddSubscriptionActivity extends AppCompatActivity {
 
-    private final  int  MAX_PAYMENT_AMOUNT = 5; // The maximum number of digits (before the decimal point) that can be entered by user for payment amount
+    private final  int  MAX_PAYMENT_AMOUNT = SubscriptionObj.MAX_PAYMENT; // The maximum number of digits (before the decimal point) that can be entered by user for payment amount
     private final  int  MAX_PAYMENT_DECIMALS = 2; // The maximum number digits after the decimal for payment amount
 
+    private AddSubscriptionHandler handler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_subscription);
 
+        handler = new AddSubscriptionHandler();
+
+
+
+
+        // ADD SUBSCRIPTION UTTON TARGET
         Button button = (Button) findViewById(R.id.submit_sub_button);
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
 
-                setContentView(R.layout.activity_main);
-                finish();
+                clickedAddSubscriptionutton(v);
+
+                //setContentView(R.layout.activity_main);
+                //finish();
 
             }
         });
 
-
         // This limits the constrains what the user can enter for payment amount
-        EditText etText = findViewById(R.id.payment_amount);
+        EditText etText = findViewById(R.id.input_payment_amount);
         // Pass setFiltlers and array of objects that implement the InputFilter interface
         etText.setFilters(new InputFilter[]{new DecimalDigitsInputFilter(MAX_PAYMENT_DECIMALS,MAX_PAYMENT_AMOUNT)});
     };
 
+
+   private void clickedAddSubscriptionutton( View v)
+    {
+
+        boolean successTry = true;
+
+        // Get the string the user entered for a name
+        EditText textInput;
+        textInput = (EditText)findViewById(R.id.input_subscription_name);
+        String userNameInput = textInput.getText().toString().trim(); // get string, and remove white spaces
+
+
+        // Get the payment amount the user entered, and convert it to Cents.
+        textInput = (EditText)findViewById(R.id.input_payment_amount);
+
+        String[] paymentAmountString =  textInput.getText().toString().split("\\.");
+
+        int paymentInCents = 0;
+        // I thought parseInt threw an exception on invalid data??
+        // Any ways, get Paymeent amount in cents
+        if (paymentAmountString.length > 0)
+        {
+            System.out.println("right here");
+            if (isParsable(paymentAmountString[0])) {
+                paymentInCents = Integer.parseInt(paymentAmountString[0]) * 100;
+
+                if ( paymentAmountString.length > 1 && isParsable(paymentAmountString[1] ) )
+                {
+                    paymentInCents = paymentInCents +  Integer.parseInt(paymentAmountString[1]);
+                }
+                else {
+                    paymentInCents = 0; // Reset back to zero, something was strange with the input
+                }
+            }
+        }
+
+
+
+        //
+        // Get payment Frequency
+        //
+        //
+        String PaymentFrequency = ""; // This will stay blank if radio button selected
+        RadioButton radioWeek,RadioMonth,radioYear;
+        radioWeek = (RadioButton)findViewById(R.id.input_frequency_weekly);
+        RadioMonth= (RadioButton)findViewById(R.id.input_frequency_monthly);
+        radioYear= (RadioButton)findViewById(R.id.input_frequency_yearly);
+
+        if ( radioWeek.isChecked())
+        {
+            PaymentFrequency = SubscriptionObj.WEEKLY;
+        }
+        else if ( RadioMonth.isChecked())
+        {
+            PaymentFrequency = SubscriptionObj.MONTHLY;
+        }
+
+        else  if ( radioYear.isChecked())
+        {
+            PaymentFrequency = SubscriptionObj.YEARLY;
+        }
+
+
+        // Create a new Subscription object (it's fine if the data is not valid, because we are going to pass it
+        // to the logic layer to check it)
+        SubscriptionObj newSubscription = new  SubscriptionObj(userNameInput, paymentInCents, PaymentFrequency);
+
+
+        handler.addSubscription(newSubscription); // The handler could somehow send back messages if anything went wrong, so our UI can tell the user what needs to be changed.
+
+
+
+
+    }
+
+
+
+    private static boolean isParsable(String input) {
+        try {
+            Integer.parseInt(input);
+            return true;
+        } catch (final NumberFormatException e) {
+            return false;
+        }
+    }
+
 }
+
+
+
 
 
 //Limits the user input for a decimal input to a format such that there will be a max of digitBeforeDecimal before decimal and a max of decimalDigits
@@ -59,7 +157,7 @@ class DecimalDigitsInputFilter implements InputFilter {
 
 
 
-    // Makes it such that the string will be in the format such that will at most be digitBeforeDecimal before the decimal, and decimalDigits after the decimal
+    // Makes it such that the string will be in the format such that there will at most be digitBeforeDecimal before the decimal, and decimalDigits after the decimal
     @Override
     public CharSequence filter(CharSequence source, int start, int end,  Spanned dest, int dstart, int dend) {
 
@@ -113,7 +211,7 @@ class DecimalDigitsInputFilter implements InputFilter {
             }
         }
 
-        return returnValue; // Will be null if source accepted, "" if source accepted!
+        return returnValue; // Will be null if source accepted, and "" if source accepted!
     }
 
 }
