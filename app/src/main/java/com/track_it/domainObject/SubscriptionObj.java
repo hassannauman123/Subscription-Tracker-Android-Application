@@ -1,15 +1,15 @@
 package com.track_it.domainObject;
 
+import java.util.jar.Attributes;
+
 public class SubscriptionObj
 {
     //Payment Frequency - Static variables to target
-
     public static final String WEEKLY = "weekly";
     public static final String MONTHLY = "monthly";
     public static final String YEARLY = "yearly";
 
-    public static final int MAX_NAME_LENGTH = 100;
-    public static final int MAX_PAYMENT = 5;
+
 
 
 
@@ -35,6 +35,32 @@ public class SubscriptionObj
         uniqueId = inputID;
 
     }
+
+    public SubscriptionObj copy()
+    {
+        SubscriptionObj copyOfSubscription = new SubscriptionObj(this.name, this.paymentInCents, this.paymentFrequency);
+
+
+        return copyOfSubscription;
+    }
+
+    public String getName()
+    {
+        return name;
+
+    }
+
+    public String getPaymentFrequency()
+    {
+        return paymentFrequency;
+
+    }
+
+    public int getPaymentInCents()
+    {
+        return paymentInCents;
+    }
+
 
 
 
