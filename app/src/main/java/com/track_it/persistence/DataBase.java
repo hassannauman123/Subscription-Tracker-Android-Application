@@ -1,10 +1,12 @@
 package com.track_it.persistence;
 import com.track_it.domainObject.*;
 import com.track_it.exception.*;  // Add this back later, android is acting really strange right now
+import com.track_it.logic.AddSubscriptionHandler;
+import com.track_it.logic.SubscriptionHandler;
 
 import java.util.ArrayList;
 
-
+;
 
 
 public class DataBase {
@@ -35,11 +37,43 @@ public class DataBase {
             throw new DataBaseFullException("You literally added " +  Integer.MAX_VALUE  + " number of subscriptions, and now the database is full");
         }
 
+
         inputSubscription.setID(dataBaseCount); // The database layer will ultimately determine the unique id, as it will be used as primary index for the sql tables
         subscriptionDB.add(inputSubscription);
         dataBaseCount++;
     }
 
+
+    // A temporary fake Data filler.
+    public static void fillFakeData()
+    {
+
+        String FrequencyList[] = SubscriptionObj.getFrequencyList();
+        int numFrequency = SubscriptionObj.getNumFrequencies();
+        AddSubscriptionHandler subHandler = new AddSubscriptionHandler();
+
+        for (int i =0 ; i < 10; i++)
+        {
+
+
+            try {
+                String inputName = "Rand name" + i;
+                String frequency = FrequencyList[i % numFrequency];
+                int payment = (int) (Math.random() * 10000 + 1);
+                SubscriptionObj currSub = new SubscriptionObj(inputName, payment,frequency);
+                subHandler.addSubscription(currSub);
+
+            }
+            catch (Exception e)
+            {
+                System.out.println("ERROR WITH MAKING FAKE DATA!!: " +   e);
+                assert(true); // Just make the app crash for now
+            }
+
+        }
+
+
+    }
 
     public ArrayList<SubscriptionObj> getAllSubscriptions()
     {
@@ -50,7 +84,6 @@ public class DataBase {
         for ( int i =0 ; i < subscriptionDB.size(); i++)
         {
             SubscriptionObj copyOfSubscription = subscriptionDB.get(i).copy();
-
             returnListOfSubscriptions.add(copyOfSubscription);
 
         }

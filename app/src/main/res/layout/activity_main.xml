@@ -4,13 +4,16 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_page"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Presentation.MainActivity">
 
+
     <include
         android:id="@+id/toolbar"
         layout="@layout/toolbar" />
+
 
     <Button
         android:id="@+id/button_subscription"
@@ -23,5 +26,33 @@
         android:text="Add Subscriptions"
         app:layout_constraintEnd_toEndOf="parent"
         tools:layout_editor_absoluteY="38dp" />
+
+    <ScrollView
+        android:id="@+id/none"
+        android:layout_width="339dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="23dp"
+        android:layout_marginTop="192dp"
+        android:layout_marginBottom="149dp">
+
+        <LinearLayout
+            android:id="@+id/subscription_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+
+            <include
+                android:id="@+id/toolbar33"
+                layout="@layout/subscription_box" />
+
+
+        </LinearLayout>
+    </ScrollView>
+
 
 </RelativeLayout>

@@ -13,7 +13,7 @@ public class AddSubscriptionHandler extends SubscriptionHandler {
 
         validateName(subscriptionToAdd.getName());
         validateFrequency(subscriptionToAdd.getPaymentFrequency());
-        validatePaymentAmount(subscriptionToAdd.getPaymentInCents());
+        validatePaymentAmount(subscriptionToAdd.getTotalPaymentInCents());
 
         DataBase dataBaseHandler = new DataBase();
 

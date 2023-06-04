@@ -38,6 +38,7 @@ public class AddSubscriptionActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_subscription);
 
+
         handler = new AddSubscriptionHandler();
 
 
@@ -46,11 +47,7 @@ public class AddSubscriptionActivity extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
 
-
                 clickedAddSubscriptionuttoButton(v); // Run this function when the user clicks the add subscription button.
-
-                //setContentView(R.layout.activity_main);
-                //finish();
 
             }
         });
@@ -61,12 +58,11 @@ public class AddSubscriptionActivity extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
 
-                setContentView(R.layout.activity_main);
+                setContentView(R.layout.activity_main); // Switch screen to display main page
                 finish();
 
             }
         });
-
 
 
 

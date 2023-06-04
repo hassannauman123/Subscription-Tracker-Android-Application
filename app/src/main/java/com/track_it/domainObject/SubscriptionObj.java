@@ -8,8 +8,9 @@ public class SubscriptionObj
     public static final String WEEKLY = "weekly";
     public static final String MONTHLY = "monthly";
     public static final String YEARLY = "yearly";
+    private static String[] ALLOWABLE_FREQUENCIES = {WEEKLY,MONTHLY,YEARLY};
 
-
+    private static int NUM_FREQUENCIES = 3;
 
 
 
@@ -23,6 +24,7 @@ public class SubscriptionObj
         this.name = inputName;
         this.paymentInCents = inputPayments;
         this.paymentFrequency = inputPaymentFrequency;
+        System.out.println("Payment is " + inputPayments);
     }
 
     public int getID()
@@ -35,6 +37,26 @@ public class SubscriptionObj
         uniqueId = inputID;
 
     }
+
+    public static int getNumFrequencies()
+    {
+        return NUM_FREQUENCIES;
+    }
+
+    public static String[] getFrequencyList()
+    {
+        String returnArray[] = new String[NUM_FREQUENCIES];
+
+        for (int i=0 ; i < returnArray.length; i++)
+        {
+            returnArray[i] = ALLOWABLE_FREQUENCIES[i];
+        }
+
+        return returnArray;
+    }
+
+
+
 
     public SubscriptionObj copy()
     {
@@ -53,12 +75,20 @@ public class SubscriptionObj
     public String getPaymentFrequency()
     {
         return paymentFrequency;
-
     }
 
-    public int getPaymentInCents()
+    public int getTotalPaymentInCents()
     {
         return paymentInCents;
+    }
+    public int getPaymentDollars()
+    {
+        return paymentInCents / 100;
+    }
+
+    public int getPaymentCents()
+    {
+        return   paymentInCents -  ( paymentInCents / 100) *100 ;
     }
 
 
