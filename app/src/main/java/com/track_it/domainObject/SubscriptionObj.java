@@ -4,15 +4,6 @@ import java.util.jar.Attributes;
 
 public class SubscriptionObj
 {
-    //Payment Frequency - Static variables to target
-    public static final String WEEKLY = "weekly";
-    public static final String MONTHLY = "monthly";
-    public static final String YEARLY = "yearly";
-    private static String[] ALLOWABLE_FREQUENCIES = {WEEKLY,MONTHLY,YEARLY};
-
-    private static int NUM_FREQUENCIES = 3;
-
-
 
     private int subscriptionID;
     private String name;
@@ -38,22 +29,6 @@ public class SubscriptionObj
 
     }
 
-    public static int getNumFrequencies()
-    {
-        return NUM_FREQUENCIES;
-    }
-
-    public static String[] getFrequencyList()
-    {
-        String returnArray[] = new String[NUM_FREQUENCIES];
-
-        for (int i=0 ; i < returnArray.length; i++)
-        {
-            returnArray[i] = ALLOWABLE_FREQUENCIES[i];
-        }
-
-        return returnArray;
-    }
 
 
 
@@ -105,8 +80,6 @@ public class SubscriptionObj
     {
         this.paymentInCents = inputPayment;
     }
-
-
 
 
 }

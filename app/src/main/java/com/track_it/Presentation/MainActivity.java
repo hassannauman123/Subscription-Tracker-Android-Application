@@ -10,6 +10,7 @@ import android.widget.Button;
 
 import com.track_it.R;
 import com.track_it.domainObject.SubscriptionObj;
+import com.track_it.logic.SubscriptionHandler;
 import com.track_it.persistence.DataBase;
 
 import android.content.Intent;
@@ -66,13 +67,13 @@ public class MainActivity extends AppCompatActivity {
 
     private void displayAllSubscriptions() {
 
-        DataBase DBHelper = new DataBase();
+        SubscriptionHandler subHandler = new SubscriptionHandler();
 
         // Clear everything previously in list
         LinearLayout sv = (LinearLayout) this.findViewById(R.id.subscription_list);
         sv.removeAllViews();
 
-        ArrayList<SubscriptionObj> listOfSubs = DBHelper.getAllSubscriptions();
+        ArrayList<SubscriptionObj> listOfSubs = subHandler.getAllSubscriptions();
 
         for ( int i =0 ; i <listOfSubs.size(); i++ )
         {

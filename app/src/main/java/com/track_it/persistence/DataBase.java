@@ -1,42 +1,45 @@
 package com.track_it.persistence;
 import com.track_it.domainObject.*;
-import com.track_it.exception.*;  // Add this back later, android is acting really strange right now
-import com.track_it.logic.AddSubscriptionHandler;
+import com.track_it.exception.*;
 import com.track_it.logic.SubscriptionHandler;
-
 import java.util.ArrayList;
 
-;
+// DataBase handler
+//
+// Currently our data base consists of a single ArrayList of database object
+
 
 
 public class DataBase {
 
 
     // A temporary static Arraylist to hold subscriptions. Used only for early iterations of project
-    private static ArrayList<SubscriptionObj> subscriptionDB  = new ArrayList<SubscriptionObj>(); // Create an ArrayList object
+    private static ArrayList<SubscriptionObj> subscriptionDB  = new ArrayList<SubscriptionObj>(); // Create an ArrayList object (our current database
 
 
-    // Used to generate uniqueID's
-    private static int dataBaseCount = 0;
+    // This is currently used to generate uniqueID's (will change once we have sql database)
+    private static int dataBaseCount = 0; // Do NOT EVER REDUCE THIS VALUE (even when deleting, as it might no longer be a unique number
 
 
+    // This is used to generate a unique number internally.
     // When we actually have a database, the uniqueID will be the index into the SQL table
     private int getUniqueId()
     {
-         return dataBaseCount;
+         return dataBaseCount; // simple method for now
     }
 
-    // Add a subscription to the data base.
+
+    // Add a subscription to the dataBase.
     // When we actually have a database this method will take a part the inputSubscription object, and use it to create insert statements for
     // the sql dataBase.
-    // Method will (eventually)  throw exceptions if something goes wrong with inserting into database.
+    // Method will throw exceptions if something goes wrong with inserting into database.
     public void addSubscriptionDataBase( SubscriptionObj inputSubscription)
     {
         if ( dataBaseCount >= Integer.MAX_VALUE) // A preview of what an exception might look like
         {
+            // If you are really dedicated, you can insert MAX_VALUE subscriptions into the database, and see if this error throws correctly
             throw new DataBaseFullException("You literally added " +  Integer.MAX_VALUE  + " number of subscriptions, and now the database is full");
         }
-
 
         inputSubscription.setID(dataBaseCount); // The database layer will ultimately determine the unique id, as it will be used as primary index for the sql tables
         subscriptionDB.add(inputSubscription);
@@ -48,16 +51,16 @@ public class DataBase {
     public static void fillFakeData()
     {
 
-        String FrequencyList[] = SubscriptionObj.getFrequencyList();
-        int numFrequency = SubscriptionObj.getNumFrequencies();
-        AddSubscriptionHandler subHandler = new AddSubscriptionHandler();
+        String FrequencyList[] = SubscriptionHandler.getFrequencyList();
+        int numFrequency = SubscriptionHandler.getNumFrequencies();
+        SubscriptionHandler subHandler = new SubscriptionHandler();
 
         for (int i =0 ; i < 10; i++)
         {
 
 
             try {
-                String inputName = "Rand name" + i;
+                String inputName = "Rand name " + i;
                 String frequency = FrequencyList[i % numFrequency];
                 int payment = (int) (Math.random() * 10000 + 1);
                 SubscriptionObj currSub = new SubscriptionObj(inputName, payment,frequency);
@@ -73,7 +76,8 @@ public class DataBase {
 
     }
 
-    public ArrayList<SubscriptionObj> getAllSubscriptions()
+    // Gets all the subscriptions in the database
+    public ArrayList<SubscriptionObj> queryGetAllSubs()
     {
 
         ArrayList<SubscriptionObj> returnListOfSubscriptions = new ArrayList<SubscriptionObj>();
@@ -86,13 +90,13 @@ public class DataBase {
 
         }
 
-
         return returnListOfSubscriptions;
 
     }
 
 
     // This will look a lot different once we have a real database
+    // For now simply edits a subscription
     public void editSubscriptionByID (int subscriptionID, SubscriptionObj newDetails) throws DataBaseException
     {
         boolean found = false;
@@ -126,7 +130,7 @@ public class DataBase {
 
 
 
-    // Get a subscription from the dataBase given the subscriptionID
+    // Gets and returns a subscription from the dataBase given the subscriptionID
     public SubscriptionObj getSubscriptionByID(int subscriptionID) throws DataBaseException
     {
 
@@ -152,8 +156,7 @@ public class DataBase {
 
 
 
-
-
+    // Tries to remove a subscription with the id of subcriptionID from the database- will throw exception if it can't be deleted
     // I image that eventually we will have a sql server, and the subscription primary key for the sql table will be the subcriptionID
     // Do Not reduce Count!
     public void  removeSubscriptionByID( int subcriptionID)

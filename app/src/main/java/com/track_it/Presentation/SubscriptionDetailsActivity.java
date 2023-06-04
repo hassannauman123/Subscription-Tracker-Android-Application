@@ -2,8 +2,6 @@ package com.track_it.Presentation;
 
 import static android.app.PendingIntent.getActivity;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.graphics.Color;
@@ -16,10 +14,8 @@ import android.widget.TextView;
 
 import com.track_it.R;
 import com.track_it.domainObject.SubscriptionObj;
-import com.track_it.exception.DataBaseException;
 import com.track_it.exception.SubscriptionException;
 import com.track_it.logic.SubscriptionEditAndRemoveHandler;
-import com.track_it.logic.SubscriptionGetHandler;
 import com.track_it.logic.SubscriptionHandler;
 
 public class SubscriptionDetailsActivity extends SubscriptionInput {
@@ -66,7 +62,7 @@ public class SubscriptionDetailsActivity extends SubscriptionInput {
         generalErrorTarget = ((TextView) findViewById(R.id.details_general_error));
          editButton = (Button) findViewById(R.id.details_edit_subscription);
 
-         SubscriptionGetHandler subGetHandler = new SubscriptionGetHandler();
+         SubscriptionHandler subGetHandler = new SubscriptionHandler();
 
         setFocus(false); // Disable editing sub details
 
