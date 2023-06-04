@@ -11,12 +11,9 @@ public class AddSubscriptionHandler extends SubscriptionHandler {
 
     {
 
-        validateName(subscriptionToAdd.getName());
-        validateFrequency(subscriptionToAdd.getPaymentFrequency());
-        validatePaymentAmount(subscriptionToAdd.getTotalPaymentInCents());
+        validateWholeSubscription(subscriptionToAdd);
 
         DataBase dataBaseHandler = new DataBase();
-
         dataBaseHandler.addSubscriptionDataBase(subscriptionToAdd); // Added to dataBase!!
 
     }

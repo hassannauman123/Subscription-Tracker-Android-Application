@@ -14,7 +14,7 @@ public class SubscriptionObj
 
 
 
-    private int uniqueId;
+    private int subscriptionID;
     private String name;
     private int paymentInCents;
     private String paymentFrequency; // If we limit ourselves to this only being a string then we will forever limit the input of the user (At least not without a lot of rework. I am not sure if that is a good idea or not
@@ -29,12 +29,12 @@ public class SubscriptionObj
 
     public int getID()
     {
-        return uniqueId;
+        return subscriptionID;
     }
 
     public void setID(int inputID)
     {
-        uniqueId = inputID;
+        subscriptionID = inputID;
 
     }
 
@@ -61,7 +61,7 @@ public class SubscriptionObj
     public SubscriptionObj copy()
     {
         SubscriptionObj copyOfSubscription = new SubscriptionObj(this.name, this.paymentInCents, this.paymentFrequency);
-
+        copyOfSubscription.setID(this.getID());
 
         return copyOfSubscription;
     }
@@ -72,9 +72,19 @@ public class SubscriptionObj
 
     }
 
+    public void  setName(String inputName)
+    {
+         this.name = inputName;
+
+    }
+
     public String getPaymentFrequency()
     {
         return paymentFrequency;
+    }
+    public void  setPaymentFrequency(String inputFrequency)
+    {
+        this.paymentFrequency =  inputFrequency;
     }
 
     public int getTotalPaymentInCents()
@@ -89,6 +99,11 @@ public class SubscriptionObj
     public int getPaymentCents()
     {
         return   paymentInCents -  ( paymentInCents / 100) *100 ;
+    }
+
+    public void setPayment(int inputPayment)
+    {
+        this.paymentInCents = inputPayment;
     }
 
 

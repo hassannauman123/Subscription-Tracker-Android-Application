@@ -69,9 +69,7 @@ public class DataBase {
                 System.out.println("ERROR WITH MAKING FAKE DATA!!: " +   e);
                 assert(true); // Just make the app crash for now
             }
-
         }
-
 
     }
 
@@ -94,10 +92,42 @@ public class DataBase {
     }
 
 
+    // This will look a lot different once we have a real database
+    public void editSubscriptionByID (int subscriptionID, SubscriptionObj newDetails) throws DataBaseException
+    {
+        boolean found = false;
+        SubscriptionObj subscriptonToUpdate = null;
+
+
+
+        for (int i =0 ; i < subscriptionDB.size(); i++ )
+        {
+           if (  subscriptionDB.get(i).getID()  == subscriptionID)
+           {
+                subscriptonToUpdate = subscriptionDB.get(i);
+                 found = true;
+                break;
+           }
+        }
+
+        if ( found && subscriptonToUpdate != null)
+        {
+
+            subscriptonToUpdate.setName(newDetails.getName());
+            subscriptonToUpdate.setPayment(newDetails.getTotalPaymentInCents());
+            subscriptonToUpdate.setPaymentFrequency(newDetails.getPaymentFrequency());
+        }
+        else
+        {
+            throw new DataBaseSubNotFoundException("Subscription not found in dataBase!");
+        }
+    }
+
+
 
 
     // Get a subscription from the dataBase given the subscriptionID
-    public SubscriptionObj getSubscription (int subscriptionID)
+    public SubscriptionObj getSubscriptionByID(int subscriptionID) throws DataBaseException
     {
 
         SubscriptionObj returnSubscription = null;
@@ -124,8 +154,9 @@ public class DataBase {
 
 
 
-    // I image that eventually we will have a sql server, and the subscription primary key will be the uniqueID
-    public boolean removeSubscription( int subcriptionID)
+    // I image that eventually we will have a sql server, and the subscription primary key for the sql table will be the subcriptionID
+    // Do Not reduce Count!
+    public void  removeSubscriptionByID( int subcriptionID)
     {
         boolean removed = false;
 
@@ -138,7 +169,10 @@ public class DataBase {
             }
         }
 
-        return removed;
+        if ( removed == false)
+        {
+            throw new DataBaseSubNotFoundException("Cannot delete subscription,\n subscription not found in Database!");
+        }
     }
 
 

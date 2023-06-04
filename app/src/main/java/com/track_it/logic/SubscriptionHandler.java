@@ -5,6 +5,7 @@ import com.track_it.exception.SubscriptionInvalidNameException;
 import com.track_it.exception.SubscriptionInvalidPaymentException;
 import com.track_it.domainObject.SubscriptionObj;
 import com.track_it.exception.*;
+import com.track_it.persistence.DataBase;
 
 public class SubscriptionHandler {
 
@@ -22,6 +23,13 @@ public class SubscriptionHandler {
     private static final String allowableCharactersInName = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890 _+*^&%$#@!+=\\|}]'?/<>'"; // Our current list of allowable characters in the name
 
 
+
+
+    public SubscriptionHandler()
+    {
+     }
+
+
     public void validatePaymentAmount(int paymentAmount) throws SubscriptionInvalidPaymentException {
         if (paymentAmount <= 0) {
             throw new SubscriptionInvalidPaymentException("Payment amount is too small");
@@ -32,6 +40,7 @@ public class SubscriptionHandler {
 
         }
     }
+
 
 
     public static int getMaxPaymentDigitsBeforeDecimal() {
@@ -67,6 +76,14 @@ public class SubscriptionHandler {
         }
 
         return returnAllowableFrequencies;
+    }
+
+
+    public void validateWholeSubscription(SubscriptionObj subscriptionToValidate)
+    {
+        validateName(subscriptionToValidate.getName());
+        validateFrequency(subscriptionToValidate.getPaymentFrequency());
+        validatePaymentAmount(subscriptionToValidate.getTotalPaymentInCents());
     }
 
     public void validateName(String inputName) throws SubscriptionInvalidNameException {

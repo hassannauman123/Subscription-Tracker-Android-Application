@@ -1,7 +1,6 @@
 package com.track_it.Presentation;
 
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
@@ -22,16 +21,20 @@ import com.track_it.exception.*;
 import java.util.concurrent.Flow;
 
 
+
+
 // This class handles the presentation of the subscription page for the android app.
-//
-//
+
 
 public class AddSubscriptionActivity extends AppCompatActivity {
 
+    private String accomplishColor = "#8c1f7c";
+
     private final int MAX_DIGITAL_BEFORE_DECIMAL = SubscriptionHandler.getMaxPaymentDigitsBeforeDecimal(); // The maximum number of digits (before the decimal point) that can be entered by user for payment amount
     private final int MAX_PAYMENT_DECIMALS = 2; // The maximum number digits after the decimal for payment amount
+    private AddSubscriptionHandler handler; // Will hold the AddSubscriptionHandler
 
-    private AddSubscriptionHandler handler;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,10 +81,18 @@ public class AddSubscriptionActivity extends AppCompatActivity {
     private void clickedAddSubscriptionuttoButton(View view) {
 
          successTry = true;
-
+        SubscriptionInput subInput = new SubscriptionInput();
 
         String userNameInput = getNameInput( view);
-        int paymentInCents = getPaymentAmount(view);
+
+        int paymentInCents = subInput.getPaymentAmountInput( (EditText) findViewById(R.id.input_payment_amount) ,((TextView) findViewById(R.id.input_payment_amount_error)));
+        if (paymentInCents == Integer.MIN_VALUE)
+        {
+            successTry = false;
+        }
+
+
+
         String PaymentFrequency = getPaymentFrequency(view);
 
 
@@ -95,9 +106,9 @@ public class AddSubscriptionActivity extends AppCompatActivity {
             try { // Try to add subscription to dataBase
 
                 handler.addSubscription(newSubscription);
-                ((TextView) findViewById(R.id.subscription_error)).setVisibility(view.VISIBLE);
+                ((TextView) findViewById(R.id.subscription_error)).setVisibility(View.VISIBLE);
                 ((TextView) findViewById(R.id.subscription_error)).setText("Subscription successfully Added!");
-               ((TextView) findViewById(R.id.subscription_error)).setTextColor(Color.parseColor("#00FF00"));
+               ((TextView) findViewById(R.id.subscription_error)).setTextColor(Color.parseColor(accomplishColor));
 
                disableAddSubscriptionsButtons();
 
@@ -113,61 +124,11 @@ public class AddSubscriptionActivity extends AppCompatActivity {
 
     }
 
-    private int getPaymentAmount(View view)
-    {
-
-        EditText textInput = (EditText) findViewById(R.id.input_payment_amount);
-        String[] paymentAmountString = textInput.getText().toString().split("\\.");
-        int paymentInCents = Integer.MIN_VALUE;
-        // I thought parseInt threw an exception on invalid data??
-        // Anyways, get Payment amount in cents
-
-
-        if (paymentAmountString.length > 0) {
-
-            if (isParsable(paymentAmountString[0])) {
-                paymentInCents = Integer.parseInt(paymentAmountString[0]) * 100;
-            }
-
-            if (paymentAmountString.length > 1) {
-
-                if (isParsable(paymentAmountString[1])) {
-
-                    if (paymentInCents == Integer.MIN_VALUE)
-                    {
-                        paymentInCents = 0;
-                    }
-
-                    paymentInCents = paymentInCents + Integer.parseInt(paymentAmountString[1]);
-                }
-            }
-        }
-
-        if (paymentInCents == Integer.MIN_VALUE) {
-            ((TextView) findViewById(R.id.input_payment_amount_error)).setText("Invalid input for Payment amount");
-            ((TextView) findViewById(R.id.input_payment_amount_error)).setVisibility(view.VISIBLE);
-            successTry = false;
-
-        } else {
-            try {
-                handler.validatePaymentAmount(paymentInCents);
-                ((TextView) findViewById(R.id.input_payment_amount_error)).setVisibility(view.INVISIBLE);
 
 
 
-            } catch (SubscriptionException e) {
-                ((TextView) findViewById(R.id.input_payment_amount_error)).setText(e.getMessage());
-                ((TextView) findViewById(R.id.input_payment_amount_error)).setVisibility(view.VISIBLE);
-                successTry = false;
-            }
-
-        }
-
-        return paymentInCents;
-
-    }
-
-    private String getNameInput(View view)
+    // Get the name input from the user
+    private String getNameInput(View view) throws SubscriptionException
     {
         // Get the string the user entered for a name
         EditText textInput;
@@ -177,13 +138,13 @@ public class AddSubscriptionActivity extends AppCompatActivity {
         try {
             handler.validateName(userNameInput);
             ((TextView) findViewById(R.id.input_subscription_name_error)).setText("");
-            ((TextView) findViewById(R.id.input_subscription_name_error)).setVisibility(view.INVISIBLE);
+            ((TextView) findViewById(R.id.input_subscription_name_error)).setVisibility(View.INVISIBLE);
 
 
         } catch (SubscriptionException e) {
             successTry = false;
             ((TextView) findViewById(R.id.input_subscription_name_error)).setText(e.getMessage());
-            ((TextView) findViewById(R.id.input_subscription_name_error)).setVisibility(view.VISIBLE);
+            ((TextView) findViewById(R.id.input_subscription_name_error)).setVisibility(View.VISIBLE);
         }
 
         return userNameInput;
@@ -271,6 +232,7 @@ public class AddSubscriptionActivity extends AppCompatActivity {
 
 
 //Limits the user input for a decimal input to a format such that there will be a max of digitBeforeDecimal before decimal and a max of decimalDigits
+// !* reminder this is not complete, still allows decimals to go in wrong places sometimes.
 class DecimalDigitsInputFilter implements InputFilter {
 
     private final int decimalDigits; // Maximum number of integer after decimal

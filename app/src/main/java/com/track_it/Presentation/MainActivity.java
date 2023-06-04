@@ -87,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
 
             // Set Name of subscription
             TextView targetName =  subscriptionBox.findViewById(R.id.subscription_name);
-            targetName.setText("Name is : " + curr.getName());
+            targetName.setText("Name is : " + curr.getName() );
 
 
             // Set Frequency
@@ -101,9 +101,9 @@ public class MainActivity extends AppCompatActivity {
             targetPaymentAmount.setText("Payment Amount: $" + curr.getPaymentDollars() + "." +  curr.getPaymentCents() );
 
 
-
-            //Set ID
-            subscriptionBox.setId(i);
+            //Set ID - Just as a reminder, these might not be unique ID's on this page, as other elements by have these ID numbers
+            // but for how we are using them right now it's fine
+            subscriptionBox.setId(curr.getID());
 
 
             subscriptionBox.setOnLongClickListener(
@@ -111,12 +111,22 @@ public class MainActivity extends AppCompatActivity {
                 {
                     public boolean onLongClick(View v)
                     {
-                       //Intent newIntenter =
+                        Intent subDetailsIntent = new Intent(MainActivity.this, SubscriptionDetailsActivity.class);
+                        subDetailsIntent.putExtra("subscriptionID", v.getId() );
+                        startActivity(subDetailsIntent);
 
                         return true;
                     }
                 }
             );
+
+            subscriptionBox.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    Intent subDetailsIntent = new Intent(MainActivity.this, SubscriptionDetailsActivity.class);
+                    subDetailsIntent.putExtra("subscriptionID", v.getId() );
+                    startActivity(subDetailsIntent);
+                }
+            });
 
 
             sv.addView(subscriptionBox);
