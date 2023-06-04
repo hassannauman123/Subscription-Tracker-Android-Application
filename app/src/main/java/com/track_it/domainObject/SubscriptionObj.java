@@ -15,7 +15,6 @@ public class SubscriptionObj
         this.name = inputName;
         this.paymentInCents = inputPayments;
         this.paymentFrequency = inputPaymentFrequency;
-        System.out.println("Payment is " + inputPayments);
     }
 
     public int getID()

@@ -7,23 +7,25 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
-
 import com.track_it.R;
 import com.track_it.domainObject.SubscriptionObj;
 import com.track_it.logic.SubscriptionHandler;
 import com.track_it.persistence.DataBase;
-
 import android.content.Intent;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
-
 import androidx.appcompat.widget.Toolbar;
-
 import java.util.ArrayList;
 import java.util.List;
+
+
+//This is the presentation logic for the main Page
+//
+//  Currently is displays all subscriptions, and has a button to add a new sub.
+// Clicking on any sub should open a new page that allows you to edit or delete sub
 
 
 public class MainActivity extends AppCompatActivity {
@@ -36,7 +38,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main); // Switch screen to display main pag
         displayAllSubscriptions();
-
 
 
         //Button sections
@@ -102,11 +103,12 @@ public class MainActivity extends AppCompatActivity {
             targetPaymentAmount.setText("Payment Amount: $" + curr.getPaymentDollars() + "." +  curr.getPaymentCents() );
 
 
-            //Set ID - Just as a reminder, these might not be unique ID's on this page, as other elements by have these ID numbers
-            // but for how we are using them right now it's fine
+            //Set ID - Just as a reminder, these might not be unique ID's on this page, as other elements may have these ID numbers
+            // but for how we are using them right now it's fine.
             subscriptionBox.setId(curr.getID());
 
 
+            //Set what happens when user does long click on sub
             subscriptionBox.setOnLongClickListener(
                 new View.OnLongClickListener()
                 {
@@ -121,6 +123,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             );
 
+            //Set what happens when user does short click on sub
             subscriptionBox.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     Intent subDetailsIntent = new Intent(MainActivity.this, SubscriptionDetailsActivity.class);
