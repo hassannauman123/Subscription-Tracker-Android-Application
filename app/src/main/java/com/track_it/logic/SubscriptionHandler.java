@@ -200,13 +200,15 @@ public class SubscriptionHandler {
         return digitsBeforeDecimalCount;
     }
 
+
+    //returns the maximum amount a payment can be in cents
     public static int getMaxPaymentCentsTotal()
     {
         return MAX_PAYMENT_CENTS_TOTAL;
     }
 
 
-    //Min length of name
+    //Returns Min length a subscription name has to be
     public static int getMinNameLength() {
         return MIN_NAME_LENGTH;
     }
@@ -214,7 +216,7 @@ public class SubscriptionHandler {
 
 
 
-    // Max length of name
+    // Max length of subscription name
     public static int getMaxNameLength() {
         return MAX_NAME_LENGTH;
     }
