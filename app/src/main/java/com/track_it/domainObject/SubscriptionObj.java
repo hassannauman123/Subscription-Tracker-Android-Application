@@ -31,7 +31,6 @@ public class SubscriptionObj
 
 
 
-
     public SubscriptionObj copy()
     {
         SubscriptionObj copyOfSubscription = new SubscriptionObj(this.name, this.paymentInCents, this.paymentFrequency);

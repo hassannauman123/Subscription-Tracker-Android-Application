@@ -200,11 +200,19 @@ public class SubscriptionHandler {
         return digitsBeforeDecimalCount;
     }
 
+    public static int getMaxPaymentCentsTotal()
+    {
+        return MAX_PAYMENT_CENTS_TOTAL;
+    }
+
 
     //Min length of name
     public static int getMinNameLength() {
         return MIN_NAME_LENGTH;
     }
+
+
+
 
     // Max length of name
     public static int getMaxNameLength() {

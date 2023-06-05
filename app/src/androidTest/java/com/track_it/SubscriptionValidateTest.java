@@ -185,6 +185,83 @@ public class SubscriptionValidateTest {
     public void testValidatePaymentFrequencyWithInValidData() {
 
 
+        boolean thrown = false;
+        String inputFrequency = "";
+        SubscriptionHandler subHandler = new SubscriptionHandler();
+
+
+        // Invalid data with empty string
+        thrown = false;
+        inputFrequency = "";
+
+        try {
+            subHandler.validateFrequency(inputFrequency);
+        } catch (Exception e) {
+            thrown = true;
+        }
+        assertTrue(thrown);
+
+        // Invalid data with blank space
+        thrown = false;
+        inputFrequency = "  ";
+
+        try {
+            subHandler.validateFrequency(inputFrequency);
+        } catch (Exception e) {
+            thrown = true;
+        }
+        assertTrue(thrown);
+
+        // Invalid data with strange looking input
+        thrown = false;
+        inputFrequency = " one two";
+
+        try {
+            subHandler.validateFrequency(inputFrequency);
+        } catch (Exception e) {
+            thrown = true;
+        }
+        assertTrue(thrown);
+
+
+        // Invalid data with correct frequency + char
+        thrown = false;
+        inputFrequency = subHandler.getFrequencyList()[0] + "1";
+
+        try {
+            subHandler.validateFrequency(inputFrequency);
+        } catch (Exception e) {
+            thrown = true;
+        }
+        assertTrue(thrown);
+
+
+
+
+        // Invalid data with correct frequency + blank character
+        thrown = false;
+        inputFrequency = subHandler.getFrequencyList()[1] + " ";
+
+        try {
+            subHandler.validateFrequency(inputFrequency);
+        } catch (Exception e) {
+            thrown = true;
+        }
+        assertTrue(thrown);
+
+
+        // Invalid data with correct frequency + blank character
+        thrown = false;
+        inputFrequency = " " + subHandler.getFrequencyList()[1];
+
+        try {
+            subHandler.validateFrequency(inputFrequency);
+        } catch (Exception e) {
+            thrown = true;
+        }
+        assertTrue(thrown);
+
+
         System.out.println("Finished testing validatePaymentFrequency with invalid Data!");
 
 
@@ -193,7 +270,36 @@ public class SubscriptionValidateTest {
 
     // Test Validate payment frequency with invalid Data
     @Test
-    public void  testValidatePaymentFrequencyWithValidData() {
+    public void testValidatePaymentFrequencyWithValidData() {
+
+        boolean thrown = false;
+        String inputFrequency = "";
+        SubscriptionHandler subHandler = new SubscriptionHandler();
+
+
+        // Invalid data with correct frequency + char
+        thrown = false;
+        String allowableFrequency[] = subHandler.getFrequencyList();
+
+        for (int i = 0; i < allowableFrequency.length; i++)
+        {
+            thrown = false;
+            inputFrequency = allowableFrequency[i];
+            try {
+                subHandler.validateFrequency(inputFrequency);
+
+            }
+            catch ( Exception e)
+            {
+                System.out.println("validate frequency Test failed with input " + inputFrequency);
+                System.out.println(e.getMessage());
+                thrown = true;
+            }
+
+            assertTrue(!thrown);
+        }
+
+
         System.out.println("Finished testing validatePaymentFrequency with valid Data!");
 
 
@@ -202,17 +308,110 @@ public class SubscriptionValidateTest {
 
     // Test Validate paymentAmount with invalid Data
     @Test
-    public void  testValidatePaymentAmountWithInvalidData()
-    {
-        System.out.println("Finished testing validatePaymentAmount with valid Data!");
+    public void testValidatePaymentAmountWithInvalidData() {
+
+        int paymentAmount = 0;
+        boolean thrown = false;
+        SubscriptionHandler subHandler = new SubscriptionHandler();
+
+
+        // Payment too small
+        thrown = false;
+        paymentAmount = 0;
+        try {
+            subHandler.validatePaymentAmount(paymentAmount);
+        } catch (Exception e) {
+            thrown = true;
+        }
+        assertTrue(thrown);
+
+
+        // Payment too small
+        thrown = false;
+        paymentAmount = -1;
+        try {
+            subHandler.validatePaymentAmount(paymentAmount);
+        } catch (Exception e) {
+            thrown = true;
+        }
+        assertTrue(thrown);
+
+
+        // Payment too small
+        thrown = false;
+        paymentAmount = Integer.MIN_VALUE;
+        try {
+            subHandler.validatePaymentAmount(paymentAmount);
+        } catch (Exception e) {
+            thrown = true;
+        }
+        assertTrue(thrown);
+
+        // Payment too large
+        thrown = false;
+        paymentAmount =  Integer.MAX_VALUE;
+        try {
+            subHandler.validatePaymentAmount(paymentAmount);
+        } catch (Exception e) {
+            thrown = true;
+        }
+        assertTrue(thrown);
+
+        // Payment too large
+        thrown = false;
+        paymentAmount =  subHandler.getMaxPaymentCentsTotal() + 1;
+        try {
+            subHandler.validatePaymentAmount(paymentAmount);
+        } catch (Exception e) {
+            thrown = true;
+        }
+        assertTrue(thrown);
+        System.out.println("Finished testing validatePaymentAmount with invalid Data!");
 
     }
 
 
     // Test Validate payment frequency with valid Data
     @Test
-    public void  testValidatePaymentAmountWithvalidData()
-    {
+    public void testValidatePaymentAmountWithvalidData() {
+
+
+        int paymentAmount = 0;
+        boolean thrown = false;
+        SubscriptionHandler subHandler = new SubscriptionHandler();
+
+
+        // Payment correct
+        thrown = false;
+        paymentAmount = 1;
+        try {
+            subHandler.validatePaymentAmount(paymentAmount);
+        } catch (Exception e) {
+            thrown = true;
+        }
+        assertTrue(!thrown);
+
+
+        int maxPayment = subHandler.getMaxPaymentCentsTotal();
+        //Cycle through all correct payments
+       for ( int i = 1 ; i <=maxPayment; i++ )
+       {
+
+           thrown = false;
+           paymentAmount= i;
+           try {
+               subHandler.validatePaymentAmount(paymentAmount);
+           } catch (Exception e) {
+
+               System.out.println("Validate payment amount failed with input "+ i);
+               thrown = true;
+           }
+
+           assertFalse(thrown);
+
+       }
+
+
         System.out.println("Finished testing validatePaymentAmount with valid Data!");
 
     }
