@@ -13,13 +13,13 @@
         android:theme="@style/Theme.Track_it"
         tools:targetApi="31">
         <activity
-            android:name=".Presentation.SubscriptionDetailsActivity"
+            android:name=".presentation.SubscriptionDetailsActivity"
             android:exported="false" />
         <activity
-            android:name=".Presentation.AddSubscriptionActivity"
+            android:name=".presentation.AddSubscriptionActivity"
             android:exported="false" />
         <activity
-            android:name=".Presentation.MainActivity"
+            android:name=".presentation.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

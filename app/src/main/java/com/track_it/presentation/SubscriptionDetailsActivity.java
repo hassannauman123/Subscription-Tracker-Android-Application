@@ -1,4 +1,4 @@
-package com.track_it.Presentation;
+package com.track_it.presentation;
 
 import static android.app.PendingIntent.getActivity;
 

@@ -1,4 +1,4 @@
-package com.track_it.Presentation;
+package com.track_it.presentation;
 import androidx.appcompat.app.AppCompatActivity;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -6,7 +6,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.text.InputFilter;
-import android.text.Spanned;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
@@ -14,8 +13,6 @@ import com.track_it.R;
 import com.track_it.domainObject.SubscriptionObj;
 import com.track_it.logic.SubscriptionHandler;
 import com.track_it.exception.*;
-import com.track_it.Presentation.*;
-
 
 
 // This class handles the presentation of the subscription page for the android app.

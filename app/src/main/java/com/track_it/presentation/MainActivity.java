@@ -1,8 +1,7 @@
-package com.track_it.Presentation;
+package com.track_it.presentation;
 import androidx.appcompat.app.AppCompatActivity;
-import android.content.Context;
+
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import com.track_it.R;
@@ -11,13 +10,9 @@ import com.track_it.logic.SubscriptionHandler;
 import com.track_it.persistence.DataBase;
 import android.content.Intent;
 import android.widget.LinearLayout;
-import android.widget.ListView;
-import android.widget.RelativeLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
-import androidx.appcompat.widget.Toolbar;
+
 import java.util.ArrayList;
-import java.util.List;
 
 
 //

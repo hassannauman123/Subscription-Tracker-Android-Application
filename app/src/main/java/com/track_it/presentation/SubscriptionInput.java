@@ -1,11 +1,11 @@
-package com.track_it.Presentation;
+package com.track_it.presentation;
 import android.text.InputFilter;
 import android.text.Spanned;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
-import com.track_it.R;
+
 import com.track_it.exception.SubscriptionException;
 import com.track_it.logic.SubscriptionHandler;
 //

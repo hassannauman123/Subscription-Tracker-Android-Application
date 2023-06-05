@@ -7,7 +7,7 @@
     android:id="@+id/main_page"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Presentation.MainActivity">
+    tools:context=".presentation.MainActivity">
 
 
     <include
