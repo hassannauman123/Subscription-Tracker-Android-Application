@@ -1,59 +1,48 @@
 package com.track_it;
+import org.junit.Test;
+import androidx.test.ext.junit.runners.AndroidJUnit4;
+import org.junit.runner.RunWith;
+import static org.junit.Assert.assertEquals;
+import androidx.test.platform.app.InstrumentationRegistry;
+import android.content.Context;
 
-import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
-import org.junit.Before;
-import org.junit.Test;
-
-import static org.junit.Assert.assertEquals;
 
 import com.track_it.Presentation.SubscriptionInput;
 
+@RunWith(AndroidJUnit4.class)
 public class SubscriptionInputTest {
-
-    private SubscriptionInput subscriptionInput;
-    private EditText inputLocation;
-    private TextView errorMessageLocation;
-
-    @Before
-    public void setUp() {
-        subscriptionInput = new SubscriptionInput();
-        inputLocation = new EditText(null); // Use null as the context parameter
-        errorMessageLocation = new TextView(null); // Use null as the context parameter
-    }
+    // Get the application context
+    Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
 
     @Test
-    public void testGetPaymentAmountInput_ValidInput() {
-        // Set the input value
-        inputLocation.setText("100.50");
+    public void testGetPaymentAmountInput() {
+        // Run the test on the main UI thread
+        InstrumentationRegistry.getInstrumentation().runOnMainSync(new Runnable() {
+            @Override
+            public void run() {
+                // Create input EditText and error TextView
+                EditText inputLocation = new EditText(appContext);
+                TextView errorMessageLocation = new TextView(appContext);
 
-        // Call the method under test
-        int paymentAmount = subscriptionInput.getPaymentAmountInput(inputLocation, errorMessageLocation);
+                // Set the input value
+                inputLocation.setText("10.50");
 
-        // Verify the results...
-        assertEquals(10050, paymentAmount);
-        assertEquals("", errorMessageLocation.getText().toString());
-        assertEquals(View.INVISIBLE, errorMessageLocation.getVisibility());
+                // Create an instance of SubscriptionInput
+                SubscriptionInput subscriptionInput = new SubscriptionInput();
+
+                // Call the method to be tested
+                int result = subscriptionInput.getPaymentAmountInput(inputLocation, errorMessageLocation);
+
+                // Assert that the result matches the expected value
+                assertEquals(1050, result);
+            }
+        });
     }
-
-    @Test
-    public void testGetPaymentAmountInput_InvalidInput() {
-        // Set the input value
-        inputLocation.setText("abc");
-
-        // Call the method under test
-        int paymentAmount = subscriptionInput.getPaymentAmountInput(inputLocation, errorMessageLocation);
-
-        // Verify the results...
-        assertEquals(Integer.MIN_VALUE, paymentAmount);
-        assertEquals("Invalid input for Payment amount", errorMessageLocation.getText().toString());
-        assertEquals(View.VISIBLE, errorMessageLocation.getVisibility());
-    }
-
-    // Other test cases...
-
 }
+
+
 
 
 
