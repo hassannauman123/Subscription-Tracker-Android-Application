@@ -60,10 +60,8 @@
         android:id="@+id/details_general_error"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="115dp"
-        android:layout_marginTop="40dp"
-        android:layout_marginEnd="114dp"
-        android:text="gettgere"
+        android:layout_marginTop="72dp"
+        android:text="Already deleted"
         android:textAlignment="center"
         android:textColor="#FF0000"
         android:textColorHighlight="#FF0000"
@@ -71,9 +69,8 @@
         android:textColorLink="#FF0000"
         android:textSize="20sp"
         android:visibility="invisible"
-        app:layout_constraintEnd_toEndOf="@+id/detail_subscription_name"
-        app:layout_constraintStart_toStartOf="@+id/textView7"
         app:layout_constraintTop_toTopOf="parent"
+        tools:layout_editor_absoluteX="157dp"
         tools:visibility="invisible" />
 
     <Button

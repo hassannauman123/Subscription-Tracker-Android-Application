@@ -1,5 +1,4 @@
 package com.track_it.Presentation;
-
 import androidx.appcompat.app.AppCompatActivity;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -15,6 +14,8 @@ import com.track_it.R;
 import com.track_it.domainObject.SubscriptionObj;
 import com.track_it.logic.SubscriptionHandler;
 import com.track_it.exception.*;
+import com.track_it.Presentation.*;
+
 
 
 // This class handles the presentation of the subscription page for the android app.
@@ -74,7 +75,7 @@ public class AddSubscriptionActivity extends AppCompatActivity {
 
 
 
-    // What runs when the add sub button is clicked!
+    // What to run when the userc licks the add Subscription button
     private void clickedAddSubscriptionButton(View view) {
 
          successTry = true; // Is all the input valid? (this will become false if anything wrong is detected)
@@ -95,7 +96,7 @@ public class AddSubscriptionActivity extends AppCompatActivity {
         if (successTry )  // Only if all of our internal checks have passed, try to add subscription to database
         {
             // Create a new Subscription object
-            SubscriptionObj newSubscription = new SubscriptionObj(userNameInput, paymentInCents, PaymentFrequency);
+            SubscriptionObj newSubscription = new SubscriptionObj(userNameInput, paymentInCents, PaymentFrequency); // Sets the parameters
 
             try { // Try to add subscription to dataBase
 
@@ -106,7 +107,9 @@ public class AddSubscriptionActivity extends AppCompatActivity {
 
                disableAddSubscriptionsButtons();
 
-            } catch (SubscriptionException e) {
+            }
+            // Something went wrong, display error for user
+            catch (SubscriptionException e) {
                 generalErrorTarget.setText(e.getMessage());
                 generalErrorTarget.setVisibility(view.VISIBLE);
                 successTry = false;
@@ -123,7 +126,7 @@ public class AddSubscriptionActivity extends AppCompatActivity {
 
 
     // Get the name input from the user.
-    // This will throw Exceptions if invalid, set eror messages and set successTry to false
+    // This will throw an Exceptions if name input is invalid, display the error message for the users, and set successTry to false
     private String getNameInput(View view) throws SubscriptionException
     {
         // Get the string the user entered for a name
@@ -207,12 +210,12 @@ public class AddSubscriptionActivity extends AppCompatActivity {
     // Disable add Button after we added the sub
     private void disableAddSubscriptionsButtons()
     {
-        Button subButton = (Button) findViewById(R.id.submit_sub_button);
-        subButton.setEnabled(false);
+         addSubtarget.setEnabled(false); // Disable the add button
 
+
+        // Make all the input uneditable
         EditText textInput = (EditText) findViewById(R.id.input_subscription_name);
         textInput.setEnabled(false);
-
 
         EditText paymentAmountTarget = (EditText) findViewById(R.id.input_payment_amount);
         paymentAmountTarget.setEnabled(false);

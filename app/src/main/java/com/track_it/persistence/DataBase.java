@@ -33,6 +33,7 @@ public class DataBase {
     // When we actually have a database this method will take a part the inputSubscription object, and use it to create insert statements for
     // the sql dataBase.
     // Method will throw exceptions if something goes wrong with inserting into database.
+    // This will set the subscriptionID of the inputSubscription object. The calling function can use that to get the ID of the newly added subscription.
     public void addSubscriptionDataBase( SubscriptionObj inputSubscription)
     {
         if ( dataBaseCount >= Integer.MAX_VALUE) // A preview of what an exception might look like
@@ -48,6 +49,7 @@ public class DataBase {
 
 
     // A temporary fake Data filler.
+    // Fill the dataBase with 10 fake subs
     public static void fillFakeData()
     {
 
@@ -82,10 +84,10 @@ public class DataBase {
 
         ArrayList<SubscriptionObj> returnListOfSubscriptions = new ArrayList<SubscriptionObj>();
 
-        //Go through the DataBase, and create return an arrayList of all the subscriptions
+        //Go through the DataBase, and create fill the arrayList with all the subscriptions the database
         for ( int i =0 ; i < subscriptionDB.size(); i++)
         {
-            SubscriptionObj copyOfSubscription = subscriptionDB.get(i).copy();
+            SubscriptionObj copyOfSubscription = subscriptionDB.get(i).copy(); // Copy the sub so the calling function can't illegally modify our fake dataBase
             returnListOfSubscriptions.add(copyOfSubscription);
 
         }

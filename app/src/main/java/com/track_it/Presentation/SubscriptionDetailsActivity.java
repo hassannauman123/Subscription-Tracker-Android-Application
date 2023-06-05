@@ -15,14 +15,13 @@ import android.widget.TextView;
 import com.track_it.R;
 import com.track_it.domainObject.SubscriptionObj;
 import com.track_it.exception.SubscriptionException;
-import com.track_it.logic.SubscriptionEditAndRemoveHandler;
 import com.track_it.logic.SubscriptionHandler;
 
 public class SubscriptionDetailsActivity extends SubscriptionInput {
 
 
     private int MAX_PAYMENT_DECIMALS = 2;
-    private int MAX_DIGITAL_BEFORE_DECIMAL =  SubscriptionHandler.getMaxPaymentDigitsBeforeDecimal();
+    private int MAX_DIGITAL_BEFORE_DECIMAL = SubscriptionHandler.getMaxPaymentDigitsBeforeDecimal();
     private boolean alreadyDeleted = false;
 
     private boolean editMode = false;
@@ -30,7 +29,6 @@ public class SubscriptionDetailsActivity extends SubscriptionInput {
     private String accomplishColor = "#8c1f7c";
     private String saveButtonColor = "#57f2a0";
     private String editButtonColor = "#6632a8";
-
 
 
     private EditText nameTarget;
@@ -54,30 +52,28 @@ public class SubscriptionDetailsActivity extends SubscriptionInput {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_subscription_details);
 
-        nameTarget =  ((EditText) findViewById(R.id.detail_subscription_name)) ;
-        paymentAmountTarget =   ((EditText) findViewById(R.id.detail_subscription_amount));
+        nameTarget = ((EditText) findViewById(R.id.detail_subscription_name));
+        paymentAmountTarget = ((EditText) findViewById(R.id.detail_subscription_amount));
         frequencyTarget = ((EditText) findViewById(R.id.detail_subscription_frequency));
 
         backButton = (Button) findViewById(R.id.go_home);
         generalErrorTarget = ((TextView) findViewById(R.id.details_general_error));
-         editButton = (Button) findViewById(R.id.details_edit_subscription);
+        editButton = (Button) findViewById(R.id.details_edit_subscription);
 
-         SubscriptionHandler subGetHandler = new SubscriptionHandler();
+        SubscriptionHandler subGetHandler = new SubscriptionHandler();
 
         setFocus(false); // Disable editing sub details
 
 
         //Enable go back button
-        backButton.setOnClickListener(new View.OnClickListener()
-        {
+        backButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 setContentView(R.layout.activity_main);
                 finish();
             }
         });
 
-
-
+        // Try to get the input passed to this activity
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             int subscriptionID = extras.getInt("subscriptionID");
@@ -90,26 +86,32 @@ public class SubscriptionDetailsActivity extends SubscriptionInput {
                 Button button = (Button) findViewById(R.id.details_delete_subscription);
                 button.setOnClickListener(new View.OnClickListener() {
                     public void onClick(View v) {
-                        createDialog(subscriptionToDisplay.getID());
+
+                        if ( !editMode)  // If we are not in edit mode, let the user delete it
+                        {
+
+                            createDialog(subscriptionToDisplay.getID());
+                        }
 
                     }
                 });
 
 
-
-                //Enable edit button
+                //Run this when editButton is clicked
                 editButton.setOnClickListener(new View.OnClickListener() {
                     public void onClick(View v) {
-                         editButton();
+                        editButton();
 
                     }
                 });
 
             } catch (Exception e) {
-                setGeneralError(e.getMessage(),errorColor);
+                setGeneralError(e.getMessage(), errorColor);
             }
-        } else {
-            setGeneralError("Invalid Selection for subscription",errorColor);
+        }
+        else  // We we display if we could not get passed input
+        {
+            setGeneralError("Invalid Selection for subscription", errorColor);
         }
 
         // This physically constrains the user for what they can enter into the payment amount field ( How many digits before decimal, how many after)
@@ -118,56 +120,56 @@ public class SubscriptionDetailsActivity extends SubscriptionInput {
 
     }
 
-
-    private void setFocus(boolean input)
-    {
-        nameTarget.setEnabled(input) ;
-         paymentAmountTarget.setEnabled(input);
-        frequencyTarget.setEnabled(input);
+    // This changes whether the input can be edited by the user.
+    // inputBool = true -> makes it editable
+    // inputBool = false -> makes it not editable
+    private void setFocus(boolean inputBool) {
+        nameTarget.setEnabled(inputBool);
+        paymentAmountTarget.setEnabled(inputBool);
+        frequencyTarget.setEnabled(inputBool);
 
 
         String color2 = "#222222"; // Working fast
-        if (input)
-        {
-            nameTarget.setTextColor(Color.parseColor(color2)) ;
-            paymentAmountTarget.setTextColor(Color.parseColor(color2)) ;
-            frequencyTarget.setTextColor(Color.parseColor(color2)) ;
-        }
-        else
-        {
-            nameTarget.setTextColor(Color.parseColor("#000000")) ;
-            paymentAmountTarget.setTextColor(Color.parseColor("#000000")) ;
-            frequencyTarget.setTextColor(Color.parseColor("#000000")) ;
+        if (inputBool) {
+            nameTarget.setTextColor(Color.parseColor(color2));
+            paymentAmountTarget.setTextColor(Color.parseColor(color2));
+            frequencyTarget.setTextColor(Color.parseColor(color2));
+        } else {
+            nameTarget.setTextColor(Color.parseColor("#000000"));
+            paymentAmountTarget.setTextColor(Color.parseColor("#000000"));
+            frequencyTarget.setTextColor(Color.parseColor("#000000"));
         }
 
     }
 
-    private void changeEditButton()
-    {
-        if (editMode == false)
-        {
+    // Toggle the edit sub button from edit to save changes (or vice versa)
+    private void changeEditButton() {
+        if (editMode == false) {
             editButton.setBackgroundColor(Color.parseColor(editButtonColor));
             editButton.setText("Edit Subscription");
 
-        }
-        else {
+        } else {
             editButton.setBackgroundColor(Color.parseColor(saveButtonColor));
             editButton.setText("Save Changes");
         }
     }
 
     // This runs when a user clicks the edit button
-    private void editButton()
-    {
-        //If we are not in edit mode, and the subscription has not already been deleted
-        if ( editMode == false && !alreadyDeleted)
-        {
+    private void editButton() {
+        //If we are not in edit mode, and the subscription has not already been deleted  -then switch to edit mode
+        if (editMode == false && !alreadyDeleted) {
 
             editMode = true; // change to edit mode
             setFocus(true); // enable the inputs to be edited
             changeEditButton(); // toggle the edit button to change
 
         }
+        else if ( alreadyDeleted)
+        {
+            setGeneralError("Cannot edit subscription:\n Subscription has been deleted!", errorColor);
+
+        }
+
         else // Else we are already in edit mode, and user is try to save chages.
         {
 
@@ -176,8 +178,8 @@ public class SubscriptionDetailsActivity extends SubscriptionInput {
 
             // Get the payment amount the user Enter
             SubscriptionInput subInput = new SubscriptionInput();
-            int inputPaymentAmount  = subInput.getPaymentAmountInput( paymentAmountTarget,generalErrorTarget ); // This function throws exceptions, and sets user error message accordingly
-            if ( inputPaymentAmount == Integer.MIN_VALUE) // Bit sloppy, but the return value will bit MIN_VALUE if any exception were thrown
+            int inputPaymentAmount = subInput.getPaymentAmountInput(paymentAmountTarget, generalErrorTarget); // This function throws exceptions, and sets user error message accordingly
+            if (inputPaymentAmount == Integer.MIN_VALUE) // Bit sloppy, but the return value will bit MIN_VALUE if any exception were thrown
             {
                 valid = false;
             }
@@ -211,24 +213,21 @@ public class SubscriptionDetailsActivity extends SubscriptionInput {
 
 
             // If everything was detected as valid, try to change the info
-            if ( valid)
-            {
+            if (valid) {
                 try {
-                    SubscriptionEditAndRemoveHandler logicHandler = new SubscriptionEditAndRemoveHandler();
+                    SubscriptionHandler logicHandler = new SubscriptionHandler();
 
                     subscriptionToDisplay.setName(userNameInput);
                     subscriptionToDisplay.setPaymentFrequency(inputFrequency);
                     subscriptionToDisplay.setPayment(inputPaymentAmount);
-                    logicHandler.editWholeSubscription (subscriptionToDisplay.getID(),subscriptionToDisplay);
+                    logicHandler.editWholeSubscription(subscriptionToDisplay.getID(), subscriptionToDisplay);
 
                     //Everything worked, so time to switch back to none-edit mode!
                     editMode = false;
                     setFocus(false); // No longer allow inputs to be edited
                     changeEditButton(); // Edit button changes back
                     setGeneralError(validEditMessage, accomplishColor);
-                }
-                catch(Exception e)
-                {
+                } catch (Exception e) {
                     setGeneralError(e.getMessage(), errorColor);
                 }
 
@@ -239,30 +238,24 @@ public class SubscriptionDetailsActivity extends SubscriptionInput {
     }
 
 
-    //PopupMessage Confirming to our user that they want to delelete a subscription
-    private void createDialog(int subscriptionToDelete)
-    {
+    //PopupMessage Confirming to our user if they really want to delete a subscription
+    private void createDialog(int subscriptionToDelete) {
         AlertDialog.Builder builder = new AlertDialog.Builder(SubscriptionDetailsActivity.this);
         builder.setTitle(confirmationMsg);
 
         // Make a Yes button, meaning that the user does in fact want to delete the subscription
-        builder.setNegativeButton("Yes", new DialogInterface.OnClickListener()
-        {
-            public void onClick (DialogInterface dialog, int which)
-            {
-                SubscriptionEditAndRemoveHandler SubHandler = new SubscriptionEditAndRemoveHandler();
+        builder.setNegativeButton("Yes", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                SubscriptionHandler SubHandler = new SubscriptionHandler();
                 try {
 
                     SubHandler.removeSubscriptionByID(subscriptionToDelete); // Attempt to delete the sub
-                    alreadyDeleted= true;
-                    setGeneralError(successDeleteMessage,accomplishColor);
-                }
-                catch (Exception e)
-                {
+                    alreadyDeleted = true;
+                    setGeneralError(successDeleteMessage, accomplishColor);
+                } catch (Exception e) {
                     if (!alreadyDeleted) {
                         setGeneralError(e.getMessage(), errorColor); // Some  unkown error
-                    }
-                    else {
+                    } else {
                         setGeneralError(alreadyDeletedMessage, errorColor); // We already deleted it
                     }
 
@@ -271,11 +264,9 @@ public class SubscriptionDetailsActivity extends SubscriptionInput {
             }
         });
         // Make a No button
-        builder.setPositiveButton("No", new DialogInterface.OnClickListener()
-        {
-            public void onClick (DialogInterface dialog, int which)
-            {
-                // do need to do anything, as we won't delete subscription
+        builder.setPositiveButton("No", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                // We do not need to do anything, as we won't delete subscription
             }
         });
         AlertDialog dialog = builder.create(); // create alert
@@ -283,7 +274,7 @@ public class SubscriptionDetailsActivity extends SubscriptionInput {
 
     }
 
-    private void setGeneralError(String inputMessage,String inputColor) {
+    private void setGeneralError(String inputMessage, String inputColor) {
         generalErrorTarget.setTextColor(Color.parseColor(inputColor));
         generalErrorTarget.setText(inputMessage);
         generalErrorTarget.setVisibility(View.VISIBLE);
@@ -292,7 +283,7 @@ public class SubscriptionDetailsActivity extends SubscriptionInput {
 
     private void setDetails(SubscriptionObj subscriptionToDisplay) {
         setName(subscriptionToDisplay.getName());
-        setPaymentAmount( subscriptionToDisplay.getPaymentDollars() + "." + subscriptionToDisplay.getPaymentCents());
+        setPaymentAmount(subscriptionToDisplay.getPaymentDollars() + "." + subscriptionToDisplay.getPaymentCents());
         setPaymentFrequency(subscriptionToDisplay.getPaymentFrequency());
     }
 

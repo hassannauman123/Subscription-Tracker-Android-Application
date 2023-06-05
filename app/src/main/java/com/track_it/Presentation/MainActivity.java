@@ -1,7 +1,5 @@
 package com.track_it.Presentation;
-
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -22,37 +20,36 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-//This is the presentation logic for the main Page
 //
-//  Currently is displays all subscriptions, and has a button to add a new sub.
-// Clicking on any sub should open a new page that allows you to edit or delete sub
-
+//  This is the presentation class for the main home page of the app.
+//  It will be instantiated when the android app first starts
+//
+//  Currently it displays all subscriptions in scrollable list, and has a button to add a new sub.
+//   Clicking on any sub should open a new page that allows you to edit or delete the sub.
+//
 
 public class MainActivity extends AppCompatActivity {
 
     @Override // Make sure this function is overriding some default onCreate method
-    protected void onCreate(Bundle savedInstanceState)  // when this crated
+    protected void onCreate(Bundle savedInstanceState)
     {
-        DataBase.fillFakeData();
+        DataBase.fillFakeData(); // Fill the database with fake data?
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main); // Switch screen to display main pag
-        displayAllSubscriptions();
+        setContentView(R.layout.activity_main); // Switch screen to display main page
 
+        displayAllSubscriptions(); // Display all the subscriptions
 
-        //Button sections
+        //Button section
 
-        // Target subscription button, and switch to that intent when clicked
+        // Target add subscription button, and set what happens to it when clicked
         Button button = (Button) this.findViewById(R.id.button_subscription);
-
-
-        button.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-
+        button.setOnClickListener(new View.OnClickListener()
+        {
+            public void onClick(View v)
+            {
                 Intent intent = new Intent(MainActivity.this, AddSubscriptionActivity.class);
-
                 startActivity(intent);
-
 
             }
         });
@@ -60,12 +57,14 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    //Runs when this app comes back
     protected void onRestart() {
         super.onRestart();
         displayAllSubscriptions();
 
     }
 
+    // Display all the subscriptions currently in the database in a scrollable list
     private void displayAllSubscriptions() {
 
         SubscriptionHandler subHandler = new SubscriptionHandler();
@@ -108,7 +107,7 @@ public class MainActivity extends AppCompatActivity {
             subscriptionBox.setId(curr.getID());
 
 
-            //Set what happens when user does long click on sub
+            //Set what happens when the user does a long click on a subscription box
             subscriptionBox.setOnLongClickListener(
                 new View.OnLongClickListener()
                 {
@@ -117,13 +116,12 @@ public class MainActivity extends AppCompatActivity {
                         Intent subDetailsIntent = new Intent(MainActivity.this, SubscriptionDetailsActivity.class);
                         subDetailsIntent.putExtra("subscriptionID", v.getId() );
                         startActivity(subDetailsIntent);
-
                         return true;
                     }
                 }
             );
 
-            //Set what happens when user does short click on sub
+            //Set what happens when the user does clicks on a subscription box
             subscriptionBox.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     Intent subDetailsIntent = new Intent(MainActivity.this, SubscriptionDetailsActivity.class);
