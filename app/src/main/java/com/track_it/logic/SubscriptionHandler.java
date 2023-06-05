@@ -1,10 +1,11 @@
 package com.track_it.logic;
 
 import com.track_it.domainObject.SubscriptionObj;
-import com.track_it.exception.SubscriptionInvalidNameException;
-import com.track_it.exception.SubscriptionInvalidPaymentException;
-import com.track_it.domainObject.SubscriptionObj;
-import com.track_it.exception.*;
+import com.track_it.logic.exception.DataBaseException;
+import com.track_it.logic.exception.SubscriptionException;
+import com.track_it.logic.exception.SubscriptionInvalidNameException;
+import com.track_it.logic.exception.SubscriptionInvalidPaymentException;
+import com.track_it.logic.exception.*;
 import com.track_it.persistence.DataBase;
 import java.util.ArrayList;
 

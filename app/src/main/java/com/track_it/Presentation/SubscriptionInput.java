@@ -5,8 +5,8 @@ import android.widget.EditText;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.track_it.exception.SubscriptionException;
-import com.track_it.exception.SubscriptionInvalidPaymentException;
+import com.track_it.logic.exception.SubscriptionException;
+import com.track_it.logic.exception.SubscriptionInvalidPaymentException;
 import com.track_it.logic.SubscriptionHandler;
 //
 //  This is a general helper class, used to get user input using common functions.

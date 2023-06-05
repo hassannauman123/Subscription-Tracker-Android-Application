@@ -11,7 +11,8 @@ import android.widget.TextView;
 import com.track_it.R;
 import com.track_it.domainObject.SubscriptionObj;
 import com.track_it.logic.SubscriptionHandler;
-import com.track_it.exception.*;
+import com.track_it.logic.exception.*;
+import com.track_it.logic.exception.SubscriptionException;
 
 
 // This class handles the presentation of the subscription page for the android app.

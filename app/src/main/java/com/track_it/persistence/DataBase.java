@@ -1,7 +1,11 @@
 package com.track_it.persistence;
 import com.track_it.domainObject.*;
-import com.track_it.exception.*;
+import com.track_it.logic.exception.*;
 import com.track_it.logic.SubscriptionHandler;
+import com.track_it.logic.exception.DataBaseException;
+import com.track_it.logic.exception.DataBaseFullException;
+import com.track_it.logic.exception.DataBaseSubNotFoundException;
+
 import java.util.ArrayList;
 
 // DataBase handler

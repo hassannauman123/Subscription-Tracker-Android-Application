@@ -16,7 +16,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.track_it.R;
 import com.track_it.domainObject.SubscriptionObj;
-import com.track_it.exception.SubscriptionException;
+import com.track_it.logic.exception.SubscriptionException;
 import com.track_it.logic.SubscriptionHandler;
 
 public class SubscriptionDetailsActivity extends AppCompatActivity {
