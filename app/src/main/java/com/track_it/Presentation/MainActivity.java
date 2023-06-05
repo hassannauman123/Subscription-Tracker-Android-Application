@@ -1,4 +1,4 @@
-package com.track_it.presentation;
+package com.track_it.Presentation;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
@@ -8,6 +8,7 @@ import com.track_it.R;
 import com.track_it.domainObject.SubscriptionObj;
 import com.track_it.logic.SubscriptionHandler;
 import com.track_it.persistence.DataBase;
+
 import android.content.Intent;
 import android.widget.LinearLayout;
 import android.widget.TextView;

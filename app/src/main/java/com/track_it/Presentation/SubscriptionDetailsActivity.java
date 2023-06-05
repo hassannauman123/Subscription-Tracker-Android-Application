@@ -1,4 +1,4 @@
-package com.track_it.presentation;
+package com.track_it.Presentation;
 
 import static android.app.PendingIntent.getActivity;
 
@@ -12,12 +12,14 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.track_it.R;
 import com.track_it.domainObject.SubscriptionObj;
 import com.track_it.exception.SubscriptionException;
 import com.track_it.logic.SubscriptionHandler;
 
-public class SubscriptionDetailsActivity extends SubscriptionInput {
+public class SubscriptionDetailsActivity extends AppCompatActivity {
 
 
     private int MAX_PAYMENT_DECIMALS = 2;
@@ -103,7 +105,7 @@ public class SubscriptionDetailsActivity extends SubscriptionInput {
                         editButton();
 
                     }
-                });
+                }); //
 
             } catch (Exception e) {
                 setGeneralError(e.getMessage(), errorColor);
@@ -170,45 +172,64 @@ public class SubscriptionDetailsActivity extends SubscriptionInput {
 
         }
 
-        else // Else we are already in edit mode, and user is try to save chages.
+        else // Else we are already in edit mode, and user is try to save changes.
         {
 
             boolean valid = true;// Tells us if everything the user entered is valid
             SubscriptionHandler handler = new SubscriptionHandler();// users to get payment amount
 
+
+            // Get the frequency the user entered
+            String inputFrequency = frequencyTarget.getText().toString().trim();
+            try {
+
+                handler.validateFrequency(inputFrequency);
+
+            } catch (SubscriptionException e)  //Catch - Frequency was not valid
+            {
+
+                // Display error
+                valid = false;
+               setGeneralError(e.getMessage(), errorColor);
+                generalErrorTarget.setVisibility(View.VISIBLE);
+
+            }
+
+
             // Get the payment amount the user Enter
             SubscriptionInput subInput = new SubscriptionInput();
-            int inputPaymentAmount = subInput.getPaymentAmountInput(paymentAmountTarget, generalErrorTarget); // This function throws exceptions, and sets user error message accordingly
-            if (inputPaymentAmount == Integer.MIN_VALUE) // Bit sloppy, but the return value will bit MIN_VALUE if any exception were thrown
+            int inputPaymentAmount = 0;
+
+            try {
+                inputPaymentAmount = subInput.getPaymentAmountInput(paymentAmountTarget); // This function throws exceptions, and sets user error message accordingly
+            }
+            catch(SubscriptionException e) // Payment amount not valid
             {
+                // Display errors
                 valid = false;
+                setGeneralError(e.getMessage(), errorColor);
+                generalErrorTarget.setVisibility(View.VISIBLE);
             }
 
 
             // Get the string the user entered for a name
             String userNameInput = nameTarget.getText().toString().trim(); // get string, and remove white spaces
             try {
-                handler.validateName(userNameInput); // Check if value
-                generalErrorTarget.setVisibility(View.INVISIBLE);
+                handler.validateName(userNameInput); // Check if value is valid
 
-
-            } catch (SubscriptionException e) // Else it threw an exception, and was not valid!
+            } catch (SubscriptionException e) // Catch - name was not valid,
             {
+                // Display errors
                 valid = false;
                 setGeneralError(e.getMessage(), errorColor);
+                generalErrorTarget.setVisibility(View.VISIBLE);
+
             }
 
-            // Get the frequency the user entered
-            String inputFrequency = frequencyTarget.getText().toString().trim();
-            System.out.println("target is " + inputFrequency);
-            try {
-
-                handler.validateFrequency(inputFrequency);
+            if ( valid )
+            {
                 generalErrorTarget.setVisibility(View.INVISIBLE);
 
-            } catch (SubscriptionException e) {
-                valid = false;
-                setGeneralError(e.getMessage(), errorColor);
             }
 
 
@@ -229,6 +250,8 @@ public class SubscriptionDetailsActivity extends SubscriptionInput {
                     setGeneralError(validEditMessage, accomplishColor);
                 } catch (Exception e) {
                     setGeneralError(e.getMessage(), errorColor);
+                    generalErrorTarget.setVisibility(View.VISIBLE);
+
                 }
 
             }

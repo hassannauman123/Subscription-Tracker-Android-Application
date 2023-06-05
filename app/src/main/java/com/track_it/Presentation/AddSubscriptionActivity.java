@@ -1,4 +1,4 @@
-package com.track_it.presentation;
+package com.track_it.Presentation;
 import androidx.appcompat.app.AppCompatActivity;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -8,7 +8,6 @@ import android.widget.EditText;
 import android.text.InputFilter;
 import android.widget.RadioButton;
 import android.widget.TextView;
-
 import com.track_it.R;
 import com.track_it.domainObject.SubscriptionObj;
 import com.track_it.logic.SubscriptionHandler;
@@ -72,20 +71,30 @@ public class AddSubscriptionActivity extends AppCompatActivity {
 
 
 
-    // What to run when the userc licks the add Subscription button
+    // What to run when the user clicks the add Subscription button
     private void clickedAddSubscriptionButton(View view) {
 
          successTry = true; // Is all the input valid? (this will become false if anything wrong is detected)
 
 
-        String userNameInput = getNameInput( view); // Get input for name
+        String userNameInput = getNameInput( view); // Get input for name,
 
-        SubscriptionInput subInput = new SubscriptionInput(); // Make a helper object, to get user input
-        int paymentInCents = subInput.getPaymentAmountInput( (EditText) findViewById(R.id.input_payment_amount) ,((TextView) findViewById(R.id.input_payment_amount_error)));
-        if (paymentInCents == Integer.MIN_VALUE)
-        {
-            successTry = false;
-        }
+        // Get input for payment amount
+         SubscriptionInput subInput = new SubscriptionInput(); // Make a helper object, to get user input
+          int paymentInCents = 1;
+          try {
+              subInput.getPaymentAmountInput((EditText) findViewById(R.id.input_payment_amount));
+              ((TextView) findViewById(R.id.input_payment_amount_error)).setVisibility(View.INVISIBLE);
+
+          }
+          catch(Exception e)
+          {
+              successTry = false;
+              ((TextView) findViewById(R.id.input_payment_amount_error)).setText(e.getMessage());
+              ((TextView) findViewById(R.id.input_payment_amount_error)).setVisibility(View.VISIBLE);
+          }
+
+
 
         String PaymentFrequency = getPaymentFrequency(view); //Get input for payment frequency
 
@@ -112,7 +121,8 @@ public class AddSubscriptionActivity extends AppCompatActivity {
                 successTry = false;
             }
         }
-        else {
+        else // Else our internal checks did not pass
+        {
             generalErrorTarget.setText("Error with input");
             generalErrorTarget.setVisibility(view.VISIBLE);
         }

@@ -1,12 +1,12 @@
-package com.track_it.presentation;
+package com.track_it.Presentation;
 import android.text.InputFilter;
 import android.text.Spanned;
-import android.view.View;
 import android.widget.EditText;
-import android.widget.TextView;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.track_it.exception.SubscriptionException;
+import com.track_it.exception.SubscriptionInvalidPaymentException;
 import com.track_it.logic.SubscriptionHandler;
 //
 //  This is a general helper class, used to get user input using common functions.
@@ -18,11 +18,10 @@ public class SubscriptionInput extends AppCompatActivity
 {
 
     // Get the input payment amount that the user entered.
-    public int getPaymentAmountInput(EditText inputLocation, TextView errorMessageLocation)
+    public int getPaymentAmountInput(EditText inputLocation ) throws SubscriptionInvalidPaymentException
     {
 
         SubscriptionHandler handler = new  SubscriptionHandler();
-
         EditText textInput = inputLocation;
         String[] paymentAmountString = textInput.getText().toString().split("\\.");
         int paymentInCents = Integer.MIN_VALUE;
@@ -47,24 +46,20 @@ public class SubscriptionInput extends AppCompatActivity
                 }
             }
         }
+        else {
+            throw new SubscriptionInvalidPaymentException("Invalid input for Payment amount");
+        }
 
         if (paymentInCents == Integer.MIN_VALUE) {
-            errorMessageLocation.setText("Invalid input for Payment amount");
-            errorMessageLocation.setVisibility(View.VISIBLE);
-            paymentInCents = Integer.MIN_VALUE;
 
+            throw new SubscriptionInvalidPaymentException("Invalid input for Payment amount");
 
         } else {
             try {
                 handler.validatePaymentAmount(paymentInCents);
-                errorMessageLocation.setVisibility(View.INVISIBLE);
-
-
 
             } catch (SubscriptionException e) {
-                errorMessageLocation.setText(e.getMessage());
-                errorMessageLocation.setVisibility(View.VISIBLE);
-                paymentInCents = Integer.MIN_VALUE;
+                throw new SubscriptionInvalidPaymentException(e.getMessage());
 
             }
 

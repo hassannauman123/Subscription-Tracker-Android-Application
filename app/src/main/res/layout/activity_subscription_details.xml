@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".presentation.SubscriptionDetailsActivity">
+    tools:context=".Presentation.SubscriptionDetailsActivity">
 
     <TextView
         android:id="@+id/textView7"
@@ -69,8 +69,9 @@
         android:textColorLink="#FF0000"
         android:textSize="20sp"
         android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:layout_editor_absoluteX="157dp"
         tools:visibility="invisible" />
 
     <Button
@@ -129,6 +130,7 @@
         android:layout_width="102dp"
         android:layout_height="40dp"
         android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
         android:background="@android:color/white"
         android:text="Go Back"
         android:textColor="@android:color/white"
