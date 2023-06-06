@@ -1,6 +1,4 @@
-package com.track_it.domainObject;
-
-import java.util.jar.Attributes;
+package com.track_it.domainobject;
 
 public class SubscriptionObj
 {

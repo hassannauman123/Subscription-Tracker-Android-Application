@@ -1,4 +1,4 @@
-package com.track_it.Presentation;
+package com.track_it.presentation;
 import androidx.appcompat.app.AppCompatActivity;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -9,9 +9,8 @@ import android.text.InputFilter;
 import android.widget.RadioButton;
 import android.widget.TextView;
 import com.track_it.R;
-import com.track_it.domainObject.SubscriptionObj;
+import com.track_it.domainobject.SubscriptionObj;
 import com.track_it.logic.SubscriptionHandler;
-import com.track_it.logic.exception.*;
 import com.track_it.logic.exception.SubscriptionException;
 
 

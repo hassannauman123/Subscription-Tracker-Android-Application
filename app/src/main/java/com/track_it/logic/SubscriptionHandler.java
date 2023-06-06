@@ -1,11 +1,10 @@
 package com.track_it.logic;
 
-import com.track_it.domainObject.SubscriptionObj;
+import com.track_it.domainobject.SubscriptionObj;
 import com.track_it.logic.exception.DataBaseException;
 import com.track_it.logic.exception.SubscriptionException;
 import com.track_it.logic.exception.SubscriptionInvalidNameException;
 import com.track_it.logic.exception.SubscriptionInvalidPaymentException;
-import com.track_it.logic.exception.*;
 import com.track_it.persistence.DataBase;
 import java.util.ArrayList;
 
@@ -35,7 +34,7 @@ public class SubscriptionHandler {
     private static int NUM_FREQUENCIES = 3;
     private static final String[] ALLOWABLE_FREQUENCIES = {FREQUENCY.weekly.toString() ,FREQUENCY.monthly.toString(), FREQUENCY.yearly.toString()};
 
-    private static final String allowableCharactersInName = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890 _+*^&%$#@!+=\\|}]'?/<>'"; // Our current list of allowable characters in the name
+    private static final String allowableCharactersInName = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890 _+*^&%$#@!+=|}]'?<>'"; // Our current list of allowable characters in the name
 
 
     public SubscriptionHandler()

@@ -1,12 +1,10 @@
 package com.track_it;
 
 
-import com.track_it.domainObject.SubscriptionObj;
-import com.track_it.persistence.DataBase;
+import com.track_it.domainobject.SubscriptionObj;
 import com.track_it.logic.SubscriptionHandler;
 
 import org.junit.Test;
-import com.track_it.domainObject.*;
 
 import static org.junit.Assert.*;
 import static org.junit.Assert.assertFalse;

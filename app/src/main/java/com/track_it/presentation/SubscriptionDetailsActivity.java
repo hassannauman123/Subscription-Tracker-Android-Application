@@ -1,4 +1,4 @@
-package com.track_it.Presentation;
+package com.track_it.presentation;
 
 import static android.app.PendingIntent.getActivity;
 
@@ -15,7 +15,7 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.track_it.R;
-import com.track_it.domainObject.SubscriptionObj;
+import com.track_it.domainobject.SubscriptionObj;
 import com.track_it.logic.exception.SubscriptionException;
 import com.track_it.logic.SubscriptionHandler;
 
@@ -32,7 +32,7 @@ public class SubscriptionDetailsActivity extends AppCompatActivity {
     private boolean editMode = false; // Are we in edit mode? Determines whether the input can be edited, and behaviour of the edit/save button
 
     // Various color - We should probably put this in some type of shared resource location later
-    private String errorColor = "#ff0000"; //// error text color
+    private String errorColor = "#ff0002"; //// error text color
     private String accomplishColor = "#8c1f7c"; // Accomplish text color
     private String saveButtonColor = "#57f2a0"; // what color the save button will be
     private String editButtonColor = "#6632a8";// what color the edit color button will be

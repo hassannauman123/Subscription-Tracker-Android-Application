@@ -4,7 +4,7 @@ package com.track_it;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import com.track_it.domainObject.SubscriptionObj;
+import com.track_it.domainobject.SubscriptionObj;
 import com.track_it.logic.SubscriptionHandler;
 
 import org.junit.Test;
