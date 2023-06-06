@@ -1,15 +1,13 @@
 package com.track_it;
 
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
 import com.track_it.domainObject.SubscriptionObj;
-import com.track_it.persistence.DataBase;
 import com.track_it.logic.SubscriptionHandler;
 
 import org.junit.Test;
-import com.track_it.domainObject.*;
-
-import static org.junit.Assert.*;
-import static org.junit.Assert.assertFalse;
 
 public class SubscriptionsAddEditRemoveTest
 {
@@ -241,7 +239,7 @@ public class SubscriptionsAddEditRemoveTest
 
         catch(Exception e)
         {
-             System.out.println(e.getMessage());
+            System.out.println(e.getMessage()  + "one");
             thrown = true;
 
         }
@@ -256,8 +254,7 @@ public class SubscriptionsAddEditRemoveTest
 
         catch(Exception e)
         {
-            System.out.println(e.getMessage());
-            thrown = true;
+             thrown = true;
 
         }
         assertTrue(thrown);
@@ -265,7 +262,7 @@ public class SubscriptionsAddEditRemoveTest
 
 
 
-        System.out.println("Passed the remove subscription test!");
+        System.out.println("Passed the remove subscription test !");
 
     }
 

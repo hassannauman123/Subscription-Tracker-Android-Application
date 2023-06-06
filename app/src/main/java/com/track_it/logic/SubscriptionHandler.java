@@ -22,11 +22,15 @@ public class SubscriptionHandler {
 
     private static final int MAX_PAYMENT_CENTS_TOTAL = MAX_PAYMENT_DOLLAR * 100 + MAX_PAYMENT_CENTS; // Maximum payment will be 9999.99
 
-    public static enum FREQUENCY {
+    private DataBase dataBaseHandler; //DatabaseHandler
+
+    public static enum FREQUENCY //Allowable frequencies,
+    {
         weekly,
         monthly,
         yearly
     }
+
 
     private static int NUM_FREQUENCIES = 3;
     private static final String[] ALLOWABLE_FREQUENCIES = {FREQUENCY.weekly.toString() ,FREQUENCY.monthly.toString(), FREQUENCY.yearly.toString()};
@@ -34,14 +38,18 @@ public class SubscriptionHandler {
     private static final String allowableCharactersInName = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890 _+*^&%$#@!+=\\|}]'?/<>'"; // Our current list of allowable characters in the name
 
 
+    public SubscriptionHandler()
+    {
+         dataBaseHandler = new DataBase();
+    }
+
 
 
     // This function will add subscriptionToAdd to database. It will first validate subscription, and then
     // try to add to database.
-    // It will throws Exceptions if anything goes wrong, so caller should br prepared to catch them.
+    // It will throw Exceptions if anything goes wrong (like invalid data), so caller should be prepared to catch them.
     public void addSubscription(SubscriptionObj subscriptionToAdd) throws DataBaseException, SubscriptionException {
         validateWholeSubscription(subscriptionToAdd); // might throw exception
-        DataBase dataBaseHandler = new DataBase();
         dataBaseHandler.addSubscriptionDataBase(subscriptionToAdd); // Added to dataBase!!
 
     }
@@ -141,8 +149,8 @@ public class SubscriptionHandler {
 
     // Gets and returns a single subscription by ID from the database.
     public SubscriptionObj getSubscriptionByID(int inputID) throws DataBaseException {
-        DataBase DBHandler = new DataBase();
-        SubscriptionObj returnSub = DBHandler.getSubscriptionByID(inputID);
+
+        SubscriptionObj returnSub = dataBaseHandler.getSubscriptionByID(inputID);
         return returnSub;
 
     }
@@ -151,9 +159,7 @@ public class SubscriptionHandler {
     public ArrayList<SubscriptionObj> getAllSubscriptions() throws DataBaseException
     {
 
-        DataBase DBhandler = new DataBase();
-
-        return DBhandler.queryGetAllSubs();
+        return dataBaseHandler.queryGetAllSubs();
 
     }
 
@@ -161,8 +167,8 @@ public class SubscriptionHandler {
     // Removes a subscription by ID from the database.
     // Will throw an Exception if subscription could not be deleted from database
     public void removeSubscriptionByID(int subscriptionID) throws DataBaseException {
-        DataBase dbHandler = new DataBase(); // handler for dataBase
-        dbHandler.removeSubscriptionByID(subscriptionID); // Remove it
+
+        dataBaseHandler.removeSubscriptionByID(subscriptionID); // Remove it
     }
 
 
@@ -174,9 +180,8 @@ public class SubscriptionHandler {
     public void editWholeSubscription(int subscriptionID, SubscriptionObj subscriptionToEdit) throws DataBaseException, SubscriptionException {
 
 
-        DataBase dbHandler = new DataBase(); // handler to dataBase
         validateWholeSubscription(subscriptionToEdit); // Validate the subscription
-        dbHandler.editSubscriptionByID(subscriptionID, subscriptionToEdit); // Go edit
+        dataBaseHandler.editSubscriptionByID(subscriptionID, subscriptionToEdit); // Go edit
 
     }
 
@@ -184,11 +189,11 @@ public class SubscriptionHandler {
 
     // This part essentially returns what are allowable parameters for a subscription object.
     // I am not sure to have this in the logic layer, or attach it to the domain object directly?
-    // I think it makes more sense to have it in the logic layer, incase we ever have different
+    // I think it makes more sense to have it in the logic layer, in case we ever have different
     // allowable parameters for different users.
 
 
-    // Returns how many digits are allowable before decimal place
+    // Returns how many digits are allowable before decimal place for payment amount
     public static int getMaxPaymentDigitsBeforeDecimal() {
         int payment = MAX_PAYMENT_DOLLAR;
         int digitsBeforeDecimalCount = 0;

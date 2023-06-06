@@ -8,10 +8,10 @@ import com.track_it.logic.exception.DataBaseSubNotFoundException;
 
 import java.util.ArrayList;
 
-// DataBase handler
+
 //
 // Currently our data base consists of a single ArrayList of database object
-
+// This database is currently very fake.
 
 
 public class DataBase {
@@ -52,11 +52,13 @@ public class DataBase {
     }
 
 
-    // A temporary fake Data filler.
-    // Fill the dataBase with 10 fake subs
+    // This is a temporary function!
+    // This will eventually be moved to some type of utility folder
+    // Currently fills the dataBase with 10 fake subs
     public static void fillFakeData()
     {
 
+        // Create 10 subs, with random data
         String FrequencyList[] = SubscriptionHandler.getFrequencyList();
         int numFrequency = SubscriptionHandler.getNumFrequencies();
         SubscriptionHandler subHandler = new SubscriptionHandler();
@@ -64,11 +66,10 @@ public class DataBase {
         for (int i =0 ; i < 10; i++)
         {
 
-
             try {
                 String inputName = "Rand name " + i;
                 String frequency = FrequencyList[i % numFrequency];
-                int payment = (int) (Math.random() * 10000 + 1);
+                int payment = (int) (Math.random() * SubscriptionHandler.getMaxPaymentCentsTotal() + 1);
                 SubscriptionObj currSub = new SubscriptionObj(inputName, payment,frequency);
                 subHandler.addSubscription(currSub);
 
@@ -163,8 +164,8 @@ public class DataBase {
 
 
     // Tries to remove a subscription with the id of subcriptionID from the database- will throw exception if it can't be deleted
-    // I image that eventually we will have a sql server, and the subscription primary key for the sql table will be the subcriptionID
-    // Do Not reduce Count!
+    // I image that eventually we will have a real database, and the subscription primary key for the sql table will be the subcriptionID.
+    // Do Not reduce Count when removing a subscription!
     public void  removeSubscriptionByID( int subcriptionID)
     {
         boolean removed = false;

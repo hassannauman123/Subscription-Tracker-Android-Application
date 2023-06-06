@@ -35,15 +35,26 @@ public class SubscriptionInput extends AppCompatActivity
 
             if (paymentAmountString.length > 1) {
 
-                if (isParsable(paymentAmountString[1])) {
+                if (isParsable(paymentAmountString[1]))
+                {
 
                     if (paymentInCents == Integer.MIN_VALUE) {
                         paymentInCents = 0;
+
                     }
-                    if(paymentAmountString[1].length() == 1)
-                        paymentInCents = paymentInCents + Integer.parseInt(paymentAmountString[1])*10;
-                    else
+                    if(paymentAmountString[1].length() == 1)  // The payment is in the format like: 10.2, so we need to to multiply the 2 by 10 to get cents payment amount
+                    {
+                        paymentInCents = paymentInCents + Integer.parseInt(paymentAmountString[1]) * 10;
+                    }
+                    else if ( paymentAmountString[1].length() > 2) // If there are more than 2 digits after decimal, then it is invalid.  ex  10.444 <- more than 2 digits after decimal
+                        {
+                            paymentInCents = Integer.MIN_VALUE;
+                        }
+
+
+                    else {
                         paymentInCents = paymentInCents + Integer.parseInt(paymentAmountString[1]);
+                    }
                 }
             }
         }
@@ -69,8 +80,6 @@ public class SubscriptionInput extends AppCompatActivity
         return paymentInCents;
 
     }
-
-
 
     // check if the input string is parsable by Integer.parseInt function
     private boolean isParsable(String inputString) {
@@ -98,7 +107,8 @@ class DecimalDigitsInputFilter implements InputFilter {
     }
 
 
-    // Makes it such that the string will be in the format such that there will at most be digitBeforeDecimal before the decimal, and decimalDigits after the decimal
+    // Makes it such that the string the user is allowed to entered will be in the format such that the number of digits before the decimal will be at most digitBeforeDecimal
+    // and the number of digits after the decimal will be decimalDigits
     @Override
     public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
 
@@ -113,40 +123,43 @@ class DecimalDigitsInputFilter implements InputFilter {
         int len = dest.length(); // Get length of previous string
 
 
-        // Iterate over the string, looking for decimal character
-        for (int i = 0; i < len; i++) {
-            char charIterator = dest.charAt(i); // The current char being read
 
-            if (charIterator == '.') {
-                dotPos = i; // Decimal place found
-                break;
-            } else if ((i >= digitBeforeDecimal - 1) && !source.equals("."))  // The maximum amount of integers before the decimal
+            // Iterate over the string, looking for decimal character
+            for (int i = 0; i < len; i++) {
+                char charIterator = dest.charAt(i); // The current char being read
 
-            {
-                if ((i + 1) < len && dest.charAt(i + 1) == '.') // The next char after this is a decimal, so we are good
+                if (charIterator == '.') {
+                    dotPos = i; // Decimal place found
+                    break;
+                } else if ((i >= digitBeforeDecimal - 1) && !source.equals("."))  // The maximum amount of integers before the decimal
+
                 {
-                    continue; // Continue back to loop ( dotPos will end being = to i+1);
-                } else {
-                    returnValue = ""; // Else we hit the maximum number of integers before decimal, and the next char is not a decimal so don't add anything
-                    break; // Break out of this for loop, and dotPos will <
+                    if ((i + 1) < len && dest.charAt(i + 1) == '.') // The next char after this is a decimal, so we are good
+                    {
+                        continue; // Continue back to loop ( dotPos will end being = to i+1);
+                    } else {
+                        returnValue = ""; // Else we hit the maximum number of integers before decimal, and the next char is not a decimal so don't add anything
+                        break; // Break out of this for loop, and dotPos will <
+                    }
                 }
             }
-        }
 
-        if (dotPos >= 0)  // Decimal is in the string
-        {
 
-            // If source is being added to front of decimal and there is room accept source
-            if (dend <= dotPos && (dotPos < digitBeforeDecimal)) {
-                returnValue = null;
+            if (dotPos >= 0)  // Decimal is in the string, and we are trying to insert a digit
+            {
+
+                // If source is being added to front of decimal and there is room accept source
+                if (dend <= dotPos && (dotPos < digitBeforeDecimal)) {
+                    returnValue = null;
+                }
+                // Else - If there are already 2 digits past the decimal and source digit is going past decimal reject source
+                else if (len - dotPos > decimalDigits) {
+                    returnValue = "";
+                }
             }
-            // Else - If there are already 2 digits past the decimal and source is going past decimal reject source
-            else if (len - dotPos > decimalDigits) {
-                returnValue = "";
-            }
-        }
 
-        return returnValue; // Will be null if source accepted, and "" if source accepted!
+
+        return returnValue; // Will be null if source accepted, and "" if source rejected!
     }
 
 }

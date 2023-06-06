@@ -28,9 +28,7 @@ public class SubscriptionObj
 
     }
 
-
-
-
+    // Create and return a  copy of this object
     public SubscriptionObj copy()
     {
         SubscriptionObj copyOfSubscription = new SubscriptionObj(this.name, this.paymentInCents, this.paymentFrequency);
@@ -39,13 +37,14 @@ public class SubscriptionObj
         return copyOfSubscription;
     }
 
+    //Various get and set methods. They are very simple (at least for now)
     public String getName()
     {
         return name;
 
     }
 
-    public void  setName(String inputName)
+    public void setName(String inputName)
     {
          this.name = inputName;
 
@@ -61,12 +60,13 @@ public class SubscriptionObj
     }
 
     public int getTotalPaymentInCents() { return paymentInCents; }
-    public int getPaymentDollars()
+    public int getPaymentDollars() // Return only the dollars amount of the payment
     {
         return paymentInCents / 100;
     }
 
-    public int getPaymentCents() { return paymentInCents -  ( paymentInCents / 100) *100 ; }
+    public int getPaymentCents()  //Return only the cents amount (That is the part that comes after the decimal, ie 22.55 (stored as 2255) -> returns 55)
+    { return paymentInCents -  ( paymentInCents / 100) *100 ; }
 
     public void setPayment(int inputPayment)
     {

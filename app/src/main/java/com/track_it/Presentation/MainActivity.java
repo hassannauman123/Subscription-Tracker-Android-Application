@@ -20,8 +20,8 @@ import java.util.ArrayList;
 //  This is the presentation class for the main home page of the app.
 //  It will be instantiated when the android app first starts
 //
-//  Currently it displays all subscriptions in scrollable list, and has a button to add a new sub.
-//   Clicking on any sub should open a new page that allows you to edit or delete the sub.
+//  Currently it displays all subscriptions in a scrollable list, and got to a page to add a new subscription.
+//   Clicking on any subscription should open a new page that allows you to edit or delete the sub.
 //
 
 public class MainActivity extends AppCompatActivity {

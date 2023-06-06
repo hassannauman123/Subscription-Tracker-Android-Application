@@ -1,10 +1,11 @@
 package com.track_it;
 
-import org.junit.Test;
-
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import com.track_it.logic.SubscriptionHandler;
+
+import org.junit.Test;
 
 
 public class SubscriptionValidateTest {
