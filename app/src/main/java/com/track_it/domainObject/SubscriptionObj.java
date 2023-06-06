@@ -60,19 +60,13 @@ public class SubscriptionObj
         this.paymentFrequency =  inputFrequency;
     }
 
-    public int getTotalPaymentInCents()
-    {
-        return paymentInCents;
-    }
+    public int getTotalPaymentInCents() { return paymentInCents; }
     public int getPaymentDollars()
     {
         return paymentInCents / 100;
     }
 
-    public int getPaymentCents()
-    {
-        return   paymentInCents -  ( paymentInCents / 100) *100 ;
-    }
+    public int getPaymentCents() { return paymentInCents -  ( paymentInCents / 100) *100 ; }
 
     public void setPayment(int inputPayment)
     {

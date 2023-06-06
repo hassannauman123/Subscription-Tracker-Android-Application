@@ -37,12 +37,13 @@ public class SubscriptionInput extends AppCompatActivity
 
                 if (isParsable(paymentAmountString[1])) {
 
-                    if (paymentInCents == Integer.MIN_VALUE)
-                    {
+                    if (paymentInCents == Integer.MIN_VALUE) {
                         paymentInCents = 0;
                     }
-
-                    paymentInCents = paymentInCents + Integer.parseInt(paymentAmountString[1]);
+                    if(paymentAmountString[1].length() == 1)
+                        paymentInCents = paymentInCents + Integer.parseInt(paymentAmountString[1])*10;
+                    else
+                        paymentInCents = paymentInCents + Integer.parseInt(paymentAmountString[1]);
                 }
             }
         }

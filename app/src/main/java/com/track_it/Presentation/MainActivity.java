@@ -95,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
 
             // Set Payment amount
             TextView targetPaymentAmount =  subscriptionBox.findViewById(R.id.subscription_amount);
-            targetPaymentAmount.setText("Payment Amount: $" + curr.getPaymentDollars() + "." +  curr.getPaymentCents() );
+            targetPaymentAmount.setText("Payment Amount: $" + curr.getPaymentDollars() + "." +  String.format("%02d", curr.getPaymentCents()));
 
 
             //Set ID - Just as a reminder, these might not be unique ID's on this page, as other elements may have these ID numbers

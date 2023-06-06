@@ -84,7 +84,7 @@ public class AddSubscriptionActivity extends AppCompatActivity {
          SubscriptionInput subInput = new SubscriptionInput(); // Make a helper object, to get user input
           int paymentInCents = 1;
           try {
-              subInput.getPaymentAmountInput((EditText) findViewById(R.id.input_payment_amount));
+              paymentInCents = subInput.getPaymentAmountInput((EditText) findViewById(R.id.input_payment_amount));
               ((TextView) findViewById(R.id.input_payment_amount_error)).setVisibility(View.INVISIBLE);
 
           }
