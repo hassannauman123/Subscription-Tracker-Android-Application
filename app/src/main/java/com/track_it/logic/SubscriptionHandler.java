@@ -9,6 +9,9 @@ import com.track_it.persistence.DataBase;
 import java.util.ArrayList;
 
 
+//This class is used to handle and implement the logical manipulation of the subscription objects.
+// It also sets the allowable parameters of a subscription object.
+
 public class SubscriptionHandler {
 
 
@@ -19,7 +22,7 @@ public class SubscriptionHandler {
     private static final int MAX_PAYMENT_DOLLAR = 9999;
     private static final int MAX_PAYMENT_CENTS = 99;
 
-    private static final int MAX_PAYMENT_CENTS_TOTAL = MAX_PAYMENT_DOLLAR * 100 + MAX_PAYMENT_CENTS; // Maximum payment will be 9999.99
+    private static final int MAX_PAYMENT_CENTS_TOTAL = MAX_PAYMENT_DOLLAR * 100 + MAX_PAYMENT_CENTS; // Maximum payment will be 9999.99 or 999999 cents
 
     private DataBase dataBaseHandler; //DatabaseHandler
 
@@ -172,7 +175,7 @@ public class SubscriptionHandler {
 
 
     // Edit a whole subscription, and save those changes to the database
-    // This throws Exceptions if new data is invalid, subscriptionID is invalid, or the subscription can't be edited
+    // This throws Exceptions if new data is invalid, subscriptionID is invalid, or the subscription can't be edited.
     // Input Parameters:
     //        subscriptionID  - The id of the subscription to change
     //       subscriptionToEdit - The details that the subscipsubscriptionriton will be changed to.
@@ -180,7 +183,7 @@ public class SubscriptionHandler {
 
 
         validateWholeSubscription(subscriptionToEdit); // Validate the subscription
-        dataBaseHandler.editSubscriptionByID(subscriptionID, subscriptionToEdit); // Go edit
+        dataBaseHandler.editSubscriptionByID(subscriptionID, subscriptionToEdit); // ave the edits.
 
     }
 

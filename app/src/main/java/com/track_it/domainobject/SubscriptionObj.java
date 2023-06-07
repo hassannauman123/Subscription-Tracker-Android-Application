@@ -1,12 +1,16 @@
 package com.track_it.domainobject;
+//
+// This class is used to represent a subscription object
+//
+
 
 public class SubscriptionObj
 {
 
-    private int subscriptionID;
-    private String name;
-    private int paymentInCents;
-    private String paymentFrequency; // If we limit ourselves to this only being a string then we will forever limit the input of the user (At least not without a lot of rework. I am not sure if that is a good idea or not
+    private int subscriptionID; // The unique ID of the subscription
+    private String name; // The name of the subscription
+    private int paymentInCents; // The payment amount in cents
+    private String paymentFrequency; // - How often a payment happens. (Since this is a string, we will be limiting the allowable payment frequencies to a handful of well defined values)
 
     public SubscriptionObj(String inputName, int inputPayments, String inputPaymentFrequency )
     {
@@ -35,7 +39,10 @@ public class SubscriptionObj
         return copyOfSubscription;
     }
 
+
+    //
     //Various get and set methods. They are very simple (at least for now)
+    //
     public String getName()
     {
         return name;

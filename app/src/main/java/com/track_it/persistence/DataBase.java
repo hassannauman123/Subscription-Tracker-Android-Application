@@ -7,11 +7,11 @@ import com.track_it.logic.exception.DataBaseSubNotFoundException;
 
 import java.util.ArrayList;
 
-
+// This is the database class, use to stored information in a database.
 //
-// Currently our data base consists of a single ArrayList of database object
+// Currently our data base consists of a single ArrayList that holds subscription objects.
 // This database is currently very fake.
-
+//
 
 public class DataBase {
 
