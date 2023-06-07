@@ -24,6 +24,16 @@ public class SubscriptionValidateTest {
         }
         assertTrue(thrown);
 
+        // Invalid characters
+        thrown = false;
+        inputName = "One~Twothree` ";
+
+        try {
+            subHandler.validateName(inputName);
+        } catch (Exception e) {
+            thrown = true;
+        }
+        assertTrue(thrown);
 
         // Try lots of blank space
         for (int i = 0; i < 100; i++) {
@@ -36,31 +46,6 @@ public class SubscriptionValidateTest {
             }
             assertTrue(thrown);
         }
-
-
-        // Try to short letters
-        thrown = false;
-        inputName = "ab";
-
-        try {
-            subHandler.validateName(inputName);
-        } catch (Exception e) {
-            thrown = true;
-        }
-        assertTrue(thrown);
-
-
-        // Try non alpha letters first
-        thrown = false;
-        inputName = "1ab";
-
-        try {
-            subHandler.validateName(inputName);
-        } catch (Exception e) {
-            thrown = true;
-        }
-        assertTrue(thrown);
-
 
         // Try white spaces first
         thrown = false;
@@ -77,18 +62,6 @@ public class SubscriptionValidateTest {
         // Try white spaces trailing
         thrown = false;
         inputName = "onettwo ";
-
-        try {
-            subHandler.validateName(inputName);
-        } catch (Exception e) {
-            thrown = true;
-        }
-        assertTrue(thrown);
-
-
-        // Invalid characters
-        thrown = false;
-        inputName = "One~Twothree` ";
 
         try {
             subHandler.validateName(inputName);
@@ -177,6 +150,30 @@ public class SubscriptionValidateTest {
             }
             assertTrue(!thrown);
         }
+
+
+        // Try to short letters
+        thrown = false;
+        inputName = "ab";
+
+        try {
+            subHandler.validateName(inputName);
+        } catch (Exception e) {
+            thrown = true;
+        }
+        assertFalse(thrown);
+
+
+        // Try non alpha letters first
+        thrown = false;
+        inputName = "1ab";
+
+        try {
+            subHandler.validateName(inputName);
+        } catch (Exception e) {
+            thrown = true;
+        }
+        assertFalse(thrown);
 
         System.out.println("Finished testing validateName with valid Data!");
     }
