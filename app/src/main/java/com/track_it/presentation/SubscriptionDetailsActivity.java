@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -123,13 +124,12 @@ public class SubscriptionDetailsActivity extends AppCompatActivity {
         {
 
             //Only Enable delete button if we could load subscription
-            Button button = (Button) findViewById(R.id.details_delete_subscription);
-            button.setOnClickListener(new View.OnClickListener() {
+            Button deleteButton = (Button) findViewById(R.id.details_delete_subscription);
+            deleteButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
 
                     if ( !editMode)  // If we are not in edit mode, let the user delete it
                     {
-
                         createDialog(subscriptionToDisplay.getID());
                     }
 
@@ -149,6 +149,12 @@ public class SubscriptionDetailsActivity extends AppCompatActivity {
         EditText etText = findViewById(R.id.detail_subscription_amount);  // Target Payment amount input
         etText.setFilters(new InputFilter[]{new DecimalDigitsInputFilter(MAX_PAYMENT_DECIMALS, MAX_DIGITAL_BEFORE_DECIMAL)}); // Pass setFilters and array
 
+    }
+
+    private void deleted(){
+        Toast.makeText(this, successDeleteMessage, Toast.LENGTH_SHORT).show(); //Display "Subscription Deleted"
+        setContentView(R.layout.activity_main); // Switch screen to display main page
+        finish();
     }
 
     // This changes whether the input can be edited by the user.
@@ -302,6 +308,7 @@ public class SubscriptionDetailsActivity extends AppCompatActivity {
                     SubHandler.removeSubscriptionByID(subscriptionToDelete); // Attempt to delete the sub
                     alreadyDeleted = true;
                     setGeneralError(successDeleteMessage, accomplishColor);
+                    deleted();
                 } catch (Exception e) {
                     if (!alreadyDeleted) {
                         setGeneralError(e.getMessage(), errorColor); // Some  unkown error occurred
