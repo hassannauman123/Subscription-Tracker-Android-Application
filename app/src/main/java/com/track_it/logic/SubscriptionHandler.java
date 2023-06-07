@@ -160,7 +160,6 @@ public class SubscriptionHandler {
     // Gets all the subscriptions in the database
     public ArrayList<SubscriptionObj> getAllSubscriptions() throws DataBaseException
     {
-
         return dataBaseHandler.queryGetAllSubs();
 
     }
@@ -222,8 +221,6 @@ public class SubscriptionHandler {
     }
 
 
-
-
     // Max length of subscription name
     public static int getMaxNameLength() {
         return MAX_NAME_LENGTH;
@@ -240,7 +237,6 @@ public class SubscriptionHandler {
 
         for (int i = 0; i < ALLOWABLE_FREQUENCIES.length; i++) {
             returnAllowableFrequencies[i] = ALLOWABLE_FREQUENCIES[i];
-
         }
 
         return returnAllowableFrequencies;

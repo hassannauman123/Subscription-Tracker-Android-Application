@@ -1,10 +1,11 @@
 package com.track_it;
 
-import org.junit.Test;
-
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import com.track_it.logic.SubscriptionHandler;
+
+import org.junit.Test;
 
 
 public class SubscriptionValidateTest {
@@ -291,12 +292,11 @@ public class SubscriptionValidateTest {
             }
             catch ( Exception e)
             {
-                System.out.println("validate frequency Test failed with input " + inputFrequency);
                 System.out.println(e.getMessage());
                 thrown = true;
             }
 
-            assertTrue(!thrown);
+            assertTrue("validate frequency Test failed with input " + inputFrequency,!thrown);
         }
 
 
@@ -368,6 +368,26 @@ public class SubscriptionValidateTest {
         assertTrue(thrown);
         System.out.println("Finished testing validatePaymentAmount with invalid Data!");
 
+
+
+
+        // Payment should be too large by exactly 1 cent!
+        thrown = false;
+        paymentAmount =  ((int) ( Math.pow(10, (subHandler.getMaxPaymentDigitsBeforeDecimal() ) )) )- 1; // should be like 9999
+        paymentAmount = paymentAmount * 100;
+        paymentAmount += 100;
+        try {
+            subHandler.validatePaymentAmount(paymentAmount);
+
+        } catch (Exception e) {
+            thrown = true;
+        }
+        assertTrue( "PaymentAmount " + paymentAmount + " was said to be valid, when it was suppose to be invalid", thrown);
+
+
+
+        System.out.println("Finished testing validatePaymentAmount with invalid Data!");
+
     }
 
 
@@ -410,6 +430,20 @@ public class SubscriptionValidateTest {
            assertFalse(thrown);
 
        }
+
+
+        // Payment should be valid (The exact max payment allowed)
+        thrown = false;
+        paymentAmount =  ((int) ( Math.pow(10, (subHandler.getMaxPaymentDigitsBeforeDecimal() ) )) )- 1; // should be like 9999
+        paymentAmount = paymentAmount * 100;
+        paymentAmount += 99;
+        try {
+            subHandler.validatePaymentAmount(paymentAmount);
+
+        } catch (Exception e) {
+            thrown = true;
+        }
+        assertFalse(   "PaymentAmount " + paymentAmount + " was said to be invalid, when it was suppose to be valid", thrown);
 
 
         System.out.println("Finished testing validatePaymentAmount with valid Data!");
