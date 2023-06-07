@@ -8,6 +8,8 @@ import android.widget.EditText;
 import android.text.InputFilter;
 import android.widget.RadioButton;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.track_it.R;
 import com.track_it.domainobject.SubscriptionObj;
 import com.track_it.logic.SubscriptionHandler;
@@ -111,7 +113,12 @@ public class AddSubscriptionActivity extends AppCompatActivity {
                 generalErrorTarget.setText("Subscription successfully Added!");
                 generalErrorTarget.setTextColor(Color.parseColor(accomplishColor));
 
-               disableAddSubscriptionsButtons();
+                disableAddSubscriptionsButtons();
+
+                Toast.makeText(this, "Subscription Added", Toast.LENGTH_SHORT).show();
+
+                setContentView(R.layout.activity_main); // Switch screen to display main page
+                finish();
 
             }
             // Something went wrong, display error for user
