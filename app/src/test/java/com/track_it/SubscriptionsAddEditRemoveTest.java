@@ -38,17 +38,16 @@ public class SubscriptionsAddEditRemoveTest
             thrown= true;
 
         }
-        assertFalse(thrown);
+        assertFalse("Unable to add new subscription", thrown);
 
         SubscriptionObj retrieve = subHandle.getSubscriptionByID(newSub.getID());
 
         //Make sure the sub has the original details
+        assertTrue(retrieve.getName() + " does not equal " + name, retrieve.getName().equals(name));
 
-        assertTrue(retrieve.getName().equals(name));
+        assertTrue(retrieve.getPaymentFrequency() + " does not equal " + paymentFrequency, retrieve.getPaymentFrequency().equals(paymentFrequency));
 
-        assertTrue(retrieve.getPaymentFrequency().equals(paymentFrequency));
-
-        assertTrue(retrieve.getTotalPaymentInCents() == paymentAmount);
+        assertEquals(retrieve.getTotalPaymentInCents() + " does not equal " + paymentAmount, retrieve.getTotalPaymentInCents(), paymentAmount);
 
 
 
@@ -108,18 +107,18 @@ public class SubscriptionsAddEditRemoveTest
 
         }
 
-        assertFalse(thrown);
+        assertFalse("Editing the subscription was unsuccessful", thrown);
 
 
 
         //Make sure the sub details have changed
         SubscriptionObj retrieveSubFomDataBase = subHandle.getSubscriptionByID(newSub.getID());
 
-        assertTrue(retrieveSubFomDataBase.getName().equals(newName));
+        assertTrue(retrieveSubFomDataBase.getName() + " does not equal " + newName, retrieveSubFomDataBase.getName().equals(newName));
 
-        assertTrue(retrieveSubFomDataBase.getPaymentFrequency().equals(newPaymentFrequency));
+        assertTrue("was expecting: " + retrieveSubFomDataBase.getPaymentFrequency() + " but instead returned: " + newPaymentFrequency, retrieveSubFomDataBase.getPaymentFrequency().equals(newPaymentFrequency));
 
-        assertTrue(retrieveSubFomDataBase.getTotalPaymentInCents() == newPayment);
+        assertEquals(retrieveSubFomDataBase.getTotalPaymentInCents() + " should be equal to " + newPayment, retrieveSubFomDataBase.getTotalPaymentInCents(), newPayment);
 
 
 
@@ -138,26 +137,11 @@ public class SubscriptionsAddEditRemoveTest
         int paymentAmount = (int) (Math.random() * SubscriptionHandler.getMaxPaymentCentsTotal()) + 1;
 
         SubscriptionObj newSub = new SubscriptionObj(name,paymentAmount,paymentFrequency);
+        subHandle.addSubscription(newSub);
 
         boolean thrown = false;
 
-        try {
-            subHandle.addSubscription(newSub);
-        }
-
-        catch(Exception e)
-        {
-            System.out.println("Failed Edit subscription test before running. Failed to add the subscription");
-            System.out.println(e.getMessage());
-            thrown = true;
-
-        }
-        assertFalse(thrown);
-
-
         //Change details of the subscription object with, but have 1 change be invalid
-         thrown = false;
-
         String newName = "New name";
         int newPayment = 0; // 1 invalid input !
 
@@ -175,8 +159,7 @@ public class SubscriptionsAddEditRemoveTest
             thrown = true;
 
         }
-
-        assertTrue(thrown);
+        assertTrue("Subscription was edited with invalid input", thrown);
 
 
 
@@ -184,19 +167,19 @@ public class SubscriptionsAddEditRemoveTest
         //Make sure the sub details have NOT changed
         SubscriptionObj retrieveSubFomDataBase = subHandle.getSubscriptionByID(newSub.getID()); //Get the subscription from the database
 
-        assertTrue(!retrieveSubFomDataBase.getName().equals(newName));
+        assertFalse(retrieveSubFomDataBase.getName() + " should not equal " + newName, retrieveSubFomDataBase.getName().equals(newName));
 
-        assertTrue(!retrieveSubFomDataBase.getPaymentFrequency().equals(newPaymentFrequency));
+        assertFalse(retrieveSubFomDataBase.getPaymentFrequency() + " should not equal " + newPaymentFrequency, retrieveSubFomDataBase.getPaymentFrequency().equals(newPaymentFrequency));
 
-        assertTrue(retrieveSubFomDataBase.getTotalPaymentInCents() != newPayment);
+        assertTrue("The payment data in the subscription should not have been updated to invalid input", retrieveSubFomDataBase.getTotalPaymentInCents() != newPayment);
 
         //Make sure the sub has the original details
 
-        assertTrue(retrieveSubFomDataBase.getName().equals(name));
+        assertTrue("The subscription name should not have changed as the input was invalid", retrieveSubFomDataBase.getName().equals(name));
 
-        assertTrue(retrieveSubFomDataBase.getPaymentFrequency().equals(paymentFrequency));
+        assertTrue("The subscription pay frequency should not have changed as the input was invalid", retrieveSubFomDataBase.getPaymentFrequency().equals(paymentFrequency));
 
-        assertTrue(retrieveSubFomDataBase.getTotalPaymentInCents() == paymentAmount);
+        assertTrue("The subscription cost should not have changed as the input was invalid", retrieveSubFomDataBase.getTotalPaymentInCents() == paymentAmount);
 
 
 
@@ -216,23 +199,10 @@ public class SubscriptionsAddEditRemoveTest
         SubscriptionObj newSub = new SubscriptionObj(name,paymentAmount,paymentFrequency);
 
         //ADD SUB
+        subHandle.addSubscription(newSub);
         boolean thrown = false;
-        try {
-            subHandle.addSubscription(newSub);
-        }
-
-        catch(Exception e)
-        {
-            System.out.println("Failed remove subscription test before running. Failed to add the subscription");
-            System.out.println(e.getMessage());
-            thrown = true;
-
-        }
-        assertFalse(thrown);
-
 
         //REMOVE SUB
-         thrown = false;
         try {
             subHandle.removeSubscriptionByID(newSub.getID());
         }
@@ -243,10 +213,10 @@ public class SubscriptionsAddEditRemoveTest
             thrown = true;
 
         }
-        assertFalse(thrown);
+        assertFalse("Unable to remove subscription", thrown);
 
 
-        //TRY TO REMOVE SUB again
+        //TRY TO REMOVE SUB again, should be unsuccessful
          thrown = false;
         try {
             subHandle.removeSubscriptionByID(newSub.getID());
@@ -255,11 +225,8 @@ public class SubscriptionsAddEditRemoveTest
         catch(Exception e)
         {
              thrown = true;
-
         }
-        assertTrue(thrown);
-
-
+        assertTrue("Sub removal method worked for a subscription object that should no longer be in the database", thrown);
 
 
         System.out.println("Passed the remove subscription test !");
