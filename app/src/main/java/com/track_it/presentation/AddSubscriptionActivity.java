@@ -115,7 +115,7 @@ public class AddSubscriptionActivity extends AppCompatActivity {
 
                 disableAddSubscriptionsButtons();
 
-                Toast.makeText(this, "Subscription Added", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Subscription Added", Toast.LENGTH_SHORT).show(); //Display "Subscription Added"
 
                 setContentView(R.layout.activity_main); // Switch screen to display main page
                 finish();
