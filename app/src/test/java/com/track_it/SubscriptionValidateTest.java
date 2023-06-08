@@ -170,7 +170,7 @@ public class SubscriptionValidateTest {
             } catch (Exception e) {
                 thrown = true;
             }
-            assertFalse("A string consisting of less than 3 characters should not be valid input", thrown);
+            assertFalse("A string consisting of less than 3 characters should not be invalid input", thrown);
 
 
             // Try non alpha letters first
@@ -182,7 +182,7 @@ public class SubscriptionValidateTest {
             } catch (Exception e) {
                 thrown = true;
             }
-            assertFalse("Sub name should not start with a number", thrown);
+            assertFalse("Sub name can start with a number", thrown);
         }
 
 
