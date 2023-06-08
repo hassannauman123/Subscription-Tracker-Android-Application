@@ -95,7 +95,6 @@ public class SubscriptionHandler {
     //      No trailing white spaces before or after string!
     //      Must be a least MIN_NAME_LENGTH long
     //      Must be less than or equal to MAX_NAME_LENGTH characters long
-    //      first char in string is a letter
     //      chars are restricted to certain characters (look at allowableCharactersInName)
 
     public void validateName(String inputName) throws SubscriptionInvalidNameException {
