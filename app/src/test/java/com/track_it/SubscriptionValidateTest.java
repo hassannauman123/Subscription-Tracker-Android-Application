@@ -47,29 +47,6 @@ public class SubscriptionValidateTest {
             assertTrue("Multiple spaces for a subscription name should not be valid input", thrown);
         }
 
-        // Try to short letters
-        thrown = false;
-        inputName = "ab";
-
-        try {
-            subHandler.validateName(inputName);
-        } catch (Exception e) {
-            thrown = true;
-        }
-        assertTrue("A string consisting of less than 3 characters should not be valid input", thrown);
-
-
-        // Try non alpha letters first
-        thrown = false;
-        inputName = "1ab";
-
-        try {
-            subHandler.validateName(inputName);
-        } catch (Exception e) {
-            thrown = true;
-        }
-        assertTrue("Sub name should not start with a number", thrown);
-
         // Try white spaces first
         thrown = false;
         inputName = " onettwo";
@@ -183,6 +160,29 @@ public class SubscriptionValidateTest {
                 thrown = true;
             }
             assertTrue("A name consisting of multiple valid characters was incorrectly flagged as invalid input", !thrown);
+
+            // Try to short letters
+            thrown = false;
+            inputName = "ab";
+
+            try {
+                subHandler.validateName(inputName);
+            } catch (Exception e) {
+                thrown = true;
+            }
+            assertFalse("A string consisting of less than 3 characters should not be valid input", thrown);
+
+
+            // Try non alpha letters first
+            thrown = false;
+            inputName = "1ab";
+
+            try {
+                subHandler.validateName(inputName);
+            } catch (Exception e) {
+                thrown = true;
+            }
+            assertFalse("Sub name should not start with a number", thrown);
         }
 
 

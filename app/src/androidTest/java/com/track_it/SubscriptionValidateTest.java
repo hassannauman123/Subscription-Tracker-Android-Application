@@ -12,7 +12,7 @@ public class SubscriptionValidateTest {
 
     @Test
     // We are going to test the validate name test
-    public void testNameValidateWithInvalidData() {
+    public void testNameValidateWithInValidData() {
         SubscriptionHandler subHandler = new SubscriptionHandler();
 
         boolean thrown = false;
@@ -22,44 +22,7 @@ public class SubscriptionValidateTest {
         } catch (Exception e) {
             thrown = true;
         }
-        assertTrue(thrown);
-
-
-        // Try lots of blank space
-        for (int i = 0; i < 100; i++) {
-            inputName = inputName + " ";
-            thrown = false;
-            try {
-                subHandler.validateName(inputName);
-            } catch (Exception e) {
-                thrown = true;
-            }
-            assertTrue(thrown);
-        }
-
-        // Try white spaces first
-        thrown = false;
-        inputName = " onettwo";
-
-        try {
-            subHandler.validateName(inputName);
-        } catch (Exception e) {
-            thrown = true;
-        }
-        assertTrue(thrown);
-
-
-        // Try white spaces trailing
-        thrown = false;
-        inputName = "onettwo ";
-
-        try {
-            subHandler.validateName(inputName);
-        } catch (Exception e) {
-            thrown = true;
-        }
-        assertTrue(thrown);
-
+        assertTrue("An empty string should not be valid input", thrown);
 
         // Invalid characters
         thrown = false;
@@ -71,6 +34,52 @@ public class SubscriptionValidateTest {
             thrown = true;
         }
         assertTrue(thrown);
+
+        // Try lots of blank space
+        for (int i = 0; i < 100; i++) {
+            inputName = inputName + " ";
+            thrown = false;
+            try {
+                subHandler.validateName(inputName);
+            } catch (Exception e) {
+                thrown = true;
+            }
+            assertTrue("Multiple spaces for a subscription name should not be valid input", thrown);
+        }
+
+        // Try white spaces first
+        thrown = false;
+        inputName = " onettwo";
+
+        try {
+            subHandler.validateName(inputName);
+        } catch (Exception e) {
+            thrown = true;
+        }
+        assertTrue("Should not allow white spaces at the start of a sub name", thrown);
+
+
+        // Try white spaces trailing
+        thrown = false;
+        inputName = "onettwo ";
+
+        try {
+            subHandler.validateName(inputName);
+        } catch (Exception e) {
+            thrown = true;
+        }
+        assertTrue("Should not allow white spaces at the end of a sub name", thrown);
+
+        // Invalid characters
+        thrown = false;
+        inputName = "One~Twothree` ";
+
+        try {
+            subHandler.validateName(inputName);
+        } catch (Exception e) {
+            thrown = true;
+        }
+        assertTrue("Should not allow invalid characters in the sub name", thrown);
 
         System.out.println("Finished testing validateName with invalid Data!");
     }
@@ -89,7 +98,7 @@ public class SubscriptionValidateTest {
         } catch (Exception e) {
             thrown = true;
         }
-        assertTrue(!thrown);
+        assertTrue("'One' was incorrectly flagged as an invalid sub name", !thrown);
 
 
         // Valid name with alpha characters
@@ -101,7 +110,7 @@ public class SubscriptionValidateTest {
         } catch (Exception e) {
             thrown = true;
         }
-        assertTrue(!thrown);
+        assertTrue("A sub name with valid characters was incorrectly flagged as invalid", !thrown);
 
 
         // Valid  name with spaces one space in middle
@@ -113,7 +122,7 @@ public class SubscriptionValidateTest {
         } catch (Exception e) {
             thrown = true;
         }
-        assertTrue(!thrown);
+        assertTrue("A sub name with spaces in the middle was incorrectly flagged as invalid input", !thrown);
 
 
         // Valid  name with two spaces in middle
@@ -125,7 +134,7 @@ public class SubscriptionValidateTest {
         } catch (Exception e) {
             thrown = true;
         }
-        assertTrue(!thrown);
+        assertTrue("A sub name with multiple spaces in the middle was incorrectly flagged as invalid input", !thrown);
 
 
         // Valid 100 Char name
@@ -150,9 +159,34 @@ public class SubscriptionValidateTest {
                 System.out.println(e.getMessage());
                 thrown = true;
             }
-            assertTrue(!thrown);
+            assertTrue("A name consisting of multiple valid characters was incorrectly flagged as invalid input", !thrown);
+
+            // Try to short letters
+            thrown = false;
+            inputName = "ab";
+
+            try {
+                subHandler.validateName(inputName);
+            } catch (Exception e) {
+                thrown = true;
+            }
+            assertFalse("A string consisting of less than 3 characters should not be valid input", thrown);
+
+
+            // Try non alpha letters first
+            thrown = false;
+            inputName = "1ab";
+
+            try {
+                subHandler.validateName(inputName);
+            } catch (Exception e) {
+                thrown = true;
+            }
+            assertFalse("Sub name should not start with a number", thrown);
         }
 
+
+        // Try to short letters
         thrown = false;
         inputName = "ab";
 
@@ -162,6 +196,7 @@ public class SubscriptionValidateTest {
             thrown = true;
         }
         assertFalse(thrown);
+
 
         // Try non alpha letters first
         thrown = false;
@@ -196,7 +231,7 @@ public class SubscriptionValidateTest {
         } catch (Exception e) {
             thrown = true;
         }
-        assertTrue(thrown);
+        assertTrue("Empty string was incorrectly accepted as valid payment frequency", thrown);
 
         // Invalid data with blank space
         thrown = false;
@@ -207,7 +242,7 @@ public class SubscriptionValidateTest {
         } catch (Exception e) {
             thrown = true;
         }
-        assertTrue(thrown);
+        assertTrue("Multiple blank spaces were incorrectly accepted as valid payment frequency", thrown);
 
         // Invalid data with strange looking input
         thrown = false;
@@ -218,7 +253,8 @@ public class SubscriptionValidateTest {
         } catch (Exception e) {
             thrown = true;
         }
-        assertTrue(thrown);
+
+        assertTrue("' one two' was incorrectly accepted as valid payment frequency", thrown);
 
 
         // Invalid data with correct frequency + char
@@ -230,7 +266,7 @@ public class SubscriptionValidateTest {
         } catch (Exception e) {
             thrown = true;
         }
-        assertTrue(thrown);
+        assertTrue("'"+ subHandler.getFrequencyList()[0] + "1' was incorrectly accepted as valid payment frequency", thrown);
 
 
 
@@ -244,7 +280,7 @@ public class SubscriptionValidateTest {
         } catch (Exception e) {
             thrown = true;
         }
-        assertTrue(thrown);
+        assertTrue("'"+ subHandler.getFrequencyList()[1] + " ' was incorrectly accepted as valid payment frequency", thrown);
 
 
         // Invalid data with correct frequency + blank character
@@ -256,7 +292,7 @@ public class SubscriptionValidateTest {
         } catch (Exception e) {
             thrown = true;
         }
-        assertTrue(thrown);
+        assertTrue("' "+ subHandler.getFrequencyList()[0] + "' was incorrectly accepted as valid payment frequency", thrown);
 
 
         System.out.println("Finished testing validatePaymentFrequency with invalid Data!");
@@ -319,7 +355,7 @@ public class SubscriptionValidateTest {
         } catch (Exception e) {
             thrown = true;
         }
-        assertTrue(thrown);
+        assertTrue("Payment amount should not be 0", thrown);
 
 
         // Payment too small
@@ -330,7 +366,7 @@ public class SubscriptionValidateTest {
         } catch (Exception e) {
             thrown = true;
         }
-        assertTrue(thrown);
+        assertTrue("Payment amount should not be a negative number", thrown);
 
 
         // Payment too small
@@ -341,7 +377,7 @@ public class SubscriptionValidateTest {
         } catch (Exception e) {
             thrown = true;
         }
-        assertTrue(thrown);
+        assertTrue("Payment amount should not be a negative number", thrown);
 
         // Payment too large
         thrown = false;
@@ -351,7 +387,7 @@ public class SubscriptionValidateTest {
         } catch (Exception e) {
             thrown = true;
         }
-        assertTrue(thrown);
+        assertTrue(Integer.MAX_VALUE + " should not be considered a valid payment amount", thrown);
 
         // Payment too large
         thrown = false;
@@ -361,7 +397,8 @@ public class SubscriptionValidateTest {
         } catch (Exception e) {
             thrown = true;
         }
-        assertTrue(thrown);
+        assertTrue("Payment amount should not exceed " + subHandler.getMaxPaymentCentsTotal(), thrown);
+
         System.out.println("Finished testing validatePaymentAmount with invalid Data!");
 
 
@@ -405,7 +442,7 @@ public class SubscriptionValidateTest {
         } catch (Exception e) {
             thrown = true;
         }
-        assertTrue(!thrown);
+        assertTrue("1 should have been considered a valid payment amount", !thrown);
 
 
         int maxPayment = subHandler.getMaxPaymentCentsTotal();
@@ -423,7 +460,7 @@ public class SubscriptionValidateTest {
                thrown = true;
            }
 
-           assertFalse(thrown);
+           assertFalse(i + "should have been considered a valid payment amount", thrown);
 
        }
 
@@ -445,9 +482,6 @@ public class SubscriptionValidateTest {
         System.out.println("Finished testing validatePaymentAmount with valid Data!");
 
     }
-
-
-
 
 
 
