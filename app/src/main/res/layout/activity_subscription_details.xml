@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Presentation.SubscriptionDetailsActivity">
+    tools:context=".presentation.SubscriptionDetailsActivity">
 
     <TextView
         android:id="@+id/textView7"
@@ -60,10 +60,8 @@
         android:id="@+id/details_general_error"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="115dp"
-        android:layout_marginTop="40dp"
-        android:layout_marginEnd="114dp"
-        android:text="gettgere"
+        android:layout_marginTop="72dp"
+        android:text="Already deleted"
         android:textAlignment="center"
         android:textColor="#FF0000"
         android:textColorHighlight="#FF0000"
@@ -71,8 +69,8 @@
         android:textColorLink="#FF0000"
         android:textSize="20sp"
         android:visibility="invisible"
-        app:layout_constraintEnd_toEndOf="@+id/detail_subscription_name"
-        app:layout_constraintStart_toStartOf="@+id/textView7"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:visibility="invisible" />
 
@@ -90,8 +88,8 @@
 
     <EditText
         android:id="@+id/detail_subscription_amount"
-        android:layout_width="69dp"
-        android:layout_height="43dp"
+        android:layout_width="74dp"
+        android:layout_height="46dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
 
@@ -102,8 +100,8 @@
 
     <EditText
         android:id="@+id/detail_subscription_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="179dp"
+        android:layout_height="46dp"
         android:layout_marginStart="68dp"
         android:layout_marginEnd="65dp"
 
@@ -132,6 +130,7 @@
         android:layout_width="102dp"
         android:layout_height="40dp"
         android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
         android:background="@android:color/white"
         android:text="Go Back"
         android:textColor="@android:color/white"

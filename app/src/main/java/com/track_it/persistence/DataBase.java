@@ -1,14 +1,17 @@
 package com.track_it.persistence;
-import com.track_it.domainObject.*;
-import com.track_it.exception.*;
+import com.track_it.domainobject.*;
 import com.track_it.logic.SubscriptionHandler;
+import com.track_it.logic.exception.DataBaseException;
+import com.track_it.logic.exception.DataBaseFullException;
+import com.track_it.logic.exception.DataBaseSubNotFoundException;
+
 import java.util.ArrayList;
 
-// DataBase handler
+// This is the database class, use to stored information in a database.
 //
-// Currently our data base consists of a single ArrayList of database object
-
-
+// Currently our data base consists of a single ArrayList that holds subscription objects.
+// This database is currently very fake.
+//
 
 public class DataBase {
 
@@ -33,6 +36,7 @@ public class DataBase {
     // When we actually have a database this method will take a part the inputSubscription object, and use it to create insert statements for
     // the sql dataBase.
     // Method will throw exceptions if something goes wrong with inserting into database.
+    // This will set the subscriptionID of the inputSubscription object. The calling function can use that to get the ID of the newly added subscription.
     public void addSubscriptionDataBase( SubscriptionObj inputSubscription)
     {
         if ( dataBaseCount >= Integer.MAX_VALUE) // A preview of what an exception might look like
@@ -47,10 +51,13 @@ public class DataBase {
     }
 
 
-    // A temporary fake Data filler.
+    // This is a temporary function!
+    // This will eventually be moved to some type of utility folder
+    // Currently fills the dataBase with 10 fake subs
     public static void fillFakeData()
     {
 
+        // Create 10 subs, with random data
         String FrequencyList[] = SubscriptionHandler.getFrequencyList();
         int numFrequency = SubscriptionHandler.getNumFrequencies();
         SubscriptionHandler subHandler = new SubscriptionHandler();
@@ -58,11 +65,10 @@ public class DataBase {
         for (int i =0 ; i < 10; i++)
         {
 
-
             try {
                 String inputName = "Rand name " + i;
                 String frequency = FrequencyList[i % numFrequency];
-                int payment = (int) (Math.random() * 10000 + 1);
+                int payment = (int) (Math.random() * SubscriptionHandler.getMaxPaymentCentsTotal() + 1);
                 SubscriptionObj currSub = new SubscriptionObj(inputName, payment,frequency);
                 subHandler.addSubscription(currSub);
 
@@ -82,10 +88,10 @@ public class DataBase {
 
         ArrayList<SubscriptionObj> returnListOfSubscriptions = new ArrayList<SubscriptionObj>();
 
-        //Go through the DataBase, and create return an arrayList of all the subscriptions
+        //Go through the DataBase, and create fill the arrayList with all the subscriptions the database
         for ( int i =0 ; i < subscriptionDB.size(); i++)
         {
-            SubscriptionObj copyOfSubscription = subscriptionDB.get(i).copy();
+            SubscriptionObj copyOfSubscription = subscriptionDB.get(i).copy(); // Copy the sub so the calling function can't illegally modify our fake dataBase
             returnListOfSubscriptions.add(copyOfSubscription);
 
         }
@@ -157,8 +163,8 @@ public class DataBase {
 
 
     // Tries to remove a subscription with the id of subcriptionID from the database- will throw exception if it can't be deleted
-    // I image that eventually we will have a sql server, and the subscription primary key for the sql table will be the subcriptionID
-    // Do Not reduce Count!
+    // I image that eventually we will have a real database, and the subscription primary key for the sql table will be the subcriptionID.
+    // Do Not reduce Count when removing a subscription!
     public void  removeSubscriptionByID( int subcriptionID)
     {
         boolean removed = false;

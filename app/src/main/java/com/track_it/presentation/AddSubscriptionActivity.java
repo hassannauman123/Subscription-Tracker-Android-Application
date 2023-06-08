@@ -1,5 +1,4 @@
-package com.track_it.Presentation;
-
+package com.track_it.presentation;
 import androidx.appcompat.app.AppCompatActivity;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -7,14 +6,14 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.text.InputFilter;
-import android.text.Spanned;
 import android.widget.RadioButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.track_it.R;
-import com.track_it.domainObject.SubscriptionObj;
+import com.track_it.domainobject.SubscriptionObj;
 import com.track_it.logic.SubscriptionHandler;
-import com.track_it.exception.*;
+import com.track_it.logic.exception.SubscriptionException;
 
 
 // This class handles the presentation of the subscription page for the android app.
@@ -23,6 +22,8 @@ import com.track_it.exception.*;
 public class AddSubscriptionActivity extends AppCompatActivity {
 
     private String accomplishColor = "#8c1f7c";
+
+    private static final String successAddMessage = "Subscription Added!";  // if add was successful
 
     private final int MAX_DIGITAL_BEFORE_DECIMAL = SubscriptionHandler.getMaxPaymentDigitsBeforeDecimal(); // The maximum number of digits (before the decimal point) that can be entered by user for payment amount
     private final int MAX_PAYMENT_DECIMALS = 2; // The maximum number of digits after the decimal for payment amount
@@ -74,20 +75,30 @@ public class AddSubscriptionActivity extends AppCompatActivity {
 
 
 
-    // What runs when the add sub button is clicked!
+    // What to run when the user clicks the add Subscription button
     private void clickedAddSubscriptionButton(View view) {
 
          successTry = true; // Is all the input valid? (this will become false if anything wrong is detected)
 
 
-        String userNameInput = getNameInput( view); // Get input for name
+        String userNameInput = getNameInput( view); // Get input for name,
 
-        SubscriptionInput subInput = new SubscriptionInput(); // Make a helper object, to get user input
-        int paymentInCents = subInput.getPaymentAmountInput( (EditText) findViewById(R.id.input_payment_amount) ,((TextView) findViewById(R.id.input_payment_amount_error)));
-        if (paymentInCents == Integer.MIN_VALUE)
-        {
-            successTry = false;
-        }
+        // Get input for payment amount
+         SubscriptionInput subInput = new SubscriptionInput(); // Make a helper object, to get user input
+          int paymentInCents = 1;
+          try {
+              paymentInCents = subInput.getPaymentAmountInput((EditText) findViewById(R.id.input_payment_amount));
+              ((TextView) findViewById(R.id.input_payment_amount_error)).setVisibility(View.INVISIBLE);
+
+          }
+          catch(Exception e)
+          {
+              successTry = false;
+              ((TextView) findViewById(R.id.input_payment_amount_error)).setText(e.getMessage());
+              ((TextView) findViewById(R.id.input_payment_amount_error)).setVisibility(View.VISIBLE);
+          }
+
+
 
         String PaymentFrequency = getPaymentFrequency(view); //Get input for payment frequency
 
@@ -95,25 +106,33 @@ public class AddSubscriptionActivity extends AppCompatActivity {
         if (successTry )  // Only if all of our internal checks have passed, try to add subscription to database
         {
             // Create a new Subscription object
-            SubscriptionObj newSubscription = new SubscriptionObj(userNameInput, paymentInCents, PaymentFrequency);
+            SubscriptionObj newSubscription = new SubscriptionObj(userNameInput, paymentInCents, PaymentFrequency); // Sets the parameters
 
             try { // Try to add subscription to dataBase
 
                 handler.addSubscription(newSubscription);
                 generalErrorTarget.setVisibility(View.VISIBLE);
-                generalErrorTarget.setText("Subscription successfully Added!");
+                generalErrorTarget.setText(successAddMessage);
                 generalErrorTarget.setTextColor(Color.parseColor(accomplishColor));
 
-               disableAddSubscriptionsButtons();
+                disableAddSubscriptionsButtons();
 
-            } catch (SubscriptionException e) {
+                Toast.makeText(this, successAddMessage, Toast.LENGTH_SHORT).show(); //Display "Subscription Added"
+
+                setContentView(R.layout.activity_main); // Switch screen to display main page
+                finish();
+
+            }
+            // Something went wrong, display error for user
+            catch (SubscriptionException e) {
                 generalErrorTarget.setText(e.getMessage());
                 generalErrorTarget.setVisibility(view.VISIBLE);
                 successTry = false;
             }
         }
-        else {
-            generalErrorTarget.setText("Error with input");
+        else // Else our internal checks did not pass
+        {
+            generalErrorTarget.setText("Invalid Input");
             generalErrorTarget.setVisibility(view.VISIBLE);
         }
 
@@ -123,7 +142,7 @@ public class AddSubscriptionActivity extends AppCompatActivity {
 
 
     // Get the name input from the user.
-    // This will throw Exceptions if invalid, set eror messages and set successTry to false
+    // This will throw an Exceptions if name input is invalid, display the error message for the users, and set successTry to false
     private String getNameInput(View view) throws SubscriptionException
     {
         // Get the string the user entered for a name
@@ -207,12 +226,12 @@ public class AddSubscriptionActivity extends AppCompatActivity {
     // Disable add Button after we added the sub
     private void disableAddSubscriptionsButtons()
     {
-        Button subButton = (Button) findViewById(R.id.submit_sub_button);
-        subButton.setEnabled(false);
+         addSubtarget.setEnabled(false); // Disable the add button
 
+
+        // Make all the input uneditable
         EditText textInput = (EditText) findViewById(R.id.input_subscription_name);
         textInput.setEnabled(false);
-
 
         EditText paymentAmountTarget = (EditText) findViewById(R.id.input_payment_amount);
         paymentAmountTarget.setEnabled(false);

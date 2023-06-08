@@ -1,4 +1,4 @@
-package com.track_it.exception;
+package com.track_it.logic.exception;
 
 
 public class DataBaseSubNotFoundException extends DataBaseException
