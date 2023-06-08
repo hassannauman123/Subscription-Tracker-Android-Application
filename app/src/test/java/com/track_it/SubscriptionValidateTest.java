@@ -47,8 +47,6 @@ public class SubscriptionValidateTest {
             assertTrue("Multiple spaces for a subscription name should not be valid input", thrown);
         }
 
-<<<<<<<<< Temporary merge branch 1
-
         // Try to short letters
         thrown = false;
         inputName = "ab";
@@ -72,9 +70,6 @@ public class SubscriptionValidateTest {
         }
         assertTrue("Sub name should not start with a number", thrown);
 
-
-=========
->>>>>>>>> Temporary merge branch 2
         // Try white spaces first
         thrown = false;
         inputName = " onettwo";
@@ -98,8 +93,6 @@ public class SubscriptionValidateTest {
         }
         assertTrue("Should not allow white spaces at the end of a sub name", thrown);
 
-<<<<<<<<< Temporary merge branch 1
-
         // Invalid characters
         thrown = false;
         inputName = "One~Twothree` ";
@@ -111,8 +104,6 @@ public class SubscriptionValidateTest {
         }
         assertTrue("Should not allow invalid characters in the sub name", thrown);
 
-=========
->>>>>>>>> Temporary merge branch 2
         System.out.println("Finished testing validateName with invalid Data!");
     }
 

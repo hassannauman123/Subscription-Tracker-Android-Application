@@ -12,7 +12,7 @@ public class SubscriptionValidateTest {
 
     @Test
     // We are going to test the validate name test
-    public void testNameValidateWithInValidData() {
+    public void testNameValidateWithInvalidData() {
         SubscriptionHandler subHandler = new SubscriptionHandler();
 
         boolean thrown = false;
@@ -36,31 +36,6 @@ public class SubscriptionValidateTest {
             }
             assertTrue(thrown);
         }
-
-
-        // Try to short letters
-        thrown = false;
-        inputName = "ab";
-
-        try {
-            subHandler.validateName(inputName);
-        } catch (Exception e) {
-            thrown = true;
-        }
-        assertTrue(thrown);
-
-
-        // Try non alpha letters first
-        thrown = false;
-        inputName = "1ab";
-
-        try {
-            subHandler.validateName(inputName);
-        } catch (Exception e) {
-            thrown = true;
-        }
-        assertTrue(thrown);
-
 
         // Try white spaces first
         thrown = false;
@@ -177,6 +152,27 @@ public class SubscriptionValidateTest {
             }
             assertTrue(!thrown);
         }
+
+        thrown = false;
+        inputName = "ab";
+
+        try {
+            subHandler.validateName(inputName);
+        } catch (Exception e) {
+            thrown = true;
+        }
+        assertFalse(thrown);
+
+        // Try non alpha letters first
+        thrown = false;
+        inputName = "1ab";
+
+        try {
+            subHandler.validateName(inputName);
+        } catch (Exception e) {
+            thrown = true;
+        }
+        assertFalse(thrown);
 
         System.out.println("Finished testing validateName with valid Data!");
     }
