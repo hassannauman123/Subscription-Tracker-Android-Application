@@ -24,6 +24,16 @@ public class SubscriptionValidateTest {
         }
         assertTrue("An empty string should not be valid input", thrown);
 
+        // Invalid characters
+        thrown = false;
+        inputName = "One~Twothree` ";
+
+        try {
+            subHandler.validateName(inputName);
+        } catch (Exception e) {
+            thrown = true;
+        }
+        assertTrue(thrown);
 
         // Try lots of blank space
         for (int i = 0; i < 100; i++) {
@@ -36,31 +46,6 @@ public class SubscriptionValidateTest {
             }
             assertTrue("Multiple spaces for a subscription name should not be valid input", thrown);
         }
-
-
-        // Try to short letters
-        thrown = false;
-        inputName = "ab";
-
-        try {
-            subHandler.validateName(inputName);
-        } catch (Exception e) {
-            thrown = true;
-        }
-        assertTrue("A string consisting of less than 3 characters should not be valid input", thrown);
-
-
-        // Try non alpha letters first
-        thrown = false;
-        inputName = "1ab";
-
-        try {
-            subHandler.validateName(inputName);
-        } catch (Exception e) {
-            thrown = true;
-        }
-        assertTrue("Sub name should not start with a number", thrown);
-
 
         // Try white spaces first
         thrown = false;
@@ -84,7 +69,6 @@ public class SubscriptionValidateTest {
             thrown = true;
         }
         assertTrue("Should not allow white spaces at the end of a sub name", thrown);
-
 
         // Invalid characters
         thrown = false;
@@ -176,7 +160,54 @@ public class SubscriptionValidateTest {
                 thrown = true;
             }
             assertTrue("A name consisting of multiple valid characters was incorrectly flagged as invalid input", !thrown);
+
+            // Try to short letters
+            thrown = false;
+            inputName = "ab";
+
+            try {
+                subHandler.validateName(inputName);
+            } catch (Exception e) {
+                thrown = true;
+            }
+            assertFalse("A string consisting of less than 3 characters should not be valid input", thrown);
+
+
+            // Try non alpha letters first
+            thrown = false;
+            inputName = "1ab";
+
+            try {
+                subHandler.validateName(inputName);
+            } catch (Exception e) {
+                thrown = true;
+            }
+            assertFalse("Sub name should not start with a number", thrown);
         }
+
+
+        // Try to short letters
+        thrown = false;
+        inputName = "ab";
+
+        try {
+            subHandler.validateName(inputName);
+        } catch (Exception e) {
+            thrown = true;
+        }
+        assertFalse(thrown);
+
+
+        // Try non alpha letters first
+        thrown = false;
+        inputName = "1ab";
+
+        try {
+            subHandler.validateName(inputName);
+        } catch (Exception e) {
+            thrown = true;
+        }
+        assertFalse(thrown);
 
         System.out.println("Finished testing validateName with valid Data!");
     }

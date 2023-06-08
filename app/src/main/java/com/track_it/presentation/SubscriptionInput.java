@@ -59,12 +59,12 @@ public class SubscriptionInput extends AppCompatActivity
             }
         }
         else {
-            throw new SubscriptionInvalidPaymentException("Invalid input for Payment amount");
+            throw new SubscriptionInvalidPaymentException("Invalid payment amount");
         }
 
         if (paymentInCents == Integer.MIN_VALUE) {
 
-            throw new SubscriptionInvalidPaymentException("Invalid input for Payment amount");
+            throw new SubscriptionInvalidPaymentException("Invalid payment amount");
 
         } else {
             try {

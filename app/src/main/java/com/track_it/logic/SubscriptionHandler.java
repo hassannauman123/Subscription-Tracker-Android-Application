@@ -17,7 +17,7 @@ public class SubscriptionHandler {
 
     //Every variable here sets what are allowable values of a subscription object
 
-    private static final int MIN_NAME_LENGTH = 3;
+    private static final int MIN_NAME_LENGTH = 1;
     private static final int MAX_NAME_LENGTH = 100;
     private static final int MAX_PAYMENT_DOLLAR = 9999;
     private static final int MAX_PAYMENT_CENTS = 99;
@@ -72,7 +72,7 @@ public class SubscriptionHandler {
         boolean match = false;
 
         if (inputName.equals("")) {
-            throw new SubscriptionInvalidPaymentException("You must enter a payment Frequency!");
+            throw new SubscriptionInvalidPaymentException("Payment frequency required");
 
         }
 
@@ -84,7 +84,7 @@ public class SubscriptionHandler {
         }
 
         if (!match) {
-            throw new SubscriptionInvalidPaymentException("Incorrect frequency Entered");
+            throw new SubscriptionInvalidPaymentException(inputName + " is not a valid frequency");
         }
     }
 
@@ -103,30 +103,24 @@ public class SubscriptionHandler {
 
         //The name has to be a minimum length
         if (inputName.trim().length() < MIN_NAME_LENGTH) {
-            throw new SubscriptionInvalidNameException("Name needs to be at least 3 characters long");
-        } else  // Now we know string is greater than 3 chars
-        {
-            if (!Character.isLetter((inputName.charAt(0)))) {
-                throw new SubscriptionInvalidNameException("First character in name must be a letter");
-            }
+            throw new SubscriptionInvalidNameException("Name required");
         }
 
         if (inputName.length() > MAX_NAME_LENGTH) {
-            throw new SubscriptionInvalidNameException("Name is too Long");
-
+            throw new SubscriptionInvalidNameException("Name is too long");
         }
 
         if (!inputName.equals(inputName.trim())) // Blank spaces as first or last char
         {
 
-            throw new SubscriptionInvalidNameException("First and last characters must not be spaces");
+            throw new SubscriptionInvalidNameException("Must not start or end with spaces");
         }
 
 
         //Iterate through whole string, checks for invalid characters
         for (int i = 0; i < inputName.length(); i++) {
             if (allowableCharactersInName.indexOf(inputName.charAt(i)) == -1) {
-                throw new SubscriptionInvalidNameException("Invalid characters detected!");
+                throw new SubscriptionInvalidNameException(inputName.charAt(i) + " is not allowed");
             }
         }
 
@@ -143,7 +137,7 @@ public class SubscriptionHandler {
         }
         if (paymentAmount > MAX_PAYMENT_CENTS_TOTAL) {
 
-            throw new SubscriptionInvalidPaymentException("Payment amount is too large, Maximum payment is $" + MAX_PAYMENT_DOLLAR + "." + MAX_PAYMENT_CENTS);
+            throw new SubscriptionInvalidPaymentException("Payment amount is too large. Maximum payment is $" + MAX_PAYMENT_DOLLAR + "." + MAX_PAYMENT_CENTS);
 
         }
     }
@@ -177,7 +171,7 @@ public class SubscriptionHandler {
     // This throws Exceptions if new data is invalid, subscriptionID is invalid, or the subscription can't be edited.
     // Input Parameters:
     //        subscriptionID  - The id of the subscription to change
-    //       subscriptionToEdit - The details that the subscipsubscriptionriton will be changed to.
+    //       subscriptionToEdit - The details that the subscription will be changed to.
     public void editWholeSubscription(int subscriptionID, SubscriptionObj subscriptionToEdit) throws DataBaseException, SubscriptionException {
 
 

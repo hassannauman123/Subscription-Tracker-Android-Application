@@ -8,6 +8,8 @@ import android.widget.EditText;
 import android.text.InputFilter;
 import android.widget.RadioButton;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.track_it.R;
 import com.track_it.domainobject.SubscriptionObj;
 import com.track_it.logic.SubscriptionHandler;
@@ -20,6 +22,8 @@ import com.track_it.logic.exception.SubscriptionException;
 public class AddSubscriptionActivity extends AppCompatActivity {
 
     private String accomplishColor = "#8c1f7c";
+
+    private static final String successAddMessage = "Subscription Added!";  // if add was successful
 
     private final int MAX_DIGITAL_BEFORE_DECIMAL = SubscriptionHandler.getMaxPaymentDigitsBeforeDecimal(); // The maximum number of digits (before the decimal point) that can be entered by user for payment amount
     private final int MAX_PAYMENT_DECIMALS = 2; // The maximum number of digits after the decimal for payment amount
@@ -108,10 +112,15 @@ public class AddSubscriptionActivity extends AppCompatActivity {
 
                 handler.addSubscription(newSubscription);
                 generalErrorTarget.setVisibility(View.VISIBLE);
-                generalErrorTarget.setText("Subscription successfully Added!");
+                generalErrorTarget.setText(successAddMessage);
                 generalErrorTarget.setTextColor(Color.parseColor(accomplishColor));
 
-               disableAddSubscriptionsButtons();
+                disableAddSubscriptionsButtons();
+
+                Toast.makeText(this, successAddMessage, Toast.LENGTH_SHORT).show(); //Display "Subscription Added"
+
+                setContentView(R.layout.activity_main); // Switch screen to display main page
+                finish();
 
             }
             // Something went wrong, display error for user
@@ -123,7 +132,7 @@ public class AddSubscriptionActivity extends AppCompatActivity {
         }
         else // Else our internal checks did not pass
         {
-            generalErrorTarget.setText("Error with input");
+            generalErrorTarget.setText("Invalid Input");
             generalErrorTarget.setVisibility(view.VISIBLE);
         }
 
