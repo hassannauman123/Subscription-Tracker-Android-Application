@@ -18,7 +18,7 @@ public class SubscriptionHandler {
     //Every variable here sets what are allowable values of a subscription object
 
     private static final int MIN_NAME_LENGTH = 1;
-    private static final int MAX_NAME_LENGTH = 100;
+    private static final int MAX_NAME_LENGTH = 30;
     private static final int MAX_PAYMENT_DOLLAR = 9999;
     private static final int MAX_PAYMENT_CENTS = 99;
 

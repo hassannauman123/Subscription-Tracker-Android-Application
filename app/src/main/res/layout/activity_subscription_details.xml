@@ -20,9 +20,10 @@
         android:id="@+id/textView11"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="10dp"
+        android:layout_marginEnd="28dp"
         android:text="Frequency:"
         android:textSize="20sp"
+        android:textStyle="bold"
         app:layout_constraintBaseline_toBaselineOf="@+id/detail_subscription_frequency"
         app:layout_constraintEnd_toStartOf="@+id/detail_subscription_frequency" />
 
@@ -30,9 +31,10 @@
         android:id="@+id/textView12"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="41dp"
+        android:layout_marginStart="24dp"
         android:text="Payment Amount: $"
         android:textSize="20sp"
+        android:textStyle="bold"
         app:layout_constraintBaseline_toBaselineOf="@+id/detail_subscription_amount"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -40,10 +42,11 @@
         android:id="@+id/textView13"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="193dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="192dp"
         android:text="Name:  "
         android:textSize="20sp"
-        app:layout_constraintStart_toStartOf="@+id/textView7"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
@@ -100,8 +103,8 @@
 
     <EditText
         android:id="@+id/detail_subscription_name"
-        android:layout_width="179dp"
-        android:layout_height="46dp"
+        android:layout_width="291dp"
+        android:layout_height="70dp"
         android:layout_marginStart="68dp"
         android:layout_marginEnd="65dp"
 
@@ -110,6 +113,7 @@
         android:textSize="20sp"
         app:layout_constraintBaseline_toBaselineOf="@+id/textView7"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/textView7" />
 
     <EditText

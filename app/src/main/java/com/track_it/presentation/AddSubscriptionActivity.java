@@ -28,6 +28,7 @@ public class AddSubscriptionActivity extends AppCompatActivity {
     private final int MAX_DIGITAL_BEFORE_DECIMAL = SubscriptionHandler.getMaxPaymentDigitsBeforeDecimal(); // The maximum number of digits (before the decimal point) that can be entered by user for payment amount
     private final int MAX_PAYMENT_DECIMALS = 2; // The maximum number of digits after the decimal for payment amount
     private SubscriptionHandler handler; // Will hold the AddSubscriptionHandler
+    private  EditText nameInput;
 
     Button addSubtarget; // To target add subscription
     Button backTarget; // To target back button
@@ -39,6 +40,9 @@ public class AddSubscriptionActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_subscription);
 
+        nameInput = (EditText) findViewById(R.id.input_subscription_name); // Set target for name input
+        int maxLength = SubscriptionHandler.getMaxNameLength();
+        nameInput.setFilters( new InputFilter[] {new InputFilter.LengthFilter(maxLength)}); // Set max length
 
         generalErrorTarget =((TextView) findViewById(R.id.subscription_error)); // Set where general error messages are displayed
         handler = new SubscriptionHandler(); // Set up subscription handler object
@@ -81,7 +85,7 @@ public class AddSubscriptionActivity extends AppCompatActivity {
          successTry = true; // Is all the input valid? (this will become false if anything wrong is detected)
 
 
-        String userNameInput = getNameInput( view); // Get input for name,
+        String userNameInput = getNameInput(view); // Get input for name,
 
         // Get input for payment amount
          SubscriptionInput subInput = new SubscriptionInput(); // Make a helper object, to get user input
@@ -146,9 +150,7 @@ public class AddSubscriptionActivity extends AppCompatActivity {
     private String getNameInput(View view) throws SubscriptionException
     {
         // Get the string the user entered for a name
-        EditText textInput;
-        textInput = (EditText) findViewById(R.id.input_subscription_name);
-        String userNameInput = textInput.getText().toString().trim(); // get string, and remove white spaces
+        String userNameInput = nameInput.getText().toString().trim(); // get string, and remove white spaces
         TextView nameError = ((TextView) findViewById(R.id.input_subscription_name_error)); // where to display name errors
 
         try {

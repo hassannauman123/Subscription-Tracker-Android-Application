@@ -74,6 +74,9 @@ public class SubscriptionDetailsActivity extends AppCompatActivity {
 
         // Set the various targets
         nameTarget = ((EditText) findViewById(R.id.detail_subscription_name));
+        int maxLength = SubscriptionHandler.getMaxNameLength();
+        nameTarget.setFilters( new InputFilter[] {new InputFilter.LengthFilter(maxLength)}); // Set max length
+
         paymentAmountTarget = ((EditText) findViewById(R.id.detail_subscription_amount));
         frequencyTarget = ((EditText) findViewById(R.id.detail_subscription_frequency));
 

@@ -34,7 +34,7 @@ public class SubscriptionsAddEditRemoveTest
 
         catch(Exception e)
         {
-            System.out.println("Failed add subscription");
+            System.out.println("Failed to add subscription");
             System.out.println(e.getMessage());
             thrown= true;
 

@@ -66,7 +66,7 @@ public class DataBase {
         {
 
             try {
-                String inputName = "Rand name " + i;
+                String inputName = "Rand name For subscription" + i;
                 String frequency = FrequencyList[i % numFrequency];
                 int payment = (int) (Math.random() * SubscriptionHandler.getMaxPaymentCentsTotal() + 1);
                 SubscriptionObj currSub = new SubscriptionObj(inputName, payment,frequency);
@@ -76,11 +76,29 @@ public class DataBase {
             catch (Exception e)
             {
                 System.out.println("ERROR WITH MAKING FAKE DATA!!: " +   e);
-                assert(true); // Just make the app crash for now
+                assert(false); // Just make the app crash for now
             }
         }
 
+        try {
+
+            int payment = 22444;
+            String inputName = "Really long name ";
+            for (int i = inputName.length(); i < SubscriptionHandler.getMaxNameLength(); i++)
+            {
+                inputName = inputName + "1";
+            }
+            String frequency = FrequencyList[0];
+            SubscriptionObj currSub = new SubscriptionObj(inputName, payment, frequency);
+            subHandler.addSubscription(currSub);
+        }
+        catch (Exception e)
+        {
+            System.out.println("ERROR WITH MAKING FAKE DATA!!: " +   e);
+            assert(false); // Just make the app crash for now
+        }
     }
+
 
     // Gets all the subscriptions in the database
     public ArrayList<SubscriptionObj> queryGetAllSubs()

@@ -83,8 +83,9 @@ public class MainActivity extends AppCompatActivity {
 
 
             // Set Name of subscription
+
             TextView targetName =  subscriptionBox.findViewById(R.id.subscription_name);
-            targetName.setText("Name is : " + curr.getName() );
+            targetName.setText("Name: " + curr.getName());
 
 
             // Set Frequency
