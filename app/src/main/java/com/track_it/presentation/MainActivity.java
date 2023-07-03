@@ -1,6 +1,7 @@
 package com.track_it.presentation;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -71,8 +72,13 @@ public class MainActivity extends AppCompatActivity {
 
         ArrayList<SubscriptionObj> listOfSubs = subHandler.getAllSubscriptions();
 
+        boolean toggleColor = true;
+        int color1 = Color.parseColor("#EEEEEE");
+        int color2 = Color.parseColor("#FFFFFF");
+
         for ( int i =0 ; i <listOfSubs.size(); i++ )
         {
+
 
 
             // Current subscription object we are working on
@@ -99,9 +105,18 @@ public class MainActivity extends AppCompatActivity {
             targetPaymentAmount.setText("Payment Amount: $" + curr.getPaymentDollars() + "." +  String.format("%02d", curr.getPaymentCents()));
 
 
+
+
             //Set ID - Just as a reminder, these might not be unique ID's on this page, as other elements may have these ID numbers
             // but for how we are using them right now it's fine.
             subscriptionBox.setId(curr.getID());
+            toggleColor = !toggleColor;
+            if ( toggleColor) {
+                subscriptionBox.setBackgroundColor(color1);
+            }
+            else {
+                subscriptionBox.setBackgroundColor(color2);
+            }
 
 
             //Set what happens when the user does a long click on a subscription box
