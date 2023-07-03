@@ -6,6 +6,7 @@ import com.track_it.logic.exception.DataBaseFullException;
 import com.track_it.logic.exception.DataBaseSubNotFoundException;
 
 import java.util.ArrayList;
+import java.util.List;
 
 // This is the database class, use to stored information in a database.
 //
@@ -57,18 +58,20 @@ public class DataBase {
     public static void fillFakeData()
     {
 
-        // Create 10 subs, with random data
-        String FrequencyList[] = SubscriptionHandler.getFrequencyList();
-        int numFrequency = SubscriptionHandler.getNumFrequencies();
         SubscriptionHandler subHandler = new SubscriptionHandler();
+
+        // Create 10 subs, with random data
+        List<String> FrequencyList = subHandler.getFrequencyList();
+        int numFrequency = subHandler.getNumFrequencies();
+
 
         for (int i =0 ; i < 10; i++)
         {
 
             try {
                 String inputName = "Rand name For subscription" + i;
-                String frequency = FrequencyList[i % numFrequency];
-                int payment = (int) (Math.random() * SubscriptionHandler.getMaxPaymentCentsTotal() + 1);
+                String frequency = FrequencyList.get(i % numFrequency);
+                int payment = (int) (Math.random() * subHandler.getMaxPaymentCentsTotal() + 1);
                 SubscriptionObj currSub = new SubscriptionObj(inputName, payment,frequency);
                 subHandler.addSubscription(currSub);
 
@@ -80,15 +83,17 @@ public class DataBase {
             }
         }
 
+
+        //Create one long name of max length
         try {
 
             int payment = 22444;
             String inputName = "Really long name ";
-            for (int i = inputName.length(); i < SubscriptionHandler.getMaxNameLength(); i++)
+            for (int i = inputName.length(); i < subHandler.getMaxNameLength(); i++)
             {
                 inputName = inputName + "1";
             }
-            String frequency = FrequencyList[0];
+            String frequency = FrequencyList.get(0);
             SubscriptionObj currSub = new SubscriptionObj(inputName, payment, frequency);
             subHandler.addSubscription(currSub);
         }

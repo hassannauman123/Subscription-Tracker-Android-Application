@@ -9,6 +9,8 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 import static org.junit.Assert.assertFalse;
 
+import java.util.List;
+
 public class SubscriptionsAddEditRemoveTest
 {
 
@@ -21,8 +23,8 @@ public class SubscriptionsAddEditRemoveTest
         SubscriptionHandler subHandle = new SubscriptionHandler();
 
         String name = "Valid Name";
-        String paymentFrequency = SubscriptionHandler.getFrequencyList()[0];
-        int paymentAmount = (int) (Math.random() * SubscriptionHandler.getMaxPaymentCentsTotal()) + 1;
+        String paymentFrequency = subHandle.getFrequencyList().get(0);
+        int paymentAmount = (int) (Math.random() * subHandle.getMaxPaymentCentsTotal()) + 1;
 
 
         boolean thrown = false;
@@ -65,8 +67,8 @@ public class SubscriptionsAddEditRemoveTest
         SubscriptionHandler subHandle = new SubscriptionHandler();
 
         String Name = "Valid Name";
-        String paymentFrequency = SubscriptionHandler.getFrequencyList()[0];
-        int PaymentAmount = (int) (Math.random() * SubscriptionHandler.getMaxPaymentCentsTotal()) + 1;
+        String paymentFrequency = subHandle.getFrequencyList().get(0);
+        int PaymentAmount = (int) (Math.random() * subHandle.getMaxPaymentCentsTotal()) + 1;
 
         SubscriptionObj newSub = new SubscriptionObj(Name,PaymentAmount,paymentFrequency);
 
@@ -86,12 +88,12 @@ public class SubscriptionsAddEditRemoveTest
         boolean thrown = false;
 
         String newName = "New name";
-        int newPayment = (int) (Math.random() * SubscriptionHandler.getMaxPaymentCentsTotal()) + 1;
+        int newPayment = (int) (Math.random() * subHandle.getMaxPaymentCentsTotal()) + 1;
         while (newPayment == PaymentAmount)
         {
-            newPayment = (int) (Math.random() * SubscriptionHandler.getMaxPaymentCentsTotal()) + 1;
+            newPayment = (int) (Math.random() * subHandle.getMaxPaymentCentsTotal()) + 1;
         }
-        String newPaymentFrequency = SubscriptionHandler.getFrequencyList()[1];
+        String newPaymentFrequency = subHandle.getFrequencyList().get(1);
 
         SubscriptionObj subWithEditDetails = new SubscriptionObj(newName,newPayment,newPaymentFrequency);
 
@@ -133,8 +135,8 @@ public class SubscriptionsAddEditRemoveTest
         SubscriptionHandler subHandle = new SubscriptionHandler();
 
         String name = "Valid Name";
-        String paymentFrequency = SubscriptionHandler.getFrequencyList()[0];
-        int paymentAmount = (int) (Math.random() * SubscriptionHandler.getMaxPaymentCentsTotal()) + 1;
+        String paymentFrequency = subHandle.getFrequencyList().get(0);
+        int paymentAmount = (int) (Math.random() * subHandle.getMaxPaymentCentsTotal()) + 1;
 
         SubscriptionObj newSub = new SubscriptionObj(name,paymentAmount,paymentFrequency);
         subHandle.addSubscription(newSub);
@@ -145,7 +147,7 @@ public class SubscriptionsAddEditRemoveTest
         String newName = "New name";
         int newPayment = 0; // 1 invalid input !
 
-        String newPaymentFrequency = SubscriptionHandler.getFrequencyList()[1];
+        String newPaymentFrequency = subHandle.getFrequencyList().get(1);
 
         SubscriptionObj subWithEditDetails = new SubscriptionObj(newName,newPayment,newPaymentFrequency);
 
@@ -193,8 +195,8 @@ public class SubscriptionsAddEditRemoveTest
         SubscriptionHandler subHandle = new SubscriptionHandler();
 
         String name = "Valid Name";
-        String paymentFrequency = SubscriptionHandler.getFrequencyList()[0];
-        int paymentAmount = (int) (Math.random() * SubscriptionHandler.getMaxPaymentCentsTotal()) + 1;
+        String paymentFrequency = subHandle.getFrequencyList().get(0);
+        int paymentAmount = (int) (Math.random() * subHandle.getMaxPaymentCentsTotal()) + 1;
 
         SubscriptionObj newSub = new SubscriptionObj(name,paymentAmount,paymentFrequency);
 

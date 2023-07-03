@@ -28,7 +28,7 @@ public class SubscriptionDetailsActivity extends AppCompatActivity {
 
 
     private int MAX_PAYMENT_DECIMALS = 2;
-    private int MAX_DIGITAL_BEFORE_DECIMAL = SubscriptionHandler.getMaxPaymentDigitsBeforeDecimal(); // Max payment amount in dollars (doesn't include cent count)
+    private int MAX_DIGITS_BEFORE_DECIMAL; // Max payment amount in dollars (doesn't include cent count)
     private boolean alreadyDeleted = false; // Has the subscription been deleted during this session?
     private boolean editMode = false; // Are we in edit mode? Determines whether the input can be edited, and behaviour of the edit/save button
 
@@ -72,9 +72,13 @@ public class SubscriptionDetailsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_subscription_details);
 
+
+        subHandler = SetupParameters.InitializeLogicLayer(); // Init sub handler
+        MAX_DIGITS_BEFORE_DECIMAL = SetupParameters.getMaxPaymentDigitsBeforeDecimal();
+
         // Set the various targets
         nameTarget = ((EditText) findViewById(R.id.detail_subscription_name));
-        int maxLength = SubscriptionHandler.getMaxNameLength();
+        int maxLength = subHandler.getMaxNameLength();
         nameTarget.setFilters( new InputFilter[] {new InputFilter.LengthFilter(maxLength)}); // Set max length
 
         paymentAmountTarget = ((EditText) findViewById(R.id.detail_subscription_amount));
@@ -85,7 +89,7 @@ public class SubscriptionDetailsActivity extends AppCompatActivity {
         editButton = (Button) findViewById(R.id.details_edit_subscription);
         setFocus(false); // Disable editing sub details
 
-        subHandler = new SubscriptionHandler(); // Init sub handler
+
 
 
 
@@ -150,7 +154,7 @@ public class SubscriptionDetailsActivity extends AppCompatActivity {
 
         // This physically constrains the user for what they can enter into the payment amount field ( How many digits before decimal, how many after)
         EditText etText = findViewById(R.id.detail_subscription_amount);  // Target Payment amount input
-        etText.setFilters(new InputFilter[]{new DecimalDigitsInputFilter(MAX_PAYMENT_DECIMALS, MAX_DIGITAL_BEFORE_DECIMAL)}); // Pass setFilters and array
+        etText.setFilters(new InputFilter[]{new DecimalDigitsInputFilter(MAX_PAYMENT_DECIMALS, MAX_DIGITS_BEFORE_DECIMAL)}); // Pass setFilters and array
 
     }
 

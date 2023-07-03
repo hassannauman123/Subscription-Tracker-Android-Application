@@ -7,6 +7,8 @@ import com.track_it.logic.SubscriptionHandler;
 
 import org.junit.Test;
 
+import java.util.List;
+
 
 public class SubscriptionValidateTest {
 
@@ -259,40 +261,40 @@ public class SubscriptionValidateTest {
 
         // Invalid data with correct frequency + char
         thrown = false;
-        inputFrequency = subHandler.getFrequencyList()[0] + "1";
+        inputFrequency = subHandler.getFrequencyList().get(0) +  "1";
 
         try {
             subHandler.validateFrequency(inputFrequency);
         } catch (Exception e) {
             thrown = true;
         }
-        assertTrue("'"+ subHandler.getFrequencyList()[0] + "1' was incorrectly accepted as valid payment frequency", thrown);
+        assertTrue("'"+ subHandler.getFrequencyList().get(0) + "1' was incorrectly accepted as valid payment frequency", thrown);
 
 
 
 
         // Invalid data with correct frequency + blank character
         thrown = false;
-        inputFrequency = subHandler.getFrequencyList()[1] + " ";
+        inputFrequency = subHandler.getFrequencyList().get(1) + " ";
 
         try {
             subHandler.validateFrequency(inputFrequency);
         } catch (Exception e) {
             thrown = true;
         }
-        assertTrue("'"+ subHandler.getFrequencyList()[1] + " ' was incorrectly accepted as valid payment frequency", thrown);
+        assertTrue("'"+ subHandler.getFrequencyList().get(1) + " ' was incorrectly accepted as valid payment frequency", thrown);
 
 
         // Invalid data with correct frequency + blank character
         thrown = false;
-        inputFrequency = " " + subHandler.getFrequencyList()[1];
+        inputFrequency = " " + subHandler.getFrequencyList().get(1);
 
         try {
             subHandler.validateFrequency(inputFrequency);
         } catch (Exception e) {
             thrown = true;
         }
-        assertTrue("' "+ subHandler.getFrequencyList()[0] + "' was incorrectly accepted as valid payment frequency", thrown);
+        assertTrue("' "+ subHandler.getFrequencyList().get(1) + "' was incorrectly accepted as valid payment frequency", thrown);
 
 
         System.out.println("Finished testing validatePaymentFrequency with invalid Data!");
@@ -312,12 +314,12 @@ public class SubscriptionValidateTest {
 
         // Invalid data with correct frequency + char
         thrown = false;
-        String allowableFrequency[] = subHandler.getFrequencyList();
+        List<String> allowableFrequency= subHandler.getFrequencyList();
 
-        for (int i = 0; i < allowableFrequency.length; i++)
+        for (int i = 0; i < allowableFrequency.size(); i++)
         {
             thrown = false;
-            inputFrequency = allowableFrequency[i];
+            inputFrequency = allowableFrequency.get(i);
             try {
                 subHandler.validateFrequency(inputFrequency);
 
@@ -330,6 +332,7 @@ public class SubscriptionValidateTest {
 
             assertTrue("validate frequency Test failed with input " + inputFrequency,!thrown);
         }
+
 
 
         System.out.println("Finished testing validatePaymentFrequency with valid Data!");
@@ -406,7 +409,7 @@ public class SubscriptionValidateTest {
 
         // Payment should be too large by exactly 1 cent!
         thrown = false;
-        paymentAmount =  ((int) ( Math.pow(10, (subHandler.getMaxPaymentDigitsBeforeDecimal() ) )) )- 1; // should be like 9999
+        paymentAmount =  9999;// should be like 9999
         paymentAmount = paymentAmount * 100;
         paymentAmount += 100;
         try {
@@ -467,7 +470,7 @@ public class SubscriptionValidateTest {
 
         // Payment should be valid (The exact max payment allowed)
         thrown = false;
-        paymentAmount =  ((int) ( Math.pow(10, (subHandler.getMaxPaymentDigitsBeforeDecimal() ) )) )- 1; // should be like 9999
+        paymentAmount =  9999; // should be like 9999
         paymentAmount = paymentAmount * 100;
         paymentAmount += 99;
         try {
@@ -477,12 +480,9 @@ public class SubscriptionValidateTest {
             thrown = true;
         }
         assertFalse(   "PaymentAmount " + paymentAmount + " was said to be invalid, when it was suppose to be valid", thrown);
-
-
         System.out.println("Finished testing validatePaymentAmount with valid Data!");
 
     }
-
 
 
 }

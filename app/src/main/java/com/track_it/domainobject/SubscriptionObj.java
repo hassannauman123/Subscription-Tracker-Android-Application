@@ -4,20 +4,24 @@ package com.track_it.domainobject;
 //
 
 
+import com.track_it.logic.FrequencyType;
+
 public class SubscriptionObj
 {
 
     private int subscriptionID; // The unique ID of the subscription
     private String name; // The name of the subscription
     private int paymentInCents; // The payment amount in cents
-    private String paymentFrequency; // - How often a payment happens. (Since this is a string, we will be limiting the allowable payment frequencies to a handful of well defined values)
+    private String paymentFrequencyName; // - How often a payment happens. (Since this is a string, we will be limiting the allowable payment frequencies to a handful of well defined values)
+
 
     public SubscriptionObj(String inputName, int inputPayments, String inputPaymentFrequency )
     {
         this.name = inputName;
         this.paymentInCents = inputPayments;
-        this.paymentFrequency = inputPaymentFrequency;
+        this.paymentFrequencyName = inputPaymentFrequency;
     }
+
 
     public int getID()
     {
@@ -33,7 +37,7 @@ public class SubscriptionObj
     // Create and return a  copy of this object
     public SubscriptionObj copy()
     {
-        SubscriptionObj copyOfSubscription = new SubscriptionObj(this.name, this.paymentInCents, this.paymentFrequency);
+        SubscriptionObj copyOfSubscription = new SubscriptionObj(this.name, this.paymentInCents, this.paymentFrequencyName);
         copyOfSubscription.setID(this.getID());
 
         return copyOfSubscription;
@@ -57,11 +61,11 @@ public class SubscriptionObj
 
     public String getPaymentFrequency()
     {
-        return paymentFrequency;
+        return paymentFrequencyName;
     }
     public void  setPaymentFrequency(String inputFrequency)
     {
-        this.paymentFrequency =  inputFrequency;
+        this.paymentFrequencyName =  inputFrequency;
     }
 
     public int getTotalPaymentInCents() { return paymentInCents; }

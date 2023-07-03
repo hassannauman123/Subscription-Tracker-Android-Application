@@ -25,9 +25,9 @@ public class AddSubscriptionActivity extends AppCompatActivity {
 
     private static final String successAddMessage = "Subscription Added!";  // if add was successful
 
-    private final int MAX_DIGITAL_BEFORE_DECIMAL = SubscriptionHandler.getMaxPaymentDigitsBeforeDecimal(); // The maximum number of digits (before the decimal point) that can be entered by user for payment amount
+    private int MAX_DIGITS_BEFORE_DECIMAL;
     private final int MAX_PAYMENT_DECIMALS = 2; // The maximum number of digits after the decimal for payment amount
-    private SubscriptionHandler handler; // Will hold the AddSubscriptionHandler
+    private SubscriptionHandler subHandler; // Will hold the AddSubscriptionHandler
     private  EditText nameInput;
 
     Button addSubtarget; // To target add subscription
@@ -40,12 +40,16 @@ public class AddSubscriptionActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_subscription);
 
+        subHandler = SetupParameters.InitializeLogicLayer();
+
+        MAX_DIGITS_BEFORE_DECIMAL = 33;
+
         nameInput = (EditText) findViewById(R.id.input_subscription_name); // Set target for name input
-        int maxLength = SubscriptionHandler.getMaxNameLength();
+        int maxLength = subHandler.getMaxNameLength();
         nameInput.setFilters( new InputFilter[] {new InputFilter.LengthFilter(maxLength)}); // Set max length
 
         generalErrorTarget =((TextView) findViewById(R.id.subscription_error)); // Set where general error messages are displayed
-        handler = new SubscriptionHandler(); // Set up subscription handler object
+
 
 
         // Set the add subscription button click handler (What runs when the add subscription button is click)
@@ -74,7 +78,7 @@ public class AddSubscriptionActivity extends AppCompatActivity {
 
         // This physically constrains the user for what they can enter into the payment amount field ( How many digits before decimal, how many after)
         EditText etText = findViewById(R.id.input_payment_amount);  // Target Payment amount input
-        etText.setFilters(new InputFilter[]{new DecimalDigitsInputFilter(MAX_PAYMENT_DECIMALS, MAX_DIGITAL_BEFORE_DECIMAL)}); // Pass setFilters and array of objects that implement the InputFilter interface
+        etText.setFilters(new InputFilter[]{new DecimalDigitsInputFilter(MAX_PAYMENT_DECIMALS, MAX_DIGITS_BEFORE_DECIMAL)}); // Pass setFilters and array of objects that implement the InputFilter interface
     }
 
 
@@ -114,7 +118,7 @@ public class AddSubscriptionActivity extends AppCompatActivity {
 
             try { // Try to add subscription to dataBase
 
-                handler.addSubscription(newSubscription);
+                subHandler.addSubscription(newSubscription);
                 generalErrorTarget.setVisibility(View.VISIBLE);
                 generalErrorTarget.setText(successAddMessage);
                 generalErrorTarget.setTextColor(Color.parseColor(accomplishColor));
@@ -154,7 +158,7 @@ public class AddSubscriptionActivity extends AppCompatActivity {
         TextView nameError = ((TextView) findViewById(R.id.input_subscription_name_error)); // where to display name errors
 
         try {
-            handler.validateName(userNameInput);
+            subHandler.validateName(userNameInput);
             nameError.setText("");
             nameError.setVisibility(View.INVISIBLE);
 
@@ -189,17 +193,17 @@ public class AddSubscriptionActivity extends AppCompatActivity {
 
         // Find which radio button is selected
         if (radioWeek.isChecked()) {
-            PaymentFrequency = SubscriptionHandler.FREQUENCY.weekly.toString();
+            PaymentFrequency =  "weekly";
         } else if (RadioMonth.isChecked()) {
-            PaymentFrequency = SubscriptionHandler.FREQUENCY.monthly.toString();;
+            PaymentFrequency = "monthly";;
         } else if (radioYear.isChecked()) {
-            PaymentFrequency = SubscriptionHandler.FREQUENCY.yearly.toString();
+            PaymentFrequency = "yearly";
         }
 
 
         // Try to validate selection, if Exception is detected display error to user
         try {
-            handler.validateFrequency(PaymentFrequency);
+            subHandler.validateFrequency(PaymentFrequency);
               frequencyError.setVisibility(view.INVISIBLE);
 
 

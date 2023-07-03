@@ -7,6 +7,7 @@ import com.track_it.logic.exception.SubscriptionInvalidNameException;
 import com.track_it.logic.exception.SubscriptionInvalidPaymentException;
 import com.track_it.persistence.DataBase;
 import java.util.ArrayList;
+import java.util.List;
 
 
 //This class is used to handle and implement the logical manipulation of the subscription objects.
@@ -15,42 +16,60 @@ import java.util.ArrayList;
 public class SubscriptionHandler {
 
 
-    //Every variable here sets what are allowable values of a subscription object
+    //Every variable here sets what are allowable values of a subscription object (This are set by injection)
 
-    private static final int MIN_NAME_LENGTH = 1;
-    private static final int MAX_NAME_LENGTH = 30;
-    private static final int MAX_PAYMENT_DOLLAR = 9999;
-    private static final int MAX_PAYMENT_CENTS = 99;
+    private final int MIN_NAME_LENGTH;
+    private final int MAX_NAME_LENGTH;
+    private final int MAX_PAYMENT_DOLLAR;
+    private final int MAX_PAYMENT_CENTS;
+   private final int MAX_PAYMENT_CENTS_TOTAL ; // Maximum payment will be 9999.99 or 999999 cents
+    private final String allowableCharactersInName; // Our current list of allowable characters in the name
 
-    private static final int MAX_PAYMENT_CENTS_TOTAL = MAX_PAYMENT_DOLLAR * 100 + MAX_PAYMENT_CENTS; // Maximum payment will be 9999.99 or 999999 cents
-
+    private ArrayList<Frequency> FrequencyList  = new ArrayList<>();
     private DataBase dataBaseHandler; //DatabaseHandler
 
-    public static enum FREQUENCY //Allowable frequencies,
-    {
-        weekly,
-        monthly,
-        yearly
-    }
 
-
-    private static int NUM_FREQUENCIES = 3;
-    private static final String[] ALLOWABLE_FREQUENCIES = {FREQUENCY.weekly.toString() ,FREQUENCY.monthly.toString(), FREQUENCY.yearly.toString()};
-
-    private static final String allowableCharactersInName = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890 _+*^&%$#@!+=|}]'?<>'"; // Our current list of allowable characters in the name
-
-
+    // Default null constructor
     public SubscriptionHandler()
     {
-         dataBaseHandler = new DataBase();
+
+        MIN_NAME_LENGTH = 1;
+        MAX_NAME_LENGTH = 30;
+        MAX_PAYMENT_DOLLAR = 9999;
+        MAX_PAYMENT_CENTS = 99;
+        MAX_PAYMENT_CENTS_TOTAL = MAX_PAYMENT_DOLLAR * 100 + MAX_PAYMENT_CENTS;
+        dataBaseHandler = new DataBase();
+        allowableCharactersInName = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890 _+*^&%$#@!+=|}]'?<>'";
+        InitFrequency();
+    }
+
+    public SubscriptionHandler( int inputMinNameLen, int inputMaxNameLen, int inputMaxPayDollar,int inputMaxPayCents,String inputAllowableChars)
+    {
+        dataBaseHandler = new DataBase(); // Change later
+        MIN_NAME_LENGTH = inputMinNameLen;
+        MAX_NAME_LENGTH = inputMaxNameLen;
+        MAX_PAYMENT_DOLLAR = inputMaxPayDollar;
+        MAX_PAYMENT_CENTS = inputMaxPayCents;
+        MAX_PAYMENT_CENTS_TOTAL = MAX_PAYMENT_DOLLAR * 100 + MAX_PAYMENT_CENTS;
+        allowableCharactersInName = inputAllowableChars;
+        InitFrequency();
+
     }
 
 
+    private void InitFrequency()
+    {
+        FrequencyList.add(new WeeklyFrequency());
+        FrequencyList.add(new MonthlyFrequency());
+        FrequencyList.add(new YearlyFrequency());
+
+    }
 
     // This function will add subscriptionToAdd to database. It will first validate subscription, and then
     // try to add to database.
     // It will throw Exceptions if anything goes wrong (like invalid data), so caller should be prepared to catch them.
-    public void addSubscription(SubscriptionObj subscriptionToAdd) throws DataBaseException, SubscriptionException {
+    public void addSubscription(SubscriptionObj subscriptionToAdd) throws DataBaseException, SubscriptionException
+    {
         validateWholeSubscription(subscriptionToAdd); // might throw exception
         dataBaseHandler.addSubscriptionDataBase(subscriptionToAdd); // Added to dataBase!!
 
@@ -67,25 +86,22 @@ public class SubscriptionHandler {
 
 
     // Validate the Frequency input string
-    // Must be one of the allowable strings in ALLOWABLE_FREQUENCIES
+    // Must be one of the allowable frequencies in FrequencyList
     public void validateFrequency(String inputName) throws SubscriptionInvalidPaymentException {
-        boolean match = false;
+        boolean match = false; // A boolean to tell if inputName matches any of our payment Frequencies
 
-        if (inputName.equals("")) {
-            throw new SubscriptionInvalidPaymentException("Payment frequency required");
-
-        }
-
-        for (int i = 0; i < ALLOWABLE_FREQUENCIES.length; i++) {
-            if (inputName.equals(ALLOWABLE_FREQUENCIES[i])) {
+        for (Frequency currFrequency : FrequencyList)
+        {
+            if (currFrequency.checkMatch(inputName))
+            {
                 match = true;
-                break;
             }
         }
-
-        if (!match) {
+        if (!match) // If there was no match
+        {
             throw new SubscriptionInvalidPaymentException(inputName + " is not a valid frequency");
         }
+
     }
 
 
@@ -98,7 +114,6 @@ public class SubscriptionHandler {
     //      chars are restricted to certain characters (look at allowableCharactersInName)
 
     public void validateName(String inputName) throws SubscriptionInvalidNameException {
-
 
         //The name has to be a minimum length
         if (inputName.trim().length() < MIN_NAME_LENGTH) {
@@ -114,7 +129,6 @@ public class SubscriptionHandler {
 
             throw new SubscriptionInvalidNameException("Must not start or end with spaces");
         }
-
 
         //Iterate through whole string, checks for invalid characters
         for (int i = 0; i < inputName.length(); i++) {
@@ -132,10 +146,8 @@ public class SubscriptionHandler {
     public void validatePaymentAmount(int paymentAmount) throws SubscriptionInvalidPaymentException {
         if (paymentAmount <= 0) {
             throw new SubscriptionInvalidPaymentException("Payment amount is too small");
-
         }
         if (paymentAmount > MAX_PAYMENT_CENTS_TOTAL) {
-
             throw new SubscriptionInvalidPaymentException("Payment amount is too large. Maximum payment is $" + MAX_PAYMENT_DOLLAR + "." + MAX_PAYMENT_CENTS);
 
         }
@@ -154,7 +166,6 @@ public class SubscriptionHandler {
     public ArrayList<SubscriptionObj> getAllSubscriptions() throws DataBaseException
     {
         return dataBaseHandler.queryGetAllSubs();
-
     }
 
 
@@ -172,8 +183,6 @@ public class SubscriptionHandler {
     //        subscriptionID  - The id of the subscription to change
     //       subscriptionToEdit - The details that the subscription will be changed to.
     public void editWholeSubscription(int subscriptionID, SubscriptionObj subscriptionToEdit) throws DataBaseException, SubscriptionException {
-
-
         validateWholeSubscription(subscriptionToEdit); // Validate the subscription
         dataBaseHandler.editSubscriptionByID(subscriptionID, subscriptionToEdit); // ave the edits.
 
@@ -187,59 +196,48 @@ public class SubscriptionHandler {
     // allowable parameters for different users.
 
 
-    // Returns how many digits are allowable before decimal place for payment amount
-    public static int getMaxPaymentDigitsBeforeDecimal() {
-        int payment = MAX_PAYMENT_DOLLAR;
-        int digitsBeforeDecimalCount = 0;
-
-        while (payment != 0) {
-            payment = payment / 10;
-            digitsBeforeDecimalCount++;
-        }
-
-        return digitsBeforeDecimalCount;
-    }
-
-
     //returns the maximum amount a payment can be in cents
-    public static int getMaxPaymentCentsTotal()
+    public  int getMaxPaymentCentsTotal()
     {
         return MAX_PAYMENT_CENTS_TOTAL;
     }
 
 
     //Returns Min length a subscription name has to be
-    public static int getMinNameLength() {
+    public  int getMinNameLength() {
         return MIN_NAME_LENGTH;
     }
 
 
     // Max length of subscription name
-    public static int getMaxNameLength() {
+    public  int getMaxNameLength() {
         return MAX_NAME_LENGTH;
     }
 
     // Allowable chars in name
-    public static String getAllowableChars() {
+    public  String getAllowableChars() {
         return allowableCharactersInName;
     }
 
     // Returns a string array of allowable frequencies
-    public static String[] getFrequencyList() {
-        String[] returnAllowableFrequencies = new String[ALLOWABLE_FREQUENCIES.length];
+    public List<String> getFrequencyList() {
+        List<String> returnAllowableFrequencies = new ArrayList<String> ();
 
-        for (int i = 0; i < ALLOWABLE_FREQUENCIES.length; i++) {
-            returnAllowableFrequencies[i] = ALLOWABLE_FREQUENCIES[i];
+        for ( Frequency currFrequency : FrequencyList )
+        {
+            returnAllowableFrequencies.add(currFrequency.getFrequencyName());
         }
 
         return returnAllowableFrequencies;
     }
 
-    public static int getNumFrequencies()
+    public int getNumFrequencies()
     {
-        return NUM_FREQUENCIES;
+        return FrequencyList.size();
     }
 
-
-
 }
+
+
+
+
