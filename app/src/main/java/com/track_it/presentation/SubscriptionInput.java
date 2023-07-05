@@ -90,6 +90,21 @@ public class SubscriptionInput extends AppCompatActivity
             return false;
         }
     }
+
+
+    //This function will return how many digits are in dollarAmount
+    public static int NumDigits(int dollarAmount)
+    {
+        int payment = dollarAmount;
+        int digitsBeforeDecimalCount = 0;
+
+        while (payment != 0) {
+            payment = payment / 10;
+            digitsBeforeDecimalCount++;
+        }
+        return digitsBeforeDecimalCount;
+    }
+
 }
 
 

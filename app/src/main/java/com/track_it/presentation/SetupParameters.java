@@ -22,19 +22,4 @@ public class SetupParameters
         return new SubscriptionHandler(MIN_NAME_LENGTH,MAX_NAME_LENGTH,MAX_PAYMENT_DOLLAR,MAX_PAYMENT_CENTS,allowableCharactersInName );
     }
 
-
-    // Returns how many digits are allowable before decimal place for payment amount=
-    public  static int getMaxPaymentDigitsBeforeDecimal() {
-        int payment = MAX_PAYMENT_DOLLAR;
-        int digitsBeforeDecimalCount = 0;
-
-        while (payment != 0) {
-            payment = payment / 10;
-            digitsBeforeDecimalCount++;
-        }
-
-        return digitsBeforeDecimalCount;
-    }
-
-
 }

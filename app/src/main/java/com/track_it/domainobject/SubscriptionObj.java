@@ -47,27 +47,36 @@ public class SubscriptionObj
     //
     //Various get and set methods. They are very simple (at least for now)
     //
+
+
+    //Get name
     public String getName()
     {
         return name;
 
     }
 
+    //Set name
     public void setName(String inputName)
     {
          this.name = inputName;
 
     }
 
+    //Get payment frequency
     public String getPaymentFrequency()
     {
         return paymentFrequencyName;
     }
+
+    //Set payment frequency
     public void  setPaymentFrequency(String inputFrequency)
     {
         this.paymentFrequencyName =  inputFrequency;
     }
 
+
+    //Return the whole payment amount
     public int getTotalPaymentInCents() { return paymentInCents; }
     public int getPaymentDollars() // Return only the dollars amount of the payment
     {

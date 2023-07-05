@@ -28,9 +28,9 @@ public class AddSubscriptionActivity extends AppCompatActivity {
     private int MAX_DIGITS_BEFORE_DECIMAL;
     private final int MAX_PAYMENT_DECIMALS = 2; // The maximum number of digits after the decimal for payment amount
     private SubscriptionHandler subHandler; // Will hold the AddSubscriptionHandler
-    private  EditText nameInput;
+    private  EditText nameInput; // Input target for the name of the subscription
 
-    Button addSubtarget; // To target add subscription
+    Button addSubtarget; // To target add subscription button
     Button backTarget; // To target back button
    TextView generalErrorTarget; // where general error messages are display
     private boolean successTry; // used by the clickedAddSubscriptionButton function, to keep track of if all the input is valid
@@ -42,15 +42,16 @@ public class AddSubscriptionActivity extends AppCompatActivity {
 
         subHandler = SetupParameters.InitializeLogicLayer();
 
-        MAX_DIGITS_BEFORE_DECIMAL = 33;
+        MAX_DIGITS_BEFORE_DECIMAL = SubscriptionInput.NumDigits(subHandler.getMaxPaymentDollarsTotal()); // get the number of digits allowed before decimal (used to constrain user input)
+        // This physically constrains the user for what they can enter into the payment amount field ( How many digits before decimal, how many after)
+        EditText etText = findViewById(R.id.input_payment_amount);  // Target Payment amount input
+        etText.setFilters(new InputFilter[]{new DecimalDigitsInputFilter(MAX_PAYMENT_DECIMALS, MAX_DIGITS_BEFORE_DECIMAL)}); // Pass setFilters and array of objects that implement the InputFilter interface
 
         nameInput = (EditText) findViewById(R.id.input_subscription_name); // Set target for name input
         int maxLength = subHandler.getMaxNameLength();
-        nameInput.setFilters( new InputFilter[] {new InputFilter.LengthFilter(maxLength)}); // Set max length
+        nameInput.setFilters( new InputFilter[] {new InputFilter.LengthFilter(maxLength)}); // Set max length the user can enter for input
 
         generalErrorTarget =((TextView) findViewById(R.id.subscription_error)); // Set where general error messages are displayed
-
-
 
         // Set the add subscription button click handler (What runs when the add subscription button is click)
         addSubtarget= (Button) findViewById(R.id.submit_sub_button);
@@ -63,7 +64,7 @@ public class AddSubscriptionActivity extends AppCompatActivity {
         });
 
 
-        // Set what happens when back button clicked ( ie, go home
+        // Set what happens when back button clicked
         backTarget = (Button) findViewById(R.id.go_home);
         backTarget.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -76,9 +77,6 @@ public class AddSubscriptionActivity extends AppCompatActivity {
 
 
 
-        // This physically constrains the user for what they can enter into the payment amount field ( How many digits before decimal, how many after)
-        EditText etText = findViewById(R.id.input_payment_amount);  // Target Payment amount input
-        etText.setFilters(new InputFilter[]{new DecimalDigitsInputFilter(MAX_PAYMENT_DECIMALS, MAX_DIGITS_BEFORE_DECIMAL)}); // Pass setFilters and array of objects that implement the InputFilter interface
     }
 
 
@@ -86,8 +84,7 @@ public class AddSubscriptionActivity extends AppCompatActivity {
     // What to run when the user clicks the add Subscription button
     private void clickedAddSubscriptionButton(View view) {
 
-         successTry = true; // Is all the input valid? (this will become false if anything wrong is detected)
-
+         successTry = true; // Is all the input valid? (this will become false if anything is detected as being invalid)
 
         String userNameInput = getNameInput(view); // Get input for name,
 

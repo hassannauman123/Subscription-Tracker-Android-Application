@@ -64,7 +64,7 @@ public class SubscriptionDetailsActivity extends AppCompatActivity {
     // Handler for the subscriptions
     private SubscriptionHandler subHandler;
 
-    private boolean loadSub = false; // Were we able to load the subscription object?
+    private boolean loadSub = false; // Were we able to load the subscription object using the info passed to this activity;
 
 
     @Override
@@ -74,7 +74,7 @@ public class SubscriptionDetailsActivity extends AppCompatActivity {
 
 
         subHandler = SetupParameters.InitializeLogicLayer(); // Init sub handler
-        MAX_DIGITS_BEFORE_DECIMAL = SetupParameters.getMaxPaymentDigitsBeforeDecimal();
+        MAX_DIGITS_BEFORE_DECIMAL = SubscriptionInput.NumDigits(subHandler.getMaxPaymentDollarsTotal());
 
         // Set the various targets
         nameTarget = ((EditText) findViewById(R.id.detail_subscription_name));

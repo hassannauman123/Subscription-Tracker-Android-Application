@@ -16,14 +16,13 @@ import java.util.List;
 public class SubscriptionHandler {
 
 
-    //Every variable here sets what are allowable values of a subscription object (This are set by injection)
-
-    private final int MIN_NAME_LENGTH;
-    private final int MAX_NAME_LENGTH;
-    private final int MAX_PAYMENT_DOLLAR;
-    private final int MAX_PAYMENT_CENTS;
-   private final int MAX_PAYMENT_CENTS_TOTAL ; // Maximum payment will be 9999.99 or 999999 cents
-    private final String allowableCharactersInName; // Our current list of allowable characters in the name
+    //Every variable here sets what are allowable values of a subscription object (These are set by injection)
+    private final int MIN_NAME_LENGTH; // Min length of name
+    private final int MAX_NAME_LENGTH; // max length of name
+    private final int MAX_PAYMENT_DOLLAR; // max payment amount
+    private final int MAX_PAYMENT_CENTS; // max payment amount
+   private final int MAX_PAYMENT_CENTS_TOTAL ;
+    private final String allowableCharactersInName;
 
     private ArrayList<Frequency> FrequencyList  = new ArrayList<>();
     private DataBase dataBaseHandler; //DatabaseHandler
@@ -120,9 +119,10 @@ public class SubscriptionHandler {
             throw new SubscriptionInvalidNameException("Name required");
         }
 
-        if (inputName.length() > MAX_NAME_LENGTH) {
+         if (inputName.length() > MAX_NAME_LENGTH) {
             throw new SubscriptionInvalidNameException("Name is too long");
         }
+
 
         if (!inputName.equals(inputName.trim())) // Blank spaces as first or last char
         {
@@ -130,7 +130,7 @@ public class SubscriptionHandler {
             throw new SubscriptionInvalidNameException("Must not start or end with spaces");
         }
 
-        //Iterate through whole string, checks for invalid characters
+        //Iterate through whole string, and check for invalid characters
         for (int i = 0; i < inputName.length(); i++) {
             if (allowableCharactersInName.indexOf(inputName.charAt(i)) == -1) {
                 throw new SubscriptionInvalidNameException(inputName.charAt(i) + " is not allowed");
@@ -203,19 +203,28 @@ public class SubscriptionHandler {
     }
 
 
+    //returns the maximum amount a payment can be in dollars
+    public  int getMaxPaymentDollarsTotal()
+    {
+        return MAX_PAYMENT_DOLLAR;
+    }
+
+
+
     //Returns Min length a subscription name has to be
     public  int getMinNameLength() {
         return MIN_NAME_LENGTH;
     }
 
 
-    // Max length of subscription name
+    // Returns the Max length a subscription name can be
     public  int getMaxNameLength() {
         return MAX_NAME_LENGTH;
     }
 
-    // Allowable chars in name
-    public  String getAllowableChars() {
+    // Returns the string of Allowable chars in name
+    public  String getAllowableChars()
+    {
         return allowableCharactersInName;
     }
 
@@ -233,6 +242,7 @@ public class SubscriptionHandler {
 
     public int getNumFrequencies()
     {
+
         return FrequencyList.size();
     }
 
