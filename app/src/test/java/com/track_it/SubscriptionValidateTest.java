@@ -4,10 +4,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import com.track_it.logic.SubscriptionHandler;
-import com.track_it.persistence.FakeDataBase;
-import com.track_it.presentation.util.SetupParameters;
 
-import org.junit.Before;
 import org.junit.Test;
 
 import java.util.List;
@@ -15,26 +12,15 @@ import java.util.List;
 
 public class SubscriptionValidateTest {
 
-
-    private SubscriptionHandler subHandle;
-
-
-    //Setup a fake database each time
-    @Before
-    public void setTestHandle()
-    {
-        SetupParameters.InitializeDatabase(new FakeDataBase());
-        subHandle =  SetupParameters.GetSubscriptionHandler();     }
-
     @Test
     // We are going to test the validate name test
     public void testNameValidateWithInValidData() {
-
+        SubscriptionHandler subHandler = new SubscriptionHandler();
 
         boolean thrown = false;
         String inputName = "";
         try {
-            subHandle.validateName(inputName);
+            subHandler.validateName(inputName);
         } catch (Exception e) {
             thrown = true;
         }
@@ -45,7 +31,7 @@ public class SubscriptionValidateTest {
         inputName = "One~Twothree` ";
 
         try {
-            subHandle.validateName(inputName);
+            subHandler.validateName(inputName);
         } catch (Exception e) {
             thrown = true;
         }
@@ -56,7 +42,7 @@ public class SubscriptionValidateTest {
             inputName = inputName + " ";
             thrown = false;
             try {
-                subHandle.validateName(inputName);
+                subHandler.validateName(inputName);
             } catch (Exception e) {
                 thrown = true;
             }
@@ -68,7 +54,7 @@ public class SubscriptionValidateTest {
         inputName = " onettwo";
 
         try {
-            subHandle.validateName(inputName);
+            subHandler.validateName(inputName);
         } catch (Exception e) {
             thrown = true;
         }
@@ -80,7 +66,7 @@ public class SubscriptionValidateTest {
         inputName = "onettwo ";
 
         try {
-            subHandle.validateName(inputName);
+            subHandler.validateName(inputName);
         } catch (Exception e) {
             thrown = true;
         }
@@ -91,7 +77,7 @@ public class SubscriptionValidateTest {
         inputName = "One~Twothree` ";
 
         try {
-            subHandle.validateName(inputName);
+            subHandler.validateName(inputName);
         } catch (Exception e) {
             thrown = true;
         }
@@ -103,13 +89,14 @@ public class SubscriptionValidateTest {
     @Test
     // We are going to test the validateName function with valid names
     public void testNameValidateWithValidData() {
+        SubscriptionHandler subHandler = new SubscriptionHandler();
 
         // Valid 3 letter name
         boolean thrown = false;
         String inputName = "One";
 
         try {
-            subHandle.validateName(inputName);
+            subHandler.validateName(inputName);
         } catch (Exception e) {
             thrown = true;
         }
@@ -121,7 +108,7 @@ public class SubscriptionValidateTest {
         inputName = "On3ee3";
 
         try {
-            subHandle.validateName(inputName);
+            subHandler.validateName(inputName);
         } catch (Exception e) {
             thrown = true;
         }
@@ -133,7 +120,7 @@ public class SubscriptionValidateTest {
         inputName = "One Two";
 
         try {
-            subHandle.validateName(inputName);
+            subHandler.validateName(inputName);
         } catch (Exception e) {
             thrown = true;
         }
@@ -145,7 +132,7 @@ public class SubscriptionValidateTest {
         inputName = "One  Two";
 
         try {
-            subHandle.validateName(inputName);
+            subHandler.validateName(inputName);
         } catch (Exception e) {
             thrown = true;
         }
@@ -155,10 +142,10 @@ public class SubscriptionValidateTest {
         // Valid 100 Char name
         thrown = false;
         inputName = "a23";
-        String allowChars = subHandle.getAllowableChars();
+        String allowChars = subHandler.getAllowableChars();
 
 
-        for (int i = 0; i < subHandle.getMaxNameLength() - 3; i++) {
+        for (int i = 0; i < subHandler.getMaxNameLength() - 3; i++) {
             char newChar = allowChars.charAt((int) (Math.random() * allowChars.length()));
 
             while (newChar == ' ') // The last letter of  name cannot be a space!!!
@@ -168,7 +155,7 @@ public class SubscriptionValidateTest {
 
             inputName = inputName + newChar;
             try {
-                subHandle.validateName(inputName);
+                subHandler.validateName(inputName);
             } catch (Exception e) {
                 System.out.println("Name:  " + inputName + " was invalid.  Thrown on index " + i);
                 System.out.println(e.getMessage());
@@ -181,7 +168,7 @@ public class SubscriptionValidateTest {
             inputName = "ab";
 
             try {
-                subHandle.validateName(inputName);
+                subHandler.validateName(inputName);
             } catch (Exception e) {
                 thrown = true;
             }
@@ -193,7 +180,7 @@ public class SubscriptionValidateTest {
             inputName = "1ab";
 
             try {
-                subHandle.validateName(inputName);
+                subHandler.validateName(inputName);
             } catch (Exception e) {
                 thrown = true;
             }
@@ -206,7 +193,7 @@ public class SubscriptionValidateTest {
         inputName = "ab";
 
         try {
-            subHandle.validateName(inputName);
+            subHandler.validateName(inputName);
         } catch (Exception e) {
             thrown = true;
         }
@@ -218,7 +205,7 @@ public class SubscriptionValidateTest {
         inputName = "1ab";
 
         try {
-            subHandle.validateName(inputName);
+            subHandler.validateName(inputName);
         } catch (Exception e) {
             thrown = true;
         }
@@ -234,6 +221,7 @@ public class SubscriptionValidateTest {
 
         boolean thrown = false;
         String inputFrequency = "";
+        SubscriptionHandler subHandler = new SubscriptionHandler();
 
 
         // Invalid data with empty string
@@ -241,7 +229,7 @@ public class SubscriptionValidateTest {
         inputFrequency = "";
 
         try {
-            subHandle.validateFrequency(inputFrequency);
+            subHandler.validateFrequency(inputFrequency);
         } catch (Exception e) {
             thrown = true;
         }
@@ -252,7 +240,7 @@ public class SubscriptionValidateTest {
         inputFrequency = "  ";
 
         try {
-            subHandle.validateFrequency(inputFrequency);
+            subHandler.validateFrequency(inputFrequency);
         } catch (Exception e) {
             thrown = true;
         }
@@ -263,7 +251,7 @@ public class SubscriptionValidateTest {
         inputFrequency = " one two";
 
         try {
-            subHandle.validateFrequency(inputFrequency);
+            subHandler.validateFrequency(inputFrequency);
         } catch (Exception e) {
             thrown = true;
         }
@@ -273,40 +261,40 @@ public class SubscriptionValidateTest {
 
         // Invalid data with correct frequency + char
         thrown = false;
-        inputFrequency = subHandle.getFrequencyList().get(0) +  "1";
+        inputFrequency = subHandler.getFrequencyList().get(0) +  "1";
 
         try {
-            subHandle.validateFrequency(inputFrequency);
+            subHandler.validateFrequency(inputFrequency);
         } catch (Exception e) {
             thrown = true;
         }
-        assertTrue("'"+ subHandle.getFrequencyList().get(0) + "1' was incorrectly accepted as valid payment frequency", thrown);
+        assertTrue("'"+ subHandler.getFrequencyList().get(0) + "1' was incorrectly accepted as valid payment frequency", thrown);
 
 
 
 
         // Invalid data with correct frequency + blank character
         thrown = false;
-        inputFrequency = subHandle.getFrequencyList().get(1) + " ";
+        inputFrequency = subHandler.getFrequencyList().get(1) + " ";
 
         try {
-            subHandle.validateFrequency(inputFrequency);
+            subHandler.validateFrequency(inputFrequency);
         } catch (Exception e) {
             thrown = true;
         }
-        assertTrue("'"+ subHandle.getFrequencyList().get(1) + " ' was incorrectly accepted as valid payment frequency", thrown);
+        assertTrue("'"+ subHandler.getFrequencyList().get(1) + " ' was incorrectly accepted as valid payment frequency", thrown);
 
 
         // Invalid data with correct frequency + blank character
         thrown = false;
-        inputFrequency = " " + subHandle.getFrequencyList().get(1);
+        inputFrequency = " " + subHandler.getFrequencyList().get(1);
 
         try {
-            subHandle.validateFrequency(inputFrequency);
+            subHandler.validateFrequency(inputFrequency);
         } catch (Exception e) {
             thrown = true;
         }
-        assertTrue("' "+ subHandle.getFrequencyList().get(1) + "' was incorrectly accepted as valid payment frequency", thrown);
+        assertTrue("' "+ subHandler.getFrequencyList().get(1) + "' was incorrectly accepted as valid payment frequency", thrown);
 
 
         System.out.println("Finished testing validatePaymentFrequency with invalid Data!");
@@ -321,18 +309,19 @@ public class SubscriptionValidateTest {
 
         boolean thrown = false;
         String inputFrequency = "";
+        SubscriptionHandler subHandler = new SubscriptionHandler();
 
 
         // Invalid data with correct frequency + char
         thrown = false;
-        List<String> allowableFrequency= subHandle.getFrequencyList();
+        List<String> allowableFrequency= subHandler.getFrequencyList();
 
         for (int i = 0; i < allowableFrequency.size(); i++)
         {
             thrown = false;
             inputFrequency = allowableFrequency.get(i);
             try {
-                subHandle.validateFrequency(inputFrequency);
+                subHandler.validateFrequency(inputFrequency);
 
             }
             catch ( Exception e)
@@ -358,13 +347,14 @@ public class SubscriptionValidateTest {
 
         int paymentAmount = 0;
         boolean thrown = false;
+        SubscriptionHandler subHandler = new SubscriptionHandler();
 
 
         // Payment too small
         thrown = false;
         paymentAmount = 0;
         try {
-            subHandle.validatePaymentAmount(paymentAmount);
+            subHandler.validatePaymentAmount(paymentAmount);
         } catch (Exception e) {
             thrown = true;
         }
@@ -375,7 +365,7 @@ public class SubscriptionValidateTest {
         thrown = false;
         paymentAmount = -1;
         try {
-            subHandle.validatePaymentAmount(paymentAmount);
+            subHandler.validatePaymentAmount(paymentAmount);
         } catch (Exception e) {
             thrown = true;
         }
@@ -386,7 +376,7 @@ public class SubscriptionValidateTest {
         thrown = false;
         paymentAmount = Integer.MIN_VALUE;
         try {
-            subHandle.validatePaymentAmount(paymentAmount);
+            subHandler.validatePaymentAmount(paymentAmount);
         } catch (Exception e) {
             thrown = true;
         }
@@ -396,7 +386,7 @@ public class SubscriptionValidateTest {
         thrown = false;
         paymentAmount =  Integer.MAX_VALUE;
         try {
-            subHandle.validatePaymentAmount(paymentAmount);
+            subHandler.validatePaymentAmount(paymentAmount);
         } catch (Exception e) {
             thrown = true;
         }
@@ -404,13 +394,13 @@ public class SubscriptionValidateTest {
 
         // Payment too large
         thrown = false;
-        paymentAmount =  subHandle.getMaxPaymentCentsTotal() + 1;
+        paymentAmount =  subHandler.getMaxPaymentCentsTotal() + 1;
         try {
-            subHandle.validatePaymentAmount(paymentAmount);
+            subHandler.validatePaymentAmount(paymentAmount);
         } catch (Exception e) {
             thrown = true;
         }
-        assertTrue("Payment amount should not exceed " + subHandle.getMaxPaymentCentsTotal(), thrown);
+        assertTrue("Payment amount should not exceed " + subHandler.getMaxPaymentCentsTotal(), thrown);
 
         System.out.println("Finished testing validatePaymentAmount with invalid Data!");
 
@@ -423,7 +413,7 @@ public class SubscriptionValidateTest {
         paymentAmount = paymentAmount * 100;
         paymentAmount += 100;
         try {
-            subHandle.validatePaymentAmount(paymentAmount);
+            subHandler.validatePaymentAmount(paymentAmount);
 
         } catch (Exception e) {
             thrown = true;
@@ -444,20 +434,21 @@ public class SubscriptionValidateTest {
 
         int paymentAmount = 0;
         boolean thrown = false;
+        SubscriptionHandler subHandler = new SubscriptionHandler();
 
 
         // Payment correct
         thrown = false;
         paymentAmount = 1;
         try {
-            subHandle.validatePaymentAmount(paymentAmount);
+            subHandler.validatePaymentAmount(paymentAmount);
         } catch (Exception e) {
             thrown = true;
         }
         assertTrue("1 should have been considered a valid payment amount", !thrown);
 
 
-        int maxPayment = subHandle.getMaxPaymentCentsTotal();
+        int maxPayment = subHandler.getMaxPaymentCentsTotal();
         //Cycle through all correct payments
        for ( int i = 1 ; i <=maxPayment; i++ )
        {
@@ -465,7 +456,7 @@ public class SubscriptionValidateTest {
            thrown = false;
            paymentAmount= i;
            try {
-               subHandle.validatePaymentAmount(paymentAmount);
+               subHandler.validatePaymentAmount(paymentAmount);
            } catch (Exception e) {
 
                System.out.println("Validate payment amount failed with input "+ i);
@@ -483,7 +474,7 @@ public class SubscriptionValidateTest {
         paymentAmount = paymentAmount * 100;
         paymentAmount += 99;
         try {
-            subHandle.validatePaymentAmount(paymentAmount);
+            subHandler.validatePaymentAmount(paymentAmount);
 
         } catch (Exception e) {
             thrown = true;

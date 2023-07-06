@@ -8,7 +8,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.track_it.logic.exception.SubscriptionException;
 import com.track_it.logic.exception.SubscriptionInvalidPaymentException;
 import com.track_it.logic.SubscriptionHandler;
-import com.track_it.presentation.util.SetupParameters;
 //
 //  This is a general helper class, used to get user input using common functions.
 //
@@ -17,12 +16,12 @@ import com.track_it.presentation.util.SetupParameters;
 
 public class SubscriptionInput extends AppCompatActivity
 {
-    private SubscriptionHandler subHandle = SetupParameters.GetSubscriptionHandler();
 
     // Get the input payment amount that the user entered.
     public int getPaymentAmountInput(EditText inputLocation ) throws SubscriptionInvalidPaymentException
     {
 
+        SubscriptionHandler handler = new  SubscriptionHandler();
         EditText textInput = inputLocation;
         String[] paymentAmountString = textInput.getText().toString().split("\\.");
         int paymentInCents = Integer.MIN_VALUE;
@@ -69,7 +68,7 @@ public class SubscriptionInput extends AppCompatActivity
 
         } else {
             try {
-                subHandle.validatePaymentAmount(paymentInCents);
+                handler.validatePaymentAmount(paymentInCents);
 
             } catch (SubscriptionException e) {
                 throw new SubscriptionInvalidPaymentException(e.getMessage());
