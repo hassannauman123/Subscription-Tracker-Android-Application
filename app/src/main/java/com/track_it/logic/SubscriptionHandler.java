@@ -6,7 +6,8 @@ import com.track_it.logic.exception.DataBaseException;
 import com.track_it.logic.exception.SubscriptionException;
 import com.track_it.logic.exception.SubscriptionInvalidNameException;
 import com.track_it.logic.exception.SubscriptionInvalidPaymentException;
-import com.track_it.persistence.DataBase;
+import com.track_it.logic.frequencies.*;
+import com.track_it.persistence.FakeDataBase;
 import com.track_it.persistence.SubscriptionPersistence;
 
 import java.util.ArrayList;
@@ -31,25 +32,12 @@ public class SubscriptionHandler {
     private SubscriptionPersistence dataBaseHandler; //DatabaseHandler
 
 
-    // Default null constructor
-    public SubscriptionHandler()
-    {
 
-        MIN_NAME_LENGTH = 1;
-        MAX_NAME_LENGTH = 30;
-        MAX_PAYMENT_DOLLAR = 9999;
-        MAX_PAYMENT_CENTS = 99;
-        MAX_PAYMENT_CENTS_TOTAL = MAX_PAYMENT_DOLLAR * 100 + MAX_PAYMENT_CENTS;
-        dataBaseHandler =   Services.getSubscriptionPersistence();
-        //dataBaseHandler = new DataBase();
-        allowableCharactersInName = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890 _+*^&%$#@!+=|}]'?<>'";
-        InitFrequency();
-    }
 
-    public SubscriptionHandler( int inputMinNameLen, int inputMaxNameLen, int inputMaxPayDollar,int inputMaxPayCents,String inputAllowableChars)
+    public SubscriptionHandler( int inputMinNameLen, int inputMaxNameLen, int inputMaxPayDollar,int inputMaxPayCents,String inputAllowableChars, SubscriptionPersistence inputDB )
     {
-        dataBaseHandler =  Services.getSubscriptionPersistence(); // Change later
-       // dataBaseHandler = new DataBase();
+        //Set the Data base, and various parameters for what is a valid subscription
+        dataBaseHandler =  inputDB;
         MIN_NAME_LENGTH = inputMinNameLen;
         MAX_NAME_LENGTH = inputMaxNameLen;
         MAX_PAYMENT_DOLLAR = inputMaxPayDollar;
@@ -57,16 +45,15 @@ public class SubscriptionHandler {
         MAX_PAYMENT_CENTS_TOTAL = MAX_PAYMENT_DOLLAR * 100 + MAX_PAYMENT_CENTS;
         allowableCharactersInName = inputAllowableChars;
         InitFrequency();
-
     }
 
 
     private void InitFrequency()
     {
+        FrequencyList.add(new DailyFrequency());
         FrequencyList.add(new WeeklyFrequency());
         FrequencyList.add(new MonthlyFrequency());
         FrequencyList.add(new YearlyFrequency());
-
     }
 
     // This function will add subscriptionToAdd to database. It will first validate subscription, and then
@@ -75,13 +62,13 @@ public class SubscriptionHandler {
     public void addSubscription(SubscriptionObj subscriptionToAdd) throws DataBaseException, SubscriptionException
     {
         validateWholeSubscription(subscriptionToAdd); // might throw exception
-        dataBaseHandler.addSubscriptionDataBase(subscriptionToAdd); // Added to dataBase!!
+        dataBaseHandler.addSubscriptionToDB(subscriptionToAdd); // Added to dataBase!!
 
     }
 
     // Validate the whole subscription.
     // Throws exception if object is invalid
-    public void validateWholeSubscription(SubscriptionObj subscriptionToValidate) throws SubscriptionException
+    public void validateWholeSubscription(final SubscriptionObj subscriptionToValidate) throws SubscriptionException
     {
         validateName(subscriptionToValidate.getName());
         validateFrequency(subscriptionToValidate.getPaymentFrequency());
@@ -91,7 +78,7 @@ public class SubscriptionHandler {
 
     // Validate the Frequency input string
     // Must be one of the allowable frequencies in FrequencyList
-    public void validateFrequency(String inputName) throws SubscriptionInvalidPaymentException {
+    public void validateFrequency(final String inputName) throws SubscriptionInvalidPaymentException {
         boolean match = false; // A boolean to tell if inputName matches any of our payment Frequencies
 
         for (Frequency currFrequency : FrequencyList)
@@ -117,7 +104,7 @@ public class SubscriptionHandler {
     //      Must be less than or equal to MAX_NAME_LENGTH characters long
     //      chars are restricted to certain characters (look at allowableCharactersInName)
 
-    public void validateName(String inputName) throws SubscriptionInvalidNameException {
+    public void validateName(final String inputName) throws SubscriptionInvalidNameException {
 
         //The name has to be a minimum length
         if (inputName.trim().length() < MIN_NAME_LENGTH) {
@@ -145,10 +132,10 @@ public class SubscriptionHandler {
 
     }
 
-    //This validates the input Payment amount
-    // Throw exceptions if invalid
+    // This validates the input Payment amount
+    // Throw exceptions if invalid.
     // Currently a valid payment amount > 0, and less than MAX_PAYMENT_CENTS_TOTAL
-    public void validatePaymentAmount(int paymentAmount) throws SubscriptionInvalidPaymentException {
+    public void validatePaymentAmount(final int paymentAmount) throws SubscriptionInvalidPaymentException {
         if (paymentAmount <= 0) {
             throw new SubscriptionInvalidPaymentException("Payment amount is too small");
         }
@@ -167,7 +154,7 @@ public class SubscriptionHandler {
 
     }
 
-    // Gets all the subscriptions in the database
+    // Gets and returns list of all the subscriptions in the database
     public List<SubscriptionObj> getAllSubscriptions() throws DataBaseException
     {
         return dataBaseHandler.getAllSubscriptions();
@@ -182,23 +169,15 @@ public class SubscriptionHandler {
     }
 
 
-    // Edit a whole subscription, and save those changes to the database
+    // Edit a whole subscription, and save those changes to the database.
     // This throws Exceptions if new data is invalid, subscriptionID is invalid, or the subscription can't be edited.
     // Input Parameters:
-    //        subscriptionID  - The id of the subscription to change
+    //       subscriptionID  - The id of the subscription to change
     //       subscriptionToEdit - The details that the subscription will be changed to.
-    public void editWholeSubscription(int subscriptionID, SubscriptionObj subscriptionToEdit) throws DataBaseException, SubscriptionException {
+    public void editWholeSubscription(int subscriptionID,final SubscriptionObj subscriptionToEdit) throws DataBaseException, SubscriptionException {
         validateWholeSubscription(subscriptionToEdit); // Validate the subscription
         dataBaseHandler.editSubscriptionByID(subscriptionID, subscriptionToEdit); // ave the edits.
-
     }
-
-
-
-    // This part essentially returns what are allowable parameters for a subscription object.
-    // I am not sure to have this in the logic layer, or attach it to the domain object directly?
-    // I think it makes more sense to have it in the logic layer, in case we ever have different
-    // allowable parameters for different users.
 
 
     //returns the maximum amount a payment can be in cents
@@ -233,7 +212,7 @@ public class SubscriptionHandler {
         return allowableCharactersInName;
     }
 
-    // Returns a string array of allowable frequencies
+    // Returns a string list of allowable frequencies
     public List<String> getFrequencyList() {
         List<String> returnAllowableFrequencies = new ArrayList<String> ();
 
@@ -245,9 +224,9 @@ public class SubscriptionHandler {
         return returnAllowableFrequencies;
     }
 
+    // Return the number of frequencies
     public int getNumFrequencies()
     {
-
         return FrequencyList.size();
     }
 
