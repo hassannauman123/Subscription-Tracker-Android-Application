@@ -14,7 +14,6 @@ import com.track_it.R;
 import com.track_it.domainobject.SubscriptionObj;
 import com.track_it.logic.SubscriptionHandler;
 import com.track_it.logic.exception.SubscriptionException;
-import com.track_it.presentation.util.SetupParameters;
 
 
 // This class handles the presentation of the subscription page for the android app.
@@ -41,7 +40,7 @@ public class AddSubscriptionActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_subscription);
 
-        subHandler = SetupParameters.GetSubscriptionHandler();
+        subHandler = SetupParameters.InitializeLogicLayer();
 
         MAX_DIGITS_BEFORE_DECIMAL = SubscriptionInput.NumDigits(subHandler.getMaxPaymentDollarsTotal()); // get the number of digits allowed before decimal (used to constrain user input)
         // This physically constrains the user for what they can enter into the payment amount field ( How many digits before decimal, how many after)

@@ -1,6 +1,8 @@
 package com.track_it.presentation;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
+import android.content.res.AssetManager;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
@@ -8,12 +10,17 @@ import android.widget.Button;
 import com.track_it.R;
 import com.track_it.domainobject.SubscriptionObj;
 import com.track_it.logic.SubscriptionHandler;
-import com.track_it.presentation.util.SetupParameters;
+import com.track_it.persistence.DataBase;
 
 import android.content.Intent;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -25,11 +32,7 @@ import java.util.List;
 //   Clicking on any subscription should open a new page that allows you to edit or delete the sub.
 //
 
-
 public class MainActivity extends AppCompatActivity {
-
-
-    private SubscriptionHandler subHandler;
 
     @Override // Make sure this function is overriding some default onCreate method
     protected void onCreate(Bundle savedInstanceState)
@@ -38,11 +41,12 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main); // Switch screen to display main page
 
         com.cook_ebook.persistence.utils.DBHelper.copyDatabaseToDevice(this);
-        subHandler  = SetupParameters.GetSubscriptionHandler();
 
         displayAllSubscriptions(); // Display all the subscriptions
 
-         // Target add subscription button, and set what happens to it when clicked
+        //Button section
+
+        // Target add subscription button, and set what happens to it when clicked
         Button button = (Button) this.findViewById(R.id.button_subscription);
         button.setOnClickListener(new View.OnClickListener()
         {
@@ -57,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    //Runs when this activity comes back
+    //Runs when this app comes back
     protected void onRestart() {
         super.onRestart();
         displayAllSubscriptions();
@@ -66,6 +70,8 @@ public class MainActivity extends AppCompatActivity {
 
     // Display all the subscriptions currently in the database in a scrollable list
     private void displayAllSubscriptions() {
+
+        SubscriptionHandler subHandler = new SubscriptionHandler();
 
         // Clear everything previously in list
         LinearLayout sv = (LinearLayout) this.findViewById(R.id.subscription_list);
@@ -102,6 +108,7 @@ public class MainActivity extends AppCompatActivity {
             // Set Payment amount
             TextView targetPaymentAmount =  subscriptionBox.findViewById(R.id.subscription_amount);
             targetPaymentAmount.setText("Payment Amount: $" + curr.getPaymentDollars() + "." +  String.format("%02d", curr.getPaymentCents()));
+
 
 
 
@@ -142,6 +149,59 @@ public class MainActivity extends AppCompatActivity {
 
 
             sv.addView(subscriptionBox);
+        }
+    }
+
+
+    private void copyDatabaseToDevice() {
+        final String DB_PATH = "db";
+
+        String[] assetNames;
+        Context context = getApplicationContext();
+        File dataDirectory = context.getDir(DB_PATH, Context.MODE_PRIVATE);
+        AssetManager assetManager = getAssets();
+
+        try {
+
+            assetNames = assetManager.list(DB_PATH);
+            for (int i = 0; i < assetNames.length; i++) {
+                assetNames[i] = DB_PATH + "/" + assetNames[i];
+            }
+
+            copyAssetsToDirectory(assetNames, dataDirectory);
+
+            comp3350.srsys.application.Main.setDBPathName(dataDirectory.toString() + "/" + comp3350.srsys.application.Main.getDBPathName());
+
+        } catch (final IOException ioe) {
+           System.out.println("Unable to access application data: " + ioe.getMessage());
+        }
+    }
+
+    public void copyAssetsToDirectory(String[] assets, File directory) throws IOException {
+        AssetManager assetManager = getAssets();
+
+        for (String asset : assets) {
+            String[] components = asset.split("/");
+            String copyPath = directory.toString() + "/" + components[components.length - 1];
+
+            char[] buffer = new char[1024];
+            int count;
+
+            File outFile = new File(copyPath);
+
+            if (!outFile.exists()) {
+                InputStreamReader in = new InputStreamReader(assetManager.open(asset));
+                FileWriter out = new FileWriter(outFile);
+
+                count = in.read(buffer);
+                while (count != -1) {
+                    out.write(buffer, 0, count);
+                    count = in.read(buffer);
+                }
+
+                out.close();
+                in.close();
+            }
         }
     }
 

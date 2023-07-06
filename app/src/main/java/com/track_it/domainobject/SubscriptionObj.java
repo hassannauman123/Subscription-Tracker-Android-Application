@@ -4,13 +4,15 @@ package com.track_it.domainobject;
 //
 
 
+import com.track_it.logic.FrequencyType;
+
 public class SubscriptionObj
 {
 
     private int subscriptionID; // The unique ID of the subscription
     private String name; // The name of the subscription
     private int paymentInCents; // The payment amount in cents
-    private String paymentFrequencyName; // - How often a payment happens.
+    private String paymentFrequencyName; // - How often a payment happens. (Since this is a string, we will be limiting the allowable payment frequencies to a handful of well defined values)
 
 
     public SubscriptionObj(String inputName, int inputPayments, String inputPaymentFrequency )
