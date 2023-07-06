@@ -14,7 +14,7 @@ import java.util.List;
 // This database is currently very fake.
 //
 
-public class DataBase implements SubscriptionPersistence
+public class FakeDataBase implements SubscriptionPersistence
 {
 
 
@@ -39,7 +39,7 @@ public class DataBase implements SubscriptionPersistence
     // the sql dataBase.
     // Method will throw exceptions if something goes wrong with inserting into database.
     // This will set the subscriptionID of the inputSubscription object. The calling function can use that to get the ID of the newly added subscription.
-    public void addSubscriptionDataBase( SubscriptionObj inputSubscription)
+    public void addSubscriptionToDB( SubscriptionObj inputSubscription)
     {
         if ( dataBaseCount >= Integer.MAX_VALUE) // A preview of what an exception might look like
         {
@@ -56,15 +56,12 @@ public class DataBase implements SubscriptionPersistence
     // This is a temporary function!
     // This will eventually be moved to some type of utility folder
     // Currently fills the dataBase with 10 fake subs
-    public static void fillFakeData()
+    public static void fillFakeData(final SubscriptionHandler subHandler)
     {
-
-        SubscriptionHandler subHandler = new SubscriptionHandler();
 
         // Create 10 subs, with random data
         List<String> FrequencyList = subHandler.getFrequencyList();
         int numFrequency = subHandler.getNumFrequencies();
-
 
         for (int i =0 ; i < 10; i++)
         {

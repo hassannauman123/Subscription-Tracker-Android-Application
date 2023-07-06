@@ -3,16 +3,30 @@ package com.track_it;
 
 import com.track_it.domainobject.SubscriptionObj;
 import com.track_it.logic.SubscriptionHandler;
+import com.track_it.persistence.FakeDataBase;
+import com.track_it.presentation.util.SetupParameters;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
 import static org.junit.Assert.assertFalse;
 
-import java.util.List;
 
 public class SubscriptionsAddEditRemoveTest
 {
+
+    private SubscriptionHandler subHandle;
+
+
+    //Setup a fake database each time
+    @Before
+    public void setTestHandle()
+    {
+        SetupParameters.InitializeDatabase(new FakeDataBase());
+        subHandle =  SetupParameters.GetSubscriptionHandler();
+     }
+
 
     //Currently we don't have a real database, so there is no point in switching database before running
 
@@ -20,7 +34,6 @@ public class SubscriptionsAddEditRemoveTest
     @Test
     public void testAddSub()
     {
-        SubscriptionHandler subHandle = new SubscriptionHandler();
 
         String name = "Valid Name";
         String paymentFrequency = subHandle.getFrequencyList().get(0);
@@ -51,10 +64,7 @@ public class SubscriptionsAddEditRemoveTest
 
         assertEquals(retrieve.getTotalPaymentInCents() + " does not equal " + paymentAmount, retrieve.getTotalPaymentInCents(), paymentAmount);
 
-
-
         System.out.println("Passed the add subscription test!");
-
 
     }
 
@@ -64,7 +74,6 @@ public class SubscriptionsAddEditRemoveTest
     @Test
     public void testEditValid()
     {
-        SubscriptionHandler subHandle = new SubscriptionHandler();
 
         String Name = "Valid Name";
         String paymentFrequency = subHandle.getFrequencyList().get(0);
@@ -132,7 +141,6 @@ public class SubscriptionsAddEditRemoveTest
     @Test
     public void testEditInValid()
     {
-        SubscriptionHandler subHandle = new SubscriptionHandler();
 
         String name = "Valid Name";
         String paymentFrequency = subHandle.getFrequencyList().get(0);
@@ -192,7 +200,6 @@ public class SubscriptionsAddEditRemoveTest
     @Test
     public void testRemove()
     {
-        SubscriptionHandler subHandle = new SubscriptionHandler();
 
         String name = "Valid Name";
         String paymentFrequency = subHandle.getFrequencyList().get(0);

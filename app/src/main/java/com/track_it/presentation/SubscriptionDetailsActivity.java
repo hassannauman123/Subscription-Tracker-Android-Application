@@ -19,6 +19,7 @@ import com.track_it.R;
 import com.track_it.domainobject.SubscriptionObj;
 import com.track_it.logic.exception.SubscriptionException;
 import com.track_it.logic.SubscriptionHandler;
+import com.track_it.presentation.util.SetupParameters;
 
 
 //This is the activity java file for the description details.
@@ -73,7 +74,7 @@ public class SubscriptionDetailsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_subscription_details);
 
 
-        subHandler = SetupParameters.InitializeLogicLayer(); // Init sub handler
+        subHandler = SetupParameters.GetSubscriptionHandler(); // Initialize sub handler
         MAX_DIGITS_BEFORE_DECIMAL = SubscriptionInput.NumDigits(subHandler.getMaxPaymentDollarsTotal());
 
         // Set the various targets
@@ -217,14 +218,12 @@ public class SubscriptionDetailsActivity extends AppCompatActivity {
         {
 
             boolean valid = true;// Tells us if everything the user entered is valid
-            SubscriptionHandler handler = new SubscriptionHandler();// users to get payment amount
-
 
             // Get the frequency the user entered
             String inputFrequency = frequencyTarget.getText().toString().trim();
             try {
 
-                handler.validateFrequency(inputFrequency);
+                subHandler.validateFrequency(inputFrequency);
 
             } catch (SubscriptionException e)  //Catch - Frequency was not valid
             {
@@ -256,7 +255,7 @@ public class SubscriptionDetailsActivity extends AppCompatActivity {
             // Get the string the user entered for a name
             String userNameInput = nameTarget.getText().toString().trim(); // get string, and remove white spaces
             try {
-                handler.validateName(userNameInput); // Check if value is valid
+                subHandler.validateName(userNameInput); // Check if value is valid
 
             } catch (SubscriptionException e) // Catch - name was not valid,
             {
@@ -309,10 +308,9 @@ public class SubscriptionDetailsActivity extends AppCompatActivity {
         // Make a Yes button, meaning that the user does in fact want to delete the subscription
         builder.setNegativeButton("Yes", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
-                SubscriptionHandler SubHandler = new SubscriptionHandler();
-                try {
+                 try {
 
-                    SubHandler.removeSubscriptionByID(subscriptionToDelete); // Attempt to delete the sub
+                    subHandler.removeSubscriptionByID(subscriptionToDelete); // Attempt to delete the sub
                     alreadyDeleted = true;
                     setGeneralError(successDeleteMessage, accomplishColor);
                     deleted();
