@@ -77,11 +77,9 @@ public class MainActivity extends AppCompatActivity {
         int color1 = Color.parseColor("#EEEEEE");
         int color2 = Color.parseColor("#FFFFFF");
 
-        for ( int i =0 ; i <listOfSubs.size(); i++ )
-        {
 
-            // Current subscription object we are working on
-            SubscriptionObj curr = listOfSubs.get(i);
+        for ( SubscriptionObj curr :  listOfSubs)
+        {
 
             // Create a new box to display subscription
             View subscriptionBox = getLayoutInflater().inflate(R.layout.subscription_box, sv, false);
@@ -108,6 +106,9 @@ public class MainActivity extends AppCompatActivity {
             //Set ID - Just as a reminder, these might not be unique ID's on this page, as other elements may have these ID numbers
             // but for how we are using them right now it's fine.
             subscriptionBox.setId(curr.getID());
+
+
+            //Every other subscription has a different background color
             toggleColor = !toggleColor;
             if ( toggleColor) {
                 subscriptionBox.setBackgroundColor(color1);
@@ -131,7 +132,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             );
 
-            //Set what happens when the user does clicks on a subscription box
+            //Set what happens when the user does a short click on a subscription box
             subscriptionBox.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     Intent subDetailsIntent = new Intent(MainActivity.this, SubscriptionDetailsActivity.class);

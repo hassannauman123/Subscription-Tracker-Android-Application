@@ -2,32 +2,26 @@ package com.track_it.persistence;
 import com.track_it.domainobject.*;
 import com.track_it.logic.SubscriptionHandler;
 import com.track_it.logic.exception.DataBaseException;
-import com.track_it.logic.exception.DataBaseFullException;
 import com.track_it.logic.exception.DataBaseSubNotFoundException;
 
 import java.util.ArrayList;
 import java.util.List;
 
-// This is the database class, use to stored information in a database.
-//
-// Currently our data base consists of a single ArrayList that holds subscription objects.
-// This database is currently very fake.
-//
+
+//This is a fakeDatabase class that implements the SubscriptionPersistence interface.
 
 public class FakeDataBase implements SubscriptionPersistence
 {
 
 
-    // A temporary static Arraylist to hold subscriptions. Used only for early iterations of project
-    private static ArrayList<SubscriptionObj> subscriptionDB  = new ArrayList<SubscriptionObj>(); // Create an ArrayList object (our current database
+    // A static Arraylist to hold subscriptions.
+    private static ArrayList<SubscriptionObj> subscriptionDB  = new ArrayList<SubscriptionObj>(); // Create a static ArrayList that hold subscription Objects
 
 
-    // This is currently used to generate uniqueID's (will change once we have sql database)
-    private static int dataBaseCount = 0; // Do NOT EVER REDUCE THIS VALUE (even when deleting, as it might no longer be a unique number
+    private static int dataBaseCount = 0; // A unique number for the Subscription ID's (Do not ever reduce this number, even when deleting from database)
 
 
     // This is used to generate a unique number internally.
-    // When we actually have a database, the uniqueID will be the index into the SQL table
     private int getUniqueId()
     {
          return dataBaseCount; // simple method for now
@@ -35,27 +29,16 @@ public class FakeDataBase implements SubscriptionPersistence
 
 
     // Add a subscription to the dataBase.
-    // When we actually have a database this method will take a part the inputSubscription object, and use it to create insert statements for
-    // the sql dataBase.
-    // Method will throw exceptions if something goes wrong with inserting into database.
-    // This will set the subscriptionID of the inputSubscription object. The calling function can use that to get the ID of the newly added subscription.
     public void addSubscriptionToDB( SubscriptionObj inputSubscription)
     {
-        if ( dataBaseCount >= Integer.MAX_VALUE) // A preview of what an exception might look like
-        {
-            // If you are really dedicated, you can insert MAX_VALUE subscriptions into the database, and see if this error throws correctly
-            throw new DataBaseFullException("You literally added " +  Integer.MAX_VALUE  + " number of subscriptions, and now the database is full");
-        }
 
-        inputSubscription.setID(dataBaseCount); // The database layer will ultimately determine the unique id, as it will be used as primary index for the sql tables
-        subscriptionDB.add(inputSubscription);
+        inputSubscription.setID(dataBaseCount);   // Set id
+        subscriptionDB.add(inputSubscription); // ADD to database
         dataBaseCount++;
     }
 
 
-    // This is a temporary function!
-    // This will eventually be moved to some type of utility folder
-    // Currently fills the dataBase with 10 fake subs
+   //Fill database with fake data
     public static void fillFakeData(final SubscriptionHandler subHandler)
     {
 
@@ -109,7 +92,7 @@ public class FakeDataBase implements SubscriptionPersistence
 
         ArrayList<SubscriptionObj> returnListOfSubscriptions = new ArrayList<SubscriptionObj>();
 
-        //Go through the DataBase, and create fill the arrayList with all the subscriptions the database
+        //Go through the DataBase, and create fill the return arrayList with all the subscriptions in the database
         for ( int i =0 ; i < subscriptionDB.size(); i++)
         {
             SubscriptionObj copyOfSubscription = subscriptionDB.get(i).copy(); // Copy the sub so the calling function can't illegally modify our fake dataBase
@@ -122,8 +105,7 @@ public class FakeDataBase implements SubscriptionPersistence
     }
 
 
-    // This will look a lot different once we have a real database
-    // For now simply edits a subscription
+    // simply edits a subscription by the ID
     public void editSubscriptionByID (int subscriptionID, SubscriptionObj newDetails) throws DataBaseException
     {
         boolean found = false;
@@ -182,9 +164,7 @@ public class FakeDataBase implements SubscriptionPersistence
 
 
 
-    // Tries to remove a subscription with the id of subcriptionID from the database- will throw exception if it can't be deleted
-    // I image that eventually we will have a real database, and the subscription primary key for the sql table will be the subcriptionID.
-    // Do Not reduce Count when removing a subscription!
+    // Tries to remove a subscription with the id of subcriptionID from the database- will throw an exception if it can't be deleted
     public void  removeSubscriptionByID( int subcriptionID)
     {
         boolean removed = false;

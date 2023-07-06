@@ -2,6 +2,7 @@ package com.track_it.logic.frequencies;
 
 public class WeeklyFrequency extends FrequencyBase
 {
+
     public WeeklyFrequency()
     {
         super("weekly");
@@ -9,7 +10,7 @@ public class WeeklyFrequency extends FrequencyBase
 
     public int calculateMonthlyPayment(int inputPayment)
     {
-        return inputPayment * 4;
+        return inputPayment * WEEKS_PER_MONTH;
     }
 
 }

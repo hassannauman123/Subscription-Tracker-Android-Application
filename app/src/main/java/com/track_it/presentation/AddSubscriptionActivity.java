@@ -3,6 +3,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.text.InputFilter;
@@ -10,6 +12,7 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.textfield.TextInputLayout;
 import com.track_it.R;
 import com.track_it.domainobject.SubscriptionObj;
 import com.track_it.logic.SubscriptionHandler;
@@ -36,6 +39,12 @@ public class AddSubscriptionActivity extends AppCompatActivity {
    TextView generalErrorTarget; // where general error messages are display
     private boolean successTry; // used by the clickedAddSubscriptionButton function, to keep track of if all the input is valid
 
+
+    private AutoCompleteTextView frequencyTarget;
+    private TextInputLayout dropDownMenuParent;
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,6 +65,16 @@ public class AddSubscriptionActivity extends AppCompatActivity {
 
         // Set the add subscription button click handler (What runs when the add subscription button is click)
         addSubtarget= (Button) findViewById(R.id.submit_sub_button);
+
+
+
+        //Frequency drop menu
+        frequencyTarget = findViewById(R.id.AutoComplete_drop_menu);
+        dropDownMenuParent = findViewById(R.id.parent_drop_menu);
+        FrequencyMenu.initializeMenu(this, subHandler, frequencyTarget);
+
+
+
         addSubtarget.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
 
@@ -77,8 +96,18 @@ public class AddSubscriptionActivity extends AppCompatActivity {
         });
 
 
+    }
+
+    private void initializeDropDownFrequencyMenu()
+    {
+        // create an array adapter and pass the required parameters
+        // in our case pass the context, drop down layout , and list of the frequencies.
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.list_item, subHandler.getFrequencyList ());
+        frequencyTarget.setAdapter(adapter);
+
 
     }
+
 
 
 
@@ -103,7 +132,6 @@ public class AddSubscriptionActivity extends AppCompatActivity {
               ((TextView) findViewById(R.id.input_payment_amount_error)).setText(e.getMessage());
               ((TextView) findViewById(R.id.input_payment_amount_error)).setVisibility(View.VISIBLE);
           }
-
 
 
         String PaymentFrequency = getPaymentFrequency(view); //Get input for payment frequency
@@ -171,33 +199,14 @@ public class AddSubscriptionActivity extends AppCompatActivity {
     }
 
 
+
     // Get payment Frequency from user input
     // This function will automatically display any errors if detected with input, and set global variable successTry to false
-    // Will return string representing what radio button user clicked for payment Frequency (may be empty if user selected nothing)
     private String getPaymentFrequency(View view)
     {
-        //
-        // Get payment Frequency from user input
-        //
-        String PaymentFrequency = ""; // This will stay blank if radio button not selected
-        TextView frequencyError = ((TextView) findViewById(R.id.input_frequency_group_error )); // where to display name errors
 
-
-        // Target all the radio buttons for Payment frequency
-        RadioButton radioWeek, RadioMonth, radioYear;
-        radioWeek = (RadioButton) findViewById(R.id.input_frequency_weekly);
-        RadioMonth = (RadioButton) findViewById(R.id.input_frequency_monthly);
-        radioYear = (RadioButton) findViewById(R.id.input_frequency_yearly);
-
-        // Find which radio button is selected
-        if (radioWeek.isChecked()) {
-            PaymentFrequency =  "weekly";
-        } else if (RadioMonth.isChecked()) {
-            PaymentFrequency = "monthly";;
-        } else if (radioYear.isChecked()) {
-            PaymentFrequency = "yearly";
-        }
-
+        String PaymentFrequency = frequencyTarget.getText().toString(); // Get payment frequency from user input
+        TextView frequencyError = ((TextView) findViewById(R.id.input_frequency_error )); // where to display name errors
 
         // Try to validate selection, if Exception is detected display error to user
         try {
@@ -216,6 +225,8 @@ public class AddSubscriptionActivity extends AppCompatActivity {
     }
 
 
+
+
     // check if the input string is parsable by Integer.parseInt function
     private boolean isParsable(String inputString) {
         try {
@@ -232,7 +243,6 @@ public class AddSubscriptionActivity extends AppCompatActivity {
     {
          addSubtarget.setEnabled(false); // Disable the add button
 
-
         // Make all the input uneditable
         EditText textInput = (EditText) findViewById(R.id.input_subscription_name);
         textInput.setEnabled(false);
@@ -240,14 +250,6 @@ public class AddSubscriptionActivity extends AppCompatActivity {
         EditText paymentAmountTarget = (EditText) findViewById(R.id.input_payment_amount);
         paymentAmountTarget.setEnabled(false);
 
-        RadioButton radioWeek, RadioMonth, radioYear;
-        radioWeek = (RadioButton) findViewById(R.id.input_frequency_weekly);
-        RadioMonth = (RadioButton) findViewById(R.id.input_frequency_monthly);
-        radioYear = (RadioButton) findViewById(R.id.input_frequency_yearly);
-
-        radioWeek.setEnabled(false);
-        RadioMonth.setEnabled(false);
-        radioYear.setEnabled(false);
 
     }
 

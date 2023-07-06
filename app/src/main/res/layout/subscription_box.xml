@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="13dp"
         android:layout_marginTop="34dp"
-        android:text="Name: random test of a name 1"
+        android:text=""
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -22,7 +22,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:text="Payment Amount: $22.99"
+        android:text=""
         app:layout_constraintBottom_toBottomOf="@+id/subscription_frequency"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/subscription_frequency" />
@@ -34,7 +34,7 @@
         android:layout_marginStart="59dp"
         android:layout_marginEnd="56dp"
         android:layout_marginBottom="41dp"
-        android:text="Frequency: hourly a"
+        android:text=""
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/subscription_amount" />

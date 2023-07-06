@@ -10,7 +10,7 @@ public class DailyFrequency extends FrequencyBase
 
     public int calculateMonthlyPayment(int inputPayment)
     {
-        return inputPayment * 365 / 12 ;
+        return inputPayment * DAYS_PER_YEAR / MONTHS_PER_YEAR ;
     }
 
 }

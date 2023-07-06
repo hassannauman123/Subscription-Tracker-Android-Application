@@ -26,7 +26,6 @@ public class DBHelper {
         AssetManager assetManager = context.getAssets();
 
         try {
-
             assetNames = assetManager.list(DB_PATH);
             for (int i = 0; i < assetNames.length; i++) {
                 assetNames[i] = DB_PATH + "/" + assetNames[i];

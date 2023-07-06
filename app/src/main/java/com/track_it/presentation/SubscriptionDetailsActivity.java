@@ -8,6 +8,9 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.text.InputFilter;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -15,11 +18,14 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.material.textfield.TextInputLayout;
 import com.track_it.R;
 import com.track_it.domainobject.SubscriptionObj;
 import com.track_it.logic.exception.SubscriptionException;
 import com.track_it.logic.SubscriptionHandler;
 import com.track_it.presentation.util.SetupParameters;
+
+import java.util.List;
 
 
 //This is the activity java file for the description details.
@@ -46,12 +52,12 @@ public class SubscriptionDetailsActivity extends AppCompatActivity {
     // Various targets for buttons, and text regions
     private EditText nameTarget;
     private EditText paymentAmountTarget;
-    private EditText frequencyTarget;
     private TextView generalErrorTarget; // Where error messages are shown to user on this page
 
     private SubscriptionObj subscriptionToDisplay; // The subscription we will display, and allow the user to edit or delete
     private Button editButton;
     private Button backButton;
+    private Button deleteButton;
 
 
     //String constants, messages to display to user
@@ -68,32 +74,64 @@ public class SubscriptionDetailsActivity extends AppCompatActivity {
     private boolean loadSub = false; // Were we able to load the subscription object using the info passed to this activity;
 
 
+
+    private AutoCompleteTextView frequencyTarget;
+    private TextInputLayout dropDownMenuParent;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_subscription_details);
 
 
-        subHandler = SetupParameters.GetSubscriptionHandler(); // Initialize sub handler
-        MAX_DIGITS_BEFORE_DECIMAL = SubscriptionInput.NumDigits(subHandler.getMaxPaymentDollarsTotal());
+        // Set the various targets and variables
 
-        // Set the various targets
-        nameTarget = ((EditText) findViewById(R.id.detail_subscription_name));
-        int maxLength = subHandler.getMaxNameLength();
-        nameTarget.setFilters( new InputFilter[] {new InputFilter.LengthFilter(maxLength)}); // Set max length
+        //Frequency drop menu
+        frequencyTarget = findViewById(R.id.AutoComplete_drop_menu);
+        dropDownMenuParent = findViewById(R.id.parent_drop_menu);
 
         paymentAmountTarget = ((EditText) findViewById(R.id.detail_subscription_amount));
-        frequencyTarget = ((EditText) findViewById(R.id.detail_subscription_frequency));
+        nameTarget = ((EditText) findViewById(R.id.detail_subscription_name));
 
-        backButton = (Button) findViewById(R.id.go_home);
+       // Get subscription handle
+        subHandler = SetupParameters.GetSubscriptionHandler();
+        MAX_DIGITS_BEFORE_DECIMAL = SubscriptionInput.NumDigits(subHandler.getMaxPaymentDollarsTotal());
+
+        int maxLength = subHandler.getMaxNameLength();
+        nameTarget.setFilters( new InputFilter[] {new InputFilter.LengthFilter(maxLength)}); // Set max length of name
+
+
         generalErrorTarget = ((TextView) findViewById(R.id.details_general_error));
+        backButton = (Button) findViewById(R.id.go_home);
         editButton = (Button) findViewById(R.id.details_edit_subscription);
-        setFocus(false); // Disable editing sub details
+        deleteButton = (Button) findViewById(R.id.details_delete_subscription);
 
 
+        FrequencyMenu.initializeMenu(this, subHandler, frequencyTarget);
 
+        setFocus(editMode); // Disable editing sub details
 
+        //Enable go back to home button
+        enableGoBackButton();
 
+        loadSub = getSubscription(subscriptionToDisplay);
+
+        if ( loadSub) // Make sure the subscription object was able to load
+        {
+            //Only Enable delete button if we could load subscription
+            enableDeleteEditButtons();
+        }
+
+        // This physically constrains the user for what they can enter into the payment amount field ( How many digits before decimal, how many after)
+        EditText etText = findViewById(R.id.detail_subscription_amount);  // Target Payment amount input
+        etText.setFilters(new InputFilter[]{new DecimalDigitsInputFilter(MAX_PAYMENT_DECIMALS, MAX_DIGITS_BEFORE_DECIMAL)}); // Pass setFilters and array
+
+    }
+
+    private void enableGoBackButton()
+    {
         //Enable go back to home button
         backButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -103,7 +141,42 @@ public class SubscriptionDetailsActivity extends AppCompatActivity {
             }
         });
 
-        // Try to get the subscription id input passed to this activity
+    }
+
+
+    private void enableDeleteEditButtons()
+    {
+        deleteButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+
+                if ( !editMode)  // If we are not in edit mode, let the user delete it
+                {
+                    createDialog(subscriptionToDisplay.getID());
+                }
+
+            }
+        });
+
+        //Only enable subscription button if we could load subscription
+        editButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                editButton();
+
+            }
+        });
+    }
+
+
+
+
+
+    //This will try to get the a subscription object from the logic layer, using the arguments passed to this activity via extras.
+    // This function will return true if subscription could be retrieved, else returns false.
+    private boolean getSubscription(SubscriptionObj subscription)
+    {
+
+        boolean loadedSub = false;
+
         Bundle extras = getIntent().getExtras();
         if (extras != null)
         {
@@ -111,10 +184,8 @@ public class SubscriptionDetailsActivity extends AppCompatActivity {
 
             try {
                 subscriptionToDisplay = subHandler.getSubscriptionByID(subscriptionID); // Get the subscription object associated with subscriptionID
-
                 setDetails(subscriptionToDisplay);
-
-                loadSub = true;
+                loadedSub = true;
 
 
             } catch (Exception e) // Failed to get subscription
@@ -122,42 +193,39 @@ public class SubscriptionDetailsActivity extends AppCompatActivity {
                 setGeneralError(e.getMessage(), errorColor);
             }
         }
-        else  // We we display if we could not get passed input
+        else  // Display an error letting the user know that there was an error getting subscription
         {
             setGeneralError("Invalid Selection for subscription", errorColor);
         }
 
-
-        if ( loadSub) // Make sure the subscription object was able to load
-        {
-
-            //Only Enable delete button if we could load subscription
-            Button deleteButton = (Button) findViewById(R.id.details_delete_subscription);
-            deleteButton.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View v) {
-
-                    if ( !editMode)  // If we are not in edit mode, let the user delete it
-                    {
-                        createDialog(subscriptionToDisplay.getID());
-                    }
-
-                }
-            });
-
-            //Only enable subscription button if we could load subscription
-            editButton.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View v) {
-                    editButton();
-
-                }
-            });
-        }
-
-        // This physically constrains the user for what they can enter into the payment amount field ( How many digits before decimal, how many after)
-        EditText etText = findViewById(R.id.detail_subscription_amount);  // Target Payment amount input
-        etText.setFilters(new InputFilter[]{new DecimalDigitsInputFilter(MAX_PAYMENT_DECIMALS, MAX_DIGITS_BEFORE_DECIMAL)}); // Pass setFilters and array
+        return loadedSub;
 
     }
+
+
+
+
+
+
+    private void disableDropDownMenu()
+    {
+        frequencyTarget.setEnabled(false);
+        frequencyTarget.setTextColor(getResources().getColor(R.color.black));
+        dropDownMenuParent.setFocusableInTouchMode(false);
+        dropDownMenuParent.setEnabled(false);
+        frequencyTarget.setBackgroundColor(getResources().getColor(R.color.white));
+    }
+
+
+    private void enableDropDownMenu()
+    {
+        frequencyTarget.setEnabled(true);
+        frequencyTarget.setTextColor(getResources().getColor(R.color.black));
+        dropDownMenuParent.setFocusableInTouchMode(true);
+        dropDownMenuParent.setEnabled(true);
+        frequencyTarget.setBackgroundColor(getResources().getColor(R.color.white));
+    }
+
 
     private void deleted(){
         Toast.makeText(this, successDeleteMessage, Toast.LENGTH_SHORT).show(); //Display "Subscription Deleted"
@@ -171,17 +239,17 @@ public class SubscriptionDetailsActivity extends AppCompatActivity {
     private void setFocus(boolean inputBool) {
         nameTarget.setEnabled(inputBool);
         paymentAmountTarget.setEnabled(inputBool);
-        frequencyTarget.setEnabled(inputBool);
+       // frequencyTarget.setEnabled(inputBool);
 
         // Change color of input.
         if (inputBool) {
             nameTarget.setTextColor(Color.parseColor(editableColor));
             paymentAmountTarget.setTextColor(Color.parseColor(editableColor));
-            frequencyTarget.setTextColor(Color.parseColor(editableColor));
+            enableDropDownMenu();
         } else {
             nameTarget.setTextColor(Color.parseColor(nonEditableColor));
             paymentAmountTarget.setTextColor(Color.parseColor(nonEditableColor));
-            frequencyTarget.setTextColor(Color.parseColor(nonEditableColor));
+            disableDropDownMenu();
         }
 
     }
@@ -349,7 +417,8 @@ public class SubscriptionDetailsActivity extends AppCompatActivity {
     private void setDetails(SubscriptionObj subscriptionToDisplay) {
         nameTarget.setText(subscriptionToDisplay.getName());
         paymentAmountTarget.setText(subscriptionToDisplay.getPaymentDollars() + "." +  String.format("%02d", subscriptionToDisplay.getPaymentCents())  );
-        frequencyTarget.setText((subscriptionToDisplay.getPaymentFrequency()));
+        frequencyTarget.setText((subscriptionToDisplay.getPaymentFrequency()),false);
+        disableDropDownMenu();
     }
 
 

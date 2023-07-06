@@ -15,20 +15,26 @@ import com.track_it.presentation.util.SetupParameters;
 
 
 
-public class SubscriptionInput extends AppCompatActivity
+public class SubscriptionInput
 {
-    private SubscriptionHandler subHandle = SetupParameters.GetSubscriptionHandler();
+    private final SubscriptionHandler subHandle;
+
+    public SubscriptionInput()
+    {
+        subHandle = SetupParameters.GetSubscriptionHandler();
+    }
+
+
 
     // Get the input payment amount that the user entered.
     public int getPaymentAmountInput(EditText inputLocation ) throws SubscriptionInvalidPaymentException
     {
 
-        EditText textInput = inputLocation;
-        String[] paymentAmountString = textInput.getText().toString().split("\\.");
+        String[] paymentAmountString = inputLocation.getText().toString().split("\\.");
         int paymentInCents = Integer.MIN_VALUE;
 
 
-        // Anyways, get Payment amount in cents
+        // Get Payment amount in cents
         if (paymentAmountString.length > 0) {
             if (isParsable(paymentAmountString[0])) {
                 paymentInCents = Integer.parseInt(paymentAmountString[0]) * 100;
@@ -163,7 +169,6 @@ class DecimalDigitsInputFilter implements InputFilter {
 
             if (dotPos >= 0)  // Decimal is in the string, and we are trying to insert a digit
             {
-
                 // If source is being added to front of decimal and there is room accept source
                 if (dend <= dotPos && (dotPos < digitBeforeDecimal)) {
                     returnValue = null;
