@@ -36,7 +36,7 @@ public class AddSubscriptionActivity extends AppCompatActivity {
 
     Button addSubtarget; // To target add subscription button
     Button backTarget; // To target back button
-   TextView generalErrorTarget; // where general error messages are display
+   TextView generalErrorTarget; // where general error messages are displayed
     private boolean successTry; // used by the clickedAddSubscriptionButton function, to keep track of if all the input is valid
 
 
@@ -53,19 +53,23 @@ public class AddSubscriptionActivity extends AppCompatActivity {
         subHandler = SetupParameters.GetSubscriptionHandler();
 
         MAX_DIGITS_BEFORE_DECIMAL = SubscriptionInput.NumDigits(subHandler.getMaxPaymentDollarsTotal()); // get the number of digits allowed before decimal (used to constrain user input)
+
         // This physically constrains the user for what they can enter into the payment amount field ( How many digits before decimal, how many after)
         EditText etText = findViewById(R.id.input_payment_amount);  // Target Payment amount input
         etText.setFilters(new InputFilter[]{new DecimalDigitsInputFilter(MAX_PAYMENT_DECIMALS, MAX_DIGITS_BEFORE_DECIMAL)}); // Pass setFilters and array of objects that implement the InputFilter interface
 
         nameInput = (EditText) findViewById(R.id.input_subscription_name); // Set target for name input
         int maxLength = subHandler.getMaxNameLength();
-        nameInput.setFilters( new InputFilter[] {new InputFilter.LengthFilter(maxLength)}); // Set max length the user can enter for input
+        nameInput.setFilters(new InputFilter[]{new InputFilter.LengthFilter(maxLength)}); // Set max length the user can enter for input
 
-        generalErrorTarget =((TextView) findViewById(R.id.subscription_error)); // Set where general error messages are displayed
+        generalErrorTarget = ((TextView) findViewById(R.id.subscription_error)); // Set where general error messages are displayed
 
         // Set the add subscription button click handler (What runs when the add subscription button is click)
-        addSubtarget= (Button) findViewById(R.id.submit_sub_button);
+        addSubtarget = (Button) findViewById(R.id.submit_sub_button);
 
+
+        // Set back button target
+        backTarget = (Button) findViewById(R.id.go_home);
 
 
         //Frequency drop menu
@@ -73,19 +77,26 @@ public class AddSubscriptionActivity extends AppCompatActivity {
         dropDownMenuParent = findViewById(R.id.parent_drop_menu);
         FrequencyMenu.initializeMenu(this, subHandler, frequencyTarget);
 
+        setButtonActions();
+
+    }
 
 
+
+    private void setButtonActions()
+    {
+
+        //Set what happens when add button clicked
         addSubtarget.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
 
                 clickedAddSubscriptionButton(v); // Run this function when the user clicks the add subscription button.
-
             }
         });
 
 
-        // Set what happens when back button clicked
-        backTarget = (Button) findViewById(R.id.go_home);
+
+        // Set what happens what backButton clickd
         backTarget.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
 
@@ -97,14 +108,12 @@ public class AddSubscriptionActivity extends AppCompatActivity {
 
 
     }
-
     private void initializeDropDownFrequencyMenu()
     {
         // create an array adapter and pass the required parameters
         // in our case pass the context, drop down layout , and list of the frequencies.
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.list_item, subHandler.getFrequencyList ());
         frequencyTarget.setAdapter(adapter);
-
 
     }
 
@@ -144,17 +153,16 @@ public class AddSubscriptionActivity extends AppCompatActivity {
 
             try { // Try to add subscription to dataBase
 
-                subHandler.addSubscription(newSubscription);
+                subHandler.addSubscription(newSubscription); //Throws an error if could not add subscription to database
+
                 generalErrorTarget.setVisibility(View.VISIBLE);
                 generalErrorTarget.setText(successAddMessage);
                 generalErrorTarget.setTextColor(Color.parseColor(accomplishColor));
-
                 disableAddSubscriptionsButtons();
 
-                Toast.makeText(this, successAddMessage, Toast.LENGTH_SHORT).show(); //Display "Subscription Added"
-
+                Toast.makeText(this, successAddMessage, Toast.LENGTH_LONG).show(); //Display "Subscription Added"
                 setContentView(R.layout.activity_main); // Switch screen to display main page
-                finish();
+                finish(); //We are done with this activity
 
             }
             // Something went wrong, display error for user

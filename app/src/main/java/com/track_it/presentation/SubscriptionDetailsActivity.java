@@ -121,7 +121,7 @@ public class SubscriptionDetailsActivity extends AppCompatActivity {
         if ( loadSub) // Make sure the subscription object was able to load
         {
             //Only Enable delete button if we could load subscription
-            enableDeleteEditButtons();
+            enableDeleteAndEditButtons();
         }
 
         // This physically constrains the user for what they can enter into the payment amount field ( How many digits before decimal, how many after)
@@ -144,7 +144,7 @@ public class SubscriptionDetailsActivity extends AppCompatActivity {
     }
 
 
-    private void enableDeleteEditButtons()
+    private void enableDeleteAndEditButtons()
     {
         deleteButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -205,8 +205,6 @@ public class SubscriptionDetailsActivity extends AppCompatActivity {
 
 
 
-
-
     private void disableDropDownMenu()
     {
         frequencyTarget.setEnabled(false);
@@ -239,9 +237,8 @@ public class SubscriptionDetailsActivity extends AppCompatActivity {
     private void setFocus(boolean inputBool) {
         nameTarget.setEnabled(inputBool);
         paymentAmountTarget.setEnabled(inputBool);
-       // frequencyTarget.setEnabled(inputBool);
 
-        // Change color of input.
+        // Change color of input, and disable/enable drop down menu
         if (inputBool) {
             nameTarget.setTextColor(Color.parseColor(editableColor));
             paymentAmountTarget.setTextColor(Color.parseColor(editableColor));

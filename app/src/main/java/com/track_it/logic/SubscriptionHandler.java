@@ -125,7 +125,7 @@ public class SubscriptionHandler {
         //Iterate through whole string, and check for invalid characters
         for (int i = 0; i < inputName.length(); i++) {
             if (allowableCharactersInName.indexOf(inputName.charAt(i)) == -1) {
-                throw new SubscriptionInvalidNameException(inputName.charAt(i) + " is not allowed");
+                throw new SubscriptionInvalidNameException(inputName.charAt(i) + " is not an allowable\nchar in name");
             }
         }
 

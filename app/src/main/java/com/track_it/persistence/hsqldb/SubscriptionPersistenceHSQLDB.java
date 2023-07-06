@@ -77,7 +77,7 @@ public class SubscriptionPersistenceHSQLDB implements SubscriptionPersistence {
         //If a subscription with id of subscriptionID is not found in database throw a DataBaseException exception
         if ( !subscriptionInDatabase(subscriptionIDToEdit) )
         {
-            throw new DataBaseSubNotFoundException("");
+            throw new DataBaseSubNotFoundException();
         }
 
 
@@ -116,9 +116,11 @@ public class SubscriptionPersistenceHSQLDB implements SubscriptionPersistence {
             statement.executeUpdate(); // execute insertion statement
 
             // We need to the get the ID of the subscription added to the database so that we can set the ID of the subscription object
-            final ResultSet returnedResults =  statement.getGeneratedKeys();
-            subscriptionToAdd.setID(returnedResults.getInt(0));
+           final ResultSet returnedResults =  statement.getGeneratedKeys();
 
+           if ( returnedResults.next()) {
+               subscriptionToAdd.setID(returnedResults.getInt(0));
+           }
             statement.close();
 
 
