@@ -14,7 +14,8 @@ import java.util.List;
 // This database is currently very fake.
 //
 
-public class DataBase {
+public class DataBase implements SubscriptionPersistence
+{
 
 
     // A temporary static Arraylist to hold subscriptions. Used only for early iterations of project
@@ -106,7 +107,7 @@ public class DataBase {
 
 
     // Gets all the subscriptions in the database
-    public ArrayList<SubscriptionObj> queryGetAllSubs()
+    public List<SubscriptionObj> getAllSubscriptions()
     {
 
         ArrayList<SubscriptionObj> returnListOfSubscriptions = new ArrayList<SubscriptionObj>();
@@ -130,7 +131,6 @@ public class DataBase {
     {
         boolean found = false;
         SubscriptionObj subscriptonToUpdate = null;
-
 
 
         for (int i =0 ; i < subscriptionDB.size(); i++ )

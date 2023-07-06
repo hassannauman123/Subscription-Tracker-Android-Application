@@ -1,11 +1,14 @@
 package com.track_it.logic;
 
+import com.track_it.application.Services;
 import com.track_it.domainobject.SubscriptionObj;
 import com.track_it.logic.exception.DataBaseException;
 import com.track_it.logic.exception.SubscriptionException;
 import com.track_it.logic.exception.SubscriptionInvalidNameException;
 import com.track_it.logic.exception.SubscriptionInvalidPaymentException;
 import com.track_it.persistence.DataBase;
+import com.track_it.persistence.SubscriptionPersistence;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,7 +28,7 @@ public class SubscriptionHandler {
     private final String allowableCharactersInName;
 
     private ArrayList<Frequency> FrequencyList  = new ArrayList<>();
-    private DataBase dataBaseHandler; //DatabaseHandler
+    private SubscriptionPersistence dataBaseHandler; //DatabaseHandler
 
 
     // Default null constructor
@@ -37,14 +40,16 @@ public class SubscriptionHandler {
         MAX_PAYMENT_DOLLAR = 9999;
         MAX_PAYMENT_CENTS = 99;
         MAX_PAYMENT_CENTS_TOTAL = MAX_PAYMENT_DOLLAR * 100 + MAX_PAYMENT_CENTS;
-        dataBaseHandler = new DataBase();
+        dataBaseHandler =   Services.getSubscriptionPersistence();
+        //dataBaseHandler = new DataBase();
         allowableCharactersInName = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890 _+*^&%$#@!+=|}]'?<>'";
         InitFrequency();
     }
 
     public SubscriptionHandler( int inputMinNameLen, int inputMaxNameLen, int inputMaxPayDollar,int inputMaxPayCents,String inputAllowableChars)
     {
-        dataBaseHandler = new DataBase(); // Change later
+        dataBaseHandler =  Services.getSubscriptionPersistence(); // Change later
+       // dataBaseHandler = new DataBase();
         MIN_NAME_LENGTH = inputMinNameLen;
         MAX_NAME_LENGTH = inputMaxNameLen;
         MAX_PAYMENT_DOLLAR = inputMaxPayDollar;
@@ -163,9 +168,9 @@ public class SubscriptionHandler {
     }
 
     // Gets all the subscriptions in the database
-    public ArrayList<SubscriptionObj> getAllSubscriptions() throws DataBaseException
+    public List<SubscriptionObj> getAllSubscriptions() throws DataBaseException
     {
-        return dataBaseHandler.queryGetAllSubs();
+        return dataBaseHandler.getAllSubscriptions();
     }
 
 
