@@ -1,13 +1,9 @@
 package com.track_it.persistence.hsqldb;
-
-
 import android.util.Log;
-
 import com.track_it.domainobject.SubscriptionObj;
 import com.track_it.logic.exception.DataBaseException;
 import com.track_it.logic.exception.DataBaseSubNotFoundException;
 import com.track_it.persistence.SubscriptionPersistence;
-
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -71,7 +67,7 @@ public class SubscriptionPersistenceHSQLDB implements SubscriptionPersistence {
         return AllSubscriptions;
     }
 
-    public void editSubscriptionByID(int subscriptionIDToEdit, SubscriptionObj newSubscriptionDetails) throws DataBaseException
+    public void editSubscriptionByID(int subscriptionIDToEdit, final SubscriptionObj newSubscriptionDetails) throws DataBaseException
     {
 
         //If a subscription with id of subscriptionID is not found in database throw a DataBaseException exception
@@ -169,6 +165,8 @@ public class SubscriptionPersistenceHSQLDB implements SubscriptionPersistence {
 
         // Otherwise get the subscription from the database, and return it
         SubscriptionObj subToReturn = null;
+
+
         try (Connection connection = connect())
         {
             final PreparedStatement statement = connection.prepareStatement("SELECT * FROM SUBSCRIPTIONS WHERE id = ?");

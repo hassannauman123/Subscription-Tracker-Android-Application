@@ -59,7 +59,7 @@ public class FakeDataBase implements SubscriptionPersistence
             }
             catch (Exception e)
             {
-                System.out.println("ERROR WITH MAKING FAKE DATA!!: " +   e);
+                System.out.println("ERROR WITH MAKING FAKE DATA!!: " +   e.getMessage());
                 assert(false); // Just make the app crash for now
             }
         }
@@ -69,7 +69,7 @@ public class FakeDataBase implements SubscriptionPersistence
         try {
 
             int payment = 22444;
-            String inputName = "Really long name ";
+            String inputName = "long name: ";
             for (int i = inputName.length(); i < subHandler.getMaxNameLength(); i++)
             {
                 inputName = inputName + "1";
@@ -80,7 +80,7 @@ public class FakeDataBase implements SubscriptionPersistence
         }
         catch (Exception e)
         {
-            System.out.println("ERROR WITH MAKING FAKE DATA!!: " +   e);
+            System.out.println("ERROR WITH MAKING FAKE DATA!!: " +   e.getMessage());
             assert(false); // Just make the app crash for now
         }
     }
