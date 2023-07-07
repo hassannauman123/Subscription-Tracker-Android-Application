@@ -7,7 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".presentation.MainActivity"
-    android:windowSoftInputMode="adjustNothing"
+    android:windowSoftInputMode="adjustResize|stateHidden"
     >
 
 
@@ -30,7 +30,7 @@
 
 
     <SearchView
-        android:id="@+id/simpleSearchView"
+        android:id="@+id/search_by_name"
         android:layout_width="235dp"
         android:layout_height="40dp"
         android:layout_alignParentStart="true"
@@ -40,6 +40,8 @@
         android:layout_marginTop="167dp"
         android:queryHint="Search Subscription by name"
         android:textColor="@color/black"
+
+
         />
 
     <ScrollView
