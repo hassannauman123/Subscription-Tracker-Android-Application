@@ -7,6 +7,8 @@ import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.InputFilter;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -96,7 +98,7 @@ public class SubscriptionDetailsActivity extends AppCompatActivity {
         nameTarget = ((EditText) findViewById(R.id.detail_subscription_name));
 
        // Get subscription handle
-        subHandler = SetupParameters.GetSubscriptionHandler();
+        subHandler = SetupParameters.getSubscriptionHandler();
         MAX_DIGITS_BEFORE_DECIMAL = SubscriptionInput.NumDigits(subHandler.getMaxPaymentDollarsTotal());
 
         int maxLength = subHandler.getMaxNameLength();

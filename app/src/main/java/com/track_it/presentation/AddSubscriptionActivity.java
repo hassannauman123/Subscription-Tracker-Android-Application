@@ -50,7 +50,7 @@ public class AddSubscriptionActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_subscription);
 
-        subHandler = SetupParameters.GetSubscriptionHandler();
+        subHandler = SetupParameters.getSubscriptionHandler();
 
         MAX_DIGITS_BEFORE_DECIMAL = SubscriptionInput.NumDigits(subHandler.getMaxPaymentDollarsTotal()); // get the number of digits allowed before decimal (used to constrain user input)
 

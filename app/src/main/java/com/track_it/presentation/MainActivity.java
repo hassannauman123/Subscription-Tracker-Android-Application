@@ -1,21 +1,32 @@
 package com.track_it.presentation;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
 import com.track_it.R;
 import com.track_it.domainobject.SubscriptionObj;
+ import com.track_it.logic.SubscriptionCompare.SubscriptionComparer;
 import com.track_it.logic.SubscriptionHandler;
+import com.track_it.logic.SubscriptionCompare.*;
+import com.track_it.logic.SubscriptionSorter;
 import com.track_it.presentation.util.SetupParameters;
 
 import android.content.Intent;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.PopupMenu;
 import android.widget.SearchView;
 import android.widget.TextView;
+import android.widget.Toast;
+import android.widget.Toolbar;
 
 import java.util.List;
 
@@ -39,18 +50,31 @@ public class MainActivity extends AppCompatActivity {
     private String searchString = ""; // Only display subscription that contain the searchString ( by default all subs are shown)
 
 
+    private SubscriptionComparer subSorter = null;
+
     @Override // Make sure this function is overriding some default onCreate method
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main); // Switch screen to display main page
 
         com.cook_ebook.persistence.utils.DBHelper.copyDatabaseToDevice(this); // Copy database
-        subHandler = SetupParameters.GetSubscriptionHandler();
+        subHandler = SetupParameters.getSubscriptionHandler();
 
         setUpButtonsAndInput();
         displayAllSubscriptions(); // Display all the subscriptions
 
 
+
+
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
+        assert(false);
+         MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.sort_menu,menu);
+        return true;
     }
 
     private void setUpButtonsAndInput() {
@@ -73,7 +97,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean onQueryTextChange(String newText) {
 
-                 displayAllSubscriptions();  //Display all subs (It will filter based on input from user)
+
+                displayAllSubscriptions();  //Display all subs (It will filter based on input from user)
                 return true;
             }
         });
@@ -84,6 +109,52 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, AddSubscriptionActivity.class);
                 startActivity(intent);
+            }
+        });
+
+
+        ImageButton filterButton;
+
+        // Referencing and Initializing the button
+        filterButton = (ImageButton) findViewById(R.id.clickBtn);
+
+        // Setting onClick behavior to the button
+        filterButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Initializing the popup menu and giving the reference as current context
+                PopupMenu popupMenu = new PopupMenu(MainActivity.this, filterButton);
+
+                // Inflating popup menu from popup_menu.xml file
+                popupMenu.getMenuInflater().inflate(R.menu.sort_menu, popupMenu.getMenu());
+                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem menuItem)
+                    {
+                        String sortInput =  menuItem.getTitle().toString();
+                        if ( sortInput.equals(getString(R.string.sort_a_z)) )
+                        {
+                            subSorter = new CompareSubscriptionName();
+                        }
+                        else if ( sortInput.equals(getString(R.string.sort_payment)) )
+                        {
+                            subSorter = new CompareSubscriptionPayment();
+                        }
+                        else if ( sortInput.equals(getString(R.string.sort_frequency)))
+                        {
+                            subSorter =  new CompareSubscriptionFrequency();
+                        }
+                        else {
+                            subSorter = null;
+                        }
+                        displayAllSubscriptions();
+                        return true;
+                    }
+
+
+                });
+                popupMenu.show();
+
             }
         });
 
@@ -105,11 +176,22 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+
+
+    private void sortSubs(List<SubscriptionObj> listOfSubs)
+    {
+        SubscriptionSorter sorterHelper = new SubscriptionSorter(subSorter);
+        sorterHelper.sortSubscriptions(listOfSubs);
+
+    }
+
     // Display all the subscriptions currently in the database in a scrollable list
     private void displayAllSubscriptions()
     {
 
         searchString = searchInput.getQuery().toString().toLowerCase(); // Only show subs where the name contains the search string
+
+
 
         // Clear everything previously in list
         LinearLayout sv = (LinearLayout) this.findViewById(R.id.subscription_list);
@@ -117,12 +199,16 @@ public class MainActivity extends AppCompatActivity {
 
         List<SubscriptionObj> listOfSubs = subHandler.getAllSubscriptions();
 
+        sortSubs(listOfSubs); // Sort the subs
+
         boolean toggleColor = true; // Every second subscription will have a slightly different color
 
         for (SubscriptionObj curr : listOfSubs) {
 
 
-            if ( curr.getName().toLowerCase().contains(searchString))
+            System.out.println("SEARCH STRING IS " + searchString);
+
+            if ( curr.getName().toLowerCase().contains(searchString)) // only show this subscription if it matches the search criteria
             {
 
                 // Create a new box to display subscription
@@ -130,7 +216,6 @@ public class MainActivity extends AppCompatActivity {
 
 
                 // Set Name of subscription
-
                 TextView targetName = subscriptionBox.findViewById(R.id.subscription_name);
                 targetName.setText("Name: " + curr.getName());
 

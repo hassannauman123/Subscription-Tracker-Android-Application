@@ -21,7 +21,7 @@ public class SubscriptionInput
 
     public SubscriptionInput()
     {
-        subHandle = SetupParameters.GetSubscriptionHandler();
+        subHandle = SetupParameters.getSubscriptionHandler();
     }
 
 

@@ -7,6 +7,9 @@
     <string name="next">Next</string>
     <string name="previous">Previous</string>
     <string name="select">Select Item</string>
+    <string name="sort_a_z">Sort A-Z</string>
+    <string name="sort_payment">Sort by Payment</string>
+    <string name="sort_frequency">Sort by frequency</string>
 
 
     <string name="lorem_ipsum">

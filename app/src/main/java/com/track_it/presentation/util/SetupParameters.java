@@ -22,13 +22,13 @@ public class SetupParameters
     private static  SubscriptionPersistence DataBase = Services.getSubscriptionPersistence();  // Database that we will use
 
 
-    public static void InitializeDatabase(SubscriptionPersistence inputDB)
+    public static void initializeDatabase(SubscriptionPersistence inputDB)
     {
         DataBase = inputDB;
     }
 
     //Wrapper for the logic layer
-    public static SubscriptionHandler GetSubscriptionHandler()
+    public static SubscriptionHandler getSubscriptionHandler()
     {
         return new SubscriptionHandler(MIN_NAME_LENGTH,MAX_NAME_LENGTH,MAX_PAYMENT_DOLLAR,MAX_PAYMENT_CENTS,allowableCharactersInName, DataBase);
     }

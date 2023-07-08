@@ -23,8 +23,8 @@ public class SubscriptionValidateTest {
     @Before
     public void setTestHandle()
     {
-        SetupParameters.InitializeDatabase(new FakeDataBase());
-        subHandle =  SetupParameters.GetSubscriptionHandler();     }
+        SetupParameters.initializeDatabase(new FakeDataBase());
+        subHandle =  SetupParameters.getSubscriptionHandler();     }
 
     @Test
     // We are going to test the validate name test

@@ -23,8 +23,8 @@ public class SubscriptionsAddEditRemoveTest
     @Before
     public void setTestHandle()
     {
-        SetupParameters.InitializeDatabase(new FakeDataBase());
-        subHandle =  SetupParameters.GetSubscriptionHandler();
+        SetupParameters.initializeDatabase(new FakeDataBase());
+        subHandle =  SetupParameters.getSubscriptionHandler();
      }
 
 
