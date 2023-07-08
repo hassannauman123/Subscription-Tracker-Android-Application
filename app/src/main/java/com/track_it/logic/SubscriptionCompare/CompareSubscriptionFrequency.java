@@ -6,6 +6,9 @@ import com.track_it.presentation.util.SetupParameters;
 
 import java.util.List;
 
+
+
+//Compare to subscription by their frequencies
 public class CompareSubscriptionFrequency implements SubscriptionComparer
 {
 

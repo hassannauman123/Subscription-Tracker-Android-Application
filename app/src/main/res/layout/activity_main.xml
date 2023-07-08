@@ -17,7 +17,7 @@
 
 
     <Button
-        android:id="@+id/button_subscription"
+        android:id="@+id/add_subscription_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"

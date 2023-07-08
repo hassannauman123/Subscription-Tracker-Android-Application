@@ -5,10 +5,12 @@ public class DataBaseSubNotFoundException extends DataBaseException
 {
 
 
-    public DataBaseSubNotFoundException() {
+    public DataBaseSubNotFoundException() // The Default message passed when using null constructor
+    {
         super("Subscription not found in dataBase!");
     }
-    public DataBaseSubNotFoundException(String error) {
+    public DataBaseSubNotFoundException(String error)  // Custom message passed
+    {
         super(error);
     }
 

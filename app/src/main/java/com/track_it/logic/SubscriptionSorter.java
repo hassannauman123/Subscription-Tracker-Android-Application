@@ -7,7 +7,7 @@ import java.util.List;
 
 public class SubscriptionSorter
 {
-    private SubscriptionComparer sorter = null;
+    private SubscriptionComparer sorter = null; //How we will sort lists
 
 
     public SubscriptionSorter(SubscriptionComparer inputSortCriteria)
@@ -30,10 +30,10 @@ public class SubscriptionSorter
     }
 
 
+
+    //Merge sort two lists
     private  void mergeSortSubs( List<SubscriptionObj> listToSort, int indexLow, int indexHigh   )
     {
-
-
 
         if ( indexLow < indexHigh )
         {
@@ -41,21 +41,18 @@ public class SubscriptionSorter
 
            mergeSortSubs(listToSort, indexLow, newMid);
            mergeSortSubs(listToSort, newMid+1, indexHigh);
-            mergeSubList(listToSort,indexLow, newMid,indexHigh );
-
+           mergeSubList(listToSort,indexLow, newMid,indexHigh );
         }
 
     }
 
-    private int once = 0;
+    //Merge two sorted lists in order
     private void mergeSubList( List<SubscriptionObj> listToSort,int indexLow, int midIndex ,int indexHigh)
     {
 
         int size1 = midIndex - indexLow +1;
-        int size2 = indexHigh -midIndex ;
+        int size2 = indexHigh -midIndex;
 
-
-        once++;
 
         // Create temp arrays
         SubscriptionObj left[] = new SubscriptionObj[size1];
@@ -76,19 +73,19 @@ public class SubscriptionSorter
 
 
 
-
         // Initial indices of first and second subArrays
         int firstIndex = 0, secondIndex = 0;
 
         // Initial index of merged subArray
         int k = indexLow;
 
+
+        //Copy the two arrays into the list in order
         while (firstIndex < size1 && secondIndex < size2) {
            if ( sorter.compareSubscriptions( left[firstIndex], right[secondIndex] )  < 0 )
             {
                 listToSort.set(k, left[firstIndex]);
                 firstIndex++;
-
             }
             else {
                 listToSort.set(k, right[secondIndex]);

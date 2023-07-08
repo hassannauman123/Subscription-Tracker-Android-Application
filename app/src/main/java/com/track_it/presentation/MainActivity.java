@@ -50,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
     private String searchString = ""; // Only display subscription that contain the searchString ( by default all subs are shown)
 
 
+    private  List<SubscriptionObj> listOfSubs; // hold all the subscripitions to display
     private SubscriptionComparer subSorter = null;
 
     @Override // Make sure this function is overriding some default onCreate method
@@ -58,31 +59,48 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main); // Switch screen to display main page
 
         com.cook_ebook.persistence.utils.DBHelper.copyDatabaseToDevice(this); // Copy database
+
+        //Get subscription handler, and list of subscriptions
         subHandler = SetupParameters.getSubscriptionHandler();
+        listOfSubs = subHandler.getAllSubscriptions();
+
 
         setUpButtonsAndInput();
         displayAllSubscriptions(); // Display all the subscriptions
 
 
-
-
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu)
-    {
-        assert(false);
-         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.sort_menu,menu);
-        return true;
-    }
+
 
     private void setUpButtonsAndInput() {
 
-        //Set target of buttons and input
-        searchInput = (SearchView) this.findViewById(R.id.search_by_name);
-        addSubButton = (Button) this.findViewById(R.id.button_subscription);
+        enableAddSubButton();
+        enableSearchInput();
+        enableFilterInput();
 
+
+
+    }
+    private void enableAddSubButton()
+    {
+        //Set target of buttons and input
+        addSubButton = (Button) this.findViewById(R.id.add_subscription_button);
+
+
+        //Set what happens when user clicks add subscription button
+        addSubButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, AddSubscriptionActivity.class);
+                startActivity(intent);
+            }
+        });
+    }
+
+    private void enableSearchInput()
+    {
+
+        searchInput = (SearchView) this.findViewById(R.id.search_by_name);
 
         //Set what happens when the user types in to the search bar
         searchInput.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -102,20 +120,29 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
+    }
 
+    //Runs when this activity comes back
+    protected void onRestart() {
+        super.onRestart();
+        listOfSubs = subHandler.getAllSubscriptions(); //Get a new list of subs ( in case any where added, deleted, or modified)
 
-        //Set what happens when user clicks add subscription button
-        addSubButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, AddSubscriptionActivity.class);
-                startActivity(intent);
-            }
-        });
+        View current = getCurrentFocus();
+        if (current != null)  //Reset focus
+        {
+            current.clearFocus();
+        }
 
+        displayAllSubscriptions(); // Display all the subs
+
+    }
+
+    private void enableFilterInput()
+    {
 
         ImageButton filterButton;
 
-        // Referencing and Initializing the button
+        // Referencing and Initializing the filter button
         filterButton = (ImageButton) findViewById(R.id.clickBtn);
 
         // Setting onClick behavior to the button
@@ -131,6 +158,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public boolean onMenuItemClick(MenuItem menuItem)
                     {
+                        //Setting what filter to use to sort the subscriptions
                         String sortInput =  menuItem.getTitle().toString();
                         if ( sortInput.equals(getString(R.string.sort_a_z)) )
                         {
@@ -157,23 +185,6 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-
-    }
-
-    //Runs when this activity comes back
-    protected void onRestart() {
-        super.onRestart();
-
-
-        View current = getCurrentFocus();
-        if (current != null)  //Reset focus
-        {
-            current.clearFocus();
-        }
-
-        displayAllSubscriptions(); // Display all the subs
-
-
     }
 
 
@@ -192,12 +203,10 @@ public class MainActivity extends AppCompatActivity {
         searchString = searchInput.getQuery().toString().toLowerCase(); // Only show subs where the name contains the search string
 
 
-
         // Clear everything previously in list
         LinearLayout sv = (LinearLayout) this.findViewById(R.id.subscription_list);
         sv.removeAllViews();
 
-        List<SubscriptionObj> listOfSubs = subHandler.getAllSubscriptions();
 
         sortSubs(listOfSubs); // Sort the subs
 
@@ -206,7 +215,6 @@ public class MainActivity extends AppCompatActivity {
         for (SubscriptionObj curr : listOfSubs) {
 
 
-            System.out.println("SEARCH STRING IS " + searchString);
 
             if ( curr.getName().toLowerCase().contains(searchString)) // only show this subscription if it matches the search criteria
             {

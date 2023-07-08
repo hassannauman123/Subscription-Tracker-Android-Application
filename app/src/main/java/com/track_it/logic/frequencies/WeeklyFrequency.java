@@ -3,8 +3,9 @@ package com.track_it.logic.frequencies;
 public class WeeklyFrequency extends FrequencyBase
 {
 
-    public WeeklyFrequency()
+    public WeeklyFrequency() //constructor method
     {
+
         super("weekly");
     }
 
