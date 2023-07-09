@@ -3,12 +3,14 @@ package com.track_it.presentation;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 
 import com.track_it.R;
@@ -50,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
     private String searchString = ""; // Only display subscription that contain the searchString ( by default all subs are shown)
 
 
-    private  List<SubscriptionObj> listOfSubs; // hold all the subscripitions to display
+    private  List<SubscriptionObj> listOfSubs; // hold all the subscriptions to display
     private SubscriptionComparer subSorter = null;
 
     @Override // Make sure this function is overriding some default onCreate method
@@ -65,62 +67,13 @@ public class MainActivity extends AppCompatActivity {
         listOfSubs = subHandler.getAllSubscriptions();
 
 
-        setUpButtonsAndInput();
+        setUpButtonsAndInput(); // Setup the input and buttons
         displayAllSubscriptions(); // Display all the subscriptions
 
 
     }
 
 
-
-    private void setUpButtonsAndInput() {
-
-        enableAddSubButton();
-        enableSearchInput();
-        enableFilterInput();
-
-
-
-    }
-    private void enableAddSubButton()
-    {
-        //Set target of buttons and input
-        addSubButton = (Button) this.findViewById(R.id.add_subscription_button);
-
-
-        //Set what happens when user clicks add subscription button
-        addSubButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, AddSubscriptionActivity.class);
-                startActivity(intent);
-            }
-        });
-    }
-
-    private void enableSearchInput()
-    {
-
-        searchInput = (SearchView) this.findViewById(R.id.search_by_name);
-
-        //Set what happens when the user types in to the search bar
-        searchInput.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-
-                displayAllSubscriptions(); //Display all subs (It will filter based on input from user)
-                return true;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-
-
-                displayAllSubscriptions();  //Display all subs (It will filter based on input from user)
-                return true;
-            }
-        });
-    }
 
     //Runs when this activity comes back
     protected void onRestart() {
@@ -137,10 +90,74 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void enableFilterInput()
+
+
+    private void setUpButtonsAndInput()
+    {
+        enableAddSubButton();
+        enableSearchInput();
+        enableSortFilterInput();
+    }
+
+    //Enable the add subscription button
+    private void enableAddSubButton()
+    {
+        //Set target of buttons and input
+        addSubButton = (Button) this.findViewById(R.id.add_subscription_button);
+
+
+        //Set what happens when user clicks add subscription button
+        addSubButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, AddSubscriptionActivity.class);
+                startActivity(intent);
+            }
+        });
+    }
+
+    //Enable search input
+    private void enableSearchInput()
     {
 
-        ImageButton filterButton;
+        searchInput = (SearchView) this.findViewById(R.id.search_by_name);
+
+        //Set what happens when the user types in to the search bar
+        searchInput.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+
+            @Override
+            public boolean onQueryTextSubmit(String query)  // What happens when user hits "enter" in search bar
+            {
+
+                displayAllSubscriptions(); //Display all subs (It will filter based on input from user)
+
+
+                //Close the keyboard
+                View current = getCurrentFocus();
+                if (current != null)  //Reset focus
+                {
+                    InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(current.getWindowToken(), 0);
+
+                }
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) //What happens when user types in search bar
+            {
+
+                displayAllSubscriptions();  //Display all subs (It will filter based on input from user)
+                return true;
+            }
+        });
+    }
+
+
+    //Enable the filter input - Allows user to sort subscriptions
+    private void enableSortFilterInput()
+    {
+
+        ImageButton filterButton; // Filter drop down button
 
         // Referencing and Initializing the filter button
         filterButton = (ImageButton) findViewById(R.id.clickBtn);
@@ -181,7 +198,7 @@ public class MainActivity extends AppCompatActivity {
 
 
                 });
-                popupMenu.show();
+                popupMenu.show(); //Enable the popup menu, allowing user to choose sort criteria
 
             }
         });
@@ -189,9 +206,11 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-    private void sortSubs(List<SubscriptionObj> listOfSubs)
+    //Sort the subscription using SubscriptionComparer.
+    // If SubscriptionComparer is null, subs will not be sorted
+    private void sortSubs(List<SubscriptionObj> listOfSubs, SubscriptionComparer sortSubsBy )
     {
-        SubscriptionSorter sorterHelper = new SubscriptionSorter(subSorter);
+        SubscriptionSorter sorterHelper = new SubscriptionSorter(sortSubsBy);
         sorterHelper.sortSubscriptions(listOfSubs);
 
     }
@@ -200,7 +219,8 @@ public class MainActivity extends AppCompatActivity {
     private void displayAllSubscriptions()
     {
 
-        searchString = searchInput.getQuery().toString().toLowerCase(); // Only show subs where the name contains the search string
+        searchString = searchInput.getQuery().toString().toLowerCase(); // Get the search string ( We will only show subs where the name contains the search string)
+        sortSubs(listOfSubs, subSorter); // Sort the subscriptions
 
 
         // Clear everything previously in list
@@ -208,10 +228,9 @@ public class MainActivity extends AppCompatActivity {
         sv.removeAllViews();
 
 
-        sortSubs(listOfSubs); // Sort the subs
-
         boolean toggleColor = true; // Every second subscription will have a slightly different color
 
+        //Create a subscription box for each subscription that we will show
         for (SubscriptionObj curr : listOfSubs) {
 
 
@@ -263,7 +282,8 @@ public class MainActivity extends AppCompatActivity {
                 });
 
                 //Set what happens when the user does a short click on a subscription box
-                subscriptionBox.setOnClickListener(new View.OnClickListener() {
+                subscriptionBox.setOnClickListener(new View.OnClickListener()
+                {
                     public void onClick(View v) {
                         Intent subDetailsIntent = new Intent(MainActivity.this, SubscriptionDetailsActivity.class);
                         subDetailsIntent.putExtra("subscriptionID", v.getId());

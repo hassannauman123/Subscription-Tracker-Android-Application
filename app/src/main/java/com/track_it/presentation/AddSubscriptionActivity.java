@@ -128,7 +128,7 @@ public class AddSubscriptionActivity extends AppCompatActivity {
         String userNameInput = getNameInput(view); // Get input for name,
 
         // Get input for payment amount
-         SubscriptionInput subInput = new SubscriptionInput(); // Make a helper object, to get user input
+         SubscriptionInput subInput = new SubscriptionInput(subHandler); // Make a helper object, to get user input
           int paymentInCents = 1;
           try {
               paymentInCents = subInput.getPaymentAmountInput((EditText) findViewById(R.id.input_payment_amount));

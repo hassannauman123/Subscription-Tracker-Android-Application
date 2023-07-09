@@ -1,4 +1,5 @@
 package com.track_it.presentation;
+
 import android.text.InputFilter;
 import android.text.Spanned;
 import android.widget.EditText;
@@ -14,20 +15,17 @@ import com.track_it.presentation.util.SetupParameters;
 //
 
 
-
-public class SubscriptionInput
-{
+public class SubscriptionInput {
     private final SubscriptionHandler subHandle;
 
-    public SubscriptionInput()
+    public SubscriptionInput(SubscriptionHandler inputSubHandle)
     {
-        subHandle = SetupParameters.getSubscriptionHandler();
+        subHandle = inputSubHandle;
     }
 
 
-
     // Get the input payment amount that the user entered.
-    public int getPaymentAmountInput(EditText inputLocation ) throws SubscriptionInvalidPaymentException
+    public int getPaymentAmountInput(EditText inputLocation) throws SubscriptionInvalidPaymentException
     {
 
         String[] paymentAmountString = inputLocation.getText().toString().split("\\.");
@@ -42,51 +40,34 @@ public class SubscriptionInput
 
             if (paymentAmountString.length > 1) {
 
-                if (isParsable(paymentAmountString[1]))
-                {
+                if (isParsable(paymentAmountString[1])) {
 
                     if (paymentInCents == Integer.MIN_VALUE) {
                         paymentInCents = 0;
 
                     }
-                    if(paymentAmountString[1].length() == 1)  // The payment is in the format like: 10.2, so we need to to multiply the 2 by 10 to get cents payment amount
+                    if (paymentAmountString[1].length() == 1)  // The payment is in the format like: 10.2, so we need to to multiply the 2 by 10 to get cents payment amount
                     {
                         paymentInCents = paymentInCents + Integer.parseInt(paymentAmountString[1]) * 10;
-                    }
-                    else if ( paymentAmountString[1].length() > 2) // If there are more than 2 digits after decimal, then it is invalid.  ex  10.444 <- more than 2 digits after decimal
-                        {
-                            paymentInCents = Integer.MIN_VALUE;
-                        }
-
-
-                    else {
+                    } else if (paymentAmountString[1].length() > 2) // If there are more than 2 digits after decimal, then it is invalid.  ex  10.444 <- more than 2 digits after decimal
+                    {
+                        paymentInCents = Integer.MIN_VALUE;
+                    } else {
                         paymentInCents = paymentInCents + Integer.parseInt(paymentAmountString[1]);
                     }
                 }
             }
         }
-        else {
-            throw new SubscriptionInvalidPaymentException("Invalid payment amount");
-        }
 
-        if (paymentInCents == Integer.MIN_VALUE) {
 
-            throw new SubscriptionInvalidPaymentException("Invalid payment amount");
+        subHandle.validatePaymentAmount(paymentInCents); // Try to validate payment amount. Will throw exception if invalid.
 
-        } else {
-            try {
-                subHandle.validatePaymentAmount(paymentInCents);
-
-            } catch (SubscriptionException e) {
-                throw new SubscriptionInvalidPaymentException(e.getMessage());
-
-            }
-
-        }
 
         return paymentInCents;
 
     }
+
+
 
     // check if the input string is parsable by Integer.parseInt function
     private boolean isParsable(String inputString) {
@@ -100,8 +81,7 @@ public class SubscriptionInput
 
 
     //This function will return how many digits are in dollarAmount
-    public static int NumDigits(int dollarAmount)
-    {
+    public static int NumDigits(int dollarAmount) {
         int payment = dollarAmount;
         int digitsBeforeDecimalCount = 0;
 
@@ -115,16 +95,15 @@ public class SubscriptionInput
 }
 
 
-
 //Limits the user input for a decimal input to a format such that there will be a max of digitBeforeDecimal before decimal and a max of decimalDigits
 // !* reminder this is not complete, still allows decimals to go in wrong places sometimes.
 class DecimalDigitsInputFilter implements InputFilter {
 
-    private final int decimalDigits; // Maximum number of integer after decimal
-    private final int digitBeforeDecimal; // Maximum number of integers before deciamls
+    private final int decimalDigitsAfter; // Maximum number of integer after decimal point
+    private final int digitBeforeDecimal; // Maximum number of integers before decimal point
 
     public DecimalDigitsInputFilter(int decimalDigits, int digitBeforeDecimal) {
-        this.decimalDigits = decimalDigits;
+        this.decimalDigitsAfter = decimalDigits;
         this.digitBeforeDecimal = digitBeforeDecimal;
     }
 
@@ -145,7 +124,18 @@ class DecimalDigitsInputFilter implements InputFilter {
         int len = dest.length(); // Get length of previous string
 
 
+        //Prevent a decimal from being added in front of more than 2 integers!
+        if (source.equals("."))
+        {
+            if ( dest.toString().length() - dstart > decimalDigitsAfter)
+            {
+                returnValue = "";
+            }
 
+        }
+
+        else //Else the new character was not decimal point
+        {
             // Iterate over the string, looking for decimal character
             for (int i = 0; i < len; i++) {
                 char charIterator = dest.charAt(i); // The current char being read
@@ -174,10 +164,11 @@ class DecimalDigitsInputFilter implements InputFilter {
                     returnValue = null;
                 }
                 // Else - If there are already 2 digits past the decimal and source digit is going past decimal reject source
-                else if (len - dotPos > decimalDigits) {
+                else if (len - dotPos > decimalDigitsAfter) {
                     returnValue = "";
                 }
             }
+        }
 
 
         return returnValue; // Will be null if source accepted, and "" if source rejected!
