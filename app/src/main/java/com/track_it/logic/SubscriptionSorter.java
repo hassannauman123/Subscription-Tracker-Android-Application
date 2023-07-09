@@ -5,6 +5,10 @@ import com.track_it.logic.SubscriptionCompare.SubscriptionComparer;
 
 import java.util.List;
 
+
+//This function will sort a subscription list in order using a mergeSort algorithm, and a SubscriptionComparer object to
+// compare two subscription objects in the list.
+
 public class SubscriptionSorter
 {
     private SubscriptionComparer sorter = null; //How we will sort lists
@@ -31,7 +35,7 @@ public class SubscriptionSorter
 
 
 
-    //Merge sort two lists
+    //MergeSort the List ( recursive function)
     private  void mergeSortSubs( List<SubscriptionObj> listToSort, int indexLow, int indexHigh   )
     {
 
@@ -46,13 +50,12 @@ public class SubscriptionSorter
 
     }
 
-    //Merge two sorted lists in order
+    //Merge the two sorted parts of the List in order
     private void mergeSubList( List<SubscriptionObj> listToSort,int indexLow, int midIndex ,int indexHigh)
     {
 
         int size1 = midIndex - indexLow +1;
         int size2 = indexHigh -midIndex;
-
 
         // Create temp arrays
         SubscriptionObj left[] = new SubscriptionObj[size1];
@@ -94,29 +97,20 @@ public class SubscriptionSorter
             k++;
         }
 
-        // Copy remaining elements of left[] if any
+        // Copy remaining elements of left[] if any left
         while (firstIndex < size1) {
             listToSort.set(k,left[firstIndex]);
             firstIndex++;
             k++;
         }
 
-        // Copy remaining elements of right[] if any
+        // Copy remaining elements of right[] if any left
         while (secondIndex < size2) {
             listToSort.set(k, right[secondIndex]);
             secondIndex++;
             k++;
         }
-
-
-
-
     }
-
-
-
-
-
 
 
 }
