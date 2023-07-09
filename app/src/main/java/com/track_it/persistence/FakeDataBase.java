@@ -9,7 +9,6 @@ import java.util.List;
 
 
 //This is a fakeDatabase class that implements the SubscriptionPersistence interface.
-
 public class FakeDataBase implements SubscriptionPersistence
 {
 
