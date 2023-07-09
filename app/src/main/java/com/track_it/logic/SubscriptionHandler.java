@@ -1,20 +1,18 @@
 package com.track_it.logic;
 
-import com.track_it.application.Services;
 import com.track_it.domainobject.SubscriptionObj;
-import com.track_it.logic.exception.DataBaseException;
-import com.track_it.logic.exception.SubscriptionException;
-import com.track_it.logic.exception.SubscriptionInvalidNameException;
-import com.track_it.logic.exception.SubscriptionInvalidPaymentException;
+import com.track_it.logic.exceptions.DataBaseException;
+import com.track_it.logic.exceptions.SubscriptionException;
+import com.track_it.logic.exceptions.SubscriptionInvalidNameException;
+import com.track_it.logic.exceptions.SubscriptionInvalidPaymentException;
 import com.track_it.logic.frequencies.*;
-import com.track_it.persistence.FakeDataBase;
 import com.track_it.persistence.SubscriptionPersistence;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
-//This class is used to handle and implement the logical manipulation of the subscription objects.
+//This class is used to handle and implement the logical manipulation of the subscription objects.=
 // It also sets the allowable parameters of a subscription object.
 
 public class SubscriptionHandler {
@@ -29,7 +27,7 @@ public class SubscriptionHandler {
     private final String allowableCharactersInName;
 
     private ArrayList<Frequency> FrequencyList  = new ArrayList<>();
-    private SubscriptionPersistence dataBaseHandler; //DatabaseHandler
+    private SubscriptionPersistence dataBaseHandler; //Database Handler
 
 
 
@@ -212,7 +210,7 @@ public class SubscriptionHandler {
         return allowableCharactersInName;
     }
 
-    // Returns a string list of allowable frequencies
+    // Returns a string list of allowable frequencies in order
     public List<String> getFrequencyList() {
         List<String> returnAllowableFrequencies = new ArrayList<String> ();
 

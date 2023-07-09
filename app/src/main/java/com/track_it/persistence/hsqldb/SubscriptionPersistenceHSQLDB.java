@@ -1,8 +1,8 @@
 package com.track_it.persistence.hsqldb;
 import android.util.Log;
 import com.track_it.domainobject.SubscriptionObj;
-import com.track_it.logic.exception.DataBaseException;
-import com.track_it.logic.exception.DataBaseSubNotFoundException;
+import com.track_it.logic.exceptions.DataBaseException;
+import com.track_it.logic.exceptions.DataBaseSubNotFoundException;
 import com.track_it.persistence.SubscriptionPersistence;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -117,7 +117,8 @@ public class SubscriptionPersistenceHSQLDB implements SubscriptionPersistence {
            if ( returnedResults.next()) {
                subscriptionToAdd.setID(returnedResults.getInt(0));
            }
-            statement.close();
+
+           statement.close();
 
 
         } catch (final SQLException e) {

@@ -1,4 +1,4 @@
-package com.track_it.logic.exception;
+package com.track_it.logic.exceptions;
 
 
 //This is the base class for a subscription exception. Other more specific exceptions can extend this class

@@ -8,7 +8,6 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.text.InputFilter;
-import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -16,7 +15,7 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.track_it.R;
 import com.track_it.domainobject.SubscriptionObj;
 import com.track_it.logic.SubscriptionHandler;
-import com.track_it.logic.exception.SubscriptionException;
+import com.track_it.logic.exceptions.SubscriptionException;
 import com.track_it.presentation.util.SetupParameters;
 
 
@@ -48,7 +47,7 @@ public class AddSubscriptionActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.add_subscription);
+        setContentView(R.layout.activity_add_subscription);
 
         subHandler = SetupParameters.getSubscriptionHandler();
 
