@@ -38,52 +38,7 @@ public class FakeDataBase implements SubscriptionPersistence
     }
 
 
-   //Fill database with fake data
-    public static void fillFakeData(final SubscriptionHandler subHandler)
-    {
 
-        // Create 10 subs, with random data
-        List<String> FrequencyList = subHandler.getFrequencyList();
-        int numFrequency = subHandler.getNumFrequencies();
-
-        for (int i =0 ; i < 10; i++)
-        {
-
-            try {
-                String inputName = "Rand name For subscription" + i;
-                String frequency = FrequencyList.get(i % numFrequency);
-                int payment = (int) (Math.random() * subHandler.getMaxPaymentCentsTotal() + 1);
-                SubscriptionObj currSub = new SubscriptionObj(inputName, payment,frequency);
-                subHandler.addSubscription(currSub);
-
-            }
-            catch (Exception e)
-            {
-                System.out.println("ERROR WITH MAKING FAKE DATA!!: " +   e.getMessage());
-                assert(false); // Just make the app crash for now
-            }
-        }
-
-
-        //Create one long name of max length
-        try {
-
-            int payment = 22444;
-            String inputName = "long name: ";
-            for (int i = inputName.length(); i < subHandler.getMaxNameLength(); i++)
-            {
-                inputName = inputName + "1";
-            }
-            String frequency = FrequencyList.get(0);
-            SubscriptionObj currSub = new SubscriptionObj(inputName, payment, frequency);
-            subHandler.addSubscription(currSub);
-        }
-        catch (Exception e)
-        {
-            System.out.println("ERROR WITH MAKING FAKE DATA!!: " +   e.getMessage());
-            assert(false); // Just make the app crash for now
-        }
-    }
 
 
     // Gets all the subscriptions in the database

@@ -16,7 +16,10 @@ import com.track_it.R;
 import com.track_it.domainobject.SubscriptionObj;
 import com.track_it.logic.SubscriptionHandler;
 import com.track_it.logic.exceptions.SubscriptionException;
+import com.track_it.presentation.util.DecimalDigitsInputFilter;
+import com.track_it.presentation.util.FrequencyMenu;
 import com.track_it.presentation.util.SetupParameters;
+import com.track_it.presentation.util.SubscriptionInput;
 
 
 // This class handles the presentation of the subscription page for the android app.
@@ -111,7 +114,7 @@ public class AddSubscriptionActivity extends AppCompatActivity {
     {
         // create an array adapter and pass the required parameters
         // in our case pass the context, drop down layout , and list of the frequencies.
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.list_item, subHandler.getFrequencyList ());
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.list_item_frequency_menu, subHandler.getFrequencyNameList ());
         frequencyTarget.setAdapter(adapter);
 
     }

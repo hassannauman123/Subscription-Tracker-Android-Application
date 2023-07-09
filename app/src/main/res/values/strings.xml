@@ -12,6 +12,9 @@
     <string name="sort_frequency">Sort by frequency</string>
 
 
+    <string name="name_length">100</string>
+
+
     <string name="lorem_ipsum">
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam in scelerisque sem. Mauris
         volutpat, dolor id interdum ullamcorper, risus dolor egestas lectus, sit amet mattis purus

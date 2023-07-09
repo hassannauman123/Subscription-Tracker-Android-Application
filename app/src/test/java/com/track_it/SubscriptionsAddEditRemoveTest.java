@@ -36,7 +36,7 @@ public class SubscriptionsAddEditRemoveTest
     {
 
         String name = "Valid Name";
-        String paymentFrequency = subHandle.getFrequencyList().get(0);
+        String paymentFrequency = subHandle.getFrequencyNameList().get(0);
         int paymentAmount = (int) (Math.random() * subHandle.getMaxPaymentCentsTotal()) + 1;
 
 
@@ -76,7 +76,7 @@ public class SubscriptionsAddEditRemoveTest
     {
 
         String Name = "Valid Name";
-        String paymentFrequency = subHandle.getFrequencyList().get(0);
+        String paymentFrequency = subHandle.getFrequencyNameList().get(0);
         int PaymentAmount = (int) (Math.random() * subHandle.getMaxPaymentCentsTotal()) + 1;
 
         SubscriptionObj newSub = new SubscriptionObj(Name,PaymentAmount,paymentFrequency);
@@ -102,7 +102,7 @@ public class SubscriptionsAddEditRemoveTest
         {
             newPayment = (int) (Math.random() * subHandle.getMaxPaymentCentsTotal()) + 1;
         }
-        String newPaymentFrequency = subHandle.getFrequencyList().get(1);
+        String newPaymentFrequency = subHandle.getFrequencyNameList().get(1);
 
         SubscriptionObj subWithEditDetails = new SubscriptionObj(newName,newPayment,newPaymentFrequency);
 
@@ -143,7 +143,7 @@ public class SubscriptionsAddEditRemoveTest
     {
 
         String name = "Valid Name";
-        String paymentFrequency = subHandle.getFrequencyList().get(0);
+        String paymentFrequency = subHandle.getFrequencyNameList().get(0);
         int paymentAmount = (int) (Math.random() * subHandle.getMaxPaymentCentsTotal()) + 1;
 
         SubscriptionObj newSub = new SubscriptionObj(name,paymentAmount,paymentFrequency);
@@ -155,7 +155,7 @@ public class SubscriptionsAddEditRemoveTest
         String newName = "New name";
         int newPayment = 0; // 1 invalid input !
 
-        String newPaymentFrequency = subHandle.getFrequencyList().get(1);
+        String newPaymentFrequency = subHandle.getFrequencyNameList().get(1);
 
         SubscriptionObj subWithEditDetails = new SubscriptionObj(newName,newPayment,newPaymentFrequency);
 
@@ -202,7 +202,7 @@ public class SubscriptionsAddEditRemoveTest
     {
 
         String name = "Valid Name";
-        String paymentFrequency = subHandle.getFrequencyList().get(0);
+        String paymentFrequency = subHandle.getFrequencyNameList().get(0);
         int paymentAmount = (int) (Math.random() * subHandle.getMaxPaymentCentsTotal()) + 1;
 
         SubscriptionObj newSub = new SubscriptionObj(name,paymentAmount,paymentFrequency);

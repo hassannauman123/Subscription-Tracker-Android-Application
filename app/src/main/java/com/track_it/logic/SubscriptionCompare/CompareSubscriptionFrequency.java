@@ -2,13 +2,14 @@ package com.track_it.logic.SubscriptionCompare;
 
 import com.track_it.domainobject.SubscriptionObj;
 import com.track_it.logic.SubscriptionHandler;
+import com.track_it.logic.exceptions.SubscriptionException;
 import com.track_it.presentation.util.SetupParameters;
 
 import java.util.List;
 
 
 
-//Compare to subscription by their frequencies
+//Compare two subscriptions by their frequencies
 public class CompareSubscriptionFrequency implements SubscriptionComparer
 {
 
@@ -21,29 +22,21 @@ public class CompareSubscriptionFrequency implements SubscriptionComparer
     }
     public int compareSubscriptions(SubscriptionObj left, SubscriptionObj right)
     {
-        int valueReturn = 0;
 
-        List<String> allowableFrequencies = subhandler.getFrequencyList();
-
-        int indexLeft = getIndex(allowableFrequencies, left.getPaymentFrequency());
-        int indexRight = getIndex(allowableFrequencies, right.getPaymentFrequency());
-
-
-        return indexLeft - indexRight;
-    }
-
-    private int getIndex( List<String> allowableFrequencies, String inputString) {
-        int index = 0;
-
-        for (int i = 0; i < allowableFrequencies.size(); i++)
+        int leftDaysBetweenPayment = 0;
+        int rightDaysBetweenPayment = 0;
+        try {
+              leftDaysBetweenPayment = subhandler.getFrequencyObject(left).daysBetweenPayment();
+              rightDaysBetweenPayment = subhandler.getFrequencyObject(right).daysBetweenPayment();
+        }
+        catch  (SubscriptionException e)
         {
-            if ( allowableFrequencies.get(i).equals(inputString ) )
-            {
-                index = i ;
-            }
+            leftDaysBetweenPayment = 0;
+            leftDaysBetweenPayment = 0;
         }
 
-        return index;
+        return leftDaysBetweenPayment  - rightDaysBetweenPayment;
+
     }
 
 

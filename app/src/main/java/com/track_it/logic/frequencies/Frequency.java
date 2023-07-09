@@ -8,6 +8,9 @@ public interface Frequency
 
     int calculateMonthlyPayment(int paymentAmount); // calculate monthly payment
 
+    int daysBetweenPayment();
+
+
 }
 
 

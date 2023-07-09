@@ -273,40 +273,40 @@ public class SubscriptionValidateTest {
 
         // Invalid data with correct frequency + char
         thrown = false;
-        inputFrequency = subHandle.getFrequencyList().get(0) +  "1";
+        inputFrequency = subHandle.getFrequencyNameList().get(0) +  "1";
 
         try {
             subHandle.validateFrequency(inputFrequency);
         } catch (Exception e) {
             thrown = true;
         }
-        assertTrue("'"+ subHandle.getFrequencyList().get(0) + "1' was incorrectly accepted as valid payment frequency", thrown);
+        assertTrue("'"+ subHandle.getFrequencyNameList().get(0) + "1' was incorrectly accepted as valid payment frequency", thrown);
 
 
 
 
         // Invalid data with correct frequency + blank character
         thrown = false;
-        inputFrequency = subHandle.getFrequencyList().get(1) + " ";
+        inputFrequency = subHandle.getFrequencyNameList().get(1) + " ";
 
         try {
             subHandle.validateFrequency(inputFrequency);
         } catch (Exception e) {
             thrown = true;
         }
-        assertTrue("'"+ subHandle.getFrequencyList().get(1) + " ' was incorrectly accepted as valid payment frequency", thrown);
+        assertTrue("'"+ subHandle.getFrequencyNameList().get(1) + " ' was incorrectly accepted as valid payment frequency", thrown);
 
 
         // Invalid data with correct frequency + blank character
         thrown = false;
-        inputFrequency = " " + subHandle.getFrequencyList().get(1);
+        inputFrequency = " " + subHandle.getFrequencyNameList().get(1);
 
         try {
             subHandle.validateFrequency(inputFrequency);
         } catch (Exception e) {
             thrown = true;
         }
-        assertTrue("' "+ subHandle.getFrequencyList().get(1) + "' was incorrectly accepted as valid payment frequency", thrown);
+        assertTrue("' "+ subHandle.getFrequencyNameList().get(1) + "' was incorrectly accepted as valid payment frequency", thrown);
 
 
         System.out.println("Finished testing validatePaymentFrequency with invalid Data!");
@@ -325,7 +325,7 @@ public class SubscriptionValidateTest {
 
         // Invalid data with correct frequency + char
         thrown = false;
-        List<String> allowableFrequency= subHandle.getFrequencyList();
+        List<String> allowableFrequency= subHandle.getFrequencyNameList();
 
         for (int i = 0; i < allowableFrequency.size(); i++)
         {

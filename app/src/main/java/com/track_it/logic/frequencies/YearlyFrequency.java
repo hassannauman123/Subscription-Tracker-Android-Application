@@ -15,4 +15,10 @@ public class YearlyFrequency extends FrequencyBase
         return inputPayment / MONTHS_PER_YEAR ;
     }
 
+
+    public int daysBetweenPayment()
+    {
+        return DAYS_PER_YEAR;
+    }
+
 }

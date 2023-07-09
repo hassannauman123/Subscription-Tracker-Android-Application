@@ -13,4 +13,10 @@ public class MonthlyFrequency extends FrequencyBase
         return inputPayment ;
     }
 
+
+    public int daysBetweenPayment()
+    {
+        return DAYS_PER_YEAR / MONTHS_PER_YEAR; // Average number of days between payment
+    }
+
 }

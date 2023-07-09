@@ -5,6 +5,7 @@ import com.track_it.domainobject.SubscriptionObj;
 import java.util.List;
 
 
+//This is the interface for a subscription Persistence database
 public  interface  SubscriptionPersistence
 {
     List<SubscriptionObj> getAllSubscriptions(); // Get all subscriptions in database

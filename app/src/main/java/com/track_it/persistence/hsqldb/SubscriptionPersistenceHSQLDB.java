@@ -14,6 +14,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 
+//This class implements a HSQL database for subscriptions.
+
 public class SubscriptionPersistenceHSQLDB implements SubscriptionPersistence {
 
 
@@ -67,6 +69,8 @@ public class SubscriptionPersistenceHSQLDB implements SubscriptionPersistence {
         return AllSubscriptions;
     }
 
+
+    // Edit the details of subscription object in the database.
     public void editSubscriptionByID(int subscriptionIDToEdit, final SubscriptionObj newSubscriptionDetails) throws DataBaseException
     {
 

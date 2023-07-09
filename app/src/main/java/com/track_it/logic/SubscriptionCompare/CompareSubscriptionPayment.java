@@ -13,7 +13,7 @@ class CompareSubscriptionPayment implements  SubscriptionComparer
     {
 
 
-        return left.getPaymentCents() - right.getPaymentCents();
+        return left.getTotalPaymentInCents() - right.getTotalPaymentInCents();
 
     }
 

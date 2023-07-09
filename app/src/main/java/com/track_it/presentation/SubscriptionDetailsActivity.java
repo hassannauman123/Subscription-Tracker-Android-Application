@@ -21,10 +21,13 @@ import com.track_it.R;
 import com.track_it.domainobject.SubscriptionObj;
 import com.track_it.logic.exceptions.SubscriptionException;
 import com.track_it.logic.SubscriptionHandler;
+import com.track_it.presentation.util.DecimalDigitsInputFilter;
+import com.track_it.presentation.util.FrequencyMenu;
 import com.track_it.presentation.util.SetupParameters;
+import com.track_it.presentation.util.SubscriptionInput;
 
 
-//This is the activity java file for the description details.
+//This is the activity java file for the edit description details page.
 // Allow the user to view details, delete subscription, and edit subscription.
 
 public class SubscriptionDetailsActivity extends AppCompatActivity {
@@ -211,21 +214,26 @@ public class SubscriptionDetailsActivity extends AppCompatActivity {
     //Enable and disable frequency dropdown menu based on boolean argument passed to this function
     private void dropDownFrequencyMenuEnabled(boolean enable)
     {
+
         frequencyTarget.setEnabled(enable);
-        frequencyTarget.setTextColor(getResources().getColor(R.color.black));
         dropDownMenuParent.setFocusableInTouchMode(enable);
         dropDownMenuParent.setEnabled(enable);
         frequencyTarget.setBackgroundColor(getResources().getColor(R.color.white));
+
+        //Change text color based on whether it is enabled or disabled
+        if ( enable) {
+            frequencyTarget.setTextColor(Color.parseColor((editableColor)));
+        }
+        else
+        {
+            frequencyTarget.setTextColor(Color.parseColor((nonEditableColor)));
+        }
     }
 
 
-
-
-
-
-
-
+    //What runs when a subscription is successfully deleted
     private void deleted(){
+        //Display a toast message, and switch back to home screen
         Toast.makeText(this, successDeleteMessage, Toast.LENGTH_SHORT).show(); //Display "Subscription Deleted"
         setContentView(R.layout.activity_main); // Switch screen to display main page
         finish();
@@ -256,6 +264,7 @@ public class SubscriptionDetailsActivity extends AppCompatActivity {
         if (editMode == false) {
             editButton.setBackgroundColor(Color.parseColor(editButtonColor));
             editButton.setText("Edit Subscription");
+
 
         } else {
             editButton.setBackgroundColor(Color.parseColor(saveButtonColor));

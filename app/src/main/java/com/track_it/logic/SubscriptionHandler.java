@@ -3,6 +3,7 @@ package com.track_it.logic;
 import com.track_it.domainobject.SubscriptionObj;
 import com.track_it.logic.exceptions.DataBaseException;
 import com.track_it.logic.exceptions.SubscriptionException;
+import com.track_it.logic.exceptions.SubscriptionInvalidFrequencyException;
 import com.track_it.logic.exceptions.SubscriptionInvalidNameException;
 import com.track_it.logic.exceptions.SubscriptionInvalidPaymentException;
 import com.track_it.logic.frequencies.*;
@@ -23,12 +24,11 @@ public class SubscriptionHandler {
     private final int MAX_NAME_LENGTH; // max length of name
     private final int MAX_PAYMENT_DOLLAR; // max payment amount
     private final int MAX_PAYMENT_CENTS; // max payment amount
-   private final int MAX_PAYMENT_CENTS_TOTAL ;
+    private final int MAX_PAYMENT_CENTS_TOTAL ;
     private final String allowableCharactersInName;
 
-    private ArrayList<Frequency> FrequencyList  = new ArrayList<>();
+    private ArrayList<Frequency> frequencyList  = new ArrayList<>();
     private SubscriptionPersistence dataBaseHandler; //Database Handler
-
 
 
 
@@ -46,12 +46,13 @@ public class SubscriptionHandler {
     }
 
 
+    //Initialize the frequency list
     private void InitFrequency()
     {
-        FrequencyList.add(new DailyFrequency());
-        FrequencyList.add(new WeeklyFrequency());
-        FrequencyList.add(new MonthlyFrequency());
-        FrequencyList.add(new YearlyFrequency());
+        frequencyList.add(new DailyFrequency());
+        frequencyList.add(new WeeklyFrequency());
+        frequencyList.add(new MonthlyFrequency());
+        frequencyList.add(new YearlyFrequency());
     }
 
     // This function will add subscriptionToAdd to database. It will first validate subscription, and then
@@ -59,8 +60,33 @@ public class SubscriptionHandler {
     // It will throw Exceptions if anything goes wrong (like invalid data), so caller should be prepared to catch them.
     public void addSubscription(SubscriptionObj subscriptionToAdd) throws DataBaseException, SubscriptionException
     {
-        validateWholeSubscription(subscriptionToAdd); // might throw exception
-        dataBaseHandler.addSubscriptionToDB(subscriptionToAdd); // Added to dataBase!!
+        validateWholeSubscription(subscriptionToAdd); // May throw exception if subscription details are not valid
+        dataBaseHandler.addSubscriptionToDB(subscriptionToAdd); // Add to dataBase, will throw DataBaseException if subscription could not be added to dat base.
+    }
+
+
+
+    //Return a frequency object that matches the frequency type of inputSubscription.
+    // will throw SubscriptionInvalidFrequencyException if frequency of inputSubscription is not valid
+    public Frequency getFrequencyObject( SubscriptionObj inputSubscription) throws SubscriptionInvalidFrequencyException
+    {
+        Frequency returnFrequency = null;
+
+        for ( Frequency currFrequency : frequencyList) // Get a frequency object that matches the frequency of the inputSubscription
+        {
+            if (currFrequency.checkMatch(inputSubscription.getPaymentFrequency()))
+            {
+                returnFrequency = currFrequency; //It's Fine to return a non-copied object
+            }
+        }
+
+        if (returnFrequency == null) // If no matching frequency was found, throw exception
+        {
+            throw new SubscriptionInvalidFrequencyException(inputSubscription.getPaymentFrequency() + " is not a valid frequency");
+        }
+
+
+        return returnFrequency; // return frequency
 
     }
 
@@ -76,10 +102,10 @@ public class SubscriptionHandler {
 
     // Validate the Frequency input string
     // Must be one of the allowable frequencies in FrequencyList
-    public void validateFrequency(final String inputName) throws SubscriptionInvalidPaymentException {
+    public void validateFrequency(final String inputName) throws SubscriptionInvalidFrequencyException {
         boolean match = false; // A boolean to tell if inputName matches any of our payment Frequencies
 
-        for (Frequency currFrequency : FrequencyList)
+        for (Frequency currFrequency : frequencyList)
         {
             if (currFrequency.checkMatch(inputName))
             {
@@ -88,7 +114,7 @@ public class SubscriptionHandler {
         }
         if (!match) // If there was no match
         {
-            throw new SubscriptionInvalidPaymentException(inputName + " is not a valid frequency");
+            throw new SubscriptionInvalidFrequencyException(inputName + " is not a valid frequency");
         }
 
     }
@@ -211,10 +237,10 @@ public class SubscriptionHandler {
     }
 
     // Returns a string list of allowable frequencies in order
-    public List<String> getFrequencyList() {
+    public List<String> getFrequencyNameList() {
         List<String> returnAllowableFrequencies = new ArrayList<String> ();
 
-        for ( Frequency currFrequency : FrequencyList )
+        for ( Frequency currFrequency : frequencyList )
         {
             returnAllowableFrequencies.add(currFrequency.getFrequencyName());
         }
@@ -225,7 +251,7 @@ public class SubscriptionHandler {
     // Return the number of frequencies
     public int getNumFrequencies()
     {
-        return FrequencyList.size();
+        return frequencyList.size();
     }
 
 }

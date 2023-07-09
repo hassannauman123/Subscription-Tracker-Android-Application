@@ -1,6 +1,5 @@
-package com.track_it.presentation;
+package com.track_it.presentation.util;
 
-import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 
@@ -16,7 +15,7 @@ public class FrequencyMenu
     {
         // create an array adapter and pass the required parameters
         // in our case pass the context, drop down layout , and list of the frequencies.
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(inputView, R.layout.list_item, subHandler.getFrequencyList ());
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(inputView, R.layout.list_item_frequency_menu, subHandler.getFrequencyNameList ());
         frequencyTarget.setAdapter(adapter);
 
     }
