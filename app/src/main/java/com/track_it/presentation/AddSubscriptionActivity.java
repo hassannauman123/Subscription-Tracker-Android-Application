@@ -160,7 +160,7 @@ public class AddSubscriptionActivity extends AppCompatActivity {
                 generalErrorTarget.setTextColor(Color.parseColor(accomplishColor));
                 disableAddSubscriptionsButtons();
 
-                Toast.makeText(this, successAddMessage, Toast.LENGTH_LONG).show(); //Display "Subscription Added"
+                Toast.makeText(this, successAddMessage, Toast.LENGTH_SHORT).show(); //Display "Subscription Added"
                 setContentView(R.layout.activity_main); // Switch screen to display main page
                 finish(); //We are done with this activity
 
