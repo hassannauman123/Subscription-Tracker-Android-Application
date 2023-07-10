@@ -8,12 +8,16 @@ public class MonthlyFrequency extends FrequencyBase
     }
 
 
+
+    @Override
     public int calculateMonthlyPayment(int inputPayment)
     {
         return inputPayment ;
     }
 
 
+
+    @Override
     public int daysBetweenPayment()
     {
         return DAYS_PER_YEAR / MONTHS_PER_YEAR; // Average number of days between payment

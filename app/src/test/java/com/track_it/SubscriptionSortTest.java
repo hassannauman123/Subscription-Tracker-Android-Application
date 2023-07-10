@@ -5,11 +5,9 @@ import com.track_it.domainobject.SubscriptionObj;
 import com.track_it.logic.SubscriptionCompare.CompareSubscriptionFrequency;
 import com.track_it.logic.SubscriptionCompare.CompareSubscriptionName;
 import com.track_it.logic.SubscriptionCompare.CompareSubscriptionPayment;
-import com.track_it.logic.SubscriptionCompare.SubscriptionCompare;
 import com.track_it.logic.SubscriptionHandler;
-import com.track_it.logic.SubscriptionSorter;
 import com.track_it.logic.frequencies.Frequency;
-import com.track_it.persistence.FakeDataBase;
+import com.track_it.persistence.stubs.SubscriptionPersistenceStub;
 import com.track_it.presentation.util.SetupParameters;
 import com.track_it.util.FillDataBase;
 
@@ -19,6 +17,7 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 import static org.junit.Assert.assertFalse;
 
+import java.util.Collections;
 import java.util.List;
 
 public class SubscriptionSortTest
@@ -32,7 +31,7 @@ public class SubscriptionSortTest
     public void setTestHandle()
     {
 
-        SetupParameters.initializeDatabase(new FakeDataBase());
+        SetupParameters.initializeDatabase(new SubscriptionPersistenceStub());
         subHandle =  SetupParameters.getSubscriptionHandler();
 
         FillDataBase.fillDataBaseRandomSubscriptions(subHandle, 100); //Create 100 fake subs, and add them to Database
@@ -44,10 +43,8 @@ public class SubscriptionSortTest
     @Test
     public void testSortByName()
     {
-        SubscriptionCompare subCompare = new CompareSubscriptionName();
 
-        SubscriptionSorter subSorter = new SubscriptionSorter(subCompare);
-        subSorter.sortSubscriptions(listOfSubs); // Sort by name
+        Collections.sort(listOfSubs,new CompareSubscriptionName()); //Sort by name
 
 
         for ( int i = 0; i < listOfSubs.size() -1 ; i ++)
@@ -63,11 +60,9 @@ public class SubscriptionSortTest
     @Test
     public void testSortByPayment()
     {
-        SubscriptionCompare subCompare = new CompareSubscriptionPayment();
 
+        Collections.sort(listOfSubs,new CompareSubscriptionPayment() ); //Sort by payment amount
 
-        SubscriptionSorter subSorter = new SubscriptionSorter(subCompare);
-        subSorter.sortSubscriptions(listOfSubs); // Sort by Payment amount
 
         for ( int i = 0; i < listOfSubs.size() -1 ; i ++)
         {
@@ -82,9 +77,9 @@ public class SubscriptionSortTest
     @Test
     public void testSortFrequency()
     {
-        SubscriptionCompare subCompare = new CompareSubscriptionFrequency();
-        SubscriptionSorter subSorter = new SubscriptionSorter(subCompare);
-        subSorter.sortSubscriptions(listOfSubs); // Sort by frequency amount
+
+        Collections.sort(listOfSubs,new CompareSubscriptionFrequency()); // Sort by frequency amount
+
 
         for ( int i = 0; i < listOfSubs.size() -1 ; i ++)
         {

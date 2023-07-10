@@ -11,11 +11,10 @@ import android.widget.Button;
 
 import com.track_it.R;
 import com.track_it.domainobject.SubscriptionObj;
- import com.track_it.logic.SubscriptionCompare.SubscriptionCompare;
 import com.track_it.logic.SubscriptionHandler;
 import com.track_it.logic.SubscriptionCompare.*;
-import com.track_it.logic.SubscriptionSorter;
 import com.track_it.presentation.util.SetupParameters;
+
 
 import android.content.Intent;
 import android.widget.ImageButton;
@@ -24,6 +23,8 @@ import android.widget.PopupMenu;
 import android.widget.SearchView;
 import android.widget.TextView;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 
@@ -31,8 +32,9 @@ import java.util.List;
 //  This is the presentation class for the main home page of the app.
 //  It will be instantiated when the android app first starts
 //
-//  Currently it displays all subscriptions in a scrollable list, and got to a page to add a new subscription.
-//   Clicking on any subscription should open a new page that allows you to edit or delete the sub.
+//  Currently it displays all subscriptions in a scrollable list, and a add subscription button.
+//  Clicking on any subscription should open a new page that allows you to edit or delete the sub.
+//  It also has sort and search input, to filter and sort the subscriptions.
 //
 
 
@@ -41,14 +43,14 @@ public class MainActivity extends AppCompatActivity {
 
     private SubscriptionHandler subHandler;
 
-    private Button addSubButton;
-    private SearchView searchInput;
-    private String searchString = ""; // Only display subscription that contain the searchString ( by default all subs are shown)
+    private Button addSubButton; // button to add a subscription
+    private SearchView searchInput; // Search input target
+    private ImageButton filterButton; // target of drop down button for sorting
 
+    private String searchString = ""; // Only subscription that contain the searchString will be shown ( by default all subs are shown)
 
-    private  List<SubscriptionObj> listOfSubs; // hold all the subscriptions to display
-    private SubscriptionCompare subSorter = null;
-    private  ImageButton filterButton; // target of drop down button for sorting
+    private List<SubscriptionObj> listOfSubs; // hold all the subscriptions to display
+    private  Comparator <SubscriptionObj> subSorter = null;
 
 
     @Override // Make sure this function is overriding some default onCreate method
@@ -69,7 +71,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
     //Runs when this activity comes back
     protected void onRestart() {
         super.onRestart();
@@ -86,17 +87,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
-    private void setUpButtonsAndInput()
-    {
+    private void setUpButtonsAndInput() {
         enableAddSubButton();
         enableSearchInput();
         enableSortFilterInput();
     }
 
     //Enable the add subscription button
-    private void enableAddSubButton()
-    {
+    private void enableAddSubButton() {
         //Set target of add sub button
         addSubButton = (Button) this.findViewById(R.id.add_subscription_button);
 
@@ -111,8 +109,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     //Enable search input
-    private void enableSearchInput()
-    {
+    private void enableSearchInput() {
 
         searchInput = (SearchView) this.findViewById(R.id.search_by_name);
 
@@ -130,7 +127,7 @@ public class MainActivity extends AppCompatActivity {
                 View current = getCurrentFocus();
                 if (current != null)  //Reset focus
                 {
-                    InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(current.getWindowToken(), 0);
 
                 }
@@ -149,16 +146,14 @@ public class MainActivity extends AppCompatActivity {
 
 
     //Enable the filter input - Allows user to sort subscriptions
-    private void enableSortFilterInput()
-    {
+    private void enableSortFilterInput() {
 
 
         // Referencing and Initializing the filter button
         filterButton = (ImageButton) findViewById(R.id.clickBtn);
 
         // Setting onClick behavior to the button
-        filterButton.setOnClickListener(new View.OnClickListener()
-        {
+        filterButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 // Initializing the popup menu and giving the reference as current context
@@ -170,23 +165,16 @@ public class MainActivity extends AppCompatActivity {
                 //Set what happens when use select option from pop up sort menu
                 popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     @Override
-                    public boolean onMenuItemClick(MenuItem menuItem)
-                    {
+                    public boolean onMenuItemClick(MenuItem menuItem) {
                         //Setting what filter to use to sort the subscriptions (ie, set subSorter)
-                        String sortInput =  menuItem.getTitle().toString();
-                        if ( sortInput.equals(getString(R.string.sort_a_z)) )
-                        {
+                        String sortInput = menuItem.getTitle().toString();
+                        if (sortInput.equals(getString(R.string.sort_a_z))) {
                             subSorter = new CompareSubscriptionName();
-                        }
-                        else if ( sortInput.equals(getString(R.string.sort_payment)) )
-                        {
+                        } else if (sortInput.equals(getString(R.string.sort_payment))) {
                             subSorter = new CompareSubscriptionPayment();
-                        }
-                        else if ( sortInput.equals(getString(R.string.sort_frequency)))
-                        {
-                            subSorter =  new CompareSubscriptionFrequency();
-                        }
-                        else {
+                        } else if (sortInput.equals(getString(R.string.sort_frequency))) {
+                            subSorter = new CompareSubscriptionFrequency();
+                        } else {
                             subSorter = null;
                         }
                         displayAllSubscriptions();
@@ -203,19 +191,19 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
-    //Sort the subscription using SubscriptionCompare object (sortSubsBy).
+    //Sort the subscription using Comparator object (sortSubsBy).
     // If sortSubsBy is null, subs will not be sorted
-    private void sortSubs(List<SubscriptionObj> listOfSubs, SubscriptionCompare sortSubsBy )
+    private void sortSubs(List<SubscriptionObj> listOfSubs,   Comparator <SubscriptionObj> sortSubsBy)
     {
-        SubscriptionSorter sorterHelper = new SubscriptionSorter(sortSubsBy);
-        sorterHelper.sortSubscriptions(listOfSubs);
+         if (sortSubsBy != null)
+        {
+                Collections.sort(listOfSubs,sortSubsBy  );
+        }
 
     }
 
     // Display all the subscriptions currently in listOfSubs in a scrollable list
-    private void displayAllSubscriptions()
-    {
+    private void displayAllSubscriptions() {
 
         searchString = searchInput.getQuery().toString().toLowerCase(); // Get the search string ( We will only show subs where the name contains the search string)
         sortSubs(listOfSubs, subSorter); // Sort the subscriptions
@@ -232,7 +220,7 @@ public class MainActivity extends AppCompatActivity {
         for (SubscriptionObj curr : listOfSubs) {
 
 
-            if ( curr.getName().toLowerCase().contains(searchString)) // only show this subscription if it matches the search criteria
+            if (curr.getName().toLowerCase().contains(searchString)) // only show this subscription if it matches the search criteria
             {
 
                 // Create a new box to display subscription
@@ -279,8 +267,7 @@ public class MainActivity extends AppCompatActivity {
                 });
 
                 //Set what happens when the user does a short click on a subscription box
-                subscriptionBox.setOnClickListener(new View.OnClickListener()
-                {
+                subscriptionBox.setOnClickListener(new View.OnClickListener() {
                     public void onClick(View v) {
                         Intent subDetailsIntent = new Intent(MainActivity.this, SubscriptionDetailsActivity.class);
                         subDetailsIntent.putExtra("subscriptionID", v.getId());

@@ -14,12 +14,15 @@ public abstract class  FrequencyBase implements Frequency
     {
         frequencyName = setName;
     }
+
+    @Override
     public String getFrequencyName()
     {
         return frequencyName;
 
     }
 
+    @Override
     public boolean checkMatch(String inputCheck)
     {
         return frequencyName.equals(inputCheck);

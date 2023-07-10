@@ -6,10 +6,13 @@ import com.track_it.logic.SubscriptionHandler;
 import java.util.List;
 
 
+//This class is used to fill a database (using a SubscriptionHandler) with fake data
+
 public class FillDataBase
 {
 
 
+    //Fill database with subscriptions that are random
     public static void fillDataBaseRandomSubscriptions(final SubscriptionHandler subHandler, int numSubs) {
 
         try {
@@ -32,7 +35,7 @@ public class FillDataBase
         catch (Exception e )
         {
             System.out.println("Something went wrong with creating random data: " + e.getMessage());
-            assert(false); // Just crash
+            assert(false); // Just crash the test
         }
 
     }
@@ -54,8 +57,10 @@ public class FillDataBase
         String nameToReturn = "";
         String validChars = subHandler.getAllowableChars();
 
+        int randomNameLength = (int) (Math.random() * subHandler.getMaxNameLength()) + subHandler.getMinNameLength();
 
-        for (int i =0 ;i <subHandler.getMaxNameLength(); i++)
+
+        for (int i =0 ;i < randomNameLength; i++)
         {
             int randChar = (int) (Math.random() * validChars.length());
 
@@ -63,7 +68,16 @@ public class FillDataBase
 
         }
 
-        nameToReturn = nameToReturn.trim();
+        nameToReturn = nameToReturn.trim(); // trim off the blank spaces
+
+
+        // In case of the slight chance that trim made the string too small, keep adding chars until it's the correct size
+        while(nameToReturn.length() < subHandler.getMinNameLength())
+        {
+            int randChar = (int) (Math.random() * validChars.length());
+            nameToReturn +=  validChars.charAt(randChar);
+            nameToReturn = nameToReturn.trim(); // trim off the blank spaces
+        }
 
         return nameToReturn;
 
@@ -93,7 +107,7 @@ public class FillDataBase
             catch (Exception e)
             {
                 System.out.println("ERROR WITH MAKING FAKE DATA!!: " +   e.getMessage());
-                assert(false); // Just make the app crash for now
+                assert(false); // Just make the test crash for now
             }
         }
 
@@ -114,7 +128,7 @@ public class FillDataBase
         catch (Exception e)
         {
             System.out.println("ERROR WITH MAKING FAKE DATA!!: " +   e.getMessage());
-            assert(false); // Just make the app crash for now
+            assert(false); // Just make the test crash for now
         }
     }
 

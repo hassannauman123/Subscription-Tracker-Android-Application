@@ -2,17 +2,20 @@ package com.track_it.logic.SubscriptionCompare;
 
 import com.track_it.domainobject.SubscriptionObj;
 
-public
+import java.util.Comparator;
 
 
-class CompareSubscriptionPayment implements SubscriptionCompare
+// Compare two subscription objects by Payment amount
+public class CompareSubscriptionPayment  implements Comparator<SubscriptionObj>
 {
-    public int compareSubscriptions(SubscriptionObj left, SubscriptionObj right)
+
+
+
+    @Override
+
+    public int compare(SubscriptionObj left, SubscriptionObj right)
     {
-
-
         return left.getTotalPaymentInCents() - right.getTotalPaymentInCents();
-
     }
 
 }

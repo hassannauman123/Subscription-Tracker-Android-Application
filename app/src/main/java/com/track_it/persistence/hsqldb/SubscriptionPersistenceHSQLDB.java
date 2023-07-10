@@ -30,6 +30,8 @@ public class SubscriptionPersistenceHSQLDB implements SubscriptionPersistence {
         return DriverManager.getConnection("jdbc:hsqldb:file:" + dbPath + ";shutdown=true", "SA", "");
     }
 
+
+
     // Create and return a subscriptionObj from the input resultSet
     private SubscriptionObj fromResultSet(final ResultSet resultSet) throws SQLException {
 
@@ -43,6 +45,7 @@ public class SubscriptionPersistenceHSQLDB implements SubscriptionPersistence {
     }
 
 
+    @Override
     // return a list of all subscriptions in the database
     public List<SubscriptionObj> getAllSubscriptions() {
         final List<SubscriptionObj> AllSubscriptions = new ArrayList<>();
@@ -70,6 +73,7 @@ public class SubscriptionPersistenceHSQLDB implements SubscriptionPersistence {
     }
 
 
+    @Override
     // Edit the details of subscription object in the database.
     public void editSubscriptionByID(int subscriptionIDToEdit, final SubscriptionObj newSubscriptionDetails) throws DataBaseException
     {
@@ -104,6 +108,7 @@ public class SubscriptionPersistenceHSQLDB implements SubscriptionPersistence {
 
     }
 
+    @Override
     public void addSubscriptionToDB(SubscriptionObj subscriptionToAdd) throws DataBaseException
     {
 
@@ -134,6 +139,7 @@ public class SubscriptionPersistenceHSQLDB implements SubscriptionPersistence {
 
     }
 
+    @Override
     public void removeSubscriptionByID(int subscriptionIDToRemove) throws DataBaseException
     {
         //If a subscription with id of subscriptionID is not found in database throw a DataBaseException exception
@@ -160,6 +166,7 @@ public class SubscriptionPersistenceHSQLDB implements SubscriptionPersistence {
         }
     }
 
+    @Override
     public  SubscriptionObj getSubscriptionByID(int subscriptionIDtoGet) throws DataBaseException
     {
         //If a subscription with id of subscriptionID is not found in database throw a DataBaseException exception

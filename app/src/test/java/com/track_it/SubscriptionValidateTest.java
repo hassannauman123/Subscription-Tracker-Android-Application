@@ -4,7 +4,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import com.track_it.logic.SubscriptionHandler;
-import com.track_it.persistence.FakeDataBase;
+import com.track_it.persistence.stubs.SubscriptionPersistenceStub;
 import com.track_it.presentation.util.SetupParameters;
 
 import org.junit.Before;
@@ -23,7 +23,7 @@ public class SubscriptionValidateTest {
     @Before
     public void setTestHandle()
     {
-        SetupParameters.initializeDatabase(new FakeDataBase());
+        SetupParameters.initializeDatabase(new SubscriptionPersistenceStub());
         subHandle =  SetupParameters.getSubscriptionHandler();     }
 
     @Test

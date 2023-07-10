@@ -5,9 +5,11 @@ import com.track_it.logic.SubscriptionHandler;
 import com.track_it.logic.exceptions.SubscriptionException;
 import com.track_it.presentation.util.SetupParameters;
 
+import java.util.Comparator;
+
 
 //Compare two subscriptions by their frequencies
-public class CompareSubscriptionFrequency implements SubscriptionCompare
+public class CompareSubscriptionFrequency implements Comparator<SubscriptionObj>
 {
 
     private SubscriptionHandler subhandler;
@@ -17,7 +19,10 @@ public class CompareSubscriptionFrequency implements SubscriptionCompare
     {
         subhandler = SetupParameters.getSubscriptionHandler();
     }
-    public int compareSubscriptions(SubscriptionObj left, SubscriptionObj right)
+
+
+    @Override
+    public int compare(SubscriptionObj left, SubscriptionObj right)
     {
 
         int leftDaysBetweenPayment = 0;

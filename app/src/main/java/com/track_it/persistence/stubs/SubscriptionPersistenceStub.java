@@ -1,21 +1,22 @@
-package com.track_it.persistence;
+package com.track_it.persistence.stubs;
 import com.track_it.domainobject.*;
-import com.track_it.logic.SubscriptionHandler;
 import com.track_it.logic.exceptions.DataBaseException;
 import com.track_it.logic.exceptions.DataBaseSubNotFoundException;
+import com.track_it.persistence.SubscriptionPersistence;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
 //This is a database Stub class that implements the SubscriptionPersistence interface.
-public class FakeDataBase implements SubscriptionPersistence
+public class SubscriptionPersistenceStub implements SubscriptionPersistence
 {
+
+
 
 
     // A static Arraylist to hold subscriptions.
     private static ArrayList<SubscriptionObj> subscriptionDB  = new ArrayList<SubscriptionObj>(); // Create a static ArrayList that hold subscription Objects
-
 
     private static int dataBaseCount = 0; // A unique number for the Subscription ID's (Do not ever reduce this number, even when deleting from database)
 
@@ -27,6 +28,7 @@ public class FakeDataBase implements SubscriptionPersistence
     }
 
 
+    @Override
     // Add a subscription to the dataBase.
     public void addSubscriptionToDB( SubscriptionObj inputSubscription)
     {
@@ -39,8 +41,8 @@ public class FakeDataBase implements SubscriptionPersistence
 
 
 
-
     // Gets all the subscriptions in the database
+    @Override
     public List<SubscriptionObj> getAllSubscriptions()
     {
 
@@ -59,7 +61,9 @@ public class FakeDataBase implements SubscriptionPersistence
     }
 
 
+
     // simply edits a subscription by the ID,
+    @Override
     public void editSubscriptionByID (int subscriptionID, SubscriptionObj newDetails) throws DataBaseException
     {
         boolean found = false;
@@ -95,6 +99,7 @@ public class FakeDataBase implements SubscriptionPersistence
 
 
     // Gets and returns a subscription from the dataBase given the subscriptionID
+    @Override
     public SubscriptionObj getSubscriptionByID(int subscriptionID) throws DataBaseException
     {
 
@@ -121,6 +126,7 @@ public class FakeDataBase implements SubscriptionPersistence
 
 
     // Tries to remove a subscription with the id of subcriptionID from the database- will throw an exception if it can't be deleted
+    @Override
     public void  removeSubscriptionByID( int subcriptionID)
     {
         boolean removed = false;

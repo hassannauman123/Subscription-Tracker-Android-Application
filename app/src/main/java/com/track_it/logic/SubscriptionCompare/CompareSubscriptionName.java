@@ -2,10 +2,16 @@ package com.track_it.logic.SubscriptionCompare;
 
 import com.track_it.domainobject.SubscriptionObj;
 
-public class CompareSubscriptionName implements SubscriptionCompare
+import java.util.Comparator;
+
+
+//Compare two subscriptions by their names
+public class CompareSubscriptionName implements Comparator <SubscriptionObj>
 {
 
-    public int compareSubscriptions(SubscriptionObj left, SubscriptionObj right)
+    @Override
+
+    public int compare(SubscriptionObj left, SubscriptionObj right)
     {
 
         return left.getName().toLowerCase().compareTo(right.getName().toLowerCase());

@@ -20,7 +20,7 @@ public class SetupParameters
     private static final int MAX_PAYMENT_DOLLAR = 9999;
     private static final int MAX_PAYMENT_CENTS = 99;
 
-    private static final String allowableCharactersInName = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890 _+*^&%$#@!+=|}]'?<>'"; // Our current list of allowable characters in the name
+    private static final String allowableCharactersInName = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890 -_+*^&%$#@!+=|}]'?<>'"; // Our current list of allowable characters in the name
 
 
     private static  SubscriptionPersistence DataBase = Services.getSubscriptionPersistence();  // Database that we will use

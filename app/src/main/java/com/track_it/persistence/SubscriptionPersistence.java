@@ -13,7 +13,7 @@ public  interface  SubscriptionPersistence
     //Edit a subscription by targeting a subscription by its ID, and having all other parameters changed
     void editSubscriptionByID(int subscriptionID, SubscriptionObj newSubscriptionDetails);
 
-    // Add a subscription to database *subscriptionToAdd ID will be set by this
+    // Add a subscription to database  - *subscriptionToAdd ID will be set by this method if not exception throw
     void addSubscriptionToDB(SubscriptionObj subscriptionToAdd);
 
     // Remove a subscription by ID

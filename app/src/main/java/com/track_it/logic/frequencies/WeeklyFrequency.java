@@ -9,12 +9,14 @@ public class WeeklyFrequency extends FrequencyBase
         super("weekly");
     }
 
+    @Override
     public int calculateMonthlyPayment(int inputPayment)
     {
         return inputPayment * WEEKS_PER_MONTH;
     }
 
 
+    @Override
     public int daysBetweenPayment()
     {
         return DAYS_PER_YEAR / ( WEEKS_PER_YEAR); // Average number of days between payment
