@@ -1,7 +1,7 @@
 package com.track_it.logic;
 
 import com.track_it.domainobject.SubscriptionObj;
-import com.track_it.logic.SubscriptionCompare.SubscriptionComparer;
+import com.track_it.logic.SubscriptionCompare.SubscriptionCompare;
 
 import java.util.List;
 
@@ -11,15 +11,15 @@ import java.util.List;
 
 public class SubscriptionSorter
 {
-    private SubscriptionComparer sorter = null; //How we will sort lists
+    private SubscriptionCompare sorter = null; //How we will sort lists
 
 
-    public SubscriptionSorter(SubscriptionComparer inputSortCriteria)
+    public SubscriptionSorter(SubscriptionCompare inputSortCriteria)
     {
         sorter  = inputSortCriteria;
     }
 
-    public void setSortCriteria(SubscriptionComparer inputSortCriteria)
+    public void setSortCriteria(SubscriptionCompare inputSortCriteria)
     {
         sorter  = inputSortCriteria;
     }

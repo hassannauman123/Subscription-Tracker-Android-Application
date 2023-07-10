@@ -5,12 +5,11 @@ import com.track_it.domainobject.SubscriptionObj;
 import com.track_it.logic.SubscriptionCompare.CompareSubscriptionFrequency;
 import com.track_it.logic.SubscriptionCompare.CompareSubscriptionName;
 import com.track_it.logic.SubscriptionCompare.CompareSubscriptionPayment;
-import com.track_it.logic.SubscriptionCompare.SubscriptionComparer;
+import com.track_it.logic.SubscriptionCompare.SubscriptionCompare;
 import com.track_it.logic.SubscriptionHandler;
 import com.track_it.logic.SubscriptionSorter;
 import com.track_it.logic.frequencies.Frequency;
 import com.track_it.persistence.FakeDataBase;
-import com.track_it.persistence.SubscriptionPersistence;
 import com.track_it.presentation.util.SetupParameters;
 import com.track_it.util.FillDataBase;
 
@@ -45,7 +44,7 @@ public class SubscriptionSortTest
     @Test
     public void testSortByName()
     {
-        SubscriptionComparer subCompare = new CompareSubscriptionName();
+        SubscriptionCompare subCompare = new CompareSubscriptionName();
 
         SubscriptionSorter subSorter = new SubscriptionSorter(subCompare);
         subSorter.sortSubscriptions(listOfSubs); // Sort by name
@@ -64,7 +63,7 @@ public class SubscriptionSortTest
     @Test
     public void testSortByPayment()
     {
-        SubscriptionComparer subCompare = new CompareSubscriptionPayment();
+        SubscriptionCompare subCompare = new CompareSubscriptionPayment();
 
 
         SubscriptionSorter subSorter = new SubscriptionSorter(subCompare);
@@ -83,7 +82,7 @@ public class SubscriptionSortTest
     @Test
     public void testSortFrequency()
     {
-        SubscriptionComparer subCompare = new CompareSubscriptionFrequency();
+        SubscriptionCompare subCompare = new CompareSubscriptionFrequency();
         SubscriptionSorter subSorter = new SubscriptionSorter(subCompare);
         subSorter.sortSubscriptions(listOfSubs); // Sort by frequency amount
 

@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-//This is a fakeDatabase class that implements the SubscriptionPersistence interface.
+//This is a database Stub class that implements the SubscriptionPersistence interface.
 public class FakeDataBase implements SubscriptionPersistence
 {
 
@@ -59,23 +59,25 @@ public class FakeDataBase implements SubscriptionPersistence
     }
 
 
-    // simply edits a subscription by the ID
+    // simply edits a subscription by the ID,
     public void editSubscriptionByID (int subscriptionID, SubscriptionObj newDetails) throws DataBaseException
     {
         boolean found = false;
         SubscriptionObj subscriptonToUpdate = null;
 
 
+        //Find the subscription to edit
         for (int i =0 ; i < subscriptionDB.size(); i++ )
         {
            if (  subscriptionDB.get(i).getID()  == subscriptionID)
            {
                 subscriptonToUpdate = subscriptionDB.get(i);
-                 found = true;
+                found = true;
                 break;
            }
         }
 
+        // If the subscription was found,  edit it with the new details
         if ( found && subscriptonToUpdate != null)
         {
 
@@ -83,7 +85,7 @@ public class FakeDataBase implements SubscriptionPersistence
             subscriptonToUpdate.setPayment(newDetails.getTotalPaymentInCents());
             subscriptonToUpdate.setPaymentFrequency(newDetails.getPaymentFrequency());
         }
-        else
+        else // Else the subscription was not found, throw an error
         {
             throw new DataBaseSubNotFoundException("Subscription not found in dataBase!");
         }

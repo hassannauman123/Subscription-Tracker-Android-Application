@@ -1,13 +1,9 @@
 package com.track_it.presentation;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -15,7 +11,7 @@ import android.widget.Button;
 
 import com.track_it.R;
 import com.track_it.domainobject.SubscriptionObj;
- import com.track_it.logic.SubscriptionCompare.SubscriptionComparer;
+ import com.track_it.logic.SubscriptionCompare.SubscriptionCompare;
 import com.track_it.logic.SubscriptionHandler;
 import com.track_it.logic.SubscriptionCompare.*;
 import com.track_it.logic.SubscriptionSorter;
@@ -27,8 +23,6 @@ import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.SearchView;
 import android.widget.TextView;
-import android.widget.Toast;
-import android.widget.Toolbar;
 
 import java.util.List;
 
@@ -53,7 +47,9 @@ public class MainActivity extends AppCompatActivity {
 
 
     private  List<SubscriptionObj> listOfSubs; // hold all the subscriptions to display
-    private SubscriptionComparer subSorter = null;
+    private SubscriptionCompare subSorter = null;
+    private  ImageButton filterButton; // target of drop down button for sorting
+
 
     @Override // Make sure this function is overriding some default onCreate method
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,9 +63,8 @@ public class MainActivity extends AppCompatActivity {
         listOfSubs = subHandler.getAllSubscriptions();
 
 
-        setUpButtonsAndInput(); // Setup the input and buttons
+        setUpButtonsAndInput(); // Setup the input fields and buttons
         displayAllSubscriptions(); // Display all the subscriptions
-
 
     }
 
@@ -102,7 +97,7 @@ public class MainActivity extends AppCompatActivity {
     //Enable the add subscription button
     private void enableAddSubButton()
     {
-        //Set target of buttons and input
+        //Set target of add sub button
         addSubButton = (Button) this.findViewById(R.id.add_subscription_button);
 
 
@@ -121,7 +116,7 @@ public class MainActivity extends AppCompatActivity {
 
         searchInput = (SearchView) this.findViewById(R.id.search_by_name);
 
-        //Set what happens when the user types in to the search bar
+        //Set what happens when the user types into the search bar
         searchInput.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
 
             @Override
@@ -157,25 +152,27 @@ public class MainActivity extends AppCompatActivity {
     private void enableSortFilterInput()
     {
 
-        ImageButton filterButton; // Filter drop down button
 
         // Referencing and Initializing the filter button
         filterButton = (ImageButton) findViewById(R.id.clickBtn);
 
         // Setting onClick behavior to the button
-        filterButton.setOnClickListener(new View.OnClickListener() {
+        filterButton.setOnClickListener(new View.OnClickListener()
+        {
             @Override
             public void onClick(View view) {
                 // Initializing the popup menu and giving the reference as current context
                 PopupMenu popupMenu = new PopupMenu(MainActivity.this, filterButton);
 
-                // Inflating popup menu from popup_menu.xml file
+                // Inflating popup menu from sort_menu.xml file
                 popupMenu.getMenuInflater().inflate(R.menu.sort_menu, popupMenu.getMenu());
+
+                //Set what happens when use select option from pop up sort menu
                 popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     @Override
                     public boolean onMenuItemClick(MenuItem menuItem)
                     {
-                        //Setting what filter to use to sort the subscriptions
+                        //Setting what filter to use to sort the subscriptions (ie, set subSorter)
                         String sortInput =  menuItem.getTitle().toString();
                         if ( sortInput.equals(getString(R.string.sort_a_z)) )
                         {
@@ -198,6 +195,7 @@ public class MainActivity extends AppCompatActivity {
 
 
                 });
+
                 popupMenu.show(); //Enable the popup menu, allowing user to choose sort criteria
 
             }
@@ -206,16 +204,16 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-    //Sort the subscription using SubscriptionComparer.
-    // If SubscriptionComparer is null, subs will not be sorted
-    private void sortSubs(List<SubscriptionObj> listOfSubs, SubscriptionComparer sortSubsBy )
+    //Sort the subscription using SubscriptionCompare object (sortSubsBy).
+    // If sortSubsBy is null, subs will not be sorted
+    private void sortSubs(List<SubscriptionObj> listOfSubs, SubscriptionCompare sortSubsBy )
     {
         SubscriptionSorter sorterHelper = new SubscriptionSorter(sortSubsBy);
         sorterHelper.sortSubscriptions(listOfSubs);
 
     }
 
-    // Display all the subscriptions currently in the database in a scrollable list
+    // Display all the subscriptions currently in listOfSubs in a scrollable list
     private void displayAllSubscriptions()
     {
 
@@ -228,11 +226,10 @@ public class MainActivity extends AppCompatActivity {
         sv.removeAllViews();
 
 
-        boolean toggleColor = true; // Every second subscription will have a slightly different color
+        boolean firstColor = true; // Every second subscription will have a slightly different color
 
         //Create a subscription box for each subscription that we will show
         for (SubscriptionObj curr : listOfSubs) {
-
 
 
             if ( curr.getName().toLowerCase().contains(searchString)) // only show this subscription if it matches the search criteria
@@ -242,17 +239,17 @@ public class MainActivity extends AppCompatActivity {
                 View subscriptionBox = getLayoutInflater().inflate(R.layout.subscription_box, sv, false);
 
 
-                // Set Name of subscription
+                // Set Name of subscription to display
                 TextView targetName = subscriptionBox.findViewById(R.id.subscription_name);
                 targetName.setText("Name: " + curr.getName());
 
 
-                // Set Frequency
+                // Set Frequency to display
                 TextView targetFrequency = subscriptionBox.findViewById(R.id.subscription_frequency);
                 targetFrequency.setText("Frequency: " + curr.getPaymentFrequency());
 
 
-                // Set Payment amount
+                // Set Payment amount to display
                 TextView targetPaymentAmount = subscriptionBox.findViewById(R.id.subscription_amount);
                 targetPaymentAmount.setText("Payment Amount: $" + curr.getPaymentDollars() + "." + String.format("%02d", curr.getPaymentCents()));
 
@@ -263,8 +260,8 @@ public class MainActivity extends AppCompatActivity {
 
 
                 //Every other subscription has a different background color
-                toggleColor = !toggleColor;
-                if (toggleColor) {
+                firstColor = !firstColor;
+                if (firstColor) {
                     subscriptionBox.setBackgroundColor(getResources().getColor(R.color.grey));
                 } else {
                     subscriptionBox.setBackgroundColor(getResources().getColor(R.color.white));

@@ -5,12 +5,9 @@ import com.track_it.logic.SubscriptionHandler;
 import com.track_it.logic.exceptions.SubscriptionException;
 import com.track_it.presentation.util.SetupParameters;
 
-import java.util.List;
-
-
 
 //Compare two subscriptions by their frequencies
-public class CompareSubscriptionFrequency implements SubscriptionComparer
+public class CompareSubscriptionFrequency implements SubscriptionCompare
 {
 
     private SubscriptionHandler subhandler;
