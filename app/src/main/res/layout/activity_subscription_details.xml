@@ -111,14 +111,12 @@
         android:id="@+id/detail_subscription_amount"
         android:layout_width="75dp"
         android:layout_height="wrap_content"
-
-        android:layout_marginEnd="104dp"
         android:layout_marginBottom="360dp"
         android:ems="2"
         android:inputType="numberDecimal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.403"
         app:layout_constraintStart_toEndOf="@+id/textView12" />
 
     <EditText
