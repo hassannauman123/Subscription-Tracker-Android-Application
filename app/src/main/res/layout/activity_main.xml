@@ -16,6 +16,22 @@
         layout="@layout/toolbar" />
 
 
+    <TextView
+        android:id="@+id/details_general_error"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="64dp"
+        android:text=""
+        android:textAlignment="center"
+        android:textColor="#FF0000"
+        android:textColorHighlight="#FF0000"
+        android:textColorHint="#FF0000"
+        android:textColorLink="#FF0000"
+        android:textSize="20sp"
+        android:visibility="invisible" />
+
     <Button
         android:id="@+id/add_subscription_button"
         android:layout_width="wrap_content"

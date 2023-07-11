@@ -15,6 +15,7 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.track_it.R;
 import com.track_it.domainobject.SubscriptionObj;
 import com.track_it.logic.SubscriptionHandler;
+import com.track_it.logic.exceptions.DataBaseException;
 import com.track_it.logic.exceptions.SubscriptionException;
 import com.track_it.presentation.util.DecimalDigitsInputFilter;
 import com.track_it.presentation.util.FrequencyMenu;
@@ -176,6 +177,11 @@ public class AddSubscriptionActivity extends AppCompatActivity {
                 generalErrorTarget.setVisibility(view.VISIBLE);
                 successTry = false;
             }
+            catch (DataBaseException e) {
+                generalErrorTarget.setText(e.getMessage());
+                generalErrorTarget.setVisibility(view.VISIBLE);
+                successTry = false;
+            }
         }
         else // Else our internal checks did not pass
         {
@@ -232,6 +238,7 @@ public class AddSubscriptionActivity extends AppCompatActivity {
             frequencyError.setVisibility(view.VISIBLE);
             successTry = false;
         }
+
 
         return PaymentFrequency;
 

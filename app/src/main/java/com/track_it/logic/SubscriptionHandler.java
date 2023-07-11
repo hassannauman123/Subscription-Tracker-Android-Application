@@ -128,7 +128,8 @@ public class SubscriptionHandler {
     //      Must be less than or equal to MAX_NAME_LENGTH characters long
     //      chars are restricted to certain characters (look at allowableCharactersInName)
 
-    public void validateName(final String inputName) throws SubscriptionInvalidNameException {
+    public void validateName(final String inputName) throws SubscriptionInvalidNameException
+    {
 
         //The name has to be a minimum length
         if (inputName.trim().length() < MIN_NAME_LENGTH) {

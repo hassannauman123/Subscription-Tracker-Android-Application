@@ -13,6 +13,9 @@ import com.track_it.R;
 import com.track_it.domainobject.SubscriptionObj;
 import com.track_it.logic.SubscriptionHandler;
 import com.track_it.logic.comparators.*;
+import com.track_it.logic.exceptions.DataBaseException;
+import com.track_it.logic.exceptions.SubscriptionException;
+import com.track_it.logic.exceptions.SubscriptionInvalidFrequencyException;
 import com.track_it.presentation.util.SetupParameters;
 
 
@@ -23,6 +26,7 @@ import android.widget.PopupMenu;
 import android.widget.SearchView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -51,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
 
     private List<SubscriptionObj> listOfSubs; // hold all the subscriptions to display
     private  Comparator <SubscriptionObj> subSorter = null;
+    private TextView errorDisplay;
 
 
     @Override // Make sure this function is overriding some default onCreate method
@@ -60,11 +65,13 @@ public class MainActivity extends AppCompatActivity {
 
         com.cook_ebook.persistence.utils.DBHelper.copyDatabaseToDevice(this); // Copy database
 
+         errorDisplay = (TextView) this.findViewById(R.id.details_general_error);
+
         //Get subscription handler, and list of subscriptions
         subHandler = SetupParameters.getSubscriptionHandler();
-        listOfSubs = subHandler.getAllSubscriptions();
 
 
+        getSubList(); // Get list of subs from database
         setUpButtonsAndInput(); // Setup the input fields and buttons
         displayAllSubscriptions(); // Display all the subscriptions
 
@@ -74,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
     //Runs when this activity comes back
     protected void onRestart() {
         super.onRestart();
-        listOfSubs = subHandler.getAllSubscriptions(); //Get a new list of subs ( in case any where added, deleted, or modified)
+        getSubList(); //Get a new list of subs ( in case any subs were added, deleted, or modified)
 
         View current = getCurrentFocus();
         if (current != null)  //Reset focus
@@ -83,9 +90,47 @@ public class MainActivity extends AppCompatActivity {
         }
 
         displayAllSubscriptions(); // Display all the subs
+    }
+
+
+
+
+
+    private void getSubList()
+    {
+        try {
+            //Get subscription handler, and list of subscriptions
+            subHandler = SetupParameters.getSubscriptionHandler();
+            listOfSubs = subHandler.getAllSubscriptions();
+         }
+        catch( SubscriptionException e) //Something went wrong with getting subs, display error
+        {
+            listOfSubs = new ArrayList<SubscriptionObj>(); // make list empty
+            enableError(e.getMessage());
+
+        }
+        catch( DataBaseException e)  //Something went wrong with getting subs, display error
+        {
+            listOfSubs = new ArrayList<SubscriptionObj>(); // make list empty
+            enableError(e.getMessage());
+
+        }
+    }
+
+    //Set the error message, and make it visible
+    private void enableError(String inputMsg)
+    {
+        errorDisplay.setText(inputMsg);
+        errorDisplay.setVisibility(View.VISIBLE);
 
     }
 
+    //Remove the error message, and make it invisible
+    private void disableError()
+    {
+        errorDisplay.setText("");
+        errorDisplay.setVisibility(View.INVISIBLE);
+    }
 
     private void setUpButtonsAndInput() {
         enableAddSubButton();
@@ -196,9 +241,14 @@ public class MainActivity extends AppCompatActivity {
     private void sortSubs(List<SubscriptionObj> listOfSubs,   Comparator <SubscriptionObj> sortSubsBy)
     {
 
-         if (sortSubsBy != null)
+        try {
+            if (sortSubsBy != null) {
+                Collections.sort(listOfSubs, sortSubsBy);
+            }
+        }
+        catch(SubscriptionInvalidFrequencyException e)
         {
-                Collections.sort(listOfSubs,sortSubsBy  );
+            enableError("can't sort subs because " + e.getMessage());
         }
 
     }

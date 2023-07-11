@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,6 +20,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.material.textfield.TextInputLayout;
 import com.track_it.R;
 import com.track_it.domainobject.SubscriptionObj;
+import com.track_it.logic.exceptions.DataBaseException;
 import com.track_it.logic.exceptions.SubscriptionException;
 import com.track_it.logic.SubscriptionHandler;
 import com.track_it.presentation.util.DecimalDigitsInputFilter;
@@ -99,7 +101,6 @@ public class SubscriptionDetailsActivity extends AppCompatActivity {
         enableGoBackButton();
 
         //Try to get the loaded subscription from arguments passed to this activity
-
         if ( getSubscription(subscriptionToDisplay)) // Make sure the subscription object was able to load
         {
             //Only Enable delete and Edit buttons if we could load subscription
@@ -117,6 +118,7 @@ public class SubscriptionDetailsActivity extends AppCompatActivity {
     //Sets the private variable targets so they can be used through out the activity
     private void setTargets()
     {
+
 
         // Get subscription handle
         subHandler = SetupParameters.getSubscriptionHandler();
@@ -196,8 +198,11 @@ public class SubscriptionDetailsActivity extends AppCompatActivity {
                 loadedSub = true;
 
 
-            } catch (Exception e) // Failed to get subscription
+            } catch (SubscriptionException e) // Failed to get subscription
             {
+                setGeneralError(e.getMessage(), errorColor);
+            }
+            catch (DataBaseException e) {
                 setGeneralError(e.getMessage(), errorColor);
             }
         }
@@ -218,26 +223,19 @@ public class SubscriptionDetailsActivity extends AppCompatActivity {
         frequencyTarget.setEnabled(enable);
         dropDownMenuParent.setFocusableInTouchMode(enable);
         dropDownMenuParent.setEnabled(enable);
-        frequencyTarget.setBackgroundColor(getResources().getColor(R.color.white));
+        frequencyTarget.setTextColor(getResources().getColor(R.color.black));
 
         //Change text color based on whether it is enabled or disabled
         if ( enable) {
-            frequencyTarget.setTextColor(Color.parseColor((editableColor)));
-        }
+            frequencyTarget.setBackgroundColor(getResources().getColor(R.color.grey));
+         }
         else
         {
-            frequencyTarget.setTextColor(Color.parseColor((nonEditableColor)));
-        }
+            frequencyTarget.setBackgroundColor(getResources().getColor(R.color.white));
+         }
     }
 
 
-    //What runs when a subscription is successfully deleted
-    private void deleted(){
-        //Display a toast message, and switch back to home screen
-        Toast.makeText(this, successDeleteMessage, Toast.LENGTH_SHORT).show(); //Display "Subscription Deleted"
-        setContentView(R.layout.activity_main); // Switch screen to display main page
-        finish();
-    }
 
     // This changes whether the input for subscription details can be edited by the user.
     // inputBool = true -> makes it editable
@@ -246,8 +244,11 @@ public class SubscriptionDetailsActivity extends AppCompatActivity {
         nameTarget.setEnabled(inputBool);
         paymentAmountTarget.setEnabled(inputBool);
 
+
+
         // Change color of input, and disable/enable drop down menu
-        if (inputBool) {
+        if (inputBool)
+        {
             nameTarget.setTextColor(Color.parseColor(editableColor));
             paymentAmountTarget.setTextColor(Color.parseColor(editableColor));
             dropDownFrequencyMenuEnabled(true);
@@ -273,7 +274,8 @@ public class SubscriptionDetailsActivity extends AppCompatActivity {
     }
 
     // This runs when a user clicks the edit \ Save changes button
-    private void editButton() {
+    private void editButton()
+    {
 
 
         //If we are not in edit mode, and the subscription has not already been deleted  -then switch to edit mode
@@ -320,6 +322,7 @@ public class SubscriptionDetailsActivity extends AppCompatActivity {
             generalErrorTarget.setVisibility(View.VISIBLE);
 
         }
+
 
 
         // Get the payment amount the user Enter
@@ -371,16 +374,32 @@ public class SubscriptionDetailsActivity extends AppCompatActivity {
                 editMode = false;
                 switchEditModes(editMode);
 
-            } catch (Exception e)
+            } catch (SubscriptionException e)
             {
                 //There was some error with saving changes
                 setGeneralError(e.getMessage(), errorColor);
                 generalErrorTarget.setVisibility(View.VISIBLE);
+            }
+            catch (DataBaseException e)  //Catch - Something wrong with databsae saving
+            {
+                // Display error
+                 setGeneralError(e.getMessage(), errorColor);
+                generalErrorTarget.setVisibility(View.VISIBLE);
 
             }
 
+
         }
 
+    }
+
+
+    //What runs when a subscription is successfully deleted
+    private void deleted(){
+        //Display a toast message, and switch back to home screen
+        Toast.makeText(this, successDeleteMessage, Toast.LENGTH_SHORT).show(); //Display "Subscription Deleted"
+        setContentView(R.layout.activity_main); // Switch screen to display main page
+        finish();
     }
 
 
