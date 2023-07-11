@@ -7,11 +7,14 @@ import org.junit.runners.Suite;
 @Suite.SuiteClasses({
 
     SubscriptionsAddEditRemoveTest.class,
-    SubscriptionValidateTest.class
+    SubscriptionValidateTest.class,
+    SubscriptionSortTest.class
 }
 )
 
 public class AllTests
 {
+
+
 }
 

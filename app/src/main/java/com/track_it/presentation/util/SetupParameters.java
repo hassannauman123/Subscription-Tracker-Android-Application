@@ -7,6 +7,10 @@ import com.track_it.logic.SubscriptionHandler;
 import com.track_it.persistence.SubscriptionPersistence;
 import com.track_it.persistence.hsqldb.SubscriptionPersistenceHSQLDB;
 
+//This is wrapper class for the logic layer.
+// It will return a subscription Handler with appropriate set parameters and database.
+// Will return the same SubscriptionHandler each time (single item) if the database has not been changed.
+
 public class SetupParameters
 {
 
@@ -16,21 +20,30 @@ public class SetupParameters
     private static final int MAX_PAYMENT_DOLLAR = 9999;
     private static final int MAX_PAYMENT_CENTS = 99;
 
-    private static final String allowableCharactersInName = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890 _+*^&%$#@!+=|}]'?<>'"; // Our current list of allowable characters in the name
+    private static final String allowableCharactersInName = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890 -!@#$%^&*()_+=|{=}[]':?<>',."; // Our current list of allowable characters in the name
 
 
     private static  SubscriptionPersistence DataBase = Services.getSubscriptionPersistence();  // Database that we will use
+    private static SubscriptionHandler subHandler = null ; // subscription handler
 
 
-    public static void InitializeDatabase(SubscriptionPersistence inputDB)
+    public static void initializeDatabase(SubscriptionPersistence inputDB)
     {
+        //Create a new subscription handler if the database has changed
         DataBase = inputDB;
+        subHandler = new SubscriptionHandler(MIN_NAME_LENGTH,MAX_NAME_LENGTH,MAX_PAYMENT_DOLLAR,MAX_PAYMENT_CENTS,allowableCharactersInName, DataBase);
+
     }
 
     //Wrapper for the logic layer
-    public static SubscriptionHandler GetSubscriptionHandler()
+    public static SubscriptionHandler getSubscriptionHandler()
     {
-        return new SubscriptionHandler(MIN_NAME_LENGTH,MAX_NAME_LENGTH,MAX_PAYMENT_DOLLAR,MAX_PAYMENT_CENTS,allowableCharactersInName, DataBase);
+
+        if ( subHandler == null) // Only create one instance of the subscription handler, and return it each time
+        {
+            subHandler = new SubscriptionHandler(MIN_NAME_LENGTH,MAX_NAME_LENGTH,MAX_PAYMENT_DOLLAR,MAX_PAYMENT_CENTS,allowableCharactersInName, DataBase);
+        }
+        return subHandler;
     }
 
 
