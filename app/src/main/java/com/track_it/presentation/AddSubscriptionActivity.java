@@ -23,9 +23,7 @@ import com.track_it.presentation.util.SetupParameters;
 import com.track_it.presentation.util.SubscriptionInput;
 
 
-// This class handles the presentation of the subscription page for the android app.
-
-
+// This class handles the presentation of the add subscription page for the app.
 public class AddSubscriptionActivity extends AppCompatActivity {
 
     private String accomplishColor = "#8c1f7c";
@@ -67,15 +65,14 @@ public class AddSubscriptionActivity extends AppCompatActivity {
     private void setUpAndEnableInput()
     {
 
-        //Payment amount Input
-        MAX_DIGITS_BEFORE_DECIMAL = SubscriptionInput.NumDigits(subHandler.getMaxPaymentDollarsTotal()); // get the number of digits allowed before decimal (used to constrain user input)
 
         // This physically constrains the user for what they can enter into the payment amount field ( How many digits before decimal, how many after)
         paymentAmount= findViewById(R.id.input_payment_amount);  // Target Payment amount input
+        MAX_DIGITS_BEFORE_DECIMAL = SubscriptionInput.NumDigits(subHandler.getMaxPaymentDollarsTotal()); // get the number of digits allowed before decimal (used to constrain user input)
         paymentAmount.setFilters(new InputFilter[]{new DecimalDigitsInputFilter(MAX_PAYMENT_DECIMALS, MAX_DIGITS_BEFORE_DECIMAL)}); // Pass setFilters and array of objects that implement the InputFilter interface
 
 
-        //Name input
+        //Set Name input target, and limit what the user can enter for name
         nameInput = (EditText) findViewById(R.id.input_subscription_name); // Set target for name input
         int maxLength = subHandler.getMaxNameLength();
         nameInput.setFilters(new InputFilter[]{new InputFilter.LengthFilter(maxLength)}); // Set max length the user can enter for input
@@ -84,7 +81,6 @@ public class AddSubscriptionActivity extends AppCompatActivity {
         frequencyTarget = findViewById(R.id.AutoComplete_drop_menu);
         dropDownMenuParent = findViewById(R.id.parent_drop_menu);
         FrequencyMenu.initializeMenu(this, subHandler, frequencyTarget);
-
 
 
     }

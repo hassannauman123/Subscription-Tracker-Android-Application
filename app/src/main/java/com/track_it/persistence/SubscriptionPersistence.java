@@ -19,5 +19,6 @@ public  interface  SubscriptionPersistence
     // Remove a subscription by ID
     void removeSubscriptionByID(int subscriptionIDToRemove);
 
+    //Get a subscription object returned, by id
     SubscriptionObj getSubscriptionByID(int subscriptionID);
 }
