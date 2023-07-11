@@ -12,10 +12,6 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-
-//Franklin Bristow allowed us to copy this code (said in video), and make a reference to it
-// in the presentation layer.
-// *Ask rob if this should be in the presentation layer or persistence layer.
 public class DBHelper {
 
     public static void copyDatabaseToDevice(Context context) {
