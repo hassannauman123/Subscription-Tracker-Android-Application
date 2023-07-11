@@ -54,6 +54,8 @@ public class SubscriptionSortTest
             assertTrue( "Failed sortName test\n. " + firstName + " was before " +  secondName + ". After sorting by name" ,firstName.toLowerCase().compareTo(secondName.toLowerCase()) <= 0);
         }
 
+
+        System.out.println("PASSED the sort by name test");
     }
 
 
@@ -71,6 +73,8 @@ public class SubscriptionSortTest
             assertTrue( "Failed sortPayment test\n. " + firstPay + " was before " +  secondPay + ". After sorting by payment" ,firstPay <= secondPay);
         }
 
+
+        System.out.println("PASSED the sort by payment test ");
     }
 
 
@@ -90,6 +94,8 @@ public class SubscriptionSortTest
             Frequency secondFrequency = subHandle.getFrequencyObject(listOfSubs.get(i+1));
             assertTrue( "Failed frequency test\n. " + firstFrequencyName + " was before " +  secondFrequencyName + ". After sorting by frequency" ,firstFrequency.daysBetweenPayment() <= secondFrequency.daysBetweenPayment());
         }
+
+        System.out.println("PASSED the sort by payment frequency test");
 
     }
 

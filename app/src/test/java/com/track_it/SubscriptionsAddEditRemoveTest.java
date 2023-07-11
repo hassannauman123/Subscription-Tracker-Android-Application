@@ -64,7 +64,7 @@ public class SubscriptionsAddEditRemoveTest
 
         assertEquals(retrieve.getTotalPaymentInCents() + " does not equal " + paymentAmount, retrieve.getTotalPaymentInCents(), paymentAmount);
 
-        System.out.println("Passed the add subscription test!");
+        System.out.println("PASSED the add subscription test!");
 
     }
 
@@ -133,7 +133,7 @@ public class SubscriptionsAddEditRemoveTest
 
 
 
-        System.out.println("Passed the edit subscription test!");
+        System.out.println("PASSED the edit subscription test!");
 
 
     }
@@ -193,7 +193,7 @@ public class SubscriptionsAddEditRemoveTest
 
 
 
-        System.out.println("Passed the edit subscription test with invalid Edits!");
+        System.out.println("PASSED the edit subscription test with invalid Edits!");
 
     }
 
@@ -238,7 +238,7 @@ public class SubscriptionsAddEditRemoveTest
         assertTrue("Sub removal method worked for a subscription object that should no longer be in the database", thrown);
 
 
-        System.out.println("Passed the remove subscription test !");
+        System.out.println("PASSED the remove subscription test !");
 
     }
 

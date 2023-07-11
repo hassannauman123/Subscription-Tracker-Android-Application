@@ -97,7 +97,7 @@ public class SubscriptionValidateTest {
         }
         assertTrue("Should not allow invalid characters in the sub name", thrown);
 
-        System.out.println("Finished testing validateName with invalid Data!");
+        System.out.println("PASSED testing validateName with invalid Data!");
     }
 
     @Test
@@ -224,7 +224,7 @@ public class SubscriptionValidateTest {
         }
         assertFalse(thrown);
 
-        System.out.println("Finished testing validateName with valid Data!");
+        System.out.println("PASSED testing validateName with valid Data!");
     }
 
     // Test Validate payment frequency with invalid Data
@@ -309,7 +309,7 @@ public class SubscriptionValidateTest {
         assertTrue("' "+ subHandle.getFrequencyNameList().get(1) + "' was incorrectly accepted as valid payment frequency", thrown);
 
 
-        System.out.println("Finished testing validatePaymentFrequency with invalid Data!");
+        System.out.println("PASSED testing validatePaymentFrequency with invalid Data!");
 
 
     }
@@ -346,7 +346,7 @@ public class SubscriptionValidateTest {
 
 
 
-        System.out.println("Finished testing validatePaymentFrequency with valid Data!");
+        System.out.println("PASSED testing validatePaymentFrequency with valid Data!");
 
 
     }
@@ -412,7 +412,7 @@ public class SubscriptionValidateTest {
         }
         assertTrue("Payment amount should not exceed " + subHandle.getMaxPaymentCentsTotal(), thrown);
 
-        System.out.println("Finished testing validatePaymentAmount with invalid Data!");
+        System.out.println("PASSED testing validatePaymentAmount with invalid Data!");
 
 
 
@@ -432,7 +432,7 @@ public class SubscriptionValidateTest {
 
 
 
-        System.out.println("Finished testing validatePaymentAmount with invalid Data!");
+        System.out.println("PASSED testing validatePaymentAmount with invalid Data!");
 
     }
 
@@ -489,7 +489,8 @@ public class SubscriptionValidateTest {
             thrown = true;
         }
         assertFalse(   "PaymentAmount " + paymentAmount + " was said to be invalid, when it was suppose to be valid", thrown);
-        System.out.println("Finished testing validatePaymentAmount with valid Data!");
+
+        System.out.println("PASSED testing validatePaymentAmount with valid Data!");
 
     }
 
