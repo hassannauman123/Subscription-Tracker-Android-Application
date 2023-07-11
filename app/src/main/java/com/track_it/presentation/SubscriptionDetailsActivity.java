@@ -225,9 +225,9 @@ public class SubscriptionDetailsActivity extends AppCompatActivity {
         dropDownMenuParent.setEnabled(enable);
         frequencyTarget.setTextColor(getResources().getColor(R.color.black));
 
-        //Change text color based on whether it is enabled or disabled
+        //Change background color based on whether it is enabled or disabled
         if ( enable) {
-            frequencyTarget.setBackgroundColor(getResources().getColor(R.color.grey));
+            frequencyTarget.setBackgroundColor(getResources().getColor(R.color.white_grey));
          }
         else
         {
