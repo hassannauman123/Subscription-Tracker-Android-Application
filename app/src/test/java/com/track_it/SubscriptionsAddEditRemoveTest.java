@@ -3,7 +3,7 @@ package com.track_it;
 
 import com.track_it.domainobject.SubscriptionObj;
 import com.track_it.logic.SubscriptionHandler;
-import com.track_it.persistence.stubs.SubscriptionPersistenceStub;
+import com.track_it.persistence.fakes.FakeSubscriptionPersistenceDatabase;
 import com.track_it.presentation.util.SetupParameters;
 
 import org.junit.Before;
@@ -23,7 +23,7 @@ public class SubscriptionsAddEditRemoveTest
     @Before
     public void setTestHandle()
     {
-        SetupParameters.initializeDatabase(new SubscriptionPersistenceStub());
+        SetupParameters.initializeDatabase(new FakeSubscriptionPersistenceDatabase());
         subHandle =  SetupParameters.getSubscriptionHandler();
      }
 

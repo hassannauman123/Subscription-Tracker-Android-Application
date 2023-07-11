@@ -2,12 +2,12 @@ package com.track_it;
 
 
 import com.track_it.domainobject.SubscriptionObj;
-import com.track_it.logic.SubscriptionCompare.CompareSubscriptionFrequency;
-import com.track_it.logic.SubscriptionCompare.CompareSubscriptionName;
-import com.track_it.logic.SubscriptionCompare.CompareSubscriptionPayment;
+import com.track_it.logic.comparators.CompareSubscriptionFrequency;
+import com.track_it.logic.comparators.CompareSubscriptionName;
+import com.track_it.logic.comparators.CompareSubscriptionPayment;
 import com.track_it.logic.SubscriptionHandler;
 import com.track_it.logic.frequencies.Frequency;
-import com.track_it.persistence.stubs.SubscriptionPersistenceStub;
+import com.track_it.persistence.fakes.FakeSubscriptionPersistenceDatabase;
 import com.track_it.presentation.util.SetupParameters;
 import com.track_it.util.FillDataBase;
 
@@ -31,7 +31,7 @@ public class SubscriptionSortTest
     public void setTestHandle()
     {
 
-        SetupParameters.initializeDatabase(new SubscriptionPersistenceStub());
+        SetupParameters.initializeDatabase(new FakeSubscriptionPersistenceDatabase());
         subHandle =  SetupParameters.getSubscriptionHandler();
 
         FillDataBase.fillDataBaseRandomSubscriptions(subHandle, 100); //Create 100 fake subs, and add them to Database

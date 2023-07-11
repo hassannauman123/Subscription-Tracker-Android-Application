@@ -12,7 +12,7 @@ import android.widget.Button;
 import com.track_it.R;
 import com.track_it.domainobject.SubscriptionObj;
 import com.track_it.logic.SubscriptionHandler;
-import com.track_it.logic.SubscriptionCompare.*;
+import com.track_it.logic.comparators.*;
 import com.track_it.presentation.util.SetupParameters;
 
 
@@ -195,6 +195,7 @@ public class MainActivity extends AppCompatActivity {
     // If sortSubsBy is null, subs will not be sorted
     private void sortSubs(List<SubscriptionObj> listOfSubs,   Comparator <SubscriptionObj> sortSubsBy)
     {
+
          if (sortSubsBy != null)
         {
                 Collections.sort(listOfSubs,sortSubsBy  );

@@ -1,4 +1,4 @@
-package com.track_it.logic.SubscriptionCompare;
+package com.track_it.logic.comparators;
 
 import com.track_it.domainobject.SubscriptionObj;
 

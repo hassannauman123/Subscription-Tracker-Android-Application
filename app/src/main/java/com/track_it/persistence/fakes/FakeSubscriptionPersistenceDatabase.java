@@ -1,4 +1,4 @@
-package com.track_it.persistence.stubs;
+package com.track_it.persistence.fakes;
 import com.track_it.domainobject.*;
 import com.track_it.logic.exceptions.DataBaseException;
 import com.track_it.logic.exceptions.DataBaseSubNotFoundException;
@@ -9,7 +9,7 @@ import java.util.List;
 
 
 //This is a database Stub class that implements the SubscriptionPersistence interface.
-public class SubscriptionPersistenceStub implements SubscriptionPersistence
+public class FakeSubscriptionPersistenceDatabase implements SubscriptionPersistence
 {
 
 
