@@ -3,14 +3,21 @@ package com.track_it;
 
 import com.track_it.domainobject.SubscriptionObj;
 import com.track_it.logic.SubscriptionHandler;
+import com.track_it.persistence.SubscriptionPersistence;
 import com.track_it.persistence.fakes.FakeSubscriptionPersistenceDatabase;
+import com.track_it.persistence.hsqldb.SubscriptionPersistenceHSQLDB;
 import com.track_it.presentation.util.SetupParameters;
+import com.track_it.util.FillDataBase;
+import com.track_it.util.TestUtils;
 
 import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
 import static org.junit.Assert.assertFalse;
+
+import java.io.File;
+import java.util.Scanner;
 
 
 public class SubscriptionsAddEditRemoveTest
@@ -23,8 +30,13 @@ public class SubscriptionsAddEditRemoveTest
     @Before
     public void setTestHandle()
     {
-        SetupParameters.initializeDatabase(new FakeSubscriptionPersistenceDatabase());
-        subHandle =  SetupParameters.getSubscriptionHandler();
+
+            TestUtils.changeDatabase();
+
+            //Else use fake database
+            SetupParameters.initializeDatabase(new FakeSubscriptionPersistenceDatabase());
+            subHandle = SetupParameters.getSubscriptionHandler();
+
      }
 
 
@@ -83,6 +95,7 @@ public class SubscriptionsAddEditRemoveTest
 
         try {
             subHandle.addSubscription(newSub);
+
         }
 
         catch(Exception e)
