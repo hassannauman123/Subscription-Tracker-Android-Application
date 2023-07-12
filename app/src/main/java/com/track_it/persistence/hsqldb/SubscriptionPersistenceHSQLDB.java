@@ -22,20 +22,28 @@ public class SubscriptionPersistenceHSQLDB implements SubscriptionPersistence {
 
 
     private final String dbPath;
-
-    public SubscriptionPersistenceHSQLDB(final String dbPath) {
-
-        System.setProperty("hsqldb.reconfig_logging", "false");
-        Logger.getGlobal().setLevel(Level.OFF);
-        Logger.getLogger("hsqldb.db").setLevel(Level.WARNING);
+    private final String shutDownString;
 
 
+
+
+    public SubscriptionPersistenceHSQLDB(final String dbPath)
+    {
+        this.shutDownString="true";
+        this.dbPath = dbPath;
+    }
+
+
+   // Constructor method, but also lets you Set the shutdown="" option when connecting to a database
+    public SubscriptionPersistenceHSQLDB(final String dbPath,final String inputShutDown)
+    {
+        this.shutDownString = inputShutDown;
         this.dbPath = dbPath;
     }
 
 
     private Connection connect() throws SQLException {
-        return DriverManager.getConnection("jdbc:hsqldb:file:" + dbPath + ";shutdown=false", "SA", "");
+        return DriverManager.getConnection("jdbc:hsqldb:file:" + dbPath + ";shutdown=" + shutDownString, "SA", "");
     }
 
 

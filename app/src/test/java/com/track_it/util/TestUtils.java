@@ -37,7 +37,7 @@ public class TestUtils {
             try {
                 File tempDB;
                 tempDB = TestUtils.copyDB();
-                final SubscriptionPersistence persistence = new SubscriptionPersistenceHSQLDB(tempDB.getAbsolutePath().replace(".script", ""));
+                final SubscriptionPersistence persistence = new SubscriptionPersistenceHSQLDB(tempDB.getAbsolutePath().replace(".script", ""),"false");
                 SetupParameters.initializeDatabase(persistence);
             }
             catch (IOException e)
