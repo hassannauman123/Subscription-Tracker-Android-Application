@@ -27,7 +27,7 @@ Communication overall seemed to improve. Our group was more responsive for this 
 
 ## Design Patterns
 Singleton design pattern, combined with a builder class.  
-For the SubscriptionHandler class there are a lot of input parameters, and a lot of expensive setup operations to create a  new SubscriptionHandler object. So we created a wrapper class called SetupParameters that initializes and returns one copy of the SubscriptionHandler with the correct input. This prevents the calling code from having to set up all the correct input, and makes it faster by only creating the SubscriptionHandler object once, and returning the same object for each call to the getSubscriptionHandler method (assuming the setup parameters have not changed).
+For the SubscriptionHandler class there are a lot of input parameters, and a lot of expensive setup operations to create a  new SubscriptionHandler object. So we created a wrapper class called SetupParameters that initializes and returns one copy of the SubscriptionHandler with the correct input. This prevents the calling code from having to set up all the correct input, and makes it faster by only creating the SubscriptionHandler object once, and returning the same object for each call to the getSubscriptionHandler method (assuming the setup parameters have not changed).  
 https://code.cs.umanitoba.ca/3350-summer2023/ghostdevs-7/-/blob/bryceWorking/app/src/main/java/com/track_it/presentation/util/SetupParameters.java
 
 ## Iteration 1 Feedback Fixes
