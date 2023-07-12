@@ -31,14 +31,14 @@ public class SubscriptionHandler {
      private final String allowableCharactersInName;
 
     private ArrayList<Frequency> frequencyList  = new ArrayList<>();
-    private SubscriptionPersistence dataBaseHandler; //Database Handler
+    private SubscriptionPersistence subscriptionPersistence; //Database Handler
 
 
 
     public SubscriptionHandler( int inputMinNameLen, int inputMaxNameLen, int inputMinPayment, int inputMaxPayment,String inputAllowableChars, SubscriptionPersistence inputDB )
     {
         //Set the Data base, and various parameters for what is a valid subscription
-        this.dataBaseHandler =  inputDB;
+        this.subscriptionPersistence =  inputDB;
         this.MIN_NAME_LENGTH = inputMinNameLen;
         this.MAX_NAME_LENGTH = inputMaxNameLen;
         this.MAX_PAYMENT = inputMaxPayment;
@@ -66,7 +66,7 @@ public class SubscriptionHandler {
     public void addSubscription(SubscriptionObj subscriptionToAdd) throws DataBaseException, SubscriptionException
     {
         validateWholeSubscription(subscriptionToAdd); // May throw exception if subscription details are not valid
-        dataBaseHandler.addSubscriptionToDB(subscriptionToAdd); // Add to dataBase, will throw DataBaseException if subscription could not be added to dat base.
+        subscriptionPersistence.addSubscriptionToDB(subscriptionToAdd); // Add to dataBase, will throw DataBaseException if subscription could not be added to dat base.
     }
 
 
@@ -179,7 +179,7 @@ public class SubscriptionHandler {
     // Gets and returns a single subscription by ID from the database.
     public SubscriptionObj getSubscriptionByID(int inputID) throws DataBaseException {
 
-        SubscriptionObj returnSub = dataBaseHandler.getSubscriptionByID(inputID);
+        SubscriptionObj returnSub = this.subscriptionPersistence.getSubscriptionByID(inputID);
         return returnSub;
 
     }
@@ -187,7 +187,7 @@ public class SubscriptionHandler {
     // Gets and returns list of all the subscriptions in the database
     public List<SubscriptionObj> getAllSubscriptions() throws DataBaseException
     {
-        return dataBaseHandler.getAllSubscriptions();
+        return this.subscriptionPersistence.getAllSubscriptions();
     }
 
 
@@ -195,7 +195,7 @@ public class SubscriptionHandler {
     // Will throw an Exception if subscription could not be deleted from database
     public void removeSubscriptionByID(int subscriptionID) throws DataBaseException {
 
-        dataBaseHandler.removeSubscriptionByID(subscriptionID); // Remove it
+        subscriptionPersistence.removeSubscriptionByID(subscriptionID); // Remove it
     }
 
 
@@ -206,7 +206,7 @@ public class SubscriptionHandler {
     //       subscriptionToEdit - The details that the subscription will be changed to.
     public void editWholeSubscription(int subscriptionID,final SubscriptionObj newSubDetails) throws DataBaseException, SubscriptionException {
         validateWholeSubscription(newSubDetails); // Validate the subscription
-        dataBaseHandler.editSubscriptionByID(subscriptionID, newSubDetails); // ave the edits.
+        this.subscriptionPersistence.editSubscriptionByID(subscriptionID, newSubDetails); // save the edits to subscription persistence.
     }
 
 
@@ -217,7 +217,7 @@ public class SubscriptionHandler {
     }
 
 
-    //returns the maximum amount a payment can be in (just the dollar amount)
+    //returns the maximum amount a payment can be in dollars (just the dollar amount)
     public  int getMaxPaymentDollars()
 
     {
