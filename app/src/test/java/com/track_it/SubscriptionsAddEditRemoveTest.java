@@ -30,11 +30,7 @@ public class SubscriptionsAddEditRemoveTest
     @Before
     public void setTestHandle()
     {
-
             TestUtils.changeDatabase();
-
-            //Else use fake database
-            SetupParameters.initializeDatabase(new FakeSubscriptionPersistenceDatabase());
             subHandle = SetupParameters.getSubscriptionHandler();
 
      }

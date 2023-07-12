@@ -26,9 +26,9 @@ public class SubscriptionValidateTest {
     {
 
         TestUtils.changeDatabase();
+         subHandle =  SetupParameters.getSubscriptionHandler();
 
-        SetupParameters.initializeDatabase(new FakeSubscriptionPersistenceDatabase());
-        subHandle =  SetupParameters.getSubscriptionHandler();    }
+    }
 
     @Test
     // We are going to test the validate name test

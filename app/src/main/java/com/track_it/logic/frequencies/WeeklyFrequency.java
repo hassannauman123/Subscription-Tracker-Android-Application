@@ -9,11 +9,7 @@ public class WeeklyFrequency extends FrequencyBase
         super("weekly");
     }
 
-    @Override
-    public int calculateMonthlyPayment(int inputPayment)
-    {
-        return inputPayment * WEEKS_PER_MONTH;
-    }
+
 
 
     @Override

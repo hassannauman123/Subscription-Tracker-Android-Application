@@ -199,9 +199,9 @@ public class SubscriptionHandler {
     // Input Parameters:
     //       subscriptionID  - The id of the subscription to change
     //       subscriptionToEdit - The details that the subscription will be changed to.
-    public void editWholeSubscription(int subscriptionID,final SubscriptionObj subscriptionToEdit) throws DataBaseException, SubscriptionException {
-        validateWholeSubscription(subscriptionToEdit); // Validate the subscription
-        dataBaseHandler.editSubscriptionByID(subscriptionID, subscriptionToEdit); // ave the edits.
+    public void editWholeSubscription(int subscriptionID,final SubscriptionObj newSubDetails) throws DataBaseException, SubscriptionException {
+        validateWholeSubscription(newSubDetails); // Validate the subscription
+        dataBaseHandler.editSubscriptionByID(subscriptionID, newSubDetails); // ave the edits.
     }
 
 

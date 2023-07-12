@@ -22,7 +22,7 @@ import org.junit.runners.Suite;
 public class AllIntegrationTests{
 
 
-        //Set the dataBase to be a real script
+        //Set the dataBase to be a real script - This runs before every class that is tested
         @ClassRule
         public static ExternalResource testRule = new ExternalResource(){
                 @Override

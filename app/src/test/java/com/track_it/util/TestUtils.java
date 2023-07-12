@@ -28,7 +28,7 @@ public class TestUtils {
     }
 
 
-
+    //Change the DataBase - Either to a real SQL database, or a fake database, depending on what useRealDatabase is set to
     public static void changeDatabase()
     {
         if (TestUtils.getUseRealDatabase())
@@ -54,45 +54,19 @@ public class TestUtils {
     }
 
 
+    // Change whether we should use real dataBase
     public static void setUseRealDatabase(boolean input) {
         useRealDatabase = input;
     }
 
+    //Get whether we should use real dataBase
     public static boolean getUseRealDatabase()
     {
         return useRealDatabase;
     }
 
 
-    public static void setUpTestDataBase()
-    {
 
-        if ( useRealDatabase) //Use the a real SQL database.
-        {
-
-            try {
-                //USE REAL DATABASE
-
-                System.out.println("using the database for reals LLLLLLLLLLLL");
-                File tempDB = TestUtils.copyDB();
-                final SubscriptionPersistence persistence = new SubscriptionPersistenceHSQLDB( tempDB.getAbsolutePath().replace(".script", ""));
-                SetupParameters.initializeDatabase(persistence);
-
-            }
-            catch(Exception e)
-            {
-                System.out.println("ERROR WITH SETTING UP TEST SQL DATABASE \n" + e.getMessage());
-            }
-
-        }
-        else  //USE FAKE DATABASE
-        {
-            System.out.println("using the database for reals LLLLLLLLLLLL");
-
-            SetupParameters.initializeDatabase(new FakeSubscriptionPersistenceDatabase());
-        }
-
-    }
 }
 
 
