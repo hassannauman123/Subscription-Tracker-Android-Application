@@ -11,7 +11,7 @@ https://code.cs.umanitoba.ca/3350-summer2023/ghostdevs-7/-/blame/bryceWorking/ap
 Originally our code was highly coupled with the concrete implementation of our fake database (an array list). This was addressed by rewriting and restructuring several classes and tests to support different database implementations. This debt was prudent and inadvertent as we knew we would be implementing a SQL database for the second iteration which would require several modifications. We didn't have enough knowledge at the time to know how to properly structure our code as we had no familiarity with Android development or experience implementing an HSQL database. We knew going into iteration 2 several changes would have to be made but taking on the debt in iteration 1 allowed us work quickly and focus on other aspects of the project.  
 
 ## SOLID Violations
-I created an issue for projects 8. I informed them that their classes should support dependency injection, and specifically linked to a class in their main branch that violated the “Dependency inversion principle”.
+We created an issue for projects 8. We informed them that their classes should support dependency injection, and specifically linked to a class in their main branch that violated the “Dependency inversion principle”.
 https://code.cs.umanitoba.ca/3350-summer2023/tech-titans-8/-/issues/83
 
 ## Retrospective 
