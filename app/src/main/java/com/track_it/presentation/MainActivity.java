@@ -49,37 +49,36 @@ public class MainActivity extends AppCompatActivity {
 
     private Button addSubButton; // button to add a subscription
     private SearchView searchInput; // Search input target
-    private ImageButton filterButton; // target of drop down button for sorting
+    private ImageButton filterButton; // target of a drop down button for sorting subscriptions
 
     private String searchString = ""; // Only subscriptions that contain the searchString will be shown ( by default all subs are shown)
 
     private List<SubscriptionObj> listOfSubs; // hold all the subscriptions to display
-    private  Comparator <SubscriptionObj> subSorter = null;
+    private  Comparator <SubscriptionObj> subSorter = null; //How we will sort subscriptions (By default we won't sort the subscriptions)
     private TextView errorDisplay; // target to display errors
     private  LinearLayout displaySubList; // Target for subscription list
 
-    private boolean firstColor = true; // Every second subscription will have a slightly different color, and this will toggle it
+    private boolean firstColor = true; // Every second subscription will have a slightly different color, and this will toggle between the colors
 
 
 
-    @Override // Make sure this function is overriding some default onCreate method
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main); // Switch screen to display main page
 
         com.cook_ebook.persistence.utils.DBHelper.copyDatabaseToDevice(this); // Copy database
 
-        //Set targets
-        errorDisplay = (TextView) this.findViewById(R.id.details_general_error);
-        displaySubList = (LinearLayout) this.findViewById(R.id.subscription_list);
 
-        //Get subscription handler, and list of subscriptions
+        //Get subscription handler
         subHandler = SetupParameters.getSubscriptionHandler();
 
-
-        getSubList(); // Get list of subs from database
+        setTargets(); //Set the targets for the global variables
+        getSubList(); // Get list of subs from database, and store in listOfSubs
         setUpButtonsAndInput(); // Setup the input fields and buttons
         displayAllSubscriptions(); // Display all the subscriptions
+
 
     }
 
@@ -87,6 +86,7 @@ public class MainActivity extends AppCompatActivity {
     //Runs when this activity comes back
     protected void onRestart() {
         super.onRestart();
+        disableError(); // Clear any errors
         getSubList(); //Get a new list of subs ( in case any subs were added, deleted, or modified)
 
         View current = getCurrentFocus();
@@ -100,8 +100,27 @@ public class MainActivity extends AppCompatActivity {
 
 
 
+    //Set all the target for the global variables for this activity
+    private void setTargets()
+    {
+        //Where errors will show
+        errorDisplay = (TextView) this.findViewById(R.id.details_general_error);
+        displaySubList = (LinearLayout) this.findViewById(R.id.subscription_list);
+
+        //Set target of add sub button
+        addSubButton = (Button) this.findViewById(R.id.add_subscription_button);
+
+        //Search bar target
+        searchInput = (SearchView) this.findViewById(R.id.search_by_name);
+
+        // target filter button
+        filterButton = (ImageButton) findViewById(R.id.sort_button);
 
 
+    }
+
+
+    //Get the all subscriptions from the logic layer, and store in listOfSubs
     private void getSubList()
     {
         try {
@@ -146,8 +165,7 @@ public class MainActivity extends AppCompatActivity {
 
     //Enable the add subscription button
     private void enableAddSubButton() {
-        //Set target of add sub button
-        addSubButton = (Button) this.findViewById(R.id.add_subscription_button);
+
 
 
         //Set what happens when user clicks add subscription button
@@ -162,7 +180,7 @@ public class MainActivity extends AppCompatActivity {
     //Enable search input
     private void enableSearchInput() {
 
-        searchInput = (SearchView) this.findViewById(R.id.search_by_name);
+
 
         //Set what happens when the user types into the search bar
         searchInput.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -172,7 +190,6 @@ public class MainActivity extends AppCompatActivity {
             {
 
                 displayAllSubscriptions(); //Display all subs (It will filter based on input from user)
-
 
                 //Close the keyboard
                 View current = getCurrentFocus();
@@ -196,12 +213,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    //Enable the filter input - Allows user to sort subscriptions
+    //Enable the sort input - Allows user to sort subscriptions
     private void enableSortFilterInput() {
 
 
-        // Referencing and Initializing the filter button
-        filterButton = (ImageButton) findViewById(R.id.sort_button);
 
         // Setting onClick behavior to the button
         filterButton.setOnClickListener(new View.OnClickListener() {
