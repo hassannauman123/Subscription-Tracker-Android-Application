@@ -26,7 +26,7 @@ A second issue we acknowledged was that we failed to calculate and report the to
 Communication overall seemed to improve. Our group was more responsive for this iteration and worked well together. An example of this was when one group member was working on a bug fix while another member was in possession of the Samsung device at the time. One member would implement changes, the other group member would run the app with the updates and report back what still needed to be addressed. This was done very efficiently. A screenshot of this exchange is displayed below.
 
 ## Design Patterns
-Singleton design pattern, combined with a builder class.
+Singleton design pattern, combined with a builder class.  
 For the SubscriptionHandler class there are a lot of input parameters, and a lot of expensive setup operations to create a  new SubscriptionHandler object. So we created a wrapper class called SetupParameters that initializes and returns one copy of the SubscriptionHandler with the correct input. This prevents the calling code from having to set up all the correct input, and makes it faster by only creating the SubscriptionHandler object once, and returning the same object for each call to the getSubscriptionHandler method (assuming the setup parameters have not changed).
 https://code.cs.umanitoba.ca/3350-summer2023/ghostdevs-7/-/blob/bryceWorking/app/src/main/java/com/track_it/presentation/util/SetupParameters.java
 
