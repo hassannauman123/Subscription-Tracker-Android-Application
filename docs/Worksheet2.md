@@ -13,7 +13,7 @@ Example of where some of these changes were made:
 https://code.cs.umanitoba.ca/3350-summer2023/ghostdevs-7/-/blob/develop/app/src/main/java/com/track_it/logic/SubscriptionHandler.java?ref_type=heads#L31
 
 ## SOLID Violations
-I created an issue for projects 8. I informed them that their classes should support dependency injection, and specifically linked to a class in their main branch that violated the “Dependency inversion principle”.
+We created an issue for projects 8. We informed them that their classes should support dependency injection, and specifically linked to a class in their main branch that violated the “Dependency inversion principle”.
 https://code.cs.umanitoba.ca/3350-summer2023/tech-titans-8/-/issues/83
 
 ## Retrospective 

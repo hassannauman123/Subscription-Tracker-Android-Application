@@ -15,9 +15,7 @@ import com.track_it.presentation.util.SetupParameters;
 public class TestUtils {
     private static final File DB_SRC = new File("src/main/assets/db/Test.script");
 
-    private static boolean useRealDatabase = false; //Should we use real database?
-
-
+    private static boolean useRealDatabase = false; //Should we use real database? - Default false means use fakeDataBase
 
 
     public static File copyDB() throws IOException {
@@ -31,7 +29,7 @@ public class TestUtils {
     //Change the DataBase - Either to a real SQL database, or a fake database, depending on what useRealDatabase is set to
     public static void changeDatabase()
     {
-        if (TestUtils.getUseRealDatabase())
+        if (TestUtils.getUseRealDatabase())//Use real SQL database
         {
 
             try {
@@ -47,7 +45,7 @@ public class TestUtils {
 
             }
         }
-        else
+        else //Use fake Database
         {
             SetupParameters.initializeDatabase(new FakeSubscriptionPersistenceDatabase());
         }
