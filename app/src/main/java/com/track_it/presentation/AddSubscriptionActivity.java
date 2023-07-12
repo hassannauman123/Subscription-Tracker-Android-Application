@@ -68,7 +68,7 @@ public class AddSubscriptionActivity extends AppCompatActivity {
 
         // This physically constrains the user for what they can enter into the payment amount field ( How many digits before decimal, how many after)
         paymentAmount= findViewById(R.id.input_payment_amount);  // Target Payment amount input
-        MAX_DIGITS_BEFORE_DECIMAL = SubscriptionInput.NumDigits(subHandler.getMaxPaymentDollarsTotal()); // get the number of digits allowed before decimal (used to constrain user input)
+        MAX_DIGITS_BEFORE_DECIMAL = SubscriptionInput.NumDigits(subHandler.getMaxPaymentDollars()); // get the number of digits allowed before decimal (used to constrain user input)
         paymentAmount.setFilters(new InputFilter[]{new DecimalDigitsInputFilter(MAX_PAYMENT_DECIMALS, MAX_DIGITS_BEFORE_DECIMAL)}); // Pass setFilters and array of objects that implement the InputFilter interface
 
 

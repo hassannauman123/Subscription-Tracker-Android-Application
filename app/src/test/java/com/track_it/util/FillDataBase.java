@@ -22,7 +22,7 @@ public class FillDataBase {
 
                 String frequency = getFrequency(subHandler);
 
-                int payment = (int) (Math.random() * subHandler.getMaxPaymentCentsTotal()) + 1;
+                int payment = (int) (Math.random() * subHandler.getMaxPaymentTotal()) + 1;
 
 
                 SubscriptionObj newSub = new SubscriptionObj(subName, payment, frequency);
@@ -88,7 +88,7 @@ public class FillDataBase {
             try {
                 String inputName = "Rand name For subscription" + i;
                 String frequency = FrequencyList.get(i % numFrequency);
-                int payment = (int) (Math.random() * subHandler.getMaxPaymentCentsTotal() + 1);
+                int payment = (int) (Math.random() * subHandler.getMaxPaymentTotal() + 1);
                 SubscriptionObj currSub = new SubscriptionObj(inputName, payment, frequency);
                 subHandler.addSubscription(currSub);
 
@@ -143,19 +143,19 @@ public class FillDataBase {
              frequency = FrequencyList.get(0);
              payment = 33;
              currSub = new SubscriptionObj(inputName, payment, frequency);
-            subHandler.addSubscription(currSub);
+             subHandler.addSubscription(currSub);
 
              inputName = "Frank ";
              frequency = FrequencyList.get(1);
              payment = 1;
              currSub = new SubscriptionObj(inputName, payment, frequency);
-            subHandler.addSubscription(currSub);
+             subHandler.addSubscription(currSub);
 
              inputName = "Frank ";
              frequency = FrequencyList.get(3);
              payment = 99999;
              currSub = new SubscriptionObj(inputName, payment, frequency);
-            subHandler.addSubscription(currSub);
+             subHandler.addSubscription(currSub);
 
 
         } catch (Exception e) {

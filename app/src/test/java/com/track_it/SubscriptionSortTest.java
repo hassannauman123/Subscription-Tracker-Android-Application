@@ -74,7 +74,7 @@ public class SubscriptionSortTest
 
             String firstName = listOfSubs.get(i).getName();
             String secondName = listOfSubs.get(i+1).getName();
-            assertTrue( "Failed sortName test\n. " + firstName + " was before " +  secondName + ". After sorting by name" ,firstName.toLowerCase().compareTo(secondName.toLowerCase()) <= 0);
+            assertTrue( "FAILED sortName test\n. " + firstName + " was before " +  secondName + ". After sorting by name" ,firstName.toLowerCase().compareTo(secondName.toLowerCase()) <= 0);
         }
     }
 
@@ -108,7 +108,7 @@ public class SubscriptionSortTest
         {
             int firstPay= listOfSubs.get(i).getTotalPaymentInCents();
             int secondPay = listOfSubs.get(i+1).getTotalPaymentInCents();
-            assertTrue( "Failed sortPayment test. " + firstPay + " was before " +  secondPay + ". After sorting by payment" ,firstPay <= secondPay);
+            assertTrue( "FAILED sortPayment test. " + firstPay + " was before " +  secondPay + ". After sorting by payment" ,firstPay <= secondPay);
         }
 
     }
@@ -146,7 +146,7 @@ public class SubscriptionSortTest
 
             Frequency firstFrequency =  subHandle.getFrequencyObject(listOfSubs.get(i));
             Frequency secondFrequency = subHandle.getFrequencyObject(listOfSubs.get(i+1));
-            assertTrue( "Failed frequency test. " + firstFrequencyName + " was before " +  secondFrequencyName + ". After sorting by frequency" ,firstFrequency.daysBetweenPayment() <= secondFrequency.daysBetweenPayment());
+            assertTrue( "FAILED frequency test. " + firstFrequencyName + " was before " +  secondFrequencyName + ". After sorting by frequency" ,firstFrequency.daysBetweenPayment() <= secondFrequency.daysBetweenPayment());
         }
 
 

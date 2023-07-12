@@ -408,13 +408,13 @@ public class SubscriptionValidateTest {
 
         // Payment too large
         thrown = false;
-        paymentAmount =  subHandle.getMaxPaymentCentsTotal() + 1;
+        paymentAmount =  subHandle.getMaxPaymentTotal() + 1;
         try {
             subHandle.validatePaymentAmount(paymentAmount);
         } catch (Exception e) {
             thrown = true;
         }
-        assertTrue("Payment amount should not exceed " + subHandle.getMaxPaymentCentsTotal(), thrown);
+        assertTrue("Payment amount should not exceed " + subHandle.getMaxPaymentTotal(), thrown);
 
         System.out.println("PASSED testing validatePaymentAmount with invalid Data!");
 
@@ -461,7 +461,7 @@ public class SubscriptionValidateTest {
         assertTrue("1 should have been considered a valid payment amount", !thrown);
 
 
-        int maxPayment = subHandle.getMaxPaymentCentsTotal();
+        int maxPayment = subHandle.getMaxPaymentTotal();
         //Cycle through all correct payments
        for ( int i = 1 ; i <=maxPayment; i++ )
        {

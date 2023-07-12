@@ -22,26 +22,30 @@ public class SubscriptionHandler {
     //Every variable here sets what are allowable values of a subscription object (These are set by injection)
     private final int MIN_NAME_LENGTH; // Min length of name
     private final int MAX_NAME_LENGTH; // max length of name
-    private final int MAX_PAYMENT_DOLLAR; // max payment amount
-    private final int MAX_PAYMENT_CENTS; // max payment amount
-    private final int MAX_PAYMENT_CENTS_TOTAL ;
-    private final String allowableCharactersInName;
+    private final int MAX_PAYMENT; // Max Payment allowed
+    private final int MIN_PAYMENT; // Max Payment allowed
+
+    private final int MAX_PAYMENT_DOLLAR; //Will be the maximum dollar amount ( calculated from MAX_PAYMENT)
+    private final int MAX_PAYMENT_CENTS; //Will be the maximum cents amount ( calculated from MAX_PAYMENT)
+
+     private final String allowableCharactersInName;
 
     private ArrayList<Frequency> frequencyList  = new ArrayList<>();
     private SubscriptionPersistence dataBaseHandler; //Database Handler
 
 
 
-    public SubscriptionHandler( int inputMinNameLen, int inputMaxNameLen, int inputMaxPayDollar,int inputMaxPayCents,String inputAllowableChars, SubscriptionPersistence inputDB )
+    public SubscriptionHandler( int inputMinNameLen, int inputMaxNameLen, int inputMinPayment, int inputMaxPayment,String inputAllowableChars, SubscriptionPersistence inputDB )
     {
         //Set the Data base, and various parameters for what is a valid subscription
-        dataBaseHandler =  inputDB;
-        MIN_NAME_LENGTH = inputMinNameLen;
-        MAX_NAME_LENGTH = inputMaxNameLen;
-        MAX_PAYMENT_DOLLAR = inputMaxPayDollar;
-        MAX_PAYMENT_CENTS = inputMaxPayCents;
-        MAX_PAYMENT_CENTS_TOTAL = MAX_PAYMENT_DOLLAR * 100 + MAX_PAYMENT_CENTS;
-        allowableCharactersInName = inputAllowableChars;
+        this.dataBaseHandler =  inputDB;
+        this.MIN_NAME_LENGTH = inputMinNameLen;
+        this.MAX_NAME_LENGTH = inputMaxNameLen;
+        this.MAX_PAYMENT = inputMaxPayment;
+        this.MIN_PAYMENT = inputMinPayment;
+        this.MAX_PAYMENT_DOLLAR = this.MAX_PAYMENT / 100;
+        this.MAX_PAYMENT_CENTS = this.MAX_PAYMENT - this.MAX_PAYMENT_DOLLAR * 100;
+        this.allowableCharactersInName = inputAllowableChars;
         InitFrequency();
     }
 
@@ -161,11 +165,11 @@ public class SubscriptionHandler {
     // Throw exceptions if invalid.
     // Currently a valid payment amount > 0, and less than MAX_PAYMENT_CENTS_TOTAL
     public void validatePaymentAmount(final int paymentAmount) throws SubscriptionInvalidPaymentException {
-        if (paymentAmount <= 0) {
+        if (paymentAmount <= MIN_PAYMENT) {
             throw new SubscriptionInvalidPaymentException("Payment amount is too small");
         }
-        if (paymentAmount > MAX_PAYMENT_CENTS_TOTAL) {
-            throw new SubscriptionInvalidPaymentException("Payment amount is too large. Maximum payment is $" + MAX_PAYMENT_DOLLAR + "." + MAX_PAYMENT_CENTS);
+        if (paymentAmount > MAX_PAYMENT) {
+            throw new SubscriptionInvalidPaymentException("Payment amount is too large.\n Maximum payment is $" + MAX_PAYMENT_DOLLAR + "." + MAX_PAYMENT_CENTS);
 
         }
     }
@@ -206,17 +210,21 @@ public class SubscriptionHandler {
 
 
     //returns the maximum amount a payment can be in cents
-    public  int getMaxPaymentCentsTotal()
+    public  int getMaxPaymentTotal()
     {
-        return MAX_PAYMENT_CENTS_TOTAL;
+        return MAX_PAYMENT;
     }
 
 
-    //returns the maximum amount a payment can be in dollars
-    public  int getMaxPaymentDollarsTotal()
+    //returns the maximum amount a payment can be in (just the dollar amount)
+    public  int getMaxPaymentDollars()
+
     {
         return MAX_PAYMENT_DOLLAR;
     }
+
+
+
 
 
 
