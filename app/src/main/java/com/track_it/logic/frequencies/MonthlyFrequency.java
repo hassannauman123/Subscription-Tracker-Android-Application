@@ -9,11 +9,6 @@ public class MonthlyFrequency extends FrequencyBase
 
 
 
-    @Override
-    public int calculateMonthlyPayment(int inputPayment)
-    {
-        return inputPayment ;
-    }
 
 
 

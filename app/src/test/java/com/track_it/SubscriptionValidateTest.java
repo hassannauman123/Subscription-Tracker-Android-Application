@@ -6,6 +6,7 @@ import static org.junit.Assert.assertTrue;
 import com.track_it.logic.SubscriptionHandler;
 import com.track_it.persistence.fakes.FakeSubscriptionPersistenceDatabase;
 import com.track_it.presentation.util.SetupParameters;
+import com.track_it.util.TestUtils;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -23,8 +24,11 @@ public class SubscriptionValidateTest {
     @Before
     public void setTestHandle()
     {
-        SetupParameters.initializeDatabase(new FakeSubscriptionPersistenceDatabase());
-        subHandle =  SetupParameters.getSubscriptionHandler();     }
+
+        TestUtils.changeDatabase();
+         subHandle =  SetupParameters.getSubscriptionHandler();
+
+    }
 
     @Test
     // We are going to test the validate name test

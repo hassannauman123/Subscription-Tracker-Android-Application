@@ -36,7 +36,7 @@ import java.util.List;
 //  This is the presentation class for the main home page of the app.
 //  It will be instantiated when the android app first starts
 //
-//  Currently it displays all subscriptions in a scrollable list, and a add subscription button.
+//  Currently it displays all subscriptions in a scrollable list, and has a add subscription button.
 //  Clicking on any subscription should open a new page that allows you to edit or delete the sub.
 //  It also has sort and search input, to filter and sort the subscriptions.
 //
@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
     private SearchView searchInput; // Search input target
     private ImageButton filterButton; // target of drop down button for sorting
 
-    private String searchString = ""; // Only subscription that contain the searchString will be shown ( by default all subs are shown)
+    private String searchString = ""; // Only subscriptions that contain the searchString will be shown ( by default all subs are shown)
 
     private List<SubscriptionObj> listOfSubs; // hold all the subscriptions to display
     private  Comparator <SubscriptionObj> subSorter = null;
@@ -201,7 +201,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         // Referencing and Initializing the filter button
-        filterButton = (ImageButton) findViewById(R.id.clickBtn);
+        filterButton = (ImageButton) findViewById(R.id.sort_button);
 
         // Setting onClick behavior to the button
         filterButton.setOnClickListener(new View.OnClickListener() {

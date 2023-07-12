@@ -33,12 +33,12 @@
 
     <LinearLayout
         android:id="@+id/subscription_list"
-        android:layout_width="204dp"
+        android:layout_width="150dp"
         android:layout_height="86dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.178"
+        app:layout_constraintHorizontal_bias="0.138"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.587">
@@ -47,7 +47,7 @@
         <include
 
             layout="@layout/frequency_menu"
-            android:layout_width="200dp"
+            android:layout_width="150dp"
             android:layout_height="200dp"
 
             />
@@ -95,19 +95,18 @@
 
     <TextView
         android:id="@+id/input_subscription_name_error"
-        android:layout_width="146dp"
+        android:layout_width="126dp"
         android:layout_height="wrap_content"
-         android:text=""
-        android:textSize="12sp"
+        android:text=""
         android:textColor="#CD1313"
+        android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.286"
+        app:layout_constraintHorizontal_bias="0.578"
         app:layout_constraintStart_toEndOf="@+id/input_subscription_name"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.168"
-        tools:visibility="invisible"
-        />
+        app:layout_constraintVertical_bias="0.172"
+        tools:visibility="invisible" />
 
     <TextView
         android:id="@+id/textView2"
