@@ -40,7 +40,7 @@ public class SubscriptionSortTest
         TestUtils.changeDatabase();
 
         subHandle = SetupParameters.getSubscriptionHandler();
-        FillDataBase.fillDataBaseRandomSubscriptions(subHandle, 3); //Create 100 fake subs, and add them to Database
+        FillDataBase.fillDataBaseRandomSubscriptions(subHandle, 20); //Create 20 random subs, and add them to Database
         listOfSubs = subHandle.getAllSubscriptions(); // Get subscriptions from database
 
     }
@@ -143,7 +143,6 @@ public class SubscriptionSortTest
         {
             String firstFrequencyName = listOfSubs.get(i).getPaymentFrequency();
             String secondFrequencyName = listOfSubs.get(i+1).getPaymentFrequency();
-
             Frequency firstFrequency =  subHandle.getFrequencyObject(listOfSubs.get(i));
             Frequency secondFrequency = subHandle.getFrequencyObject(listOfSubs.get(i+1));
             assertTrue( "FAILED frequency test. " + firstFrequencyName + " was before " +  secondFrequencyName + ". After sorting by frequency" ,firstFrequency.daysBetweenPayment() <= secondFrequency.daysBetweenPayment());
