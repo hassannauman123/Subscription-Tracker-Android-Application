@@ -2,9 +2,9 @@
 
 ## Paying Off Technical Debt 
 1. Originally we had allowable frequencies as a string. This meant that whenever we had to reference a frequency property we needed a bunch of switch statements ( usually in multiple functions, depending on what part of the frequency information we needed). This meant adding new frequencies required a bunch of code modification in different places, and we were violating the open for extension closed for modification principle. We paid off this debt by creating a frequency interface, and creating different classes that implement the frequency interface that hold needed methods of the frequencies. This was inadvertent and prudent technical debt, as we did not yet know about the principle when we were first introduced to this feature during the first iteration of the project, but changed our implementation once we learned about open closed principle.
-Original:
+Original:  
 https://code.cs.umanitoba.ca/3350-summer2023/ghostdevs-7/-/blame/9b7cb21cc454441f025958cd26e6d5ade485c7c0/app/src/main/java/com/track_it/logic/SubscriptionHandler.java#L29
-Updated as a list of frequency objects:
+Updated as a list of frequency objects:  
 https://code.cs.umanitoba.ca/3350-summer2023/ghostdevs-7/-/blame/bryceWorking/app/src/main/java/com/track_it/logic/SubscriptionHandler.java#L30
 
 2. Dependency Inversion Principle Violation:
@@ -31,10 +31,10 @@ For the SubscriptionHandler class there are a lot of input parameters, and a lot
 https://code.cs.umanitoba.ca/3350-summer2023/ghostdevs-7/-/blob/bryceWorking/app/src/main/java/com/track_it/presentation/util/SetupParameters.java
 
 ## Iteration 1 Feedback Fixes
-Issue:
-https://code.cs.umanitoba.ca/3350-summer2023/ghostdevs-7/-/issues/34
+Issue:  
+https://code.cs.umanitoba.ca/3350-summer2023/ghostdevs-7/-/issues/34  
 
-Fix:
-https://code.cs.umanitoba.ca/3350-summer2023/ghostdevs-7/-/blame/bryceWorking/app/src/main/java/com/track_it/presentation/MainActivity.java#L263
+Fix:  
+https://code.cs.umanitoba.ca/3350-summer2023/ghostdevs-7/-/blame/bryceWorking/app/src/main/java/com/track_it/presentation/MainActivity.java#L263  
 
 The issue was that on the main activity screen we showed all the different subscriptions in a big list, but the subscriptions were not visually shown as being separate (ie, one subscription details started right after the other with no border, or color change). This made it hard to clearly see how subscriptions were separated. We fixed this issue by giving each successive subscription a different background color, so that you can more easily identify different subscriptions . 
