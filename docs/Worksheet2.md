@@ -2,13 +2,15 @@
 
 ## Paying Off Technical Debt 
 1. Originally we had allowable frequencies as a string. This meant that whenever we had to reference a frequency property we needed a bunch of switch statements ( usually in multiple functions, depending on what part of the frequency information we needed). This meant adding new frequencies required a bunch of code modification in different places, and we were violating the open for extension closed for modification principle. We paid off this debt by creating a frequency interface, and creating different classes that implement the frequency interface that hold needed methods of the frequencies. This was inadvertent and prudent technical debt, as we did not yet know about the principle when we were first introduced to this feature during the first iteration of the project, but changed our implementation once we learned about open closed principle.
-original:
+Original:
 https://code.cs.umanitoba.ca/3350-summer2023/ghostdevs-7/-/blame/9b7cb21cc454441f025958cd26e6d5ade485c7c0/app/src/main/java/com/track_it/logic/SubscriptionHandler.java#L29
-Updated as a list of frequency objects.
+Updated as a list of frequency objects:
 https://code.cs.umanitoba.ca/3350-summer2023/ghostdevs-7/-/blame/bryceWorking/app/src/main/java/com/track_it/logic/SubscriptionHandler.java#L30
 
-2. Dependency Inversion Principle Violation 
-Originally our code was highly coupled with the concrete implementation of our fake database (an array list). This was addressed by rewriting and restructuring several classes and tests to support different database implementations. This debt was prudent and inadvertent as we knew we would be implementing a SQL database for the second iteration which would require several modifications. We didn't have enough knowledge at the time to know how to properly structure our code as we had no familiarity with Android development or experience implementing an HSQL database. We knew going into iteration 2 several changes would have to be made but taking on the debt in iteration 1 allowed us work quickly and focus on other aspects of the project.  
+2. Dependency Inversion Principle Violation:
+Originally our code was highly coupled with the concrete implementation of our fake database (an array list) instead of using an interface and we had no dependency injection. This was addressed by rewriting and restructuring several classes and tests to support different database implementations. This debt was prudent and inadvertent as we knew we would be implementing a SQL database for the second iteration which would require several modifications. We didn't have enough knowledge at the time to know how to properly structure our code as we had no familiarity with Android development or experience implementing an HSQL database. We knew going into iteration 2 several changes would have to be made but taking on the debt in iteration 1 allowed us work quickly and focus on other aspects of the project.  
+Example of where some of these changes were made:
+https://code.cs.umanitoba.ca/3350-summer2023/ghostdevs-7/-/blob/develop/app/src/main/java/com/track_it/logic/SubscriptionHandler.java?ref_type=heads#L31
 
 ## SOLID Violations
 I created an issue for projects 8. I informed them that their classes should support dependency injection, and specifically linked to a class in their main branch that violated the “Dependency inversion principle”.
@@ -25,7 +27,7 @@ Communication overall seemed to improve. Our group was more responsive for this 
 
 ## Design Patterns
 Singleton design pattern, combined with a builder class.
-For the SubscriptionHandler class there are a lot of input parameters, and a lot of expensive setup operations to create a  new SubscriptionHandler object. So we created a wrapper class called SetupParameters that initializes and returns one copy of the SubscriptionHandler with the correct input. This prevents the calling code from having to set up all the correct input, and makes it faster by only creating the SubscriptionHandler object once, and returning the same object for each call to the getSubscriptionHandler method ( assuming the setup parameters have not changed).
+For the SubscriptionHandler class there are a lot of input parameters, and a lot of expensive setup operations to create a  new SubscriptionHandler object. So we created a wrapper class called SetupParameters that initializes and returns one copy of the SubscriptionHandler with the correct input. This prevents the calling code from having to set up all the correct input, and makes it faster by only creating the SubscriptionHandler object once, and returning the same object for each call to the getSubscriptionHandler method (assuming the setup parameters have not changed).
 https://code.cs.umanitoba.ca/3350-summer2023/ghostdevs-7/-/blob/bryceWorking/app/src/main/java/com/track_it/presentation/util/SetupParameters.java
 
 ## Iteration 1 Feedback Fixes
