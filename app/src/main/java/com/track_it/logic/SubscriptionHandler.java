@@ -54,6 +54,7 @@ public class SubscriptionHandler {
     private void InitFrequency()
     {
         frequencyList.add(new DailyFrequency());
+        frequencyList.add(new BiWeekly());
         frequencyList.add(new WeeklyFrequency());
         frequencyList.add(new MonthlyFrequency());
         frequencyList.add(new YearlyFrequency());
