@@ -3,14 +3,23 @@ package com.track_it;
 
 import com.track_it.domainobject.SubscriptionObj;
 import com.track_it.logic.SubscriptionHandler;
-import com.track_it.persistence.FakeDataBase;
+import com.track_it.logic.exceptions.DataBaseException;
+import com.track_it.logic.exceptions.SubscriptionException;
+import com.track_it.persistence.SubscriptionPersistence;
+import com.track_it.persistence.fakes.FakeSubscriptionPersistenceDatabase;
+import com.track_it.persistence.hsqldb.SubscriptionPersistenceHSQLDB;
 import com.track_it.presentation.util.SetupParameters;
+import com.track_it.util.FillDataBase;
+import com.track_it.util.TestUtils;
 
 import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
 import static org.junit.Assert.assertFalse;
+
+import java.io.File;
+import java.util.Scanner;
 
 
 public class SubscriptionsAddEditRemoveTest
@@ -19,12 +28,13 @@ public class SubscriptionsAddEditRemoveTest
     private SubscriptionHandler subHandle;
 
 
-    //Setup a fake database each time
+    //Setup the database each time
     @Before
     public void setTestHandle()
     {
-        SetupParameters.InitializeDatabase(new FakeDataBase());
-        subHandle =  SetupParameters.GetSubscriptionHandler();
+            TestUtils.changeDatabase();
+            subHandle = SetupParameters.getSubscriptionHandler();
+
      }
 
 
@@ -36,8 +46,8 @@ public class SubscriptionsAddEditRemoveTest
     {
 
         String name = "Valid Name";
-        String paymentFrequency = subHandle.getFrequencyList().get(0);
-        int paymentAmount = (int) (Math.random() * subHandle.getMaxPaymentCentsTotal()) + 1;
+        String paymentFrequency = subHandle.getFrequencyNameList().get(0);
+        int paymentAmount = (int) (Math.random() * subHandle.getMaxPaymentTotal()) + 1;
 
 
         boolean thrown = false;
@@ -64,7 +74,7 @@ public class SubscriptionsAddEditRemoveTest
 
         assertEquals(retrieve.getTotalPaymentInCents() + " does not equal " + paymentAmount, retrieve.getTotalPaymentInCents(), paymentAmount);
 
-        System.out.println("Passed the add subscription test!");
+        System.out.println("PASSED the add subscription test!");
 
     }
 
@@ -76,18 +86,19 @@ public class SubscriptionsAddEditRemoveTest
     {
 
         String Name = "Valid Name";
-        String paymentFrequency = subHandle.getFrequencyList().get(0);
-        int PaymentAmount = (int) (Math.random() * subHandle.getMaxPaymentCentsTotal()) + 1;
+        String paymentFrequency = subHandle.getFrequencyNameList().get(0);
+        int PaymentAmount = (int) (Math.random() * subHandle.getMaxPaymentTotal()) + 1;
 
         SubscriptionObj newSub = new SubscriptionObj(Name,PaymentAmount,paymentFrequency);
 
         try {
             subHandle.addSubscription(newSub);
+
         }
 
-        catch(Exception e)
+        catch(DataBaseException | SubscriptionException e)
         {
-            System.out.println("Failed Edit subscription test before running. Failed to add the subscription");
+            System.out.println("FAILED Edit subscription test before running. Failed to add the subscription");
             System.out.println(e.getMessage());
 
         }
@@ -97,12 +108,12 @@ public class SubscriptionsAddEditRemoveTest
         boolean thrown = false;
 
         String newName = "New name";
-        int newPayment = (int) (Math.random() * subHandle.getMaxPaymentCentsTotal()) + 1;
+        int newPayment = (int) (Math.random() * subHandle.getMaxPaymentTotal()) + 1;
         while (newPayment == PaymentAmount)
         {
-            newPayment = (int) (Math.random() * subHandle.getMaxPaymentCentsTotal()) + 1;
+            newPayment = (int) (Math.random() * subHandle.getMaxPaymentTotal()) + 1; //Make sure the new payment is not the same as the old
         }
-        String newPaymentFrequency = subHandle.getFrequencyList().get(1);
+        String newPaymentFrequency = subHandle.getFrequencyNameList().get(1); //Get different payment frequency
 
         SubscriptionObj subWithEditDetails = new SubscriptionObj(newName,newPayment,newPaymentFrequency);
 
@@ -133,7 +144,7 @@ public class SubscriptionsAddEditRemoveTest
 
 
 
-        System.out.println("Passed the edit subscription test!");
+        System.out.println("PASSED the edit subscription test!");
 
 
     }
@@ -143,8 +154,8 @@ public class SubscriptionsAddEditRemoveTest
     {
 
         String name = "Valid Name";
-        String paymentFrequency = subHandle.getFrequencyList().get(0);
-        int paymentAmount = (int) (Math.random() * subHandle.getMaxPaymentCentsTotal()) + 1;
+        String paymentFrequency = subHandle.getFrequencyNameList().get(0);
+        int paymentAmount = (int) (Math.random() * subHandle.getMaxPaymentTotal()) + 1;
 
         SubscriptionObj newSub = new SubscriptionObj(name,paymentAmount,paymentFrequency);
         subHandle.addSubscription(newSub);
@@ -155,7 +166,7 @@ public class SubscriptionsAddEditRemoveTest
         String newName = "New name";
         int newPayment = 0; // 1 invalid input !
 
-        String newPaymentFrequency = subHandle.getFrequencyList().get(1);
+        String newPaymentFrequency = subHandle.getFrequencyNameList().get(1);
 
         SubscriptionObj subWithEditDetails = new SubscriptionObj(newName,newPayment,newPaymentFrequency);
 
@@ -193,7 +204,7 @@ public class SubscriptionsAddEditRemoveTest
 
 
 
-        System.out.println("Passed the edit subscription test with invalid Edits!");
+        System.out.println("PASSED the edit subscription test with invalid Edits!");
 
     }
 
@@ -202,8 +213,8 @@ public class SubscriptionsAddEditRemoveTest
     {
 
         String name = "Valid Name";
-        String paymentFrequency = subHandle.getFrequencyList().get(0);
-        int paymentAmount = (int) (Math.random() * subHandle.getMaxPaymentCentsTotal()) + 1;
+        String paymentFrequency = subHandle.getFrequencyNameList().get(0);
+        int paymentAmount = (int) (Math.random() * subHandle.getMaxPaymentTotal()) + 1;
 
         SubscriptionObj newSub = new SubscriptionObj(name,paymentAmount,paymentFrequency);
 
@@ -238,7 +249,7 @@ public class SubscriptionsAddEditRemoveTest
         assertTrue("Sub removal method worked for a subscription object that should no longer be in the database", thrown);
 
 
-        System.out.println("Passed the remove subscription test !");
+        System.out.println("PASSED the remove subscription test !");
 
     }
 
