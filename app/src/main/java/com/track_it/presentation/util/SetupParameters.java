@@ -67,8 +67,8 @@ public class SetupParameters
         {
             allowableFrequencies = new ArrayList<Frequency>();
             allowableFrequencies.add(new DailyFrequency());
-            allowableFrequencies.add(new BiWeekly());
             allowableFrequencies.add(new WeeklyFrequency());
+            allowableFrequencies.add(new BiWeekly());
             allowableFrequencies.add(new MonthlyFrequency());
             allowableFrequencies.add(new YearlyFrequency());
         }
