@@ -23,7 +23,7 @@ Firstly, we had agreed that the manner in which we wrote our commit messages cou
 
 A second issue we acknowledged was that we failed to calculate and report the total time spent on each user story and feature. This was well documented and reported as can be observed in the issues section.
 
-Communication overall seemed to improve. Our group was more responsive for this iteration and worked well together. An example of this was when one group member was working on a bug fix while another member was in possession of the Samsung device at the time. One member would implement changes, the other group member would run the app with the updates and report back what still needed to be addressed. This was done very efficiently. A screenshot of this exchange is displayed below.
+Communication overall seemed to improve. Our group was more responsive for this iteration and worked well together. An example of this was when one group member was working on a bug fix while another member was in possession of the Samsung device at the time. One member would implement changes, the other group member would run the app with the updates and report back what still needed to be addressed. This was done very efficiently.
 
 ## Design Patterns
 Singleton design pattern, combined with a builder class.  
