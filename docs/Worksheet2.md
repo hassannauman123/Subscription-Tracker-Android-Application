@@ -10,7 +10,7 @@ https://code.cs.umanitoba.ca/3350-summer2023/ghostdevs-7/-/blame/bryceWorking/ap
 2. Dependency Inversion Principle Violation:
 Originally our code was highly coupled with the concrete implementation of our fake database (an array list) instead of using an interface and we had no dependency injection. This was addressed by rewriting and restructuring several classes and tests to support different database implementations. This debt was prudent and inadvertent as we knew we would be implementing a SQL database for the second iteration which would require several modifications, however, we didn't have enough knowledge at the time to know how to properly structure our code as we had no familiarity with Android development or experience using a database interface. We knew going into iteration 2 several changes would have to be made but taking on the debt in iteration 1 allowed us to work quickly and focus on other aspects of the project.  
 Example of where some of these changes were made:  
-https://code.cs.umanitoba.ca/3350-summer2023/ghostdevs-7/-/blob/develop/app/src/main/java/com/track_it/logic/SubscriptionHandler.java?ref_type=heads#L31
+https://code.cs.umanitoba.ca/3350-summer2023/ghostdevs-7/-/blob/develop/app/src/main/java/com/track_it/logic/SubscriptionHandler.java?ref_type=heads#L41
 
 ## SOLID Violations
 We created an issue for projects 8. We informed them that their classes should support dependency injection, and specifically linked to a class in their main branch that violated the “Dependency inversion principle”.
