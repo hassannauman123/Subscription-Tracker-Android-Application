@@ -36,7 +36,7 @@ public class FakeSubscriptionPersistenceDatabase implements SubscriptionPersiste
         inputSubscription.setID(dataBaseCount);   // Set id
         subscriptionDB.add(inputSubscription); // ADD to database
         dataBaseCount++;
-    }
+     }
 
 
 

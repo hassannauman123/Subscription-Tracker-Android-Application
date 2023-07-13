@@ -25,7 +25,7 @@ public class SubscriptionValidateTest {
     public void setTestHandle()
     {
 
-        TestUtils.changeDatabase();
+         TestUtils.changeDatabase();
          subHandle =  SetupParameters.getSubscriptionHandler();
 
     }

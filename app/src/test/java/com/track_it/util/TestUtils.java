@@ -32,6 +32,7 @@ public class TestUtils {
         if (TestUtils.getUseRealDatabase())//Use real SQL database
         {
 
+
             try {
                 File tempDB;
                 tempDB = TestUtils.copyDB();
@@ -47,6 +48,7 @@ public class TestUtils {
         }
         else //Use fake Database
         {
+
             SetupParameters.initializeDatabase(new FakeSubscriptionPersistenceDatabase());
         }
     }

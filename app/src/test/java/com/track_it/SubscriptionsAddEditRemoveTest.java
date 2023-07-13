@@ -28,7 +28,7 @@ public class SubscriptionsAddEditRemoveTest
     private SubscriptionHandler subHandle;
 
 
-    //Setup a fake database each time
+    //Setup the database each time
     @Before
     public void setTestHandle()
     {
