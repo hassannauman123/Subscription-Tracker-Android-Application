@@ -2,14 +2,21 @@ package com.track_it.logic.frequencies;
 
 public class WeeklyFrequency extends FrequencyBase
 {
-    public WeeklyFrequency()
+
+    public WeeklyFrequency() //constructor method
     {
+
         super("weekly");
     }
 
-    public int calculateMonthlyPayment(int inputPayment)
+
+
+
+    @Override
+    public int daysBetweenPayment()
     {
-        return inputPayment * 4;
+        return DAYS_PER_WEEK; // Average number of days between payment
     }
+
 
 }
