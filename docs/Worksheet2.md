@@ -35,6 +35,6 @@ Issue:
 https://code.cs.umanitoba.ca/3350-summer2023/ghostdevs-7/-/issues/34  
 
 Fix:  
-https://code.cs.umanitoba.ca/3350-summer2023/ghostdevs-7/-/blame/bryceWorking/app/src/main/java/com/track_it/presentation/MainActivity.java#L263  
+https://code.cs.umanitoba.ca/3350-summer2023/ghostdevs-7/-/blame/bryceWorking/app/src/main/java/com/track_it/presentation/MainActivity.java#L252 
 
 The issue was that on the main activity screen we showed all the different subscriptions in a big list, but the subscriptions were not visually shown as being separate (ie, one subscription details started right after the other with no border, or color change). This made it hard to clearly see how subscriptions were separated. We fixed this issue by giving each successive subscription a different background color, so that you can more easily identify different subscriptions . 
