@@ -1,13 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_page"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".presentation.MainActivity">
+    tools:context=".presentation.MainActivity"
+    android:windowSoftInputMode="adjustResize|stateHidden"
+
+
+
+    >
 
 
     <include
@@ -15,29 +19,73 @@
         layout="@layout/toolbar" />
 
 
+    <TextView
+        android:id="@+id/details_general_error"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="64dp"
+        android:text=""
+        android:textAlignment="center"
+        android:textColor="#FF0000"
+        android:textColorHighlight="#FF0000"
+        android:textColorHint="#FF0000"
+        android:textColorLink="#FF0000"
+        android:textSize="20sp"
+        android:visibility="invisible" />
+
     <Button
-        android:id="@+id/button_subscription"
+        android:id="@+id/add_subscription_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="100dp"
-        android:layout_marginEnd="120dp"
+
         android:text="Add Subscriptions"
         app:layout_constraintEnd_toEndOf="parent"
         tools:layout_editor_absoluteY="38dp" />
 
+
+    <ImageButton
+        android:id="@+id/sort_button"
+        android:layout_width="25dp"
+        android:layout_height="29dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="112dp"
+        android:layout_toEndOf="@+id/add_subscription_button"
+        android:background="#ffffff"
+        android:src="@drawable/baseline_more_vert_black_24dp"
+        android:textColor="#ffffff"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <SearchView
+        android:id="@+id/search_by_name"
+        android:layout_width="235dp"
+        android:layout_height="40dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="167dp"
+        android:queryHint="Search Subscription by name"
+        android:textColor="@color/black"
+        android:layout_centerHorizontal="true"
+
+        />
+
+
     <ScrollView
         android:id="@+id/none"
         android:layout_width="339dp"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentBottom="true"
+        android:layout_height="400dp"
+
+        android:layout_below="@+id/search_by_name"
         android:layout_centerHorizontal="true"
-        android:layout_marginStart="23dp"
-        android:layout_marginTop="192dp"
-        android:layout_marginBottom="149dp">
+        android:layout_marginTop="23dp"
+     >
 
         <LinearLayout
             android:id="@+id/subscription_list"

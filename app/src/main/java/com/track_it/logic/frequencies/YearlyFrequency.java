@@ -3,14 +3,18 @@ package com.track_it.logic.frequencies;
 
 public class YearlyFrequency extends FrequencyBase
 {
+
+
     public YearlyFrequency()
     {
         super("yearly");
     }
 
-    public int calculateMonthlyPayment(int inputPayment)
+
+    @Override
+    public int daysBetweenPayment()
     {
-        return inputPayment / 12 ;
+        return DAYS_PER_YEAR;
     }
 
 }

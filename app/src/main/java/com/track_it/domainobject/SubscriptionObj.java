@@ -1,13 +1,14 @@
 package com.track_it.domainobject;
+
+
 //
 // This class is used to represent a subscription object
 //
 
-
 public class SubscriptionObj
 {
 
-    private int subscriptionID; // The unique ID of the subscription
+    private int subscriptionID; // The unique ID of this subscription
     private String name; // The name of the subscription
     private int paymentInCents; // The payment amount in cents
     private String paymentFrequencyName; // - How often a payment happens.
@@ -28,7 +29,7 @@ public class SubscriptionObj
 
     public void setID(int inputID)
     {
-        subscriptionID = inputID;
+        this.subscriptionID = inputID;
 
     }
 
@@ -50,7 +51,7 @@ public class SubscriptionObj
     //Get name
     public String getName()
     {
-        return name;
+        return this.name;
 
     }
 
@@ -75,14 +76,19 @@ public class SubscriptionObj
 
 
     //Return the whole payment amount
-    public int getTotalPaymentInCents() { return paymentInCents; }
+    public int getTotalPaymentInCents()
+    {
+        return paymentInCents;
+    }
     public int getPaymentDollars() // Return only the dollars amount of the payment
     {
-        return paymentInCents / 100;
+        return this.paymentInCents / 100;
     }
 
     public int getPaymentCents()  //Return only the cents amount (That is the part that comes after the decimal, ie 22.55 (stored as 2255) -> returns 55)
-    { return paymentInCents -  ( paymentInCents / 100) *100 ; }
+    {
+        return this.paymentInCents -  ( this.paymentInCents / 100) *100 ;
+    }
 
     public void setPayment(int inputPayment)
     {
