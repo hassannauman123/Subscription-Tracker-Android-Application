@@ -30,12 +30,12 @@ public class SubscriptionHandler {
 
      private final String allowableCharactersInName;
 
-    private ArrayList<Frequency> frequencyList  = new ArrayList<>();
+    private final List<Frequency> frequencyList;
     private SubscriptionPersistence subscriptionPersistence; //Database Handler
 
 
 
-    public SubscriptionHandler( int inputMinNameLen, int inputMaxNameLen, int inputMinPayment, int inputMaxPayment,String inputAllowableChars, SubscriptionPersistence inputDB )
+    public SubscriptionHandler( int inputMinNameLen, int inputMaxNameLen, int inputMinPayment, int inputMaxPayment,String inputAllowableChars, List<Frequency> inputAllowableFrequencies,  SubscriptionPersistence inputDB )
     {
         //Set the Data base, and various parameters for what is a valid subscription
         this.subscriptionPersistence =  inputDB;
@@ -46,19 +46,9 @@ public class SubscriptionHandler {
         this.MAX_PAYMENT_DOLLAR = this.MAX_PAYMENT / 100;
         this.MAX_PAYMENT_CENTS = this.MAX_PAYMENT - this.MAX_PAYMENT_DOLLAR * 100;
         this.allowableCharactersInName = inputAllowableChars;
-        InitFrequency();
+        this.frequencyList = inputAllowableFrequencies;
     }
 
-
-    //Initialize the frequency list
-    private void InitFrequency()
-    {
-        frequencyList.add(new DailyFrequency());
-        frequencyList.add(new BiWeekly());
-        frequencyList.add(new WeeklyFrequency());
-        frequencyList.add(new MonthlyFrequency());
-        frequencyList.add(new YearlyFrequency());
-    }
 
     // This function will add subscriptionToAdd to database. It will first validate subscription, and then
     // try to add to database.
