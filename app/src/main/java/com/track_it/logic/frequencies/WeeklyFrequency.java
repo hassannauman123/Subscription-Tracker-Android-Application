@@ -15,7 +15,7 @@ public class WeeklyFrequency extends FrequencyBase
     @Override
     public int daysBetweenPayment()
     {
-        return DAYS_PER_YEAR / ( WEEKS_PER_YEAR); // Average number of days between payment
+        return DAYS_PER_WEEK; // Average number of days between payment
     }
 
 

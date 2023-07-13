@@ -11,7 +11,7 @@ public class BiWeekly extends FrequencyBase
     @Override
     public int daysBetweenPayment()
     {
-        return DAYS_PER_YEAR / WEEKS_PER_YEAR * 2;
+        return DAYS_PER_WEEK * 2;
 
     }
 
