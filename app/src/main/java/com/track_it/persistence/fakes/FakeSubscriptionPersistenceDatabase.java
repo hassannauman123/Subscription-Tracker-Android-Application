@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-//This is a database Stub class that implements the SubscriptionPersistence interface.
+//This is a fake database class that implements the SubscriptionPersistence interface.
 public class FakeSubscriptionPersistenceDatabase implements SubscriptionPersistence
 {
 
@@ -36,7 +36,7 @@ public class FakeSubscriptionPersistenceDatabase implements SubscriptionPersiste
         inputSubscription.setID(dataBaseCount);   // Set id
         subscriptionDB.add(inputSubscription); // ADD to database
         dataBaseCount++;
-    }
+     }
 
 
 

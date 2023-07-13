@@ -122,7 +122,7 @@ public class SubscriptionDetailsActivity extends AppCompatActivity {
 
         // Get subscription handle
         subHandler = SetupParameters.getSubscriptionHandler();
-        MAX_DIGITS_BEFORE_DECIMAL = SubscriptionInput.NumDigits(subHandler.getMaxPaymentDollarsTotal());
+        MAX_DIGITS_BEFORE_DECIMAL = SubscriptionInput.NumDigits(subHandler.getMaxPaymentDollars());
 
         //Frequency drop menu
         frequencyTarget = findViewById(R.id.AutoComplete_drop_menu);

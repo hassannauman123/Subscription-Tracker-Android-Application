@@ -36,7 +36,7 @@ import java.util.List;
 //  This is the presentation class for the main home page of the app.
 //  It will be instantiated when the android app first starts
 //
-//  Currently it displays all subscriptions in a scrollable list, and a add subscription button.
+//  Currently it displays all subscriptions in a scrollable list, and has a add subscription button.
 //  Clicking on any subscription should open a new page that allows you to edit or delete the sub.
 //  It also has sort and search input, to filter and sort the subscriptions.
 //
@@ -49,31 +49,36 @@ public class MainActivity extends AppCompatActivity {
 
     private Button addSubButton; // button to add a subscription
     private SearchView searchInput; // Search input target
-    private ImageButton filterButton; // target of drop down button for sorting
+    private ImageButton filterButton; // target of a drop down button for sorting subscriptions
 
-    private String searchString = ""; // Only subscription that contain the searchString will be shown ( by default all subs are shown)
+    private String searchString = ""; // Only subscriptions that contain the searchString will be shown ( by default all subs are shown)
 
     private List<SubscriptionObj> listOfSubs; // hold all the subscriptions to display
-    private  Comparator <SubscriptionObj> subSorter = null;
-    private TextView errorDisplay;
+    private  Comparator <SubscriptionObj> subSorter = null; //How we will sort subscriptions (By default we won't sort the subscriptions)
+    private TextView errorDisplay; // target to display errors
+    private  LinearLayout displaySubList; // Target for subscription list
+
+    private boolean firstColor = true; // Every second subscription will have a slightly different color, and this will toggle between the colors
 
 
-    @Override // Make sure this function is overriding some default onCreate method
+
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main); // Switch screen to display main page
 
         com.cook_ebook.persistence.utils.DBHelper.copyDatabaseToDevice(this); // Copy database
 
-         errorDisplay = (TextView) this.findViewById(R.id.details_general_error);
 
-        //Get subscription handler, and list of subscriptions
+        //Get subscription handler
         subHandler = SetupParameters.getSubscriptionHandler();
 
-
-        getSubList(); // Get list of subs from database
+        setTargets(); //Set the targets for the global variables
+        getSubList(); // Get list of subs from database, and store in listOfSubs
         setUpButtonsAndInput(); // Setup the input fields and buttons
         displayAllSubscriptions(); // Display all the subscriptions
+
 
     }
 
@@ -81,6 +86,7 @@ public class MainActivity extends AppCompatActivity {
     //Runs when this activity comes back
     protected void onRestart() {
         super.onRestart();
+        disableError(); // Clear any errors
         getSubList(); //Get a new list of subs ( in case any subs were added, deleted, or modified)
 
         View current = getCurrentFocus();
@@ -94,8 +100,27 @@ public class MainActivity extends AppCompatActivity {
 
 
 
+    //Set all the target for the global variables for this activity
+    private void setTargets()
+    {
+        //Where errors will show
+        errorDisplay = (TextView) this.findViewById(R.id.details_general_error);
+        displaySubList = (LinearLayout) this.findViewById(R.id.subscription_list);
+
+        //Set target of add sub button
+        addSubButton = (Button) this.findViewById(R.id.add_subscription_button);
+
+        //Search bar target
+        searchInput = (SearchView) this.findViewById(R.id.search_by_name);
+
+        // target filter button
+        filterButton = (ImageButton) findViewById(R.id.sort_button);
 
 
+    }
+
+
+    //Get the all subscriptions from the logic layer, and store in listOfSubs
     private void getSubList()
     {
         try {
@@ -140,8 +165,7 @@ public class MainActivity extends AppCompatActivity {
 
     //Enable the add subscription button
     private void enableAddSubButton() {
-        //Set target of add sub button
-        addSubButton = (Button) this.findViewById(R.id.add_subscription_button);
+
 
 
         //Set what happens when user clicks add subscription button
@@ -156,7 +180,7 @@ public class MainActivity extends AppCompatActivity {
     //Enable search input
     private void enableSearchInput() {
 
-        searchInput = (SearchView) this.findViewById(R.id.search_by_name);
+
 
         //Set what happens when the user types into the search bar
         searchInput.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -166,7 +190,6 @@ public class MainActivity extends AppCompatActivity {
             {
 
                 displayAllSubscriptions(); //Display all subs (It will filter based on input from user)
-
 
                 //Close the keyboard
                 View current = getCurrentFocus();
@@ -190,12 +213,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    //Enable the filter input - Allows user to sort subscriptions
+    //Enable the sort input - Allows user to sort subscriptions
     private void enableSortFilterInput() {
 
 
-        // Referencing and Initializing the filter button
-        filterButton = (ImageButton) findViewById(R.id.clickBtn);
 
         // Setting onClick behavior to the button
         filterButton.setOnClickListener(new View.OnClickListener() {
@@ -257,79 +278,92 @@ public class MainActivity extends AppCompatActivity {
     private void displayAllSubscriptions() {
 
         searchString = searchInput.getQuery().toString().toLowerCase(); // Get the search string ( We will only show subs where the name contains the search string)
-        sortSubs(listOfSubs, subSorter); // Sort the subscriptions
-
+        sortSubs(listOfSubs, subSorter); // Sort the subscription
 
         // Clear everything previously in list
-        LinearLayout sv = (LinearLayout) this.findViewById(R.id.subscription_list);
-        sv.removeAllViews();
+        displaySubList.removeAllViews();
 
 
-        boolean firstColor = true; // Every second subscription will have a slightly different color
+         firstColor = true; // Every second subscription will have a slightly different color
 
         //Create a subscription box for each subscription that we will show
         for (SubscriptionObj curr : listOfSubs) {
 
-
             if (curr.getName().toLowerCase().contains(searchString)) // only show this subscription if it matches the search criteria
             {
-
-                // Create a new box to display subscription
-                View subscriptionBox = getLayoutInflater().inflate(R.layout.subscription_box, sv, false);
-
-
-                // Set Name of subscription to display
-                TextView targetName = subscriptionBox.findViewById(R.id.subscription_name);
-                targetName.setText("Name: " + curr.getName());
-
-
-                // Set Frequency to display
-                TextView targetFrequency = subscriptionBox.findViewById(R.id.subscription_frequency);
-                targetFrequency.setText("Frequency: " + curr.getPaymentFrequency());
-
-
-                // Set Payment amount to display
-                TextView targetPaymentAmount = subscriptionBox.findViewById(R.id.subscription_amount);
-                targetPaymentAmount.setText("Payment Amount: $" + curr.getPaymentDollars() + "." + String.format("%02d", curr.getPaymentCents()));
-
-
-                //Set ID - Just as a reminder, these might not be unique ID's on this page, as other elements may have these ID numbers
-                // but for how we are using them right now it's fine.
-                subscriptionBox.setId(curr.getID());
-
-
-                //Every other subscription has a different background color
-                firstColor = !firstColor;
-                if (firstColor) {
-                    subscriptionBox.setBackgroundColor(getResources().getColor(R.color.grey));
-                } else {
-                    subscriptionBox.setBackgroundColor(getResources().getColor(R.color.white));
-                }
-
-
-                //Set what happens when the user does a long click on a subscription box
-                subscriptionBox.setOnLongClickListener(new View.OnLongClickListener() {
-                    public boolean onLongClick(View v) {
-                        Intent subDetailsIntent = new Intent(MainActivity.this, SubscriptionDetailsActivity.class);
-                        subDetailsIntent.putExtra("subscriptionID", v.getId());
-                        startActivity(subDetailsIntent);
-                        return true;
-                    }
-                });
-
-                //Set what happens when the user does a short click on a subscription box
-                subscriptionBox.setOnClickListener(new View.OnClickListener() {
-                    public void onClick(View v) {
-                        Intent subDetailsIntent = new Intent(MainActivity.this, SubscriptionDetailsActivity.class);
-                        subDetailsIntent.putExtra("subscriptionID", v.getId());
-                        startActivity(subDetailsIntent);
-                    }
-                });
-
-
-                sv.addView(subscriptionBox);
+                createBoxForSubscription(curr);
             }
+
         }
+    }
+
+
+    //Create a box for subInput, and add it to displaySubList, and then display it
+    private void createBoxForSubscription(SubscriptionObj subInput)
+    {
+
+        // Create a new box to display subscription
+        View subscriptionBox = getLayoutInflater().inflate(R.layout.subscription_box, displaySubList, false);
+
+
+        // Set Name of subscription to display
+        TextView targetName = subscriptionBox.findViewById(R.id.subscription_name);
+        targetName.setText("Name: " + subInput.getName());
+
+
+        // Set Frequency to display
+        TextView targetFrequency = subscriptionBox.findViewById(R.id.subscription_frequency);
+        targetFrequency.setText("Frequency: " + subInput.getPaymentFrequency());
+
+
+        // Set Payment amount to display
+        TextView targetPaymentAmount = subscriptionBox.findViewById(R.id.subscription_amount);
+        targetPaymentAmount.setText("Payment Amount: $" + subInput.getPaymentDollars() + "." + String.format("%02d", subInput.getPaymentCents()));
+
+
+        //Set ID - Just as a reminder, these might not be unique ID's on this page, as other elements may have these ID numbers
+        // but for how we are using them right now it's fine.
+        subscriptionBox.setId(subInput.getID());
+
+
+        //Every other subscription has a different background color
+        firstColor = !firstColor;
+        if (firstColor) {
+            subscriptionBox.setBackgroundColor(getResources().getColor(R.color.grey));
+        } else {
+            subscriptionBox.setBackgroundColor(getResources().getColor(R.color.white));
+        }
+
+
+        setSubscriptionBoxBehaviour(subscriptionBox); //Set behavior of box whens it's clicked
+        displaySubList.addView(subscriptionBox); // display box
+    }
+
+
+
+    //Set the behavior of setSubscriptionBoxBehaviour when it's clicked
+    private void setSubscriptionBoxBehaviour(View subscriptionBox)
+    {
+
+        //Set what happens when the user does a long click on a subscription box
+        subscriptionBox.setOnLongClickListener(new View.OnLongClickListener() {
+            public boolean onLongClick(View v) {
+                Intent subDetailsIntent = new Intent(MainActivity.this, SubscriptionDetailsActivity.class);
+                subDetailsIntent.putExtra("subscriptionID", v.getId());
+                startActivity(subDetailsIntent);
+                return true;
+            }
+        });
+
+        //Set what happens when the user does a short click on a subscription box
+        subscriptionBox.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent subDetailsIntent = new Intent(MainActivity.this, SubscriptionDetailsActivity.class);
+                subDetailsIntent.putExtra("subscriptionID", v.getId());
+                startActivity(subDetailsIntent);
+            }
+        });
+
     }
 
 

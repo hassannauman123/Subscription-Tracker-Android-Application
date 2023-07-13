@@ -5,6 +5,7 @@ public abstract class  FrequencyBase implements Frequency
 
     public static final int MONTHS_PER_YEAR = 12;
     public static final int DAYS_PER_YEAR = 365;
+    public static final int DAYS_PER_WEEK = 7;
     public static final int WEEKS_PER_MONTH = 4;
     public static final int WEEKS_PER_YEAR =  52;
 

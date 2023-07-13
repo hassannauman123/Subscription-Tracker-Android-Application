@@ -8,6 +8,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.track_it.R;
 import com.track_it.logic.SubscriptionHandler;
 
+
+//This class sets up an initializes a frequency Menu with the correct drop down input
 public class FrequencyMenu
 {
 

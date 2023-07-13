@@ -12,6 +12,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 //This class implements a HSQL database for subscriptions.
@@ -20,14 +22,28 @@ public class SubscriptionPersistenceHSQLDB implements SubscriptionPersistence {
 
 
     private final String dbPath;
+    private final String shutDownString;
 
-    public SubscriptionPersistenceHSQLDB(final String dbPath) {
+
+
+
+    public SubscriptionPersistenceHSQLDB(final String dbPath)
+    {
+        this.shutDownString="true";
+        this.dbPath = dbPath;
+    }
+
+
+   // Constructor method, but also lets you Set the shutdown="" option when connecting to a database
+    public SubscriptionPersistenceHSQLDB(final String dbPath,final String inputShutDown)
+    {
+        this.shutDownString = inputShutDown;
         this.dbPath = dbPath;
     }
 
 
     private Connection connect() throws SQLException {
-        return DriverManager.getConnection("jdbc:hsqldb:file:" + dbPath + ";shutdown=true", "SA", "");
+        return DriverManager.getConnection("jdbc:hsqldb:file:" + dbPath + ";shutdown=" + shutDownString, "SA", "");
     }
 
 
@@ -47,7 +63,8 @@ public class SubscriptionPersistenceHSQLDB implements SubscriptionPersistence {
 
     @Override
     // return a list of all subscriptions in the database
-    public List<SubscriptionObj> getAllSubscriptions() {
+    public List<SubscriptionObj> getAllSubscriptions()
+    {
         final List<SubscriptionObj> AllSubscriptions = new ArrayList<>();
 
         try (final Connection c = connect()) {
@@ -61,14 +78,18 @@ public class SubscriptionPersistenceHSQLDB implements SubscriptionPersistence {
                AllSubscriptions.add(subscription);
             }
             returnedResults.close();
-            statement.close();
+           statement.close();
+           c.close();
+
         }
         catch (final SQLException e)
         {
             Log.e("Connect SQL", e.getMessage() + e.getSQLState());
-            e.printStackTrace();
-            throw new DataBaseException(e.getMessage());
+           e.printStackTrace();
+           throw new DataBaseException(e.getMessage());
         }
+
+
         return AllSubscriptions;
     }
 
@@ -97,6 +118,7 @@ public class SubscriptionPersistenceHSQLDB implements SubscriptionPersistence {
             statement.setInt(4, subscriptionIDToEdit);
 
            statement.executeUpdate();
+            connection.close();
 
 
         }
@@ -128,12 +150,12 @@ public class SubscriptionPersistenceHSQLDB implements SubscriptionPersistence {
            }
 
            statement.close();
-
+         connection.close();
 
         } catch (final SQLException e) {
-             Log.e("Connect SQL", e.getMessage() + e.getSQLState());
-            e.printStackTrace();
-            throw new DataBaseException(e.getMessage());
+           //  Log.e("Connect SQL", e.getMessage() + e.getSQLState());
+         //  e.printStackTrace();
+            throw new DataBaseException(e.getMessage() );
 
         }
 
@@ -155,13 +177,13 @@ public class SubscriptionPersistenceHSQLDB implements SubscriptionPersistence {
               statement.setInt(1, subscriptionIDToRemove);
 
             statement.executeUpdate(); // execute delete statement
-            statement.close();
+           // statement.close();
 
 
         } catch (final SQLException e) {
-            Log.e("Connect SQL", e.getMessage() + e.getSQLState());
-            e.printStackTrace();
-            throw new DataBaseException(e.getMessage());
+         //  Log.e("Connect SQL", e.getMessage() + e.getSQLState());
+          // e.printStackTrace();
+            throw new DataBaseException(e.getMessage() );
 
         }
     }
@@ -195,9 +217,9 @@ public class SubscriptionPersistenceHSQLDB implements SubscriptionPersistence {
         }
 
         catch (final SQLException e) {
-            Log.e("Connect SQL", e.getMessage() + e.getSQLState());
-            e.printStackTrace();
-            throw new DataBaseException(e.getMessage());
+           // Log.e("Connect SQL", e.getMessage() + e.getSQLState());
+           // e.printStackTrace();
+           throw new DataBaseException(e.getMessage() );
 
         }
     }
@@ -220,13 +242,14 @@ public class SubscriptionPersistenceHSQLDB implements SubscriptionPersistence {
 
                 found = true;
             }
+          //  connection.close();
             return found;
         }
 
         catch (final SQLException e) {
-            Log.e("Connect SQL", e.getMessage() + e.getSQLState());
-            e.printStackTrace();
-            throw new DataBaseException(e.getMessage());
+            // Log.e("Connect SQL", e.getMessage() + e.getSQLState());
+           //  e.printStackTrace();
+           throw new DataBaseException(e.getMessage() );
         }
     }
 

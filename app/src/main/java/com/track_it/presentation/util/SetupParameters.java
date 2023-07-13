@@ -17,8 +17,8 @@ public class SetupParameters
     // Parameters to set limits on what a subscription can be
     private static final int MIN_NAME_LENGTH = 1;
     private static final int MAX_NAME_LENGTH = 30;
-    private static final int MAX_PAYMENT_DOLLAR = 9999;
-    private static final int MAX_PAYMENT_CENTS = 99;
+    private static final int MAX_PAYMENT_IN_CENTS = 999999;
+    private static final int MIN_PAYMENT_IN_CENTS = 0;
 
     private static final String allowableCharactersInName = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890 -!@#$%^&*()_+=|{=}[]':?<>',."; // Our current list of allowable characters in the name
 
@@ -31,7 +31,7 @@ public class SetupParameters
     {
         //Create a new subscription handler if the database has changed
         DataBase = inputDB;
-        subHandler = new SubscriptionHandler(MIN_NAME_LENGTH,MAX_NAME_LENGTH,MAX_PAYMENT_DOLLAR,MAX_PAYMENT_CENTS,allowableCharactersInName, DataBase);
+        subHandler = new SubscriptionHandler(MIN_NAME_LENGTH,MAX_NAME_LENGTH,MIN_PAYMENT_IN_CENTS,MAX_PAYMENT_IN_CENTS,allowableCharactersInName, DataBase);
 
     }
 
@@ -41,7 +41,7 @@ public class SetupParameters
 
         if ( subHandler == null) // Only create one instance of the subscription handler, and return it each time
         {
-            subHandler = new SubscriptionHandler(MIN_NAME_LENGTH,MAX_NAME_LENGTH,MAX_PAYMENT_DOLLAR,MAX_PAYMENT_CENTS,allowableCharactersInName, DataBase);
+            subHandler = new SubscriptionHandler(MIN_NAME_LENGTH,MAX_NAME_LENGTH,MIN_PAYMENT_IN_CENTS,MAX_PAYMENT_IN_CENTS,allowableCharactersInName, DataBase);
         }
         return subHandler;
     }

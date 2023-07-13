@@ -11,11 +11,6 @@ public class DailyFrequency extends FrequencyBase
     }
 
 
-    @Override
-    public int calculateMonthlyPayment(int inputPayment)
-    {
-        return inputPayment * DAYS_PER_YEAR / MONTHS_PER_YEAR ;
-    }
 
     @Override
     public int daysBetweenPayment()
