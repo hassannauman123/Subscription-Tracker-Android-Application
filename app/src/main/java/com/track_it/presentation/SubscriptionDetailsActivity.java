@@ -86,33 +86,45 @@ public class SubscriptionDetailsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_subscription_details);
 
-        // Set the various targets and variables
+        // Set the various global targets and variables
         setTargets();
 
-        //Set input
-        int maxLength = subHandler.getMaxNameLength();
-        nameTarget.setFilters( new InputFilter[] {new InputFilter.LengthFilter(maxLength)}); // Set max length of name
+        constrainInput(); // Set up some filters, to constrain what is allowable input from user
 
+        FrequencyMenu.initializeMenu(this, subHandler, frequencyTarget); //setup frequency menu
 
-        FrequencyMenu.initializeMenu(this, subHandler, frequencyTarget); //setup frquency menu
         enableInputChanges(editMode); // Disable editing sub details
 
         //Enable go back to home button
         enableGoBackButton();
 
-        //Try to get the loaded subscription from arguments passed to this activity
+        //Try to load the subscription from arguments passed to this activity
         if ( getSubscription(subscriptionToDisplay)) // Make sure the subscription object was able to load
         {
             //Only Enable delete and Edit buttons if we could load subscription
             enableDeleteAndEditButtons();
         }
 
+
+    }
+
+
+
+    //This function will set up a few filters, constraining what the user is allowed to enter for input.
+    private void constrainInput()
+    {
+
+        //Set input some restriction for name input
+        int maxLength = subHandler.getMaxNameLength();
+        nameTarget.setFilters( new InputFilter[] {new InputFilter.LengthFilter(maxLength)}); // Set max length of name
+
         // This physically constrains the user for what they can enter into the payment amount field ( How many digits before decimal, how many after)
         EditText etText = findViewById(R.id.detail_subscription_amount);  // Target Payment amount input
         etText.setFilters(new InputFilter[]{new DecimalDigitsInputFilter(MAX_PAYMENT_DECIMALS, MAX_DIGITS_BEFORE_DECIMAL)}); // Pass setFilters and array
 
-    }
 
+
+    }
 
 
     //Sets the private variable targets so they can be used through out the activity

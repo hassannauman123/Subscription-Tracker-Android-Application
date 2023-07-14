@@ -100,7 +100,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-    //Set all the target for the global variables for this activity
+    //Set all the targets for the global variables for this activity
     private void setTargets()
     {
         //Where errors will show
@@ -138,7 +138,6 @@ public class MainActivity extends AppCompatActivity {
         {
             listOfSubs = new ArrayList<SubscriptionObj>(); // make list empty
             enableError(e.getMessage());
-
         }
     }
 
@@ -165,7 +164,6 @@ public class MainActivity extends AppCompatActivity {
 
     //Enable the add subscription button
     private void enableAddSubButton() {
-
 
 
         //Set what happens when user clicks add subscription button
@@ -228,7 +226,7 @@ public class MainActivity extends AppCompatActivity {
                 // Inflating popup menu from sort_menu.xml file
                 popupMenu.getMenuInflater().inflate(R.menu.sort_menu, popupMenu.getMenu());
 
-                //Set what happens when use select option from pop up sort menu
+                //Set what happens when user selects option from pop up sort menu
                 popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     @Override
                     public boolean onMenuItemClick(MenuItem menuItem) {
@@ -280,7 +278,7 @@ public class MainActivity extends AppCompatActivity {
         searchString = searchInput.getQuery().toString().toLowerCase(); // Get the search string ( We will only show subs where the name contains the search string)
         sortSubs(listOfSubs, subSorter); // Sort the subscription
 
-        // Clear everything previously in list
+        // Clears all the subscription boxes that were previously displayed on screen
         displaySubList.removeAllViews();
 
 

@@ -38,9 +38,8 @@ public class SubscriptionsAddEditRemoveTest
      }
 
 
-    //Currently we don't have a real database, so there is no point in switching database before running
-
-    //Creates a new subscription object, add it to database, then tries to edit that subscription object (All with valid data)\
+     // Test Adding a subscription object.
+    //Creates a new subscription object then adds it to database (using subHandler logic layer), and then retrieve the subscription, and check that it has the correct information
     @Test
     public void testAddSub()
     {
@@ -80,7 +79,7 @@ public class SubscriptionsAddEditRemoveTest
 
 
 
-    //Creates a new subscription object, add it to database, then tries to edit that subscription object (All with valid data)\
+    //Creates a new subscription object then adds it to database (using subHandler logic layer) , and then tries to edit that subscription object (All with valid data)
     @Test
     public void testEditValid()
     {
@@ -149,6 +148,8 @@ public class SubscriptionsAddEditRemoveTest
 
     }
 
+
+    // Test editing a subscription object with invalid changes
     @Test
     public void testEditInValid()
     {
@@ -208,6 +209,7 @@ public class SubscriptionsAddEditRemoveTest
 
     }
 
+    //Test removing a subscription object
     @Test
     public void testRemove()
     {

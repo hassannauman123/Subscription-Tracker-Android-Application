@@ -1,9 +1,12 @@
 package com.track_it.persistence.hsqldb;
+
 import android.util.Log;
+
 import com.track_it.domainobject.SubscriptionObj;
 import com.track_it.logic.exceptions.DataBaseException;
 import com.track_it.logic.exceptions.DataBaseSubNotFoundException;
 import com.track_it.persistence.SubscriptionPersistence;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -12,8 +15,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 
 //This class implements a HSQL database for subscriptions.
@@ -25,18 +26,14 @@ public class SubscriptionPersistenceHSQLDB implements SubscriptionPersistence {
     private final String shutDownString;
 
 
-
-
-    public SubscriptionPersistenceHSQLDB(final String dbPath)
-    {
-        this.shutDownString="true";
+    public SubscriptionPersistenceHSQLDB(final String dbPath) {
+        this.shutDownString = "true";
         this.dbPath = dbPath;
     }
 
 
-   // Constructor method, but also lets you Set the shutdown="" option when connecting to a database
-    public SubscriptionPersistenceHSQLDB(final String dbPath,final String inputShutDown)
-    {
+    // Constructor method, but also lets you Set the shutdown="" option when connecting to a database
+    public SubscriptionPersistenceHSQLDB(final String dbPath, final String inputShutDown) {
         this.shutDownString = inputShutDown;
         this.dbPath = dbPath;
     }
@@ -47,7 +44,6 @@ public class SubscriptionPersistenceHSQLDB implements SubscriptionPersistence {
     }
 
 
-
     // Create and return a subscriptionObj from the input resultSet
     private SubscriptionObj fromResultSet(final ResultSet resultSet) throws SQLException {
 
@@ -55,16 +51,15 @@ public class SubscriptionPersistenceHSQLDB implements SubscriptionPersistence {
         final String subscriptionName = resultSet.getString("name");
         final int paymentAmount = resultSet.getInt("paymentAmount");
         final String paymentFrequency = resultSet.getString("paymentFrequency");
-        subToReturn = new SubscriptionObj(subscriptionName,paymentAmount,paymentFrequency);
-        subToReturn.setID( resultSet.getInt("id"));
+        subToReturn = new SubscriptionObj(subscriptionName, paymentAmount, paymentFrequency);
+        subToReturn.setID(resultSet.getInt("id"));
         return subToReturn;
     }
 
 
     @Override
     // return a list of all subscriptions in the database
-    public List<SubscriptionObj> getAllSubscriptions()
-    {
+    public List<SubscriptionObj> getAllSubscriptions() {
         final List<SubscriptionObj> AllSubscriptions = new ArrayList<>();
 
         try (final Connection c = connect()) {
@@ -72,21 +67,19 @@ public class SubscriptionPersistenceHSQLDB implements SubscriptionPersistence {
             final Statement statement = c.createStatement();
 
             final ResultSet returnedResults = statement.executeQuery("SELECT * FROM SUBSCRIPTIONS");
-            while (returnedResults.next())
-            {
-               final SubscriptionObj subscription = fromResultSet(returnedResults);
-               AllSubscriptions.add(subscription);
+            while (returnedResults.next()) {
+                final SubscriptionObj subscription = fromResultSet(returnedResults);
+                AllSubscriptions.add(subscription);
             }
             returnedResults.close();
-           statement.close();
-           c.close();
+            statement.close();
+            c.close();
 
-        }
-        catch (final SQLException e)
+        } catch (final SQLException e)
         {
             Log.e("Connect SQL", e.getMessage() + e.getSQLState());
-           e.printStackTrace();
-           throw new DataBaseException(e.getMessage());
+            e.printStackTrace();
+            throw new DataBaseException(e.getMessage());
         }
 
 
@@ -96,20 +89,17 @@ public class SubscriptionPersistenceHSQLDB implements SubscriptionPersistence {
 
     @Override
     // Edit the details of subscription object in the database.
-    public void editSubscriptionByID(int subscriptionIDToEdit, final SubscriptionObj newSubscriptionDetails) throws DataBaseException
-    {
+    public void editSubscriptionByID(int subscriptionIDToEdit, final SubscriptionObj newSubscriptionDetails) throws DataBaseException {
 
         //If a subscription with id of subscriptionID is not found in database throw a DataBaseException exception
-        if ( !subscriptionInDatabase(subscriptionIDToEdit) )
-        {
+        if (!subscriptionInDatabase(subscriptionIDToEdit)) {
             throw new DataBaseSubNotFoundException();
         }
 
 
-        SubscriptionObj subToReturn= null;
+        SubscriptionObj subToReturn = null;
 
-        try (Connection connection = connect())
-        {
+        try (Connection connection = connect()) {
             final PreparedStatement statement = connection.prepareStatement("UPDATE SUBSCRIPTIONS set name = ?, paymentAmount = ?, paymentFrequency = ?  WHERE id = ?");
 
             statement.setString(1, newSubscriptionDetails.getName());
@@ -117,12 +107,11 @@ public class SubscriptionPersistenceHSQLDB implements SubscriptionPersistence {
             statement.setString(3, newSubscriptionDetails.getPaymentFrequency());
             statement.setInt(4, subscriptionIDToEdit);
 
-           statement.executeUpdate();
+            statement.executeUpdate();
             connection.close();
 
 
-        }
-        catch (final SQLException e) {
+        } catch (final SQLException e) {
             Log.e("Connect SQL", e.getMessage() + e.getSQLState());
             e.printStackTrace();
             throw new DataBaseException(e.getMessage());
@@ -131,8 +120,7 @@ public class SubscriptionPersistenceHSQLDB implements SubscriptionPersistence {
     }
 
     @Override
-    public void addSubscriptionToDB(SubscriptionObj subscriptionToAdd) throws DataBaseException
-    {
+    public void addSubscriptionToDB(SubscriptionObj subscriptionToAdd) throws DataBaseException {
 
         try (Connection connection = connect()) {
             final PreparedStatement statement = connection.prepareStatement("INSERT INTO SUBSCRIPTIONS VALUES(DEFAULT, ?,?, ?)");
@@ -143,30 +131,28 @@ public class SubscriptionPersistenceHSQLDB implements SubscriptionPersistence {
             statement.executeUpdate(); // execute insertion statement
 
             // We need to the get the ID of the subscription added to the database so that we can set the ID of the subscription object
-           final ResultSet returnedResults =  statement.getGeneratedKeys();
+            final ResultSet returnedResults = statement.getGeneratedKeys();
 
-           if ( returnedResults.next()) {
-               subscriptionToAdd.setID(returnedResults.getInt(0));
-           }
+            if (returnedResults.next()) {
+                subscriptionToAdd.setID(returnedResults.getInt(0));
+            }
 
-           statement.close();
-         connection.close();
+            statement.close();
+            connection.close();
 
         } catch (final SQLException e) {
-           //  Log.e("Connect SQL", e.getMessage() + e.getSQLState());
-         //  e.printStackTrace();
-            throw new DataBaseException(e.getMessage() );
+            Log.e("Connect SQL", e.getMessage() + e.getSQLState());
+            e.printStackTrace();
+            throw new DataBaseException(e.getMessage());
 
         }
 
     }
 
     @Override
-    public void removeSubscriptionByID(int subscriptionIDToRemove) throws DataBaseException
-    {
+    public void removeSubscriptionByID(int subscriptionIDToRemove) throws DataBaseException {
         //If a subscription with id of subscriptionID is not found in database throw a DataBaseException exception
-        if ( !subscriptionInDatabase(subscriptionIDToRemove) )
-        {
+        if (!subscriptionInDatabase(subscriptionIDToRemove)) {
             throw new DataBaseSubNotFoundException();
         }
 
@@ -174,26 +160,24 @@ public class SubscriptionPersistenceHSQLDB implements SubscriptionPersistence {
         // Otherwise remove the subscription from the database
         try (Connection connection = connect()) {
             final PreparedStatement statement = connection.prepareStatement("DELETE FROM SUBSCRIPTIONS WHERE ID = ?");
-              statement.setInt(1, subscriptionIDToRemove);
+            statement.setInt(1, subscriptionIDToRemove);
 
             statement.executeUpdate(); // execute delete statement
-           // statement.close();
+            statement.close();
 
 
         } catch (final SQLException e) {
-         //  Log.e("Connect SQL", e.getMessage() + e.getSQLState());
-          // e.printStackTrace();
-            throw new DataBaseException(e.getMessage() );
+            Log.e("Connect SQL", e.getMessage() + e.getSQLState());
+            e.printStackTrace();
+            throw new DataBaseException(e.getMessage());
 
         }
     }
 
     @Override
-    public  SubscriptionObj getSubscriptionByID(int subscriptionIDtoGet) throws DataBaseException
-    {
+    public SubscriptionObj getSubscriptionByID(int subscriptionIDtoGet) throws DataBaseException {
         //If a subscription with id of subscriptionID is not found in database throw a DataBaseException exception
-        if ( !subscriptionInDatabase(subscriptionIDtoGet) )
-        {
+        if (!subscriptionInDatabase(subscriptionIDtoGet)) {
             throw new DataBaseSubNotFoundException();
         }
 
@@ -201,55 +185,46 @@ public class SubscriptionPersistenceHSQLDB implements SubscriptionPersistence {
         SubscriptionObj subToReturn = null;
 
 
-        try (Connection connection = connect())
-        {
+        try (Connection connection = connect()) {
             final PreparedStatement statement = connection.prepareStatement("SELECT * FROM SUBSCRIPTIONS WHERE id = ?");
             statement.setInt(1, subscriptionIDtoGet);
 
             final ResultSet resultSet = statement.executeQuery();
-            if (resultSet.next())
-            {
+            if (resultSet.next()) {
 
                 subToReturn = fromResultSet(resultSet);
             }
             return subToReturn;
 
-        }
-
-        catch (final SQLException e) {
-           // Log.e("Connect SQL", e.getMessage() + e.getSQLState());
-           // e.printStackTrace();
-           throw new DataBaseException(e.getMessage() );
+        } catch (final SQLException e) {
+            Log.e("Connect SQL", e.getMessage() + e.getSQLState());
+            e.printStackTrace();
+            throw new DataBaseException(e.getMessage());
 
         }
     }
 
 
-    //Returns true if a subscription with id of subscriptionID is found in database, else return false
-    private boolean subscriptionInDatabase(int subscriptionID)  throws DataBaseException
-    {
+    //Returns true if a subscription with id of subscriptionID is found in database, else returns false
+    private boolean subscriptionInDatabase(int subscriptionID) throws DataBaseException {
 
         boolean found = false;
 
-        try (Connection connection = connect())
-        {
+        try (Connection connection = connect()) {
             final PreparedStatement statement = connection.prepareStatement("SELECT * FROM SUBSCRIPTIONS WHERE id = ?");
             statement.setInt(1, subscriptionID);
 
             final ResultSet resultSet = statement.executeQuery();
-            if (resultSet.next())
-            {
+            if (resultSet.next()) {
 
                 found = true;
             }
-          //  connection.close();
+            connection.close();
             return found;
-        }
-
-        catch (final SQLException e) {
-            // Log.e("Connect SQL", e.getMessage() + e.getSQLState());
-           //  e.printStackTrace();
-           throw new DataBaseException(e.getMessage() );
+        } catch (final SQLException e) {
+            Log.e("Connect SQL", e.getMessage() + e.getSQLState());
+            e.printStackTrace();
+            throw new DataBaseException(e.getMessage());
         }
     }
 
