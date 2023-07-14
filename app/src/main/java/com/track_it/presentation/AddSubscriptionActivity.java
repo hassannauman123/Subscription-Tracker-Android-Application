@@ -39,6 +39,8 @@ public class AddSubscriptionActivity extends AppCompatActivity {
     private Button backTarget; // To target back button
    private TextView generalErrorTarget; // where general error messages are displayed
 
+    private  TextView paymentAmountError;
+
     private boolean successTry; // used by the clickedAddSubscriptionButton function, to keep track of if all the input is valid
 
 
@@ -53,34 +55,59 @@ public class AddSubscriptionActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_subscription);
 
         subHandler = SetupParameters.getSubscriptionHandler();
-        generalErrorTarget = ((TextView) findViewById(R.id.subscription_error)); // Set where general error messages are displayed
 
+        setTargets(); //Set global variable targets
+        constrainUserInput(); //Set what a user can enter for input
         setUpAndEnableInput(); //Enable input
         setButtonActions(); //Set what happens when buttons are clicked
-
     }
 
 
     //Setup the input, and allowable parameters for the user.
-    private void setUpAndEnableInput()
+    private void setUpAndEnableInput() {
+
+        FrequencyMenu.initializeMenu(this, subHandler, frequencyTarget);
+
+    }
+
+
+
+    //Constrain what a user can enter for input
+    private void constrainUserInput()
     {
 
-
         // This physically constrains the user for what they can enter into the payment amount field ( How many digits before decimal, how many after)
-        paymentAmount= findViewById(R.id.input_payment_amount);  // Target Payment amount input
         MAX_DIGITS_BEFORE_DECIMAL = SubscriptionInput.NumDigits(subHandler.getMaxPaymentDollars()); // get the number of digits allowed before decimal (used to constrain user input)
         paymentAmount.setFilters(new InputFilter[]{new DecimalDigitsInputFilter(MAX_PAYMENT_DECIMALS, MAX_DIGITS_BEFORE_DECIMAL)}); // Pass setFilters and array of objects that implement the InputFilter interface
 
-
-        //Set Name input target, and limit what the user can enter for name
-        nameInput = (EditText) findViewById(R.id.input_subscription_name); // Set target for name input
+        //limit what the user can enter for name
         int maxLength = subHandler.getMaxNameLength();
         nameInput.setFilters(new InputFilter[]{new InputFilter.LengthFilter(maxLength)}); // Set max length the user can enter for input
 
-        //Frequency drop menu
+
+    }
+
+
+    //Set the global variable targets
+    private void setTargets()
+    {
+        // Set the add subscription button click handler (What runs when the add subscription button is click)
+        addSubtarget = (Button) findViewById(R.id.submit_sub_button);
+
+        //Frequency menu targets
         frequencyTarget = findViewById(R.id.AutoComplete_drop_menu);
         dropDownMenuParent = findViewById(R.id.parent_drop_menu);
-        FrequencyMenu.initializeMenu(this, subHandler, frequencyTarget);
+
+        //Input targets for payment and name
+        paymentAmount = findViewById(R.id.input_payment_amount);  // Target Payment amount input
+        nameInput = (EditText) findViewById(R.id.input_subscription_name); // Set target for name input
+
+
+        // Set where general error messages are displayed
+        generalErrorTarget = ((TextView) findViewById(R.id.subscription_error));
+
+        paymentAmountError = ((TextView) findViewById(R.id.input_payment_amount_error));
+
 
 
     }
@@ -90,8 +117,6 @@ public class AddSubscriptionActivity extends AppCompatActivity {
     private void setButtonActions()
     {
 
-        // Set the add subscription button click handler (What runs when the add subscription button is click)
-        addSubtarget = (Button) findViewById(R.id.submit_sub_button);
 
         //Set what happens when add button clicked
         addSubtarget.setOnClickListener(new View.OnClickListener() {
@@ -134,14 +159,14 @@ public class AddSubscriptionActivity extends AppCompatActivity {
           int paymentInCents = 1;
           try {
               paymentInCents = subInput.getPaymentAmountInput(paymentAmount);
-              ((TextView) findViewById(R.id.input_payment_amount_error)).setVisibility(View.INVISIBLE);
+              paymentAmountError.setVisibility(View.INVISIBLE);
 
           }
           catch(Exception e)
           {
               successTry = false;
-              ((TextView) findViewById(R.id.input_payment_amount_error)).setText(e.getMessage());
-              ((TextView) findViewById(R.id.input_payment_amount_error)).setVisibility(View.VISIBLE);
+              paymentAmountError.setText(e.getMessage());
+              paymentAmountError.setVisibility(View.VISIBLE);
           }
 
 
@@ -156,34 +181,38 @@ public class AddSubscriptionActivity extends AppCompatActivity {
             try { // Try to add subscription to dataBase
 
                 subHandler.addSubscription(newSubscription); //Throws an error if could not add subscription to database
-
-                generalErrorTarget.setVisibility(View.VISIBLE);
-                generalErrorTarget.setText(successAddMessage);
-                generalErrorTarget.setTextColor(Color.parseColor(accomplishColor));
-                disableAddSubscriptionsButtons();
-
-                Toast.makeText(this, successAddMessage, Toast.LENGTH_SHORT).show(); //Display "Subscription Added"
-                setContentView(R.layout.activity_main); // Switch screen to display main page
-                finish(); //We are done with this activity
+                successAddedSubscription();
 
             }
             // Something went wrong, display error for user
-            catch (SubscriptionException e) {
+            catch (SubscriptionException | DataBaseException e) {
                 generalErrorTarget.setText(e.getMessage());
                 generalErrorTarget.setVisibility(view.VISIBLE);
                 successTry = false;
             }
-            catch (DataBaseException e) {
-                generalErrorTarget.setText(e.getMessage());
-                generalErrorTarget.setVisibility(view.VISIBLE);
-                successTry = false;
-            }
+
         }
         else // Else our internal checks did not pass
         {
             generalErrorTarget.setText("Invalid Input");
             generalErrorTarget.setVisibility(view.VISIBLE);
         }
+
+    }
+
+
+    //What runs if a subscription was successfully added to the database,
+    // Will set some success messages, show a toast message, and switch view back to main, and then finish this activity
+    private void  successAddedSubscription()
+    {
+        generalErrorTarget.setVisibility(View.VISIBLE);
+        generalErrorTarget.setText(successAddMessage);
+        generalErrorTarget.setTextColor(Color.parseColor(accomplishColor));
+        disableAddSubscriptionsButtons();
+
+        Toast.makeText(this, successAddMessage, Toast.LENGTH_SHORT).show(); //Display "Subscription Added"
+        setContentView(R.layout.activity_main); // Switch screen to display main page
+        finish(); //We are done with this activity
 
     }
 
@@ -248,11 +277,9 @@ public class AddSubscriptionActivity extends AppCompatActivity {
          addSubtarget.setEnabled(false); // Disable the add button
 
         // Make all the input uneditable
-        EditText textInput = (EditText) findViewById(R.id.input_subscription_name);
-        textInput.setEnabled(false);
+        nameInput.setEnabled(false);
 
-        EditText paymentAmountTarget = (EditText) findViewById(R.id.input_payment_amount);
-        paymentAmountTarget.setEnabled(false);
+        paymentAmount.setEnabled(false);
 
 
     }
