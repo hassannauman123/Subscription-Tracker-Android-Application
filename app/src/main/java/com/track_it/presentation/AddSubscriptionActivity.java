@@ -40,12 +40,19 @@ public class AddSubscriptionActivity extends AppCompatActivity {
    private TextView generalErrorTarget; // where general error messages are displayed
 
     private  TextView paymentAmountError;
+    private TextView nameError;
+    private TextView frequencyError;
+
+
+
 
     private boolean successTry; // used by the clickedAddSubscriptionButton function, to keep track of if all the input is valid
 
 
     private AutoCompleteTextView frequencyTarget;
     private TextInputLayout dropDownMenuParent;
+
+
 
 
 
@@ -98,10 +105,11 @@ public class AddSubscriptionActivity extends AppCompatActivity {
         nameInput = (EditText) findViewById(R.id.input_subscription_name); // Set target for name input
 
 
-        // Set where general error messages are displayed
+        // Set where  error messages are displayed
         generalErrorTarget = ((TextView) findViewById(R.id.subscription_error));
-
         paymentAmountError = ((TextView) findViewById(R.id.input_payment_amount_error));
+        nameError = ((TextView) findViewById(R.id.input_subscription_name_error)); // where to display name errors
+        frequencyError = ((TextView) findViewById(R.id.input_frequency_error )); // where to display name errors
 
 
 
@@ -220,7 +228,6 @@ public class AddSubscriptionActivity extends AppCompatActivity {
     {
         // Get the string the user entered for a name
         String userNameInput = nameInput.getText().toString().trim(); // get string, and remove white spaces
-        TextView nameError = ((TextView) findViewById(R.id.input_subscription_name_error)); // where to display name errors
 
         try {
             subHandler.validateName(userNameInput);
@@ -245,7 +252,6 @@ public class AddSubscriptionActivity extends AppCompatActivity {
     {
 
         String PaymentFrequency = frequencyTarget.getText().toString(); // Get payment frequency from user input
-        TextView frequencyError = ((TextView) findViewById(R.id.input_frequency_error )); // where to display name errors
 
         // Try to validate selection, if Exception is detected display error to user
         try {
