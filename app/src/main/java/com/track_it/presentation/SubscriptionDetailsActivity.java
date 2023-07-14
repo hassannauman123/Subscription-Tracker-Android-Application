@@ -273,13 +273,13 @@ public class SubscriptionDetailsActivity extends AppCompatActivity {
     }
 
     // Toggle the edit sub button from edit to save changes (or vice versa)
-    private void changeEditButton() {
+    private void changeEditButton()
+    {
         if (editMode == false) {
             editButton.setBackgroundColor(Color.parseColor(editButtonColor));
             editButton.setText("Edit Subscription");
-
-
-        } else {
+        }
+        else {
             editButton.setBackgroundColor(Color.parseColor(saveButtonColor));
             editButton.setText("Save Changes");
         }
@@ -293,8 +293,7 @@ public class SubscriptionDetailsActivity extends AppCompatActivity {
         //If we are not in edit mode, and the subscription has not already been deleted  -then switch to edit mode
         if (editMode == false && !alreadyDeleted)
         {
-            editMode = true; // change to edit mode
-            switchEditModes(editMode);
+             switchEditModes();
 
 
         }
@@ -383,16 +382,15 @@ public class SubscriptionDetailsActivity extends AppCompatActivity {
                 subHandler.editWholeSubscription(subscriptionToDisplay.getID(), subscriptionToDisplay);
 
                 //Everything worked, so time to switch back to none-edit mode!
-                editMode = false;
-                switchEditModes(editMode);
+                switchEditModes();
 
-            } catch (SubscriptionException e)
+            } catch (SubscriptionException e)   //There was some error with the changes
             {
-                //There was some error with saving changes
+                // Display error
                 setGeneralError(e.getMessage(), errorColor);
                 generalErrorTarget.setVisibility(View.VISIBLE);
             }
-            catch (DataBaseException e)  //Catch - Something wrong with databsae saving
+            catch (DataBaseException e)  //Catch - Something wrong with database saving changes
             {
                 // Display error
                  setGeneralError(e.getMessage(), errorColor);
@@ -416,26 +414,24 @@ public class SubscriptionDetailsActivity extends AppCompatActivity {
 
 
     //switch edit modes based on boolean input
-    private void switchEditModes(boolean editMode)
+    private void switchEditModes()
     {
+        editMode = !editMode;
 
         if (editMode )  // Switch to edit mode
         {
-
-            editMode = true; // change to edit mode
             enableInputChanges(true); // enable the inputs to be edited
             changeEditButton(); // toggle the edit button to change
 
         }
         else // Switch to non edit mode
         {
-            //Everything worked, so time to switch back to none-edit mode!
-            editMode = editMode;
             enableInputChanges(editMode); // No longer allow inputs to be edited
             changeEditButton(); // Edit button changes back
             setGeneralError(validEditMessage, accomplishColor);
-
         }
+
+
     }
 
 
