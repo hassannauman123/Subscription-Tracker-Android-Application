@@ -58,17 +58,12 @@ public class AddSubscriptionActivity extends AppCompatActivity {
 
         setTargets(); //Set global variable targets
         constrainUserInput(); //Set what a user can enter for input
-        setUpAndEnableInput(); //Enable input
+        FrequencyMenu.initializeMenu(this, subHandler, frequencyTarget); // Enable drop down menu
         setButtonActions(); //Set what happens when buttons are clicked
     }
 
 
-    //Setup the input, and allowable parameters for the user.
-    private void setUpAndEnableInput() {
 
-        FrequencyMenu.initializeMenu(this, subHandler, frequencyTarget);
-
-    }
 
 
 
