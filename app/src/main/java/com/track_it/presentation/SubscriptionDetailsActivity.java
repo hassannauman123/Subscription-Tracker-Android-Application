@@ -11,7 +11,6 @@ import android.view.View;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,7 +19,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.material.textfield.TextInputLayout;
 import com.track_it.R;
 import com.track_it.domainobject.SubscriptionObj;
-import com.track_it.logic.exceptions.DataBaseException;
+import com.track_it.logic.exceptions.DatabaseException;
 import com.track_it.logic.exceptions.SubscriptionException;
 import com.track_it.logic.SubscriptionHandler;
 import com.track_it.presentation.util.DecimalDigitsInputFilter;
@@ -216,7 +215,7 @@ public class SubscriptionDetailsActivity extends AppCompatActivity {
             {
                 setGeneralError(e.getMessage(), errorColor);
             }
-            catch (DataBaseException e) {
+            catch (DatabaseException e) {
                 setGeneralError(e.getMessage(), errorColor);
             }
         }
@@ -392,7 +391,7 @@ public class SubscriptionDetailsActivity extends AppCompatActivity {
                 setGeneralError(e.getMessage(), errorColor);
                 generalErrorTarget.setVisibility(View.VISIBLE);
             }
-            catch (DataBaseException e)  //Catch - Something wrong with database saving changes
+            catch (DatabaseException e)  //Catch - Something wrong with database saving changes
             {
                 // Display error
                  setGeneralError(e.getMessage(), errorColor);

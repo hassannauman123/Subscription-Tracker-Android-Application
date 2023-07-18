@@ -14,15 +14,14 @@ import com.track_it.R;
 import com.track_it.domainobject.SubscriptionObj;
 import com.track_it.logic.SubscriptionHandler;
 import com.track_it.logic.comparators.*;
-import com.track_it.logic.exceptions.DataBaseException;
+import com.track_it.logic.exceptions.DatabaseException;
 import com.track_it.logic.exceptions.SubscriptionException;
 import com.track_it.logic.exceptions.SubscriptionInvalidFrequencyException;
  import com.track_it.persistence.utils.DBHelper;
  import com.track_it.presentation.util.SetupParameters;
-import com.track_it.presentation.util.SetupParameters;
 
 
-import android.content.Intent;
+ import android.content.Intent;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
@@ -136,7 +135,7 @@ public class MainActivity extends AppCompatActivity {
             enableError(e.getMessage());
 
         }
-        catch( DataBaseException e)  //Something went wrong with getting subs, display error
+        catch( DatabaseException e)  //Something went wrong with getting subs, display error
         {
             enableError(e.getMessage());
         }

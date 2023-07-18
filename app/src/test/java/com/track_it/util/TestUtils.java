@@ -56,12 +56,12 @@ public class TestUtils {
     }
 
 
-    // Change whether we should use real dataBase
+    // Change whether we should use real database
     public static void setUseRealDatabase(boolean input) {
         useRealDatabase = input;
     }
 
-    //Get whether we should use real dataBase
+    //Get whether we should use real database
     public static boolean getUseRealDatabase()
     {
         return useRealDatabase;

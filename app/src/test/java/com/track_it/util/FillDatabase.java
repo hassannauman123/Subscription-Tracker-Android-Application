@@ -8,11 +8,11 @@ import java.util.List;
 
 //This class is used to fill a database (using a SubscriptionHandler) with fake data
 
-public class FillDataBase {
+public class FillDatabase {
 
 
     //Fill database with subscriptions that are random
-    public static void fillDataBaseRandomSubscriptions(final SubscriptionHandler subHandler, int numSubs) {
+    public static void fillDatabaseRandomSubscriptions(final SubscriptionHandler subHandler, int numSubs) {
 
         try {
             for (int i = 0; i < numSubs; i++) {
@@ -118,7 +118,7 @@ public class FillDataBase {
 
 
     //Fill database with fake data that is not random, using defined objects
-    public static void fillDataBaseNormal(final SubscriptionHandler subHandler)
+    public static void fillDatabaseNormal(final SubscriptionHandler subHandler)
     {
         // Create 10 subs, with less random Names
         List<String> FrequencyList = subHandler.getFrequencyNameList();

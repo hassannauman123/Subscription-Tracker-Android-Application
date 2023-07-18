@@ -7,11 +7,8 @@ import com.track_it.logic.comparators.CompareSubscriptionName;
 import com.track_it.logic.comparators.CompareSubscriptionPayment;
 import com.track_it.logic.SubscriptionHandler;
 import com.track_it.logic.frequencies.Frequency;
-import com.track_it.persistence.SubscriptionPersistence;
-import com.track_it.persistence.fakes.FakeSubscriptionPersistenceDatabase;
-import com.track_it.persistence.hsqldb.SubscriptionPersistenceHSQLDB;
 import com.track_it.presentation.util.SetupParameters;
-import com.track_it.util.FillDataBase;
+import com.track_it.util.FillDatabase;
 import com.track_it.util.TestUtils;
 
 import org.junit.Before;
@@ -20,11 +17,8 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 import static org.junit.Assert.assertFalse;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
-import java.util.Scanner;
 
 public class SubscriptionSortTest
 {
@@ -40,7 +34,7 @@ public class SubscriptionSortTest
         TestUtils.changeDatabase();
 
         subHandle = SetupParameters.getSubscriptionHandler();
-        FillDataBase.fillDataBaseRandomSubscriptions(subHandle, 20); //Create 20 random subs, and add them to Database
+        FillDatabase.fillDatabaseRandomSubscriptions(subHandle, 20); //Create 20 random subs, and add them to Database
         listOfSubs = subHandle.getAllSubscriptions(); // Get subscriptions from database
 
     }
@@ -56,7 +50,7 @@ public class SubscriptionSortTest
 
         // Get new DataBase and fill with non-random data
         subHandle = SetupParameters.getSubscriptionHandler();
-        FillDataBase.fillFakeData(subHandle); //Fill database with a few non random inputs
+        FillDatabase.fillFakeData(subHandle); //Fill database with a few non random inputs
         TestUtils.changeDatabase();
 
 
@@ -88,7 +82,7 @@ public class SubscriptionSortTest
 
         // Get new DataBase and fill with non-random data
         subHandle = SetupParameters.getSubscriptionHandler();
-        FillDataBase.fillFakeData(subHandle); //Fill database with a few non random inputs
+        FillDatabase.fillFakeData(subHandle); //Fill database with a few non random inputs
         TestUtils.changeDatabase();
 
         confirmSortPayment();
@@ -121,7 +115,7 @@ public class SubscriptionSortTest
 
         // Get new DataBase and fill with non-random data
         subHandle = SetupParameters.getSubscriptionHandler();
-        FillDataBase.fillFakeData(subHandle); //Fill database with a few non random inputs
+        FillDatabase.fillFakeData(subHandle); //Fill database with a few non random inputs
         TestUtils.changeDatabase();
 
         confirmSortFrequency();

@@ -20,7 +20,7 @@ public class AllUnitTests
 {
 
 
-    //Set the dataBase to be a FakeDataBase instance.
+    //Set the database to be a FakeDataBase instance.
     @ClassRule
     public static ExternalResource testRule = new ExternalResource(){
         @Override

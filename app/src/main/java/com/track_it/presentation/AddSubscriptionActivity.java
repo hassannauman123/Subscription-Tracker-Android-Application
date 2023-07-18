@@ -3,7 +3,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
@@ -15,7 +14,7 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.track_it.R;
 import com.track_it.domainobject.SubscriptionObj;
 import com.track_it.logic.SubscriptionHandler;
-import com.track_it.logic.exceptions.DataBaseException;
+import com.track_it.logic.exceptions.DatabaseException;
 import com.track_it.logic.exceptions.SubscriptionException;
 import com.track_it.presentation.util.DecimalDigitsInputFilter;
 import com.track_it.presentation.util.FrequencyMenu;
@@ -180,14 +179,14 @@ public class AddSubscriptionActivity extends AppCompatActivity {
             // Create a new Subscription object
             SubscriptionObj newSubscription = new SubscriptionObj(userNameInput, paymentInCents, PaymentFrequency); // Sets the parameters
 
-            try { // Try to add subscription to dataBase
+            try { // Try to add subscription to database
 
                 subHandler.addSubscription(newSubscription); //Throws an error if could not add subscription to database
                 successAddedSubscription();
 
             }
             // Something went wrong, display error for user
-            catch (SubscriptionException | DataBaseException e) {
+            catch (SubscriptionException | DatabaseException e) {
                 generalErrorTarget.setText(e.getMessage());
                 generalErrorTarget.setVisibility(view.VISIBLE);
                 successTry = false;

@@ -3,13 +3,9 @@ package com.track_it;
 
 import com.track_it.domainobject.SubscriptionObj;
 import com.track_it.logic.SubscriptionHandler;
-import com.track_it.logic.exceptions.DataBaseException;
+import com.track_it.logic.exceptions.DatabaseException;
 import com.track_it.logic.exceptions.SubscriptionException;
-import com.track_it.persistence.SubscriptionPersistence;
-import com.track_it.persistence.fakes.FakeSubscriptionPersistenceDatabase;
-import com.track_it.persistence.hsqldb.SubscriptionPersistenceHSQLDB;
 import com.track_it.presentation.util.SetupParameters;
-import com.track_it.util.FillDataBase;
 import com.track_it.util.TestUtils;
 
 import org.junit.Before;
@@ -17,9 +13,6 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 import static org.junit.Assert.assertFalse;
-
-import java.io.File;
-import java.util.Scanner;
 
 
 public class SubscriptionsAddEditRemoveTest
@@ -95,7 +88,7 @@ public class SubscriptionsAddEditRemoveTest
 
         }
 
-        catch(DataBaseException | SubscriptionException e)
+        catch(DatabaseException | SubscriptionException e)
         {
             System.out.println("FAILED Edit subscription test before running. Failed to add the subscription");
             System.out.println(e.getMessage());
