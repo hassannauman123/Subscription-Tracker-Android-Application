@@ -109,25 +109,7 @@ public class SubscriptionDetailsActivity extends AppCompatActivity {
     }
 
 
-
-    //This function will set up a few filters, constraining what the user is allowed to enter for input.
-    private void constrainInput()
-    {
-
-        //Set input some restriction for name input
-        int maxLength = subHandler.getMaxNameLength();
-        nameTarget.setFilters( new InputFilter[] {new InputFilter.LengthFilter(maxLength)}); // Set max length of name
-
-        // This physically constrains the user for what they can enter into the payment amount field ( How many digits before decimal, how many after)
-        EditText etText = findViewById(R.id.detail_subscription_amount);  // Target Payment amount input
-        etText.setFilters(new InputFilter[]{new DecimalDigitsInputFilter(MAX_PAYMENT_DECIMALS, MAX_DIGITS_BEFORE_DECIMAL)}); // Pass setFilters and array
-
-
-
-    }
-
-
-    //Sets the private variable targets so they can be used through out the activity
+    //Sets the variable targets so they can be used through out the activity
     private void setTargets()
     {
 
@@ -151,6 +133,26 @@ public class SubscriptionDetailsActivity extends AppCompatActivity {
 
 
     }
+
+
+
+
+    //This function will set up a few filters, constraining what the user is allowed to enter for input.
+    private void constrainInput()
+    {
+
+        //Set input some restriction for name input
+        int maxLength = subHandler.getMaxNameLength();
+        nameTarget.setFilters( new InputFilter[] {new InputFilter.LengthFilter(maxLength)}); // Set max length of name
+
+        // This physically constrains the user for what they can enter into the payment amount field ( How many digits before decimal, how many after)
+        EditText etText = findViewById(R.id.detail_subscription_amount);  // Target Payment amount input
+        etText.setFilters(new InputFilter[]{new DecimalDigitsInputFilter(MAX_PAYMENT_DECIMALS, MAX_DIGITS_BEFORE_DECIMAL)}); // Pass setFilters and array
+
+
+
+    }
+
 
     private void enableGoBackButton()
     {

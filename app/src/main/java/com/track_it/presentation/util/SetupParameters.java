@@ -20,8 +20,7 @@ import java.util.List;
 // It will return a subscription Handler with appropriate set parameters and database.
 // Will return the same SubscriptionHandler each time (single item) if the database has not been changed.
 
-public class SetupParameters
-{
+public class SetupParameters {
 
     // Parameters to set limits on what a subscription can be
     private static final int MIN_NAME_LENGTH = 1;
@@ -32,50 +31,45 @@ public class SetupParameters
     private static final String allowableCharactersInName = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890 -!@#$%^&*()_+=|{=}[]':?<>',."; // Our current list of allowable characters in the name
 
 
-    private static  List<Frequency> allowableFrequencies  = null; // will hold allowable frequencies
-    private static  SubscriptionPersistence DataBase = Services.getSubscriptionPersistence();  // Database that we will use
-    private static SubscriptionHandler subHandler = null ; // subscription handler
+    private static  final List<Frequency> allowableFrequencies =  InitFrequency() ; // will hold allowable frequencies
+    private static SubscriptionPersistence DataBase = Services.getSubscriptionPersistence();  // Database that we will use
+    private static SubscriptionHandler subHandler = null; // subscription handler
 
 
-    public static void initializeDatabase(SubscriptionPersistence inputDB)
-    {
-        InitFrequency();
+
+    public static void initializeDatabase(SubscriptionPersistence inputDB) {
         //Create a new subscription handler if the database has changed
         DataBase = inputDB;
-        subHandler = new SubscriptionHandler(MIN_NAME_LENGTH,MAX_NAME_LENGTH,MIN_PAYMENT_IN_CENTS,MAX_PAYMENT_IN_CENTS,allowableCharactersInName, allowableFrequencies,DataBase);
+        subHandler = new SubscriptionHandler(MIN_NAME_LENGTH, MAX_NAME_LENGTH, MIN_PAYMENT_IN_CENTS, MAX_PAYMENT_IN_CENTS, allowableCharactersInName, allowableFrequencies, DataBase);
 
     }
 
     //Wrapper for the logic layer
-    public static SubscriptionHandler getSubscriptionHandler()
-    {
+    public static SubscriptionHandler getSubscriptionHandler() {
 
-        InitFrequency();
-        if ( subHandler == null) // Only create one instance of the subscription handler, and return it each time
+        if (subHandler == null) // Only create one instance of the subscription handler, and return it each time
         {
-            subHandler = new SubscriptionHandler(MIN_NAME_LENGTH,MAX_NAME_LENGTH,MIN_PAYMENT_IN_CENTS,MAX_PAYMENT_IN_CENTS,allowableCharactersInName, allowableFrequencies, DataBase);
+            subHandler = new SubscriptionHandler(MIN_NAME_LENGTH, MAX_NAME_LENGTH, MIN_PAYMENT_IN_CENTS, MAX_PAYMENT_IN_CENTS, allowableCharactersInName, allowableFrequencies, DataBase);
         }
         return subHandler;
     }
 
 
     //Initialize the frequency list
-    private static void InitFrequency()
-    {
+    private static List<Frequency> InitFrequency() {
 
-        if ( allowableFrequencies == null)
-        {
-            allowableFrequencies = new ArrayList<Frequency>();
-            allowableFrequencies.add(new DailyFrequency());
-            allowableFrequencies.add(new WeeklyFrequency());
-            allowableFrequencies.add(new BiWeekly());
-            allowableFrequencies.add(new MonthlyFrequency());
-            allowableFrequencies.add(new YearlyFrequency());
-        }
+        ArrayList<Frequency> returnList = new ArrayList<Frequency>();
+
+
+        returnList.add(new DailyFrequency());
+        returnList.add(new WeeklyFrequency());
+        returnList.add(new BiWeekly());
+        returnList.add(new MonthlyFrequency());
+        returnList.add(new YearlyFrequency());
+
+        return returnList;
+
     }
-
-
-
 
 
 }

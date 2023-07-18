@@ -44,15 +44,11 @@ public class AddSubscriptionActivity extends AppCompatActivity {
     private TextView frequencyError;
 
 
-
-
     private boolean successTry; // used by the clickedAddSubscriptionButton function, to keep track of if all the input is valid
 
 
-    private AutoCompleteTextView frequencyTarget;
-    private TextInputLayout dropDownMenuParent;
-
-
+    private AutoCompleteTextView frequencyTarget; //Input for the frequency
+    private TextInputLayout dropDownMenuParent;  //Parent of the frequency targets
 
 
 
@@ -73,28 +69,15 @@ public class AddSubscriptionActivity extends AppCompatActivity {
 
 
 
-
-    //Constrain what a user can enter for input
-    private void constrainUserInput()
-    {
-
-        // This physically constrains the user for what they can enter into the payment amount field ( How many digits before decimal, how many after)
-        MAX_DIGITS_BEFORE_DECIMAL = SubscriptionInput.NumDigits(subHandler.getMaxPaymentDollars()); // get the number of digits allowed before decimal (used to constrain user input)
-        paymentAmount.setFilters(new InputFilter[]{new DecimalDigitsInputFilter(MAX_PAYMENT_DECIMALS, MAX_DIGITS_BEFORE_DECIMAL)}); // Pass setFilters and array of objects that implement the InputFilter interface
-
-        //limit what the user can enter for name
-        int maxLength = subHandler.getMaxNameLength();
-        nameInput.setFilters(new InputFilter[]{new InputFilter.LengthFilter(maxLength)}); // Set max length the user can enter for input
-
-
-    }
-
-
     //Set the global variable targets
     private void setTargets()
     {
-        // Set the add subscription button click handler (What runs when the add subscription button is click)
+        // Set the add subscription button
         addSubtarget = (Button) findViewById(R.id.submit_sub_button);
+
+        //Back button target
+        backTarget = (Button) findViewById(R.id.go_home);
+
 
         //Frequency menu targets
         frequencyTarget = findViewById(R.id.AutoComplete_drop_menu);
@@ -112,8 +95,27 @@ public class AddSubscriptionActivity extends AppCompatActivity {
         frequencyError = ((TextView) findViewById(R.id.input_frequency_error )); // where to display name errors
 
 
+    }
+
+
+
+
+    //Constrain what a user can enter for input
+    private void constrainUserInput()
+    {
+
+        // This physically constrains the user for what they can enter into the payment amount field ( How many digits before decimal, how many after)
+        MAX_DIGITS_BEFORE_DECIMAL = SubscriptionInput.NumDigits(subHandler.getMaxPaymentDollars()); // get the number of digits allowed before decimal (used to constrain user input)
+        paymentAmount.setFilters(new InputFilter[]{new DecimalDigitsInputFilter(MAX_PAYMENT_DECIMALS, MAX_DIGITS_BEFORE_DECIMAL)}); // Pass setFilters and array of objects that implement the InputFilter interface
+
+        //limit what the user can enter for name
+        int maxLength = subHandler.getMaxNameLength();
+        nameInput.setFilters(new InputFilter[]{new InputFilter.LengthFilter(maxLength)}); // Set max length the user can enter for input
+
 
     }
+
+
 
 
    //  Set What happens when buttons are clicked
@@ -131,8 +133,6 @@ public class AddSubscriptionActivity extends AppCompatActivity {
 
 
 
-        // Set back button target
-        backTarget = (Button) findViewById(R.id.go_home);
 
         // Set what happens when backButton clicked
         backTarget.setOnClickListener(new View.OnClickListener() {
@@ -145,7 +145,6 @@ public class AddSubscriptionActivity extends AppCompatActivity {
         });
 
     }
-
 
 
 

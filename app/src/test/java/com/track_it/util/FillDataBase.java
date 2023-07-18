@@ -151,6 +151,13 @@ public class FillDataBase {
              currSub = new SubscriptionObj(inputName, payment, frequency);
              subHandler.addSubscription(currSub);
 
+
+            inputName = "Museum pass ";
+            frequency = FrequencyList.get(2);
+            payment = 4567;
+            currSub = new SubscriptionObj(inputName, payment, frequency);
+            subHandler.addSubscription(currSub);
+
              inputName = "Frank ";
              frequency = FrequencyList.get(3);
              payment = 99999;

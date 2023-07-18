@@ -1,6 +1,7 @@
 package com.track_it.presentation;
 
-import androidx.appcompat.app.AppCompatActivity;
+
+ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -16,6 +17,8 @@ import com.track_it.logic.comparators.*;
 import com.track_it.logic.exceptions.DataBaseException;
 import com.track_it.logic.exceptions.SubscriptionException;
 import com.track_it.logic.exceptions.SubscriptionInvalidFrequencyException;
+ import com.track_it.persistence.utils.DBHelper;
+ import com.track_it.presentation.util.SetupParameters;
 import com.track_it.presentation.util.SetupParameters;
 
 
@@ -68,8 +71,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main); // Switch screen to display main page
 
-        com.cook_ebook.persistence.utils.DBHelper.copyDatabaseToDevice(this); // Copy database
-
+         DBHelper.copyDatabaseToDevice(this); // Copy database
 
         //Get subscription handler
         subHandler = SetupParameters.getSubscriptionHandler();
@@ -123,20 +125,19 @@ public class MainActivity extends AppCompatActivity {
     //Get the all subscriptions from the logic layer, and store in listOfSubs
     private void getSubList()
     {
+
+        listOfSubs = new ArrayList<SubscriptionObj>(); // make list empty
         try {
-            //Get subscription handler, and list of subscriptions
-            subHandler = SetupParameters.getSubscriptionHandler();
+            //Get list of subscriptions
             listOfSubs = subHandler.getAllSubscriptions();
          }
         catch( SubscriptionException e) //Something went wrong with getting subs, display error
         {
-            listOfSubs = new ArrayList<SubscriptionObj>(); // make list empty
             enableError(e.getMessage());
 
         }
         catch( DataBaseException e)  //Something went wrong with getting subs, display error
         {
-            listOfSubs = new ArrayList<SubscriptionObj>(); // make list empty
             enableError(e.getMessage());
         }
     }
@@ -201,7 +202,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            public boolean onQueryTextChange(String newText) //What happens when user types in search bar
+            public boolean onQueryTextChange(String newText) //What happens when user type and other char into search bar
             {
 
                 displayAllSubscriptions();  //Display all subs (It will filter based on input from user)
@@ -216,7 +217,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-        // Setting onClick behavior to the button
+        // Setting onClick behavior for the sort button
         filterButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -339,7 +340,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-    //Set the behavior of setSubscriptionBoxBehaviour when it's clicked
+    //Set the behavior of a subscriptionBox when it's clicked
     private void setSubscriptionBoxBehaviour(View subscriptionBox)
     {
 

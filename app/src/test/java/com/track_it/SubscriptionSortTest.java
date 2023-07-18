@@ -54,7 +54,7 @@ public class SubscriptionSortTest
         confirmSortName();
 
 
-        //Let random data
+        // Get new DataBase and fill with non-random data
         subHandle = SetupParameters.getSubscriptionHandler();
         FillDataBase.fillFakeData(subHandle); //Fill database with a few non random inputs
         TestUtils.changeDatabase();
@@ -86,7 +86,7 @@ public class SubscriptionSortTest
         confirmSortPayment();
 
 
-        //Let random data
+        // Get new DataBase and fill with non-random data
         subHandle = SetupParameters.getSubscriptionHandler();
         FillDataBase.fillFakeData(subHandle); //Fill database with a few non random inputs
         TestUtils.changeDatabase();
@@ -117,14 +117,14 @@ public class SubscriptionSortTest
      public void testSortFrequency()
     {
 
-        confirmFrequency();
+        confirmSortFrequency();
 
-        //Less random data
+        // Get new DataBase and fill with non-random data
         subHandle = SetupParameters.getSubscriptionHandler();
         FillDataBase.fillFakeData(subHandle); //Fill database with a few non random inputs
         TestUtils.changeDatabase();
 
-        confirmFrequency();
+        confirmSortFrequency();
 
 
 
@@ -133,7 +133,7 @@ public class SubscriptionSortTest
     }
 
 
-    private void confirmFrequency()
+    private void confirmSortFrequency()
     {
 
 

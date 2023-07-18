@@ -28,16 +28,16 @@ public class SubscriptionHandler {
     private final int MAX_PAYMENT_DOLLAR; //Will be the maximum dollar amount ( calculated from MAX_PAYMENT)
     private final int MAX_PAYMENT_CENTS; //Will be the maximum cents amount ( calculated from MAX_PAYMENT)
 
-     private final String allowableCharactersInName;
+    private final String allowableCharactersInName;
 
     private final List<Frequency> frequencyList;
-    private SubscriptionPersistence subscriptionPersistence; //Database Handler
+    private final SubscriptionPersistence subscriptionPersistence; //Database Handler
 
 
 
     public SubscriptionHandler( int inputMinNameLen, int inputMaxNameLen, int inputMinPayment, int inputMaxPayment,String inputAllowableChars, List<Frequency> inputAllowableFrequencies,  SubscriptionPersistence inputDB )
     {
-        //Set the Data base, and various parameters for what is a valid subscription
+        //Set the Database used, and various parameters for what is a valid subscription
         this.subscriptionPersistence =  inputDB;
         this.MIN_NAME_LENGTH = inputMinNameLen;
         this.MAX_NAME_LENGTH = inputMaxNameLen;
@@ -63,7 +63,7 @@ public class SubscriptionHandler {
 
     //Return a frequency object that matches the frequency type of inputSubscription.
     // will throw SubscriptionInvalidFrequencyException if frequency of inputSubscription is not valid
-    public Frequency getFrequencyObject( SubscriptionObj inputSubscription) throws SubscriptionInvalidFrequencyException
+    public Frequency getFrequencyObject(final SubscriptionObj inputSubscription) throws SubscriptionInvalidFrequencyException
     {
         Frequency returnFrequency = null;
 

@@ -19,7 +19,8 @@ import java.util.List;
 
 //This class implements a HSQL database for subscriptions.
 
-public class SubscriptionPersistenceHSQLDB implements SubscriptionPersistence {
+public class SubscriptionPersistenceHSQLDB implements SubscriptionPersistence
+{
 
 
     private final String dbPath;

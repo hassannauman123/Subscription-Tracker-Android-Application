@@ -1,5 +1,7 @@
 package com.track_it.util;
 
+
+import com.track_it.application.Main;
 import com.track_it.application.Services;
 
 import java.io.File;
@@ -21,7 +23,7 @@ public class TestUtils {
     public static File copyDB() throws IOException {
         final File target = File.createTempFile("temp-db", ".script");
         Files.copy(DB_SRC, target);
-        comp3350.srsys.application.Main.setDBPathName(target.getAbsolutePath().replace(".script", ""));
+        Main.setDBPathName(target.getAbsolutePath().replace(".script", ""));
         return target;
     }
 
