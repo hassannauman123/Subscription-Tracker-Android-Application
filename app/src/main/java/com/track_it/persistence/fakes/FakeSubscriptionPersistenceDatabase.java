@@ -140,7 +140,7 @@ public class FakeSubscriptionPersistenceDatabase implements SubscriptionPersiste
             }
         }
 
-        if ( removed == false)
+        if ( !removed)
         {
             throw new DatabaseSubNotFoundException("Cannot delete subscription,\n subscription not found in Database!");
         }

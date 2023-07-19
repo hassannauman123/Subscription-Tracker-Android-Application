@@ -18,7 +18,8 @@ public class TestUtils {
     private static boolean useRealDatabase = false; //Should we use real database? - Default false means use fakeDataBase
 
 
-    public static File copyDB() throws IOException {
+    public static File copyDB() throws IOException
+    {
         final File target = File.createTempFile("temp-db", ".script");
         Files.copy(DB_SRC, target);
         Main.setDBPathName(target.getAbsolutePath().replace(".script", ""));
@@ -31,7 +32,6 @@ public class TestUtils {
     {
         if (TestUtils.getUseRealDatabase())//Use real SQL database
         {
-
 
             try {
                 File tempDB;
