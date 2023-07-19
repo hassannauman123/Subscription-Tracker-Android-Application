@@ -68,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main); // Switch screen to display main page
 
-        com.cook_ebook.persistence.utils.DBHelper.copyDatabaseToDevice(this); // Copy database
+        com.track_it.persistence.utils.DBHelper.copyDatabaseToDevice(this); // Copy database
 
 
         //Get subscription handler

@@ -1,4 +1,4 @@
-package com.cook_ebook.persistence.utils;
+package com.track_it.persistence.utils;
 
 import android.content.Context;
 import android.content.res.AssetManager;
@@ -29,7 +29,7 @@ public class DBHelper {
 
             copyAssetsToDirectory(context, assetNames, dataDirectory);
 
-            comp3350.srsys.application.Main.setDBPathName(dataDirectory.toString() + "/" + comp3350.srsys.application.Main.getDBPathName());
+            com.track_it.application.Main.setDBPathName(dataDirectory.toString() + "/" + com.track_it.application.Main.getDBPathName());
 
         } catch (final IOException ioe) {
             System.out.println("Unable to access application data: " + ioe.getMessage());
