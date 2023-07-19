@@ -39,7 +39,7 @@ public class SubscriptionsAddEditRemoveTest
 
         String name = "Valid Name";
         String paymentFrequency = subHandle.getFrequencyNameList().get(0);
-        int paymentAmount = (int) (Math.random() * subHandle.getMaxPaymentTotal()) + 1;
+        int paymentAmount =  222;
 
 
         boolean thrown = false;
@@ -79,7 +79,7 @@ public class SubscriptionsAddEditRemoveTest
 
         String Name = "Valid Name";
         String paymentFrequency = subHandle.getFrequencyNameList().get(0);
-        int PaymentAmount = (int) (Math.random() * subHandle.getMaxPaymentTotal()) + 1;
+        int PaymentAmount = 11;
 
         SubscriptionObj newSub = new SubscriptionObj(Name,PaymentAmount,paymentFrequency);
 
@@ -100,10 +100,10 @@ public class SubscriptionsAddEditRemoveTest
         boolean thrown = false;
 
         String newName = "New name";
-        int newPayment = (int) (Math.random() * subHandle.getMaxPaymentTotal()) + 1;
+        int newPayment = 47555;
         while (newPayment == PaymentAmount)
         {
-            newPayment = (int) (Math.random() * subHandle.getMaxPaymentTotal()) + 1; //Make sure the new payment is not the same as the old
+            newPayment = 221; //Make sure the new payment is not the same as the old
         }
         String newPaymentFrequency = subHandle.getFrequencyNameList().get(1); //Get different payment frequency
 
@@ -149,7 +149,7 @@ public class SubscriptionsAddEditRemoveTest
 
         String name = "Valid Name";
         String paymentFrequency = subHandle.getFrequencyNameList().get(0);
-        int paymentAmount = (int) (Math.random() * subHandle.getMaxPaymentTotal()) + 1;
+        int paymentAmount = 1;
 
         SubscriptionObj newSub = new SubscriptionObj(name,paymentAmount,paymentFrequency);
         subHandle.addSubscription(newSub);
@@ -209,7 +209,7 @@ public class SubscriptionsAddEditRemoveTest
 
         String name = "Valid Name";
         String paymentFrequency = subHandle.getFrequencyNameList().get(0);
-        int paymentAmount = (int) (Math.random() * subHandle.getMaxPaymentTotal()) + 1;
+        int paymentAmount = 23441;
 
         SubscriptionObj newSub = new SubscriptionObj(name,paymentAmount,paymentFrequency);
 
