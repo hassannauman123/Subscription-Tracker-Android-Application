@@ -3,13 +3,9 @@ package com.track_it;
 
 import com.track_it.domainobject.SubscriptionObj;
 import com.track_it.logic.SubscriptionHandler;
-import com.track_it.logic.exceptions.DataBaseException;
+import com.track_it.logic.exceptions.DatabaseException;
 import com.track_it.logic.exceptions.SubscriptionException;
-import com.track_it.persistence.SubscriptionPersistence;
-import com.track_it.persistence.fakes.FakeSubscriptionPersistenceDatabase;
-import com.track_it.persistence.hsqldb.SubscriptionPersistenceHSQLDB;
-import com.track_it.presentation.util.SetupParameters;
-import com.track_it.util.FillDataBase;
+import com.track_it.application.SetupParameters;
 import com.track_it.util.TestUtils;
 
 import org.junit.Before;
@@ -17,9 +13,6 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 import static org.junit.Assert.assertFalse;
-
-import java.io.File;
-import java.util.Scanner;
 
 
 public class SubscriptionsAddEditRemoveTest
@@ -38,16 +31,15 @@ public class SubscriptionsAddEditRemoveTest
      }
 
 
-    //Currently we don't have a real database, so there is no point in switching database before running
-
-    //Creates a new subscription object, add it to database, then tries to edit that subscription object (All with valid data)\
+     // Test Adding a subscription object.
+    //Creates a new subscription object then adds it to database (using subHandler logic layer), and then retrieve the subscription, and check that it has the correct information
     @Test
     public void testAddSub()
     {
 
         String name = "Valid Name";
         String paymentFrequency = subHandle.getFrequencyNameList().get(0);
-        int paymentAmount = (int) (Math.random() * subHandle.getMaxPaymentTotal()) + 1;
+        int paymentAmount =  222;
 
 
         boolean thrown = false;
@@ -80,14 +72,14 @@ public class SubscriptionsAddEditRemoveTest
 
 
 
-    //Creates a new subscription object, add it to database, then tries to edit that subscription object (All with valid data)\
+    //Creates a new subscription object then adds it to database (using subHandler logic layer) , and then tries to edit that subscription object (All with valid data)
     @Test
     public void testEditValid()
     {
 
         String Name = "Valid Name";
         String paymentFrequency = subHandle.getFrequencyNameList().get(0);
-        int PaymentAmount = (int) (Math.random() * subHandle.getMaxPaymentTotal()) + 1;
+        int PaymentAmount = 11;
 
         SubscriptionObj newSub = new SubscriptionObj(Name,PaymentAmount,paymentFrequency);
 
@@ -96,7 +88,7 @@ public class SubscriptionsAddEditRemoveTest
 
         }
 
-        catch(DataBaseException | SubscriptionException e)
+        catch(DatabaseException | SubscriptionException e)
         {
             System.out.println("FAILED Edit subscription test before running. Failed to add the subscription");
             System.out.println(e.getMessage());
@@ -108,10 +100,10 @@ public class SubscriptionsAddEditRemoveTest
         boolean thrown = false;
 
         String newName = "New name";
-        int newPayment = (int) (Math.random() * subHandle.getMaxPaymentTotal()) + 1;
+        int newPayment = 47555;
         while (newPayment == PaymentAmount)
         {
-            newPayment = (int) (Math.random() * subHandle.getMaxPaymentTotal()) + 1; //Make sure the new payment is not the same as the old
+            newPayment = 221; //Make sure the new payment is not the same as the old
         }
         String newPaymentFrequency = subHandle.getFrequencyNameList().get(1); //Get different payment frequency
 
@@ -149,13 +141,15 @@ public class SubscriptionsAddEditRemoveTest
 
     }
 
+
+    // Test editing a subscription object with invalid changes
     @Test
     public void testEditInValid()
     {
 
         String name = "Valid Name";
         String paymentFrequency = subHandle.getFrequencyNameList().get(0);
-        int paymentAmount = (int) (Math.random() * subHandle.getMaxPaymentTotal()) + 1;
+        int paymentAmount = 1;
 
         SubscriptionObj newSub = new SubscriptionObj(name,paymentAmount,paymentFrequency);
         subHandle.addSubscription(newSub);
@@ -208,13 +202,14 @@ public class SubscriptionsAddEditRemoveTest
 
     }
 
+    //Test removing a subscription object
     @Test
     public void testRemove()
     {
 
         String name = "Valid Name";
         String paymentFrequency = subHandle.getFrequencyNameList().get(0);
-        int paymentAmount = (int) (Math.random() * subHandle.getMaxPaymentTotal()) + 1;
+        int paymentAmount = 23441;
 
         SubscriptionObj newSub = new SubscriptionObj(name,paymentAmount,paymentFrequency);
 

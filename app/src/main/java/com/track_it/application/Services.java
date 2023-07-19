@@ -14,7 +14,7 @@ public class Services
     {
         if (subscriptionPersistence == null)
         {
-             subscriptionPersistence = new SubscriptionPersistenceHSQLDB(comp3350.srsys.application.Main.getDBPathName());
+             subscriptionPersistence = new SubscriptionPersistenceHSQLDB(Main.getDBPathName());
         }
 
         return subscriptionPersistence;

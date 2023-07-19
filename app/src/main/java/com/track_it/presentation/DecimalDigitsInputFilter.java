@@ -1,4 +1,4 @@
-package com.track_it.presentation.util;
+package com.track_it.presentation;
 
 import android.text.InputFilter;
 import android.text.Spanned;
@@ -20,7 +20,8 @@ public class DecimalDigitsInputFilter implements InputFilter {
     // Makes it such that the string the user is allowed to entered will be in the format such that the number of digits before the decimal will be at most digitBeforeDecimal
     // and the number of digits after the decimal will be decimalDigits
     @Override
-    public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
+    public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend)
+    {
 
         //Reminder
         // source is the char being added.
@@ -34,31 +35,29 @@ public class DecimalDigitsInputFilter implements InputFilter {
 
 
         //Prevent a decimal from being added in front of more than 2 integers!
-        if (source.equals("."))
+        if (source.equals("."))  //If input is a decimal
         {
-            if ( dest.toString().length() - dstart > decimalDigitsAfter)
+            if (dest.toString().length() - dstart > decimalDigitsAfter) // And that decimal is being added in front of more than 2 characters
             {
-                returnValue = "";
+                returnValue = ""; // Reject the the input
             }
 
         }
-
         else //Else the new character was not decimal point
         {
             // Iterate over the string, looking for decimal character
             for (int i = 0; i < len; i++) {
                 char charIterator = dest.charAt(i); // The current char being read
 
-                if (charIterator == '.') {
-                    dotPos = i; // Decimal place found
-                    break;
-                } else if ((i >= digitBeforeDecimal - 1) && !source.equals("."))  // The maximum amount of integers before the decimal
-
+                if (charIterator == '.')  //We found a decimal
                 {
-                    if ((i + 1) < len && dest.charAt(i + 1) == '.') // The next char after this is a decimal, so we are good
+                    dotPos = i; // Decimal place found
+                    break; //Break out of the the whole for loop, saving the decimal location
+                }
+                else if ((i > digitBeforeDecimal - 1) && !source.equals("."))  // Else, check if the maximum amount of integers before the decimal has occured
+                {
+                    if ((i + 1) >= len || dest.charAt(i + 1) != '.')
                     {
-                        continue; // Continue back to loop ( dotPos will end being = to i+1);
-                    } else {
                         returnValue = ""; // Else we hit the maximum number of integers before decimal, and the next char is not a decimal so don't add anything
                         break; // Break out of this for loop, and dotPos will <
                     }
@@ -73,8 +72,9 @@ public class DecimalDigitsInputFilter implements InputFilter {
                     returnValue = null;
                 }
                 // Else - If there are already 2 digits past the decimal and source digit is going past decimal reject source
-                else if (len - dotPos > decimalDigitsAfter) {
-                    returnValue = "";
+                else if (len - dotPos > decimalDigitsAfter)
+                {
+                    returnValue = ""; // Reject source
                 }
             }
         }

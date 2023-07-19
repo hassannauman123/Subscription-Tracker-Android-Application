@@ -1,4 +1,4 @@
-package com.track_it.presentation.util;
+package com.track_it.presentation;
 
 import android.text.InputFilter;
 import android.text.Spanned;
@@ -12,16 +12,11 @@ import com.track_it.logic.SubscriptionHandler;
 
 
 public class SubscriptionInput {
-    private final SubscriptionHandler subHandle;
 
-    public SubscriptionInput(SubscriptionHandler inputSubHandle)
-    {
-        subHandle = inputSubHandle;
-    }
 
 
     // Get the input payment amount that the user entered.
-    public int getPaymentAmountInput(EditText inputLocation) throws SubscriptionInvalidPaymentException
+    public int getPaymentAmountInput(EditText inputLocation )
     {
 
         String[] paymentAmountString = inputLocation.getText().toString().split("\\.");
@@ -55,10 +50,6 @@ public class SubscriptionInput {
             }
         }
 
-
-        subHandle.validatePaymentAmount(paymentInCents); // Try to validate payment amount. Will throw exception if invalid.
-
-
         return paymentInCents;
 
     }
@@ -66,7 +57,9 @@ public class SubscriptionInput {
 
 
     // check if the input string is parsable by Integer.parseInt function
+    //
     private boolean isParsable(String inputString) {
+
         try {
             Integer.parseInt(inputString);
             return true;

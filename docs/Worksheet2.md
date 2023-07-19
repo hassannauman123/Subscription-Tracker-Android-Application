@@ -8,7 +8,7 @@ Updated as a list of frequency objects:
 https://code.cs.umanitoba.ca/3350-summer2023/ghostdevs-7/-/blame/bryceWorking/app/src/main/java/com/track_it/logic/SubscriptionHandler.java#L30  
 
 2. Dependency Inversion Principle Violation:
-Originally our code was highly coupled with the concrete implementation of our fake database (an array list) instead of using an interface and we had no dependency injection. This was addressed by rewriting and restructuring several classes and tests to support different database implementations. This debt was prudent and inadvertent as we knew we would be implementing a SQL database for the second iteration which would require several modifications, however, we didn't have enough knowledge at the time to know how to properly structure our code as we had no familiarity with Android development or experience using a database interface. We knew going into iteration 2 several changes would have to be made but taking on the debt in iteration 1 allowed us to work quickly and focus on other aspects of the project.  
+Originally our code was highly coupled with the concrete implementation of our fake database (an array list) instead of using an interface and we had no dependency injection. This was addressed by rewriting and restructuring several classes and tests to support different database implementations. This debt was prudent and deliberate as we knew we would be implementing a SQL database for the second iteration which would require several modifications, however, we didn't have enough knowledge at the time to know how to properly structure our code as we had no familiarity with Android development or experience using a database interface. We knew going into iteration 2 several changes would have to be made but taking on the debt in iteration 1 allowed us to work quickly and focus on other aspects of the project.  
 Example of where some of these changes were made:  
 https://code.cs.umanitoba.ca/3350-summer2023/ghostdevs-7/-/blob/develop/app/src/main/java/com/track_it/logic/SubscriptionHandler.java?ref_type=heads#L41
 
@@ -23,7 +23,7 @@ Firstly, we had agreed that the manner in which we wrote our commit messages cou
 
 A second issue we acknowledged was that we failed to calculate and report the total time spent on each user story and feature. This was well documented and reported as can be observed in the issues section.
 
-Communication overall seemed to improve. Our group was more responsive for this iteration and worked well together. An example of this was when one group member was working on a bug fix while another member was in possession of the Samsung device at the time. One member would implement changes, the other group member would run the app with the updates and report back what still needed to be addressed. This was done very efficiently.
+Communication overall seemed to improve. Our group was more responsive for this iteration and worked well together. An example of this was when one group member was working on a bug fix while another member was in possession of the Samsung device at the time. One member would implement changes, the other group member would run the app with the updates and report back what still needed to be addressed. [This was done very efficiently.](https://imgur.com/a/YlUCMaC)
 
 ## Design Patterns
 Singleton design pattern, combined with a builder class.  

@@ -1,6 +1,7 @@
 package com.track_it.presentation;
 
-import androidx.appcompat.app.AppCompatActivity;
+
+ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -10,16 +11,17 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 
 import com.track_it.R;
-import com.track_it.domainobject.SubscriptionObj;
+ import com.track_it.application.SetupParameters;
+ import com.track_it.domainobject.SubscriptionObj;
 import com.track_it.logic.SubscriptionHandler;
 import com.track_it.logic.comparators.*;
-import com.track_it.logic.exceptions.DataBaseException;
+import com.track_it.logic.exceptions.DatabaseException;
 import com.track_it.logic.exceptions.SubscriptionException;
 import com.track_it.logic.exceptions.SubscriptionInvalidFrequencyException;
-import com.track_it.presentation.util.SetupParameters;
+ import com.track_it.persistence.utils.DBHelper;
 
 
-import android.content.Intent;
+ import android.content.Intent;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
@@ -68,8 +70,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main); // Switch screen to display main page
 
-        com.cook_ebook.persistence.utils.DBHelper.copyDatabaseToDevice(this); // Copy database
-
+         DBHelper.copyDatabaseToDevice(this); // Copy database
 
         //Get subscription handler
         subHandler = SetupParameters.getSubscriptionHandler();
@@ -100,7 +101,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-    //Set all the target for the global variables for this activity
+    //Set all the targets for the global variables for this activity
     private void setTargets()
     {
         //Where errors will show
@@ -123,22 +124,20 @@ public class MainActivity extends AppCompatActivity {
     //Get the all subscriptions from the logic layer, and store in listOfSubs
     private void getSubList()
     {
+
+        listOfSubs = new ArrayList<SubscriptionObj>(); // make list empty
         try {
-            //Get subscription handler, and list of subscriptions
-            subHandler = SetupParameters.getSubscriptionHandler();
+            //Get list of subscriptions
             listOfSubs = subHandler.getAllSubscriptions();
          }
         catch( SubscriptionException e) //Something went wrong with getting subs, display error
         {
-            listOfSubs = new ArrayList<SubscriptionObj>(); // make list empty
             enableError(e.getMessage());
 
         }
-        catch( DataBaseException e)  //Something went wrong with getting subs, display error
+        catch( DatabaseException e)  //Something went wrong with getting subs, display error
         {
-            listOfSubs = new ArrayList<SubscriptionObj>(); // make list empty
             enableError(e.getMessage());
-
         }
     }
 
@@ -165,7 +164,6 @@ public class MainActivity extends AppCompatActivity {
 
     //Enable the add subscription button
     private void enableAddSubButton() {
-
 
 
         //Set what happens when user clicks add subscription button
@@ -203,7 +201,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            public boolean onQueryTextChange(String newText) //What happens when user types in search bar
+            public boolean onQueryTextChange(String newText) //What happens when user type and other char into search bar
             {
 
                 displayAllSubscriptions();  //Display all subs (It will filter based on input from user)
@@ -218,7 +216,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-        // Setting onClick behavior to the button
+        // Setting onClick behavior for the sort button
         filterButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -228,7 +226,7 @@ public class MainActivity extends AppCompatActivity {
                 // Inflating popup menu from sort_menu.xml file
                 popupMenu.getMenuInflater().inflate(R.menu.sort_menu, popupMenu.getMenu());
 
-                //Set what happens when use select option from pop up sort menu
+                //Set what happens when user selects option from pop up sort menu
                 popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     @Override
                     public boolean onMenuItemClick(MenuItem menuItem) {
@@ -280,7 +278,7 @@ public class MainActivity extends AppCompatActivity {
         searchString = searchInput.getQuery().toString().toLowerCase(); // Get the search string ( We will only show subs where the name contains the search string)
         sortSubs(listOfSubs, subSorter); // Sort the subscription
 
-        // Clear everything previously in list
+        // Clears all the subscription boxes that were previously displayed on screen
         displaySubList.removeAllViews();
 
 
@@ -341,7 +339,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-    //Set the behavior of setSubscriptionBoxBehaviour when it's clicked
+    //Set the behavior of a subscriptionBox when it's clicked
     private void setSubscriptionBoxBehaviour(View subscriptionBox)
     {
 

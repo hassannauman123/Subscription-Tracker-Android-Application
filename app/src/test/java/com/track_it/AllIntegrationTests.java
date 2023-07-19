@@ -22,7 +22,7 @@ import org.junit.runners.Suite;
 public class AllIntegrationTests{
 
 
-        //Set the dataBase to be a real HSQL database with a test script - This runs before every class that is tested
+        //Set the database to be a real HSQL database with a test script - This runs before every class that is tested
         @ClassRule
         public static ExternalResource testRule = new ExternalResource(){
                 @Override

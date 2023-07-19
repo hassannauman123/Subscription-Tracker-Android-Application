@@ -1,16 +1,16 @@
 package com.track_it.util;
 
-import com.track_it.application.Services;
+
+import com.track_it.application.Main;
 
 import java.io.File;
 import java.io.IOException;
 
 import com.google.common.io.Files;
-import com.track_it.logic.SubscriptionHandler;
 import com.track_it.persistence.SubscriptionPersistence;
 import com.track_it.persistence.fakes.FakeSubscriptionPersistenceDatabase;
 import com.track_it.persistence.hsqldb.SubscriptionPersistenceHSQLDB;
-import com.track_it.presentation.util.SetupParameters;
+import com.track_it.application.SetupParameters;
 
 public class TestUtils {
     private static final File DB_SRC = new File("src/main/assets/db/Test.script");
@@ -18,10 +18,11 @@ public class TestUtils {
     private static boolean useRealDatabase = false; //Should we use real database? - Default false means use fakeDataBase
 
 
-    public static File copyDB() throws IOException {
+    public static File copyDB() throws IOException
+    {
         final File target = File.createTempFile("temp-db", ".script");
         Files.copy(DB_SRC, target);
-        comp3350.srsys.application.Main.setDBPathName(target.getAbsolutePath().replace(".script", ""));
+        Main.setDBPathName(target.getAbsolutePath().replace(".script", ""));
         return target;
     }
 
@@ -31,7 +32,6 @@ public class TestUtils {
     {
         if (TestUtils.getUseRealDatabase())//Use real SQL database
         {
-
 
             try {
                 File tempDB;
@@ -54,12 +54,12 @@ public class TestUtils {
     }
 
 
-    // Change whether we should use real dataBase
+    // Change whether we should use real database
     public static void setUseRealDatabase(boolean input) {
         useRealDatabase = input;
     }
 
-    //Get whether we should use real dataBase
+    //Get whether we should use real database
     public static boolean getUseRealDatabase()
     {
         return useRealDatabase;

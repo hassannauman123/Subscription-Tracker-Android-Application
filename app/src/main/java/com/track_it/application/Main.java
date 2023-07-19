@@ -1,5 +1,5 @@
-package comp3350.srsys.application;
 
+package com.track_it.application;
 
 public class Main
 {

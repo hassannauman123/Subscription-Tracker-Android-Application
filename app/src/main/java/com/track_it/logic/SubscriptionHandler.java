@@ -1,7 +1,7 @@
 package com.track_it.logic;
 
 import com.track_it.domainobject.SubscriptionObj;
-import com.track_it.logic.exceptions.DataBaseException;
+import com.track_it.logic.exceptions.DatabaseException;
 import com.track_it.logic.exceptions.SubscriptionException;
 import com.track_it.logic.exceptions.SubscriptionInvalidFrequencyException;
 import com.track_it.logic.exceptions.SubscriptionInvalidNameException;
@@ -28,16 +28,16 @@ public class SubscriptionHandler {
     private final int MAX_PAYMENT_DOLLAR; //Will be the maximum dollar amount ( calculated from MAX_PAYMENT)
     private final int MAX_PAYMENT_CENTS; //Will be the maximum cents amount ( calculated from MAX_PAYMENT)
 
-     private final String allowableCharactersInName;
+    private final String allowableCharactersInName;
 
-    private ArrayList<Frequency> frequencyList  = new ArrayList<>();
-    private SubscriptionPersistence subscriptionPersistence; //Database Handler
+    private final List<Frequency> frequencyList;
+    private final SubscriptionPersistence subscriptionPersistence; //Database Handler
 
 
 
-    public SubscriptionHandler( int inputMinNameLen, int inputMaxNameLen, int inputMinPayment, int inputMaxPayment,String inputAllowableChars, SubscriptionPersistence inputDB )
+    public SubscriptionHandler( int inputMinNameLen, int inputMaxNameLen, int inputMinPayment, int inputMaxPayment,String inputAllowableChars, List<Frequency> inputAllowableFrequencies,  SubscriptionPersistence inputDB )
     {
-        //Set the Data base, and various parameters for what is a valid subscription
+        //Set the Database used, and various parameters for what is a valid subscription
         this.subscriptionPersistence =  inputDB;
         this.MIN_NAME_LENGTH = inputMinNameLen;
         this.MAX_NAME_LENGTH = inputMaxNameLen;
@@ -46,34 +46,24 @@ public class SubscriptionHandler {
         this.MAX_PAYMENT_DOLLAR = this.MAX_PAYMENT / 100;
         this.MAX_PAYMENT_CENTS = this.MAX_PAYMENT - this.MAX_PAYMENT_DOLLAR * 100;
         this.allowableCharactersInName = inputAllowableChars;
-        InitFrequency();
+        this.frequencyList = inputAllowableFrequencies;
     }
 
-
-    //Initialize the frequency list
-    private void InitFrequency()
-    {
-        frequencyList.add(new DailyFrequency());
-        frequencyList.add(new BiWeekly());
-        frequencyList.add(new WeeklyFrequency());
-        frequencyList.add(new MonthlyFrequency());
-        frequencyList.add(new YearlyFrequency());
-    }
 
     // This function will add subscriptionToAdd to database. It will first validate subscription, and then
     // try to add to database.
     // It will throw Exceptions if anything goes wrong (like invalid data), so caller should be prepared to catch them.
-    public void addSubscription(SubscriptionObj subscriptionToAdd) throws DataBaseException, SubscriptionException
+    public void addSubscription(SubscriptionObj subscriptionToAdd) throws DatabaseException, SubscriptionException
     {
         validateWholeSubscription(subscriptionToAdd); // May throw exception if subscription details are not valid
-        subscriptionPersistence.addSubscriptionToDB(subscriptionToAdd); // Add to dataBase, will throw DataBaseException if subscription could not be added to dat base.
+        subscriptionPersistence.addSubscriptionToDB(subscriptionToAdd); // Add to database, will throw DataBaseException if subscription could not be added to dat base.
     }
 
 
 
     //Return a frequency object that matches the frequency type of inputSubscription.
     // will throw SubscriptionInvalidFrequencyException if frequency of inputSubscription is not valid
-    public Frequency getFrequencyObject( SubscriptionObj inputSubscription) throws SubscriptionInvalidFrequencyException
+    public Frequency getFrequencyObject(final SubscriptionObj inputSubscription) throws SubscriptionInvalidFrequencyException
     {
         Frequency returnFrequency = null;
 
@@ -177,7 +167,7 @@ public class SubscriptionHandler {
 
 
     // Gets and returns a single subscription by ID from the database.
-    public SubscriptionObj getSubscriptionByID(int inputID) throws DataBaseException {
+    public SubscriptionObj getSubscriptionByID(int inputID) throws DatabaseException {
 
         SubscriptionObj returnSub = this.subscriptionPersistence.getSubscriptionByID(inputID);
         return returnSub;
@@ -185,7 +175,7 @@ public class SubscriptionHandler {
     }
 
     // Gets and returns list of all the subscriptions in the database
-    public List<SubscriptionObj> getAllSubscriptions() throws DataBaseException
+    public List<SubscriptionObj> getAllSubscriptions() throws DatabaseException
     {
         return this.subscriptionPersistence.getAllSubscriptions();
     }
@@ -193,7 +183,7 @@ public class SubscriptionHandler {
 
     // Removes a subscription by ID from the database.
     // Will throw an Exception if subscription could not be deleted from database
-    public void removeSubscriptionByID(int subscriptionID) throws DataBaseException {
+    public void removeSubscriptionByID(int subscriptionID) throws DatabaseException {
 
         subscriptionPersistence.removeSubscriptionByID(subscriptionID); // Remove it
     }
@@ -204,7 +194,7 @@ public class SubscriptionHandler {
     // Input Parameters:
     //       subscriptionID  - The id of the subscription to change
     //       subscriptionToEdit - The details that the subscription will be changed to.
-    public void editWholeSubscription(int subscriptionID,final SubscriptionObj newSubDetails) throws DataBaseException, SubscriptionException {
+    public void editWholeSubscription(int subscriptionID,final SubscriptionObj newSubDetails) throws DatabaseException, SubscriptionException {
         validateWholeSubscription(newSubDetails); // Validate the subscription
         this.subscriptionPersistence.editSubscriptionByID(subscriptionID, newSubDetails); // save the edits to subscription persistence.
     }
