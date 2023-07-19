@@ -108,7 +108,6 @@ public class SubscriptionDetailsActivity extends AppCompatActivity {
     }
 
 
-
     //Set colors by resource file
     private void setColors() {
         errorColor = getResources().getString(R.color.error_color);
@@ -322,8 +321,9 @@ public class SubscriptionDetailsActivity extends AppCompatActivity {
         int inputPaymentAmount = 0;
 
         try {
-            inputPaymentAmount = subInput.getPaymentAmountInput(paymentAmountTarget, subHandler); // This function throws exceptions if payment invalid
-        } catch (SubscriptionException e) // Payment amount not valid
+            inputPaymentAmount = subInput.getPaymentAmountInput(paymentAmountTarget); // This function throws exceptions if payment invalid
+            subHandler.validatePaymentAmount(inputPaymentAmount);
+        } catch (SubscriptionException  e) // Payment amount not valid
         {
             // Display errors
             valid = false;

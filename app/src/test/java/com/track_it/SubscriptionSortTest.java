@@ -20,128 +20,73 @@ import static org.junit.Assert.assertFalse;
 import java.util.Collections;
 import java.util.List;
 
-public class SubscriptionSortTest
-{
+public class SubscriptionSortTest {
 
 
     private SubscriptionHandler subHandle;
-    private  List<SubscriptionObj> listOfSubs;
+    private List<SubscriptionObj> listOfSubs;
 
     @Before
-    public void setTestHandle()
-    {
+    public void setTestHandle() {
 
         TestUtils.changeDatabase();
 
         subHandle = SetupParameters.getSubscriptionHandler();
-        FillDatabase.fillDatabaseRandomSubscriptions(subHandle, 20); //Create 20 random subs, and add them to Database
+        FillDatabase.fillDataBase(subHandle);  //Create some subs,  and add them to Database
         listOfSubs = subHandle.getAllSubscriptions(); // Get subscriptions from database
 
     }
 
 
-
     @Test
-    public void testSortByName()
-    {
+    public void testSortByName() {
 
-        confirmSortName();
-
-
-        // Get new DataBase and fill with non-random data
-        subHandle = SetupParameters.getSubscriptionHandler();
-        FillDatabase.fillFakeData(subHandle); //Fill database with a few non random inputs
-        TestUtils.changeDatabase();
+        Collections.sort(listOfSubs, new CompareSubscriptionName()); //Sort by name
 
 
-        confirmSortName();
+        for (int i = 0; i < listOfSubs.size() - 1; i++) {
+
+            String firstName = listOfSubs.get(i).getName();
+            String secondName = listOfSubs.get(i + 1).getName();
+            assertTrue("FAILED sortName test\n. " + firstName + " was before " + secondName + ". After sorting by name", firstName.toLowerCase().compareTo(secondName.toLowerCase()) <= 0);
+        }
+
+
         System.out.println("PASSED the sort by name test");
     }
 
-    public void confirmSortName()
-    {
-        Collections.sort(listOfSubs,new CompareSubscriptionName()); //Sort by name
-
-
-        for ( int i = 0; i < listOfSubs.size() -1 ; i ++)
-        {
-
-            String firstName = listOfSubs.get(i).getName();
-            String secondName = listOfSubs.get(i+1).getName();
-            assertTrue( "FAILED sortName test\n. " + firstName + " was before " +  secondName + ". After sorting by name" ,firstName.toLowerCase().compareTo(secondName.toLowerCase()) <= 0);
-        }
-    }
-
 
     @Test
-     public void testSortByPayment()
-    {
-
-        confirmSortPayment();
+    public void testSortByPayment() {
 
 
-        // Get new DataBase and fill with non-random data
-        subHandle = SetupParameters.getSubscriptionHandler();
-        FillDatabase.fillFakeData(subHandle); //Fill database with a few non random inputs
-        TestUtils.changeDatabase();
+        Collections.sort(listOfSubs, new CompareSubscriptionPayment()); //Sort by payment amount
 
-        confirmSortPayment();
+        for (int i = 0; i < listOfSubs.size() - 1; i++) {
+            int firstPay = listOfSubs.get(i).getTotalPaymentInCents();
+            int secondPay = listOfSubs.get(i + 1).getTotalPaymentInCents();
+            assertTrue("FAILED sortPayment test. " + firstPay + " was before " + secondPay + ". After sorting by payment", firstPay <= secondPay);
+        }
 
 
         System.out.println("PASSED the sort by payment test ");
     }
 
 
-    public void confirmSortPayment()
-    {
-
-
-        Collections.sort(listOfSubs,new CompareSubscriptionPayment() ); //Sort by payment amount
-
-        for ( int i = 0; i < listOfSubs.size() -1 ; i ++)
-        {
-            int firstPay= listOfSubs.get(i).getTotalPaymentInCents();
-            int secondPay = listOfSubs.get(i+1).getTotalPaymentInCents();
-            assertTrue( "FAILED sortPayment test. " + firstPay + " was before " +  secondPay + ". After sorting by payment" ,firstPay <= secondPay);
-        }
-
-    }
-
     @Test
-     public void testSortFrequency()
+    public void testSortFrequency()
     {
+        Collections.sort(listOfSubs, new CompareSubscriptionFrequency()); // Sort by frequency amount
 
-        confirmSortFrequency();
-
-        // Get new DataBase and fill with non-random data
-        subHandle = SetupParameters.getSubscriptionHandler();
-        FillDatabase.fillFakeData(subHandle); //Fill database with a few non random inputs
-        TestUtils.changeDatabase();
-
-        confirmSortFrequency();
-
-
+        for (int i = 0; i < listOfSubs.size() - 1; i++) {
+            String firstFrequencyName = listOfSubs.get(i).getPaymentFrequency();
+            String secondFrequencyName = listOfSubs.get(i + 1).getPaymentFrequency();
+            Frequency firstFrequency = subHandle.getFrequencyObject(listOfSubs.get(i));
+            Frequency secondFrequency = subHandle.getFrequencyObject(listOfSubs.get(i + 1));
+            assertTrue("FAILED frequency test. " + firstFrequencyName + " was before " + secondFrequencyName + ". After sorting by frequency", firstFrequency.daysBetweenPayment() <= secondFrequency.daysBetweenPayment());
+        }
 
         System.out.println("PASSED the sort by payment frequency test");
-
-    }
-
-
-    private void confirmSortFrequency()
-    {
-
-
-        Collections.sort(listOfSubs,new CompareSubscriptionFrequency()); // Sort by frequency amount
-
-        for ( int i = 0; i < listOfSubs.size() -1 ; i ++)
-        {
-            String firstFrequencyName = listOfSubs.get(i).getPaymentFrequency();
-            String secondFrequencyName = listOfSubs.get(i+1).getPaymentFrequency();
-            Frequency firstFrequency =  subHandle.getFrequencyObject(listOfSubs.get(i));
-            Frequency secondFrequency = subHandle.getFrequencyObject(listOfSubs.get(i+1));
-            assertTrue( "FAILED frequency test. " + firstFrequencyName + " was before " +  secondFrequencyName + ". After sorting by frequency" ,firstFrequency.daysBetweenPayment() <= secondFrequency.daysBetweenPayment());
-        }
-
 
     }
 

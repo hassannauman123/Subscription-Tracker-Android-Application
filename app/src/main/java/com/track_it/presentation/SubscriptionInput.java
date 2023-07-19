@@ -16,7 +16,7 @@ public class SubscriptionInput {
 
 
     // Get the input payment amount that the user entered.
-    public int getPaymentAmountInput(EditText inputLocation,SubscriptionHandler subHandle) throws SubscriptionInvalidPaymentException
+    public int getPaymentAmountInput(EditText inputLocation )
     {
 
         String[] paymentAmountString = inputLocation.getText().toString().split("\\.");
@@ -49,10 +49,6 @@ public class SubscriptionInput {
                 }
             }
         }
-
-
-        subHandle.validatePaymentAmount(paymentInCents); // Try to validate payment amount. Will throw exception if invalid.
-
 
         return paymentInCents;
 

@@ -157,11 +157,12 @@ public class AddSubscriptionActivity extends AppCompatActivity {
          SubscriptionInput subInput = new SubscriptionInput(); // Make a helper object, to get user input
           int paymentInCents = 1;
           try {
-              paymentInCents = subInput.getPaymentAmountInput(paymentAmount,subHandler);
+              paymentInCents = subInput.getPaymentAmountInput(paymentAmount);
+              subHandler.validatePaymentAmount(paymentInCents);
               paymentAmountError.setVisibility(View.INVISIBLE);
 
           }
-          catch(Exception e)
+          catch(SubscriptionException e)
           {
               successTry = false;
               paymentAmountError.setText(e.getMessage());
