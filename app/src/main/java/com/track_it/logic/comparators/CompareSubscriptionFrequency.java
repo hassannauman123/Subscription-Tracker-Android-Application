@@ -2,8 +2,7 @@ package com.track_it.logic.comparators;
 
 import com.track_it.domainobject.SubscriptionObj;
 import com.track_it.logic.SubscriptionHandler;
-import com.track_it.logic.exceptions.SubscriptionException;
-import com.track_it.presentation.util.SetupParameters;
+import com.track_it.application.SetupParameters;
 
 import java.util.Comparator;
 

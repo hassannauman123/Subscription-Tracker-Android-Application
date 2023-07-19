@@ -11,14 +11,14 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 
 import com.track_it.R;
-import com.track_it.domainobject.SubscriptionObj;
+ import com.track_it.application.SetupParameters;
+ import com.track_it.domainobject.SubscriptionObj;
 import com.track_it.logic.SubscriptionHandler;
 import com.track_it.logic.comparators.*;
 import com.track_it.logic.exceptions.DatabaseException;
 import com.track_it.logic.exceptions.SubscriptionException;
 import com.track_it.logic.exceptions.SubscriptionInvalidFrequencyException;
  import com.track_it.persistence.utils.DBHelper;
- import com.track_it.presentation.util.SetupParameters;
 
 
  import android.content.Intent;

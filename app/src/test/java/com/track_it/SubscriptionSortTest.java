@@ -7,7 +7,7 @@ import com.track_it.logic.comparators.CompareSubscriptionName;
 import com.track_it.logic.comparators.CompareSubscriptionPayment;
 import com.track_it.logic.SubscriptionHandler;
 import com.track_it.logic.frequencies.Frequency;
-import com.track_it.presentation.util.SetupParameters;
+import com.track_it.application.SetupParameters;
 import com.track_it.util.FillDatabase;
 import com.track_it.util.TestUtils;
 

@@ -12,20 +12,17 @@ import android.widget.Toast;
 
 import com.google.android.material.textfield.TextInputLayout;
 import com.track_it.R;
+import com.track_it.application.SetupParameters;
 import com.track_it.domainobject.SubscriptionObj;
 import com.track_it.logic.SubscriptionHandler;
 import com.track_it.logic.exceptions.DatabaseException;
 import com.track_it.logic.exceptions.SubscriptionException;
-import com.track_it.presentation.util.DecimalDigitsInputFilter;
-import com.track_it.presentation.util.FrequencyMenu;
-import com.track_it.presentation.util.SetupParameters;
-import com.track_it.presentation.util.SubscriptionInput;
 
 
 // This class handles the presentation of the add subscription page for the app.
 public class AddSubscriptionActivity extends AppCompatActivity {
 
-    private String accomplishColor = "#8c1f7c";
+    private String accomplishColor;
 
     private static final String successAddMessage = "Subscription Added!";  // Message to display if add sub was successful
 
@@ -58,6 +55,7 @@ public class AddSubscriptionActivity extends AppCompatActivity {
 
         subHandler = SetupParameters.getSubscriptionHandler();
 
+        accomplishColor = getResources().getString(R.color.accomplish_color); // Accomplish text color
         setTargets(); //Set global variable targets
         constrainUserInput(); //Set what a user can enter for input
         FrequencyMenu.initializeMenu(this, subHandler, frequencyTarget); // Enable drop down menu
@@ -156,10 +154,10 @@ public class AddSubscriptionActivity extends AppCompatActivity {
         String userNameInput = getNameInput(view); // Get input for name,
 
         // Get input for payment amount
-         SubscriptionInput subInput = new SubscriptionInput(subHandler); // Make a helper object, to get user input
+         SubscriptionInput subInput = new SubscriptionInput(); // Make a helper object, to get user input
           int paymentInCents = 1;
           try {
-              paymentInCents = subInput.getPaymentAmountInput(paymentAmount);
+              paymentInCents = subInput.getPaymentAmountInput(paymentAmount,subHandler);
               paymentAmountError.setVisibility(View.INVISIBLE);
 
           }

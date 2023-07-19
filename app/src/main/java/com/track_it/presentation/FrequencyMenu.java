@@ -1,4 +1,4 @@
-package com.track_it.presentation.util;
+package com.track_it.presentation;
 
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;

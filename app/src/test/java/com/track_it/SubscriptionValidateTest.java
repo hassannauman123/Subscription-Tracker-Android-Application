@@ -4,8 +4,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import com.track_it.logic.SubscriptionHandler;
-import com.track_it.persistence.fakes.FakeSubscriptionPersistenceDatabase;
-import com.track_it.presentation.util.SetupParameters;
+import com.track_it.application.SetupParameters;
 import com.track_it.util.TestUtils;
 
 import org.junit.Before;
