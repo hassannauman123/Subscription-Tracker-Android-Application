@@ -20,8 +20,7 @@ public class DecimalDigitsInputFilter implements InputFilter {
     // Makes it such that the string the user is allowed to entered will be in the format such that the number of digits before the decimal will be at most digitBeforeDecimal
     // and the number of digits after the decimal will be decimalDigits
     @Override
-    public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend)
-    {
+    public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
 
         //Reminder
         // source is the char being added.
@@ -30,53 +29,23 @@ public class DecimalDigitsInputFilter implements InputFilter {
 
         CharSequence returnValue = null; // Null means we accept source, "" means we reject it
 
-        int dotPos = -1; // Where does the decimal occur in destination?
-        int len = dest.length(); // Get length of previous string
+        String newString = dest.toString().substring(0, dstart) + source.toString() + dest.toString().substring(dend, dest.toString().length()); //What the new string will be if we accept
+
+        String splitAlongDecimal[] = newString.split("\\."); // Split string up along decimal points
 
 
-        //Prevent a decimal from being added in front of more than 2 integers!
-        if (source.equals("."))  //If input is a decimal
+        if (splitAlongDecimal[0].length() > this.digitBeforeDecimal) //Only accept input if there are no more than digitBeforeDecimal number of decimals before decimal point
         {
-            if (dest.toString().length() - dstart > decimalDigitsAfter) // And that decimal is being added in front of more than 2 characters
-            {
-                returnValue = ""; // Reject the the input
-            }
-
+            returnValue = "";
         }
-        else //Else the new character was not decimal point
+        else if (splitAlongDecimal.length > 1 && splitAlongDecimal[1].length() > this.decimalDigitsAfter) // Else - only accept if there is a correct number of digits after decimal
         {
-            // Iterate over the string, looking for decimal character
-            for (int i = 0; i < len; i++) {
-                char charIterator = dest.charAt(i); // The current char being read
+            returnValue = "";
+        }
 
-                if (charIterator == '.')  //We found a decimal
-                {
-                    dotPos = i; // Decimal place found
-                    break; //Break out of the the whole for loop, saving the decimal location
-                }
-                else if ((i > digitBeforeDecimal - 1) && !source.equals("."))  // Else, check if the maximum amount of integers before the decimal has occured
-                {
-                    if ((i + 1) >= len || dest.charAt(i + 1) != '.')
-                    {
-                        returnValue = ""; // Else we hit the maximum number of integers before decimal, and the next char is not a decimal so don't add anything
-                        break; // Break out of this for loop, and dotPos will <
-                    }
-                }
-            }
-
-
-            if (dotPos >= 0)  // Decimal is in the string, and we are trying to insert a digit
-            {
-                // If source is being added to front of decimal and there is room accept source
-                if (dend <= dotPos && (dotPos < digitBeforeDecimal)) {
-                    returnValue = null;
-                }
-                // Else - If there are already 2 digits past the decimal and source digit is going past decimal reject source
-                else if (len - dotPos > decimalDigitsAfter)
-                {
-                    returnValue = ""; // Reject source
-                }
-            }
+       else if (splitAlongDecimal.length > 2) //Only accept if there is 1 decimal
+        {
+            returnValue = "";
         }
 
 

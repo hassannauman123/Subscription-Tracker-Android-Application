@@ -18,8 +18,8 @@ public class TestUtils {
     private static boolean useRealDatabase = false; //Should we use real database? - Default false means use fakeDataBase
 
 
-    public static File copyDB() throws IOException
-    {
+    public static File copyDB() throws IOException {
+
         final File target = File.createTempFile("temp-db", ".script");
         Files.copy(DB_SRC, target);
         Main.setDBPathName(target.getAbsolutePath().replace(".script", ""));
@@ -28,25 +28,21 @@ public class TestUtils {
 
 
     //Change the DataBase - Either to a real SQL database, or a fake database, depending on what useRealDatabase is set to
-    public static void changeDatabase()
-    {
+    public static void changeDatabase() {
         if (TestUtils.getUseRealDatabase())//Use real SQL database
         {
 
             try {
                 File tempDB;
                 tempDB = TestUtils.copyDB();
-                final SubscriptionPersistence persistence = new SubscriptionPersistenceHSQLDB(tempDB.getAbsolutePath().replace(".script", ""),"false");
+                final SubscriptionPersistence persistence = new SubscriptionPersistenceHSQLDB(tempDB.getAbsolutePath().replace(".script", ""), "false");
                 SetupParameters.initializeDatabase(persistence);
-            }
-            catch (IOException e)
-            {
+            } catch (IOException e) {
                 System.out.println(e.getMessage());
-                assert(false);
+                assert (false);
 
             }
-        }
-        else //Use fake Database
+        } else //Use fake Database
         {
 
             SetupParameters.initializeDatabase(new FakeSubscriptionPersistenceDatabase());
@@ -60,11 +56,9 @@ public class TestUtils {
     }
 
     //Get whether we should use real database
-    public static boolean getUseRealDatabase()
-    {
+    public static boolean getUseRealDatabase() {
         return useRealDatabase;
     }
-
 
 
 }

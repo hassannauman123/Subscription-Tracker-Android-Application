@@ -1,5 +1,7 @@
 package com.track_it.presentation;
+
 import androidx.appcompat.app.AppCompatActivity;
+
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
@@ -29,13 +31,13 @@ public class AddSubscriptionActivity extends AppCompatActivity {
     private int MAX_DIGITS_BEFORE_DECIMAL; // The maximum number of digits before the decimal for payment amount
     private final int MAX_PAYMENT_DECIMALS = 2; // The maximum number of digits after the decimal for payment amount
     private SubscriptionHandler subHandler; // Will hold the AddSubscriptionHandler
-    private  EditText nameInput; // Input target for the name of the subscription
+    private EditText nameInput; // Input target for the name of the subscription
     private EditText paymentAmount; // Target for input of payment amount
-   private  Button addSubtarget; // To target add subscription button
+    private Button addSubtarget; // To target add subscription button
     private Button backTarget; // To target back button
-   private TextView generalErrorTarget; // where general error messages are displayed
+    private TextView generalErrorTarget; // where general error messages are displayed
 
-    private  TextView paymentAmountError;
+    private TextView paymentAmountError;
     private TextView nameError;
     private TextView frequencyError;
 
@@ -45,7 +47,6 @@ public class AddSubscriptionActivity extends AppCompatActivity {
 
     private AutoCompleteTextView frequencyTarget; //Input for the frequency
     private TextInputLayout dropDownMenuParent;  //Parent of the frequency targets
-
 
 
     @Override
@@ -63,12 +64,8 @@ public class AddSubscriptionActivity extends AppCompatActivity {
     }
 
 
-
-
-
     //Set the global variable targets
-    private void setTargets()
-    {
+    private void setTargets() {
         // Set the add subscription button
         addSubtarget = (Button) findViewById(R.id.submit_sub_button);
 
@@ -89,17 +86,14 @@ public class AddSubscriptionActivity extends AppCompatActivity {
         generalErrorTarget = ((TextView) findViewById(R.id.subscription_error));
         paymentAmountError = ((TextView) findViewById(R.id.input_payment_amount_error));
         nameError = ((TextView) findViewById(R.id.input_subscription_name_error)); // where to display name errors
-        frequencyError = ((TextView) findViewById(R.id.input_frequency_error )); // where to display name errors
+        frequencyError = ((TextView) findViewById(R.id.input_frequency_error)); // where to display name errors
 
 
     }
 
 
-
-
     //Constrain what a user can enter for input
-    private void constrainUserInput()
-    {
+    private void constrainUserInput() {
 
         // This physically constrains the user for what they can enter into the payment amount field ( How many digits before decimal, how many after)
         MAX_DIGITS_BEFORE_DECIMAL = SubscriptionInput.NumDigits(subHandler.getMaxPaymentDollars()); // get the number of digits allowed before decimal (used to constrain user input)
@@ -113,11 +107,8 @@ public class AddSubscriptionActivity extends AppCompatActivity {
     }
 
 
-
-
-   //  Set What happens when buttons are clicked
-    private void setButtonActions()
-    {
+    //  Set What happens when buttons are clicked
+    private void setButtonActions() {
 
 
         //Set what happens when add button clicked
@@ -127,8 +118,6 @@ public class AddSubscriptionActivity extends AppCompatActivity {
                 clickedAddSubscriptionButton(v); // Run this function when the user clicks the add subscription button.
             }
         });
-
-
 
 
         // Set what happens when backButton clicked
@@ -144,8 +133,6 @@ public class AddSubscriptionActivity extends AppCompatActivity {
     }
 
 
-
-
     // What to run when the user clicks the add Subscription button
     private void clickedAddSubscriptionButton(View view) {
 
@@ -154,26 +141,24 @@ public class AddSubscriptionActivity extends AppCompatActivity {
         String userNameInput = getNameInput(view); // Get input for name,
 
         // Get input for payment amount
-         SubscriptionInput subInput = new SubscriptionInput(); // Make a helper object, to get user input
-          int paymentInCents = 1;
-          try {
-              paymentInCents = subInput.getPaymentAmountInput(paymentAmount);
-              subHandler.validatePaymentAmount(paymentInCents);
-              paymentAmountError.setVisibility(View.INVISIBLE);
+        SubscriptionInput subInput = new SubscriptionInput(); // Make a helper object, to get user input
+        int paymentInCents = 1;
+        try {
+            paymentInCents = subInput.getPaymentAmountInput(paymentAmount);
+            subHandler.validatePaymentAmount(paymentInCents);
+            paymentAmountError.setVisibility(View.INVISIBLE);
 
-          }
-          catch(SubscriptionException e)
-          {
-              successTry = false;
-              paymentAmountError.setText(e.getMessage());
-              paymentAmountError.setVisibility(View.VISIBLE);
-          }
+        } catch (SubscriptionException e) {
+            successTry = false;
+            paymentAmountError.setText(e.getMessage());
+            paymentAmountError.setVisibility(View.VISIBLE);
+        }
 
 
         String PaymentFrequency = getPaymentFrequency(view); //Get input for payment frequency
 
 
-        if (successTry )  // Only if all of our internal checks have passed, try to add subscription to database
+        if (successTry)  // Only if all of our internal checks have passed, try to add subscription to database
         {
             // Create a new Subscription object
             SubscriptionObj newSubscription = new SubscriptionObj(userNameInput, paymentInCents, PaymentFrequency); // Sets the parameters
@@ -191,8 +176,7 @@ public class AddSubscriptionActivity extends AppCompatActivity {
                 successTry = false;
             }
 
-        }
-        else // Else our internal checks did not pass
+        } else // Else our internal checks did not pass
         {
             generalErrorTarget.setText("Invalid Input");
             generalErrorTarget.setVisibility(view.VISIBLE);
@@ -203,8 +187,7 @@ public class AddSubscriptionActivity extends AppCompatActivity {
 
     //What runs if a subscription was successfully added to the database,
     // Will set some success messages, show a toast message, and switch view back to main, and then finish this activity
-    private void  successAddedSubscription()
-    {
+    private void successAddedSubscription() {
         generalErrorTarget.setVisibility(View.VISIBLE);
         generalErrorTarget.setText(successAddMessage);
         generalErrorTarget.setTextColor(Color.parseColor(accomplishColor));
@@ -217,12 +200,9 @@ public class AddSubscriptionActivity extends AppCompatActivity {
     }
 
 
-
-
     // Get the name input from the user.
     // This will throw an Exceptions if name input is invalid, display the error message for the users, and set successTry to false
-    private String getNameInput(View view) throws SubscriptionException
-    {
+    private String getNameInput(View view) throws SubscriptionException {
         // Get the string the user entered for a name
         String userNameInput = nameInput.getText().toString().trim(); // get string, and remove white spaces
 
@@ -242,18 +222,16 @@ public class AddSubscriptionActivity extends AppCompatActivity {
     }
 
 
-
     // Get payment Frequency from user input
     // This function will automatically display any errors if detected with input, and set global variable successTry to false
-    private String getPaymentFrequency(View view)
-    {
+    private String getPaymentFrequency(View view) {
 
         String PaymentFrequency = frequencyTarget.getText().toString(); // Get payment frequency from user input
 
         // Try to validate selection, if Exception is detected display error to user
         try {
             subHandler.validateFrequency(PaymentFrequency);
-              frequencyError.setVisibility(view.INVISIBLE);
+            frequencyError.setVisibility(view.INVISIBLE);
 
 
         } catch (SubscriptionException e) {
@@ -268,11 +246,9 @@ public class AddSubscriptionActivity extends AppCompatActivity {
     }
 
 
-
     // Disable add sub Button and input after we added the sub
-    private void disableAddSubscriptionsButtons()
-    {
-         addSubtarget.setEnabled(false); // Disable the add button
+    private void disableAddSubscriptionsButtons() {
+        addSubtarget.setEnabled(false); // Disable the add button
 
         // Make all the input uneditable
         nameInput.setEnabled(false);

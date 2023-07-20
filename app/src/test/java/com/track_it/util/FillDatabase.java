@@ -26,7 +26,7 @@ public class FillDatabase {
 
             String inputName = "Zoo Pass";
             String frequency = FrequencyList.get( 0);
-            int payment = 1;
+            int payment = 2;
             SubscriptionObj currSub = new SubscriptionObj(inputName, payment, frequency);
             subHandler.addSubscription(currSub);
 
