@@ -44,31 +44,7 @@ public class TotalCostCalculator {
              yearlyCost = totalCost;
 
         }
-    public void updateCost() {
-        totalCost = 0; //
 
-        for (SubscriptionObj subscription : listOfSubs) {
-            double subscriptionCost = subscription.getTotalPaymentInCents();
-            String paymentPeriod = subscription.getPaymentFrequency();
-
-            if (paymentPeriod.equals("daily")) {
-                totalCost += subscriptionCost * 365;
-            } else if (paymentPeriod.equals("monthly")) {
-                totalCost += subscriptionCost * 12;
-            } else if (paymentPeriod.equals("weekly")) {
-                totalCost += subscriptionCost * 52;
-            } else if (paymentPeriod.equals("bi-weekly")) {
-                totalCost += subscriptionCost * 26;
-            } else if (paymentPeriod.equals("yearly")) {
-                totalCost += subscriptionCost;
-            }
-        }
-
-        dailyCost = totalCost / 365;
-        weeklyCost = totalCost / 52;
-        monthlyCost = totalCost / 12;
-        yearlyCost = totalCost;
-    }
 
     public double getYearlyCost() {
             return yearlyCost;
