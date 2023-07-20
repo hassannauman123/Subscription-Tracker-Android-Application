@@ -102,5 +102,55 @@
         </LinearLayout>
     </ScrollView>
 
+    <TextView
+        android:id="@+id/yearlyCostTextView"
+        android:layout_width="133dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="254dp"
+        android:layout_marginBottom="81dp"
+        android:text="TextView" />
+
+    <TextView
+        android:id="@+id/monthlyCostTextView"
+        android:layout_width="134dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="255dp"
+        android:layout_marginBottom="35dp"
+        android:text="TextView" />
+
+    <TextView
+        android:id="@+id/weeklyCostTextView"
+        android:layout_width="129dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="33dp"
+        android:layout_marginBottom="80dp"
+        android:text="TextView" />
+
+    <TextView
+        android:id="@+id/dailyCostTextView"
+        android:layout_width="130dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="36dp"
+        android:text="TextView" />
+
+    <Button
+        android:id="@+id/update_cost"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="163dp"
+        android:layout_marginBottom="53dp"
+        android:text="update" />
+
 
 </RelativeLayout>
