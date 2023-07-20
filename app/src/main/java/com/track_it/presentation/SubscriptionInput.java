@@ -12,7 +12,6 @@ import com.track_it.logic.SubscriptionHandler;
 public class SubscriptionInput {
 
 
-
     // Get the input payment amount that the user entered.
     public int getPaymentAmountInput(EditText inputLocation )
     {
