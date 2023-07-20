@@ -7,10 +7,8 @@ import android.widget.EditText;
 import com.track_it.logic.exceptions.SubscriptionInvalidPaymentException;
 import com.track_it.logic.SubscriptionHandler;
 //
-//  This is a general helper class, used to get user input using common functions.
+//  This is a class used to get payment input from a EditText object
 //
-
-
 public class SubscriptionInput {
 
 
@@ -19,32 +17,30 @@ public class SubscriptionInput {
     public int getPaymentAmountInput(EditText inputLocation )
     {
 
-        String[] paymentAmountString = inputLocation.getText().toString().split("\\.");
-        int paymentInCents = Integer.MIN_VALUE;
+        String[] paymentAmountString = inputLocation.getText().toString().split("\\."); // Break up string along decimal
+        int paymentInCents = 0;
 
 
         // Get Payment amount in cents
-        if (paymentAmountString.length > 0) {
-            if (isParsable(paymentAmountString[0])) {
+        if (paymentAmountString.length > 0)
+        {
+
+            if (isParsable(paymentAmountString[0]))  // First covert the dollar amount to cents ( the pat before the decimal)
+            {
                 paymentInCents = Integer.parseInt(paymentAmountString[0]) * 100;
             }
 
             if (paymentAmountString.length > 1) {
 
-                if (isParsable(paymentAmountString[1])) {
-
-                    if (paymentInCents == Integer.MIN_VALUE) {
-                        paymentInCents = 0;
-
-                    }
+                if (isParsable(paymentAmountString[1]))
+                {
                     if (paymentAmountString[1].length() == 1)  // The payment is in the format like: 10.2, so we need to to multiply the 2 by 10 to get cents payment amount
                     {
                         paymentInCents = paymentInCents + Integer.parseInt(paymentAmountString[1]) * 10;
-                    } else if (paymentAmountString[1].length() > 2) // If there are more than 2 digits after decimal, then it is invalid.  ex  10.444 <- more than 2 digits after decimal
+                    }
+                    else
                     {
-                        paymentInCents = Integer.MIN_VALUE;
-                    } else {
-                        paymentInCents = paymentInCents + Integer.parseInt(paymentAmountString[1]);
+                        paymentInCents = paymentInCents + Integer.parseInt(paymentAmountString[1]); // Else just add as cents
                     }
                 }
             }

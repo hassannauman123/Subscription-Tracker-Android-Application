@@ -31,10 +31,11 @@ public class DecimalDigitsInputFilter implements InputFilter {
 
         String newString = dest.toString().substring(0, dstart) + source.toString() + dest.toString().substring(dend, dest.toString().length()); //What the new string will be if we accept
 
+
         String splitAlongDecimal[] = newString.split("\\."); // Split string up along decimal points
 
 
-        if (splitAlongDecimal[0].length() > this.digitBeforeDecimal) //Only accept input if there are no more than digitBeforeDecimal number of decimals before decimal point
+        if (splitAlongDecimal.length > 0 && splitAlongDecimal[0].length() > this.digitBeforeDecimal) //Only accept input if there are no more than digitBeforeDecimal number of decimals before decimal point
         {
             returnValue = "";
         }

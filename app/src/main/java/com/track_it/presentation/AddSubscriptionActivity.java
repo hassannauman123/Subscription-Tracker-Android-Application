@@ -1,7 +1,6 @@
 package com.track_it.presentation;
 
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
@@ -11,7 +10,6 @@ import android.widget.EditText;
 import android.text.InputFilter;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.google.android.material.textfield.TextInputLayout;
 import com.track_it.R;
 import com.track_it.application.SetupParameters;
@@ -24,7 +22,6 @@ import com.track_it.logic.exceptions.SubscriptionException;
 // This class handles the presentation of the add subscription page for the app.
 public class AddSubscriptionActivity extends AppCompatActivity {
 
-    private String accomplishColor;
 
     private static final String successAddMessage = "Subscription Added!";  // Message to display if add sub was successful
 
@@ -56,7 +53,6 @@ public class AddSubscriptionActivity extends AppCompatActivity {
 
         subHandler = SetupParameters.getSubscriptionHandler();
 
-        accomplishColor = getResources().getString(R.color.accomplish_color); // Accomplish text color
         setTargets(); //Set global variable targets
         constrainUserInput(); //Set what a user can enter for input
         FrequencyMenu.initializeMenu(this, subHandler, frequencyTarget); // Enable drop down menu
@@ -190,7 +186,7 @@ public class AddSubscriptionActivity extends AppCompatActivity {
     private void successAddedSubscription() {
         generalErrorTarget.setVisibility(View.VISIBLE);
         generalErrorTarget.setText(successAddMessage);
-        generalErrorTarget.setTextColor(Color.parseColor(accomplishColor));
+        generalErrorTarget.setTextColor(Color.parseColor(getResources().getString(R.color.accomplish_color)));
         disableAddSubscriptionsButtons();
 
         Toast.makeText(this, successAddMessage, Toast.LENGTH_SHORT).show(); //Display "Subscription Added"
