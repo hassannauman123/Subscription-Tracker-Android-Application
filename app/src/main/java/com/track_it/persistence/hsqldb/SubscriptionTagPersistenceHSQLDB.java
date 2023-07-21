@@ -17,8 +17,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SubscriptionTagPersistenceHSQLDB implements SubscriptionTagPersistence
-{
+public class SubscriptionTagPersistenceHSQLDB implements SubscriptionTagPersistence {
 
     private final String dbPath;
     private final String shutDownString;
@@ -42,29 +41,25 @@ public class SubscriptionTagPersistenceHSQLDB implements SubscriptionTagPersiste
     }
 
 
-
     // Create and return a SubscriptionTag from the input resultSet
     private SubscriptionTag fromResultSet(final ResultSet resultSet) throws SQLException {
 
-        SubscriptionTag tagToReturn = new SubscriptionTag( resultSet.getString("name"));
+        SubscriptionTag tagToReturn = new SubscriptionTag(resultSet.getString("name"));
         tagToReturn.setID(resultSet.getInt("id"));
         return tagToReturn;
     }
 
     @Override
-    public void changeSubscriptionTags(SubscriptionObj inputSub)
-    {
-        try (Connection connection = connect())
-        {
+    public void changeSubscriptionTags(SubscriptionObj inputSub) {
+        try (Connection connection = connect()) {
 
             final PreparedStatement statement = connection.prepareStatement("DELETE from SUBSCRIPTIONS_TAGS where SUBSCRIPTIONS_TAGS.subscription_id = ?");
-            statement.setInt(1,inputSub.getID());
+            statement.setInt(1, inputSub.getID());
             statement.executeUpdate();
 
-            for ( SubscriptionTag insertTag : inputSub.getTagList())
-            {
-                  addTagToPersistence(insertTag);
-                  associateTagWithSubscription(inputSub,insertTag);
+            for (SubscriptionTag insertTag : inputSub.getTagList()) {
+                addTagToPersistence(insertTag);
+                associateTagWithSubscription(inputSub, insertTag);
             }
 
             removeUnusedTags();
@@ -77,23 +72,17 @@ public class SubscriptionTagPersistenceHSQLDB implements SubscriptionTagPersiste
     }
 
 
-
-
-
-    public List<SubscriptionTag> getAllTags()
-    {
+    public List<SubscriptionTag> getAllTags() {
 
         List<SubscriptionTag> listAllTags = new ArrayList<SubscriptionTag>();
 
-        try (Connection connection = connect())
-        {
+        try (Connection connection = connect()) {
 
             final PreparedStatement statement = connection.prepareStatement("SELECT * from TAGS");
 
             final ResultSet returnedResults = statement.executeQuery();
 
-            while (returnedResults.next())
-            {
+            while (returnedResults.next()) {
                 final SubscriptionTag newTag = fromResultSet(returnedResults);
                 listAllTags.add(newTag);
             }
@@ -111,9 +100,7 @@ public class SubscriptionTagPersistenceHSQLDB implements SubscriptionTagPersiste
     }
 
 
-
-    private void associateTagWithSubscription(SubscriptionObj inputSubscription, SubscriptionTag insertTag)
-    {
+    private void associateTagWithSubscription(SubscriptionObj inputSubscription, SubscriptionTag insertTag) {
         try (Connection connection = connect()) {
             final PreparedStatement statement = connection.prepareStatement("INSERT INTO SUBSCRIPTIONS_TAGS VALUES(?, ?)");
             statement.setInt(1, inputSubscription.getID());
@@ -123,8 +110,7 @@ public class SubscriptionTagPersistenceHSQLDB implements SubscriptionTagPersiste
             statement.close();
             connection.close();
 
-        } catch (final SQLException e)
-        {
+        } catch (final SQLException e) {
             Log.e("Connect SQL", e.getMessage() + e.getSQLState());
             e.printStackTrace();
             throw new DatabaseException(e.getMessage());
@@ -132,14 +118,11 @@ public class SubscriptionTagPersistenceHSQLDB implements SubscriptionTagPersiste
 
     }
 
-    private void removeUnusedTags()
-    {
-        try (Connection connection = connect())
-        {
+    private void removeUnusedTags() {
+        try (Connection connection = connect()) {
 
             final PreparedStatement statement = connection.prepareStatement("DELETE from TAGS where id NOT IN (SELECT tag_id from SUBSCRIPTIONS_TAGS)");
             statement.executeUpdate();
-
 
 
         } catch (final SQLException e) {
@@ -150,24 +133,19 @@ public class SubscriptionTagPersistenceHSQLDB implements SubscriptionTagPersiste
     }
 
 
-
-
     @Override
-    public List<SubscriptionTag> getTagsForSubscription(SubscriptionObj inputSubscription)
-    {
+    public List<SubscriptionTag> getTagsForSubscription(SubscriptionObj inputSubscription) {
         List<SubscriptionTag> listOfTagsForSub = new ArrayList<SubscriptionTag>();
 
-        try (Connection connection = connect())
-        {
+        try (Connection connection = connect()) {
 
             final PreparedStatement statement = connection.prepareStatement("SELECT * from TAGS join SUBSCRIPTIONS_TAGS on TAGS.id = SUBSCRIPTIONS_TAGS.tag_id where SUBSCRIPTIONS_TAGS.subscription_id = ?");
-            statement.setInt(1,inputSubscription.getID());
+            statement.setInt(1, inputSubscription.getID());
 
 
             final ResultSet returnedResults = statement.executeQuery();
 
-            while (returnedResults.next())
-            {
+            while (returnedResults.next()) {
                 final SubscriptionTag newTag = fromResultSet(returnedResults);
                 listOfTagsForSub.add(newTag);
             }
@@ -184,13 +162,11 @@ public class SubscriptionTagPersistenceHSQLDB implements SubscriptionTagPersiste
     }
 
 
-    public void removeAllTagsBySubID(int inputSub)
-    {
-        try (Connection connection = connect())
-        {
+    public void removeAllTagsBySubID(int inputSub) {
+        try (Connection connection = connect()) {
 
             final PreparedStatement statement = connection.prepareStatement("DELETE from SUBSCRIPTIONS_TAGS where SUBSCRIPTIONS_TAGS.subscription_id = ?");
-            statement.setInt(1,inputSub);
+            statement.setInt(1, inputSub);
             statement.executeUpdate();
 
             removeUnusedTags();
@@ -203,12 +179,9 @@ public class SubscriptionTagPersistenceHSQLDB implements SubscriptionTagPersiste
     }
 
 
-
-
     @Override
-    public void addTagToPersistence(SubscriptionTag insertTag)
-    {
-        if ( !isTagInDatabase(insertTag.getName())) // If the tag is not already present in database
+    public void addTagToPersistence(SubscriptionTag insertTag) {
+        if (!isTagInDatabase(insertTag.getName())) // If the tag is not already present in database
         {
 
             try (Connection connection = connect()) {
@@ -223,8 +196,7 @@ public class SubscriptionTagPersistenceHSQLDB implements SubscriptionTagPersiste
 
                 final ResultSet returnedResults = statement.getGeneratedKeys();
 
-                if (returnedResults.next())
-                {
+                if (returnedResults.next()) {
 
                     insertTag.setID(returnedResults.getInt(1));
                 }
@@ -237,21 +209,18 @@ public class SubscriptionTagPersistenceHSQLDB implements SubscriptionTagPersiste
                 e.printStackTrace();
                 throw new DatabaseException(e.getMessage());
             }
-        }
-        else // Else set it's id by the value in database
+        } else // Else set it's id by the value in database
         {
-            setIDtag( insertTag);
+            setIDtag(insertTag);
 
         }
     }
 
 
     //Set a tag ID if it is already present in database
-    private void setIDtag(SubscriptionTag setTag)
-    {
+    private void setIDtag(SubscriptionTag setTag) {
 
-        try (Connection connection = connect())
-        {
+        try (Connection connection = connect()) {
             final PreparedStatement statement = connection.prepareStatement("SELECT * FROM TAGS WHERE TAGS.name = ?");
             statement.setString(1, setTag.getName());
 
@@ -259,8 +228,7 @@ public class SubscriptionTagPersistenceHSQLDB implements SubscriptionTagPersiste
             // We need to the get the ID of the subscription added to the database so that we can set the ID of the subscription object
             final ResultSet returnedResults = statement.executeQuery();
 
-            if (returnedResults.next())
-            {
+            if (returnedResults.next()) {
                 setTag.setID(returnedResults.getInt("id"));
             }
 
@@ -277,13 +245,11 @@ public class SubscriptionTagPersistenceHSQLDB implements SubscriptionTagPersiste
 
     }
 
-    private boolean isTagInDatabase(String searchTag)
-    {
+    private boolean isTagInDatabase(String searchTag) {
 
         boolean found = false;
 
-        try (Connection connection = connect())
-        {
+        try (Connection connection = connect()) {
             final PreparedStatement statement = connection.prepareStatement("SELECT * FROM TAGS WHERE TAGS.name = ?");
             statement.setString(1, searchTag);
 
@@ -291,8 +257,7 @@ public class SubscriptionTagPersistenceHSQLDB implements SubscriptionTagPersiste
             // We need to the get the ID of the subscription added to the database so that we can set the ID of the subscription object
             final ResultSet returnedResults = statement.executeQuery();
 
-            if (returnedResults.next())
-            {
+            if (returnedResults.next()) {
                 found = true;
 
             }
@@ -309,9 +274,6 @@ public class SubscriptionTagPersistenceHSQLDB implements SubscriptionTagPersiste
 
         return found;
     }
-
-
-
 
 
 }

@@ -8,9 +8,12 @@ import java.io.IOException;
 
 import com.google.common.io.Files;
 import com.track_it.persistence.SubscriptionPersistence;
+import com.track_it.persistence.SubscriptionTagPersistence;
 import com.track_it.persistence.fakes.FakeSubscriptionPersistenceDatabase;
+import com.track_it.persistence.fakes.FakeSubscriptionTagPersistenceDatabase;
 import com.track_it.persistence.hsqldb.SubscriptionPersistenceHSQLDB;
 import com.track_it.application.SetupParameters;
+import com.track_it.persistence.hsqldb.SubscriptionTagPersistenceHSQLDB;
 
 public class TestUtils {
     private static final File DB_SRC = new File("src/main/assets/db/Test.script");
@@ -35,8 +38,11 @@ public class TestUtils {
             try {
                 File tempDB;
                 tempDB = TestUtils.copyDB();
-                final SubscriptionPersistence persistence = new SubscriptionPersistenceHSQLDB(tempDB.getAbsolutePath().replace(".script", ""), "false");
-                SetupParameters.initializeDatabase(persistence);
+                final SubscriptionPersistence subPersistence = new SubscriptionPersistenceHSQLDB(tempDB.getAbsolutePath().replace(".script", ""), "false");
+                final SubscriptionTagPersistence subTagPersistence = new SubscriptionTagPersistenceHSQLDB(tempDB.getAbsolutePath().replace(".script", "")) {
+                };
+
+                SetupParameters.initializeDatabase(subPersistence,subTagPersistence);
             } catch (IOException e) {
                 System.out.println(e.getMessage());
                 assert (false);
@@ -45,7 +51,7 @@ public class TestUtils {
         } else //Use fake Database
         {
 
-            SetupParameters.initializeDatabase(new FakeSubscriptionPersistenceDatabase());
+            SetupParameters.initializeDatabase(new FakeSubscriptionPersistenceDatabase(), new FakeSubscriptionTagPersistenceDatabase());
         }
     }
 

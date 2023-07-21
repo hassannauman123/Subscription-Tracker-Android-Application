@@ -83,8 +83,10 @@ public class TagSet {
 
             public void afterTextChanged(Editable s) {
                 tagInput.removeTextChangedListener(this);
+                int cursorPosition = tagInput.getSelectionStart();
                 TagSet.setTagColors(context, tagInput, tagInput.getText().toString());
-                tagInput.setSelection(tagInput.getText().length()); // Put the cursor back into correct position
+
+                tagInput.setSelection(Math.min(tagInput.getText().length(),cursorPosition)); // Put the cursor back into correct position
                 tagInput.addTextChangedListener(this);
             }
 

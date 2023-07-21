@@ -9,7 +9,7 @@ import java.util.List;
 
 
 //This is fake database for tags. It implements that SubscriptionTagPersistence
-public class FakeSubscriptionTagPersistence implements SubscriptionTagPersistence {
+public class FakeSubscriptionTagPersistenceDatabase implements SubscriptionTagPersistence {
     private static List<SubscriptionTag> listOfTags = new ArrayList<SubscriptionTag>();
     private static List<int[]> tagSubAssociation = new ArrayList<int[]>();
     private static int SUB_ID = 0;

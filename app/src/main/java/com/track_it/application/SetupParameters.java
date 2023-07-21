@@ -2,7 +2,6 @@
 
 package com.track_it.application;
 
-import com.track_it.application.Services;
 import com.track_it.logic.SubscriptionHandler;
 import com.track_it.logic.SubscriptionTagHandler;
 import com.track_it.logic.frequencies.BiWeekly;
@@ -13,9 +12,6 @@ import com.track_it.logic.frequencies.WeeklyFrequency;
 import com.track_it.logic.frequencies.YearlyFrequency;
 import com.track_it.persistence.SubscriptionPersistence;
 import com.track_it.persistence.SubscriptionTagPersistence;
-import com.track_it.persistence.fakes.FakeSubscriptionPersistenceDatabase;
-import com.track_it.persistence.fakes.FakeSubscriptionTagPersistence;
-import com.track_it.persistence.hsqldb.SubscriptionPersistenceHSQLDB;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,7 +34,7 @@ public class SetupParameters {
 
     private static  final List<Frequency> allowableFrequencies =  InitFrequency() ; // will hold allowable frequencies
     private static SubscriptionPersistence subscriptionPersistenceDatabase = Services.getSubscriptionPersistence();  // Database that we will use
-    private static SubscriptionTagPersistence subscriptionTagPersistenceDatabase = Services.getSubscriptionTagPersistence();  // Database that we will use
+    private static SubscriptionTagPersistence tagPersistenceDatabase = Services.getSubscriptionTagPersistence();  // Database that we will use
     // private static SubscriptionPersistence subscriptionPersistenceDatabase = new FakeSubscriptionPersistenceDatabase();  // Database that we will use
     // static SubscriptionTagPersistence subscriptionTagPersistenceDatabase = new FakeSubscriptionTagPersistence();  //;  // Database that we will use
 
@@ -52,12 +48,13 @@ public class SetupParameters {
 
 
 
-    public static void initializeDatabase(SubscriptionPersistence inputDB)
+    public static void initializeDatabase(SubscriptionPersistence inputSubDB, SubscriptionTagPersistence inputTagDB)
     {
         //Create a new subscription handler if the database has changed
-        subscriptionPersistenceDatabase = inputDB;
+        tagPersistenceDatabase = inputTagDB;
+        subscriptionPersistenceDatabase = inputSubDB;
         subHandler = new SubscriptionHandler(MIN_NAME_LENGTH, MAX_NAME_LENGTH, MIN_PAYMENT_IN_CENTS, MAX_PAYMENT_IN_CENTS, allowableCharactersInName,MAX_TAGS, allowableFrequencies, subscriptionPersistenceDatabase);
-        tagHandler = new SubscriptionTagHandler(TAG_SPLIT,TAG_MIN_LENGTH,TAG_MAX_LENGTH, subscriptionTagPersistenceDatabase );
+        tagHandler = new SubscriptionTagHandler(TAG_SPLIT,TAG_MIN_LENGTH,TAG_MAX_LENGTH, tagPersistenceDatabase );
 
     }
 
@@ -95,7 +92,7 @@ public class SetupParameters {
 
         if (tagHandler == null) // Only create one instance of the subscription handler, and return it each time
         {
-            tagHandler = new SubscriptionTagHandler(TAG_SPLIT,TAG_MIN_LENGTH,TAG_MAX_LENGTH, subscriptionTagPersistenceDatabase );
+            tagHandler = new SubscriptionTagHandler(TAG_SPLIT,TAG_MIN_LENGTH,TAG_MAX_LENGTH, tagPersistenceDatabase );
         }
         return tagHandler;
     }
