@@ -5,7 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="description" content="" />
         <meta name="author" content="" />
-        <title>New Age - Start Bootstrap Theme</title>
+        <title>Track-It</title>
         <link rel="icon" type="image/png" href="./assets/img/logo.png" />
         <!-- Bootstrap icons-->
         <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
@@ -33,7 +33,8 @@
                     <ul class="navbar-nav ms-auto me-4 my-3 my-lg-0">
                         <li class="nav-item"><a class="nav-link me-lg-3" href="#features">Features</a></li>
                         <li class="nav-item"><a class="nav-link me-lg-3" href="#vision">Vision</a></li>
-                        <li class="nav-item"><a class="nav-link me-lg-3" href="#features">Postmortem</a></li>
+                        <li class="nav-item"><a class="nav-link me-lg-3" href="#postmortem">Postmortem</a></li>
+                        <li class="nav-item"><a class="nav-link me-lg-3" href="#team">The Team</a></li>
                     </ul>
                     <a href="https://code.cs.umanitoba.ca/3350-summer2023/ghostdevs-7">
                     <button class="btn btn-primary rounded-pill px-3 mb-2 mb-lg-0">
@@ -130,43 +131,93 @@
         </section>
         <!-- Basic features section-->
         <section id="vision" class="bg-light">
-            <div class="text-center">
+            <div class="container">
                         <h2 class="display-4 lh-1 mb-4">Vision Statement</h2>
                         <p class="lead fw-normal text-muted mb-5 mb-lg-0">In a world with ever-increasing subscription services, Track-It is a powerful organizational tool to assist consumers with tracking and managing their subscriptions.
-
-                            Many consumers have multiple subscriptions, membership fees and other recurring payments like Amazon Prime, Netflix, Costco, gym memberships and parking lot permits. It is easy to forget about all of these recurring subscriptions, and to not be fully aware of all of their costs. Track-It will combine all of that information allowing users to see a detailed overview of all of their recurring expenses in one convenient location. 
-                            
-                            Track-It will allow users to create a user account so that any information they enter is securely saved and retrievable from multiple devices. Users will be able to save all of their subscriptions along with the subscription information and details. This includes the service type and description, the method of payment, cost per payment, payment frequency and renewal date.   Users will also be able to edit the subscription information after it has been added. 
-                            
-                            Removing subscriptions from the app will give the user the option to also cancel the subscription (ie, the user will no longer be charged a fee for the subscription). This will greatly simplify the process of unsubscribing from a given service. 
-                            
-                            The user will be able to see the total costs involved from all of the services they are subscribed to. This information can be displayed in the form of daily, monthly and yearly total costs from all the subscriptions that they have. This feature will help the users get a firm grasp of all their recurring costs and allow them to more efficiently and effectively create and stick to a budget. The ability to visualize all subscriptions will also help users to decide if some services are not being utilized enough to justify the cost. A user will also be notified when a payment is due, eliminating the risk of incurring late fees. 
-                            
-                            Track-It will also provide the ability for users to search for services they might be interested in where suggested partnered services will be displayed. Advertisements will also be provided that are relevant to the subscriptions a user currently has. 
-                            
-                            
+                            </p><br>
+                            <h3><i class="bi bi-patch-question me-2"></i>What is Track-it?</h3>
+                            <p class="lead fw-normal text-muted mb-5 mb-lg-0">
+                            Track-It will allow users to add, search, edit and organize every service they subscribe to along with the subscription information and details. The app will allow users to create a user account so that any information they enter is securely saved and retrievable from multiple devices. 
+                            The user will be able to see the total costs involved from all of the services they are subscribed to. This information can be displayed in the form of daily, monthly and yearly total costs from all the subscriptions that they have. This feature will help the users get a firm grasp of all their recurring costs and allow them to more efficiently and effectively create and stick to a budget. The ability to visualize all subscriptions will also help users to decide if some services are not being utilized enough to justify the cost.
+                            </p><br>
+                            <h3><i class="bi bi-person-circle me-2"></i>Who is Track-it for?</h3>
+                            <p class="lead fw-normal text-muted mb-5 mb-lg-0">
                             Track-It is primarily designed for consumers who have multiple paid subscriptions. It is also intended for those that are budget conscious and want an easier way to track their recurring expenses. 
-                            
-                            The subscription Tracker project will be considered a success if at least 40% of a specific target user (consumers with at least 4 paid subscriptions) who start using the system continue to use the system after 1 year, or we are able to generate $500,000+ from ad revenue per year. </p>
+                    
+                            </p><br>
+                            <h3><i class="bi bi-currency-dollar me-2"></i>Track-it's value</h3>
+                            <p class="lead fw-normal text-muted mb-5 mb-lg-0">
+                            Many consumers have multiple subscriptions, membership fees and other recurring payments like Amazon Prime, Netflix, Costco, gym memberships, parking lot permits, etc. It is easy to forget about all of these recurring subscriptions, and to not be fully aware of all of their costs. Track-It will help them remember those subscriptions by combining all of that information into one place, allowing users to see a detailed overview of all of their recurring expenses and manage their subscriptions in one convenient app.
+                            </p><br>
+                            <h3><i class="bi bi-currency-dollar me-2"></i>How our success will be measured</h3>
+                            <p class="lead fw-normal text-muted mb-5 mb-lg-0">
+                            The subscription Tracker project will be considered a success if at least 40% of a specific target user (consumers with at least 4 paid subscriptions) who start using the system continue to use the system after 1 year, or we are able to generate $500,000+ from ad revenue per year.
+                            </p>
              
             </div>
         </section>
         <!-- Call to action section-->
-        <section class="cta">
+        <section class="cta" id="postmortem">
             <div class="cta-content text-center">
       
                     <h2 class="text-white display-1 lh-1 mb-4">
                         Postmortem
                     </h2>
+                    <p class="lead fw-normal text-white mb-5 mb-lg-0">
+                        Overall architecture: three tiered? Nothing really unique to add here I don't think?
+                        <br><br>
+                        What went right: Hopefully can say teamwork, workload distribution and communication improved. We ended the term with a fully functioning app, including a functional database and adequate testing. I would say we also did a good job at prioritizing the features as we only made one small change in the last iteration. 
+                        <br><br>
+                        What went wrong: Very uneven workload distribution amongst the group members. Having group members assign themselves to an issue they are working on to avoid multiple people working on the same thing at once and to improve workload distribution was beneficial in the third iteration. 
+                        <br> 
+
+                    </p>
             </div>
         </section>
         <!-- App badge section-->
-        <section class="bg-gradient-primary-to-secondary" id="download">
+        <section class="bg-gradient-primary-to-secondary" id="team">
             <div class="container px-5">
-                <h2 class="text-center text-white font-alt mb-4">Get the app now!</h2>
-                <div class="d-flex flex-column flex-lg-row align-items-center justify-content-center">
-                    <a class="me-lg-3 mb-4 mb-lg-0" href="#!"><img class="app-badge" src="assets/img/google-play-badge.svg" alt="..." /></a>
-                    <a href="#!"><img class="app-badge" src="assets/img/app-store-badge.svg" alt="..." /></a>
+                <h2 class="text-center font-alt mb-4">Meet the Team!</h2>
+                <hr>
+                <div class="container feature-container">
+                    <div class="row">
+                        <div class="col-lg-2 col-md-5 text-center">
+                            <div>
+                                <h3 class="font-alt">Breanna</h3>
+                                <p class="text-muted">Description</p>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-5 text-center">
+                            <div>
+                                <h3 class="font-alt">Bryce</h3>
+                                <p class="text-muted">Description</p>
+                            </div>
+                        </div>
+                        <div class="col-lg-2 col-md-5 text-center">
+                            <div>
+                                <h3 class="font-alt">Hao</h3>
+                                <p class="text-muted">Description</p>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-5 text-center">
+                            <div>
+                                <h3 class="font-alt">Hassan</h3>
+                                <p class="text-muted">Description</p>
+                            </div>
+                        </div>
+                        <div class="col-lg-2 col-md-5 text-center">
+                            <div>
+                                <h3 class="font-alt">Jiazhen</h3>
+                                <p class="text-muted">Description</p>
+                            </div>
+                        </div>
+                        <div class="col-lg-2 col-md-5 text-center">
+                            <div>
+                                <h3 class="font-alt">Will</h3>
+                                <p class="text-muted">Description</p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>

@@ -110,6 +110,18 @@ hr {
   border: 0;
   border-top: 1px solid;
   opacity: 0.25;
+  display: block;
+  margin-block-start: 0.5em;
+  margin-block-end: 0.5em;
+  margin-inline-start: auto;
+  margin-inline-end: auto;
+  border-color:  #6c757d; 
+  border-width: 3px;
+  max-width: 50px;
+  margin-top: 20px;
+margin-bottom: 20px;
+border: 0;
+border-top: 1px solid black;
 }
 
 h6, .h6, h5, .h5, h4, .h4, h3, .h3, h2, .h2, h1, .h1 {
@@ -219,6 +231,7 @@ b,
 strong {
   font-weight: bolder;
 }
+
 
 small, .small {
   font-size: 0.875em;
@@ -10851,7 +10864,7 @@ html {
 }
 
 .bg-gradient-primary-to-secondary {
-  background: linear-gradient(45deg, #2937f0, #9f1ae2) !important;
+  background: white;
 }
 
 .font-alt {
