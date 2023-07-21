@@ -67,11 +67,11 @@ public class SubscriptionTagHandler
         }
         else if ( inputName.length() < MIN_NAME_TAG_LENGTH)
         {
-            throw new SubscriptionTagException(" tag was too short!");
+            throw new SubscriptionTagException("A Tag was too short!");
         }
         else if ( inputName.length() > MAX_NAME_TAG_LENGTH)
         {
-            throw new SubscriptionTagException( " tag was too long! max "+ MAX_NAME_TAG_LENGTH  +" chars long" );
+            throw new SubscriptionTagException( "Tag max "+ MAX_NAME_TAG_LENGTH  +" chars long" );
         }
     }
 

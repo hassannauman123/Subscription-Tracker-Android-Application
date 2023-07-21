@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.Html;
 import android.text.InputFilter;
+import android.text.Selection;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.AutoCompleteTextView;
@@ -64,7 +65,7 @@ public class SubscriptionDetailsActivity extends AppCompatActivity {
     private Button backButton;
     private Button deleteButton;
 
-    private TextView tagInput;
+    private EditText tagInput;
 
     //String constants, messages to display to user
     private static final String validEditMessage = "Subscription Edited!"; // if edit was successful
@@ -114,23 +115,8 @@ public class SubscriptionDetailsActivity extends AppCompatActivity {
             enableDeleteAndEditButtons();
         }
 
+        TagSet.setTextWatcher(this,tagInput);
 
-        tagInput.addTextChangedListener(new TextWatcher() {
-
-            public void afterTextChanged(Editable s)
-            {
-                tagInput.removeTextChangedListener(this);
-               // setTagColors(tagInput,tagInput.getText().toString());
-                tagInput.addTextChangedListener(this);
-            }
-
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-
-            }
-        });
 
     }
 
@@ -168,7 +154,7 @@ public class SubscriptionDetailsActivity extends AppCompatActivity {
         deleteButton = (Button) findViewById(R.id.details_delete_subscription);
 
         //Get tag input target
-        tagInput = ((TextView) findViewById(R.id.tag_input));
+        tagInput = ((EditText) findViewById(R.id.tag_input));
 
 
     }
@@ -280,15 +266,14 @@ public class SubscriptionDetailsActivity extends AppCompatActivity {
         nameTarget.setEnabled(inputBool);
         paymentAmountTarget.setEnabled(inputBool);
         tagInput.setEnabled(inputBool);
+        tagInput.setTextColor(getResources().getColor(R.color.black));
 
         // Change color of input, and disable/enable drop down menu
         if (inputBool) {
-            tagInput.setTextColor(Color.parseColor(editableColor));
             nameTarget.setTextColor(Color.parseColor(editableColor));
             paymentAmountTarget.setTextColor(Color.parseColor(editableColor));
             dropDownFrequencyMenuEnabled(true);
         } else {
-            tagInput.setTextColor(Color.parseColor(editableColor));
             nameTarget.setTextColor(Color.parseColor(nonEditableColor));
             paymentAmountTarget.setTextColor(Color.parseColor(nonEditableColor));
             dropDownFrequencyMenuEnabled(false);
@@ -513,28 +498,9 @@ public class SubscriptionDetailsActivity extends AppCompatActivity {
             allTags += currTag.getName() + " ";
         }
 
-        setTagColors(tagInput,allTags);
+        TagSet.setTagColors(this, tagInput,allTags);
     }
 
-    private void setTagColors(TextView tagInput, String input)
-    {
-         String[] getSplit = input.split( SetupParameters.getTagHandler().getSplitCriteria());
-
-        int itr = 0;
-        String[] colorsLIst = {"'#f56e6e'", "'#ffa26e'","'#ff00ae'","'#5ab4c7'" };
-
-        String allTagsName = "";
-         for ( String currTagName : getSplit)
-         {
-             if ( !currTagName.trim().equals("")) {
-                 allTagsName += "<font color=" + colorsLIst[itr % 3] + ">" + currTagName + "</font> ";
-                 itr++;
-             }
-         }
-        tagInput.clearComposingText();
-        tagInput.setText(Html.fromHtml(allTagsName));
-
-    }
 
 
 

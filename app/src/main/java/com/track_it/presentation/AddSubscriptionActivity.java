@@ -41,7 +41,7 @@ public class AddSubscriptionActivity extends AppCompatActivity {
     private TextView nameError;
     private TextView frequencyError;
 
-    private TextView tagInput;
+    private EditText tagInput;
 
 
     private boolean successTry; // used by the clickedAddSubscriptionButton function, to keep track of if all the input is valid
@@ -62,6 +62,7 @@ public class AddSubscriptionActivity extends AppCompatActivity {
         constrainUserInput(); //Set what a user can enter for input
         FrequencyMenu.initializeMenu(this, subHandler, frequencyTarget); // Enable drop down menu
         setButtonActions(); //Set what happens when buttons are clicked
+        TagSet.setTextWatcher(this,tagInput); // Set the tag box such that it displays seperated words in different color
     }
 
 
@@ -90,7 +91,7 @@ public class AddSubscriptionActivity extends AppCompatActivity {
         frequencyError = ((TextView) findViewById(R.id.input_frequency_error)); // where to display name errors
         tagError = ((TextView) findViewById(R.id.tag_input_error));
         //Get tag input target
-        tagInput = ((TextView) findViewById(R.id.tag_input));
+        tagInput = ((EditText) findViewById(R.id.tag_input));
 
     }
 

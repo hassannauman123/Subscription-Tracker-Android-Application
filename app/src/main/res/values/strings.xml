@@ -11,6 +11,12 @@
     <string name="sort_payment">Sort by Payment</string>
     <string name="sort_frequency">Sort by frequency</string>
 
+    <string name="tag_color1">#319197</string>
+    <string name="tag_color2">#ffa26e</string>
+    <string name="tag_color3">#ff00ae</string>
+    <string name="tag_color4">#5ab4c7</string>
+    <string name="tag_color5">#db5945</string>
+
 
 
 
