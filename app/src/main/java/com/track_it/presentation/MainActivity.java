@@ -293,12 +293,14 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int which)
             {
 
+                // Clear filter list, and build a new one based on the click checked marks
                 tagFilter.clear();
                 for (int i = 0; i < checkedArray.length; i++) {
                     if (checkedArray[i]) {
                         tagFilter.add(tags.get(i));
                     }
                 }
+                //Display subs ( will use the filters)
                 displayAllSubscriptions();
             }
         });
@@ -307,6 +309,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which)
             {
+                // Clear all filters
                 tagFilter.clear();
                 displayAllSubscriptions();
             }
@@ -344,9 +347,7 @@ public class MainActivity extends AppCompatActivity {
 
         //Create a subscription box for each subscription that we will show
         for (SubscriptionObj curr : listOfSubs)
-        {
-            System.out.println("THESE ARE SUBS");
-            if (curr.getName().toLowerCase().contains(searchString)) // only show this subscription if it matches the search criteria
+        {if (curr.getName().toLowerCase().contains(searchString)) // only show this subscription if it matches the search criteria
             {
                 if (checkFilter(curr)) {
                     createBoxForSubscription(curr);
