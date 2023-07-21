@@ -13,6 +13,15 @@ public class FakeSubscriptionPersistenceDatabase implements SubscriptionPersiste
 {
 
 
+   // YOU NEED TO UPDATE THIS METHOD BELOW LATER!!!!
+    @Override
+    public void associateTagWithSubscription(SubscriptionObj inputSubscription, SubscriptionTag insertTag)
+    {
+                        //TELL SOMEONE TO UPDATE !!
+    }
+
+
+
 
 
     // A static Arraylist to hold subscriptions.
@@ -39,7 +48,9 @@ public class FakeSubscriptionPersistenceDatabase implements SubscriptionPersiste
      }
 
 
-
+    public static ArrayList<SubscriptionObj> getSubscriptionDB() {
+        return subscriptionDB;
+    }
 
     // Gets all the subscriptions in the database
     @Override
@@ -66,8 +77,7 @@ public class FakeSubscriptionPersistenceDatabase implements SubscriptionPersiste
     @Override
     public void editSubscriptionByID (int subscriptionID, SubscriptionObj newDetails) throws DatabaseException
     {
-        boolean found = false;
-        SubscriptionObj subscriptonToUpdate = null;
+         SubscriptionObj subscriptonToUpdate = null;
 
 
         //Find the subscription to edit
@@ -75,16 +85,13 @@ public class FakeSubscriptionPersistenceDatabase implements SubscriptionPersiste
         {
            if (  subscriptionDB.get(i).getID()  == subscriptionID)
            {
-                subscriptonToUpdate = subscriptionDB.get(i);
-                found = true;
-                break;
+               subscriptonToUpdate = subscriptionDB.get(i);
            }
         }
 
-        // If the subscription was found,  edit it with the new details
-        if ( found && subscriptonToUpdate != null)
+        // If the subscription was found, then edit it with the new details
+        if (   subscriptonToUpdate != null)
         {
-
             subscriptonToUpdate.setName(newDetails.getName());
             subscriptonToUpdate.setPayment(newDetails.getTotalPaymentInCents());
             subscriptonToUpdate.setPaymentFrequency(newDetails.getPaymentFrequency());
@@ -110,7 +117,6 @@ public class FakeSubscriptionPersistenceDatabase implements SubscriptionPersiste
             if (subscriptionDB.get(i).getID() == subscriptionID)
             {
                 returnSubscription = subscriptionDB.get(i).copy();
-
             }
         }
 

@@ -1,6 +1,7 @@
 package com.track_it.persistence;
 
 import com.track_it.domainobject.SubscriptionObj;
+import com.track_it.domainobject.SubscriptionTag;
 
 import java.util.List;
 
@@ -20,4 +21,7 @@ public  interface  SubscriptionPersistence
 
     //Get a subscription object returned from the database by subscriptionID
     SubscriptionObj getSubscriptionByID(int subscriptionID);
+
+    public void associateTagWithSubscription(SubscriptionObj inputSubscription, SubscriptionTag insertTag);
+
 }

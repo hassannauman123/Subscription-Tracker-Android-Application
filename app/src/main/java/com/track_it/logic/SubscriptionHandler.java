@@ -1,13 +1,17 @@
 package com.track_it.logic;
 
+import com.track_it.application.SetupParameters;
 import com.track_it.domainobject.SubscriptionObj;
+import com.track_it.domainobject.SubscriptionTag;
 import com.track_it.logic.exceptions.DatabaseException;
 import com.track_it.logic.exceptions.SubscriptionException;
 import com.track_it.logic.exceptions.SubscriptionInvalidFrequencyException;
 import com.track_it.logic.exceptions.SubscriptionInvalidNameException;
 import com.track_it.logic.exceptions.SubscriptionInvalidPaymentException;
+import com.track_it.logic.exceptions.SubscriptionTagException;
 import com.track_it.logic.frequencies.*;
 import com.track_it.persistence.SubscriptionPersistence;
+import com.track_it.persistence.SubscriptionTagPersistence;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,9 +37,11 @@ public class SubscriptionHandler {
     private final List<Frequency> frequencyList;
     private final SubscriptionPersistence subscriptionPersistence; //Database Handler
 
+    private final int MAX_TAGS;
 
+    private final SubscriptionTagHandler tagHandler;
 
-    public SubscriptionHandler( int inputMinNameLen, int inputMaxNameLen, int inputMinPayment, int inputMaxPayment,String inputAllowableChars, List<Frequency> inputAllowableFrequencies,  SubscriptionPersistence inputDB )
+    public SubscriptionHandler( int inputMinNameLen, int inputMaxNameLen, int inputMinPayment, int inputMaxPayment,String inputAllowableChars, int inputMaxTags, List<Frequency> inputAllowableFrequencies,  SubscriptionPersistence inputDB )
     {
         //Set the Database used, and various parameters for what is a valid subscription
         this.subscriptionPersistence =  inputDB;
@@ -47,6 +53,8 @@ public class SubscriptionHandler {
         this.MAX_PAYMENT_CENTS = this.MAX_PAYMENT - this.MAX_PAYMENT_DOLLAR * 100;
         this.allowableCharactersInName = inputAllowableChars;
         this.frequencyList = inputAllowableFrequencies;
+        this.MAX_TAGS = inputMaxTags;
+        tagHandler =   SetupParameters.getTagHandler();
     }
 
 
@@ -56,7 +64,26 @@ public class SubscriptionHandler {
     public void addSubscription(SubscriptionObj subscriptionToAdd) throws DatabaseException, SubscriptionException
     {
         validateWholeSubscription(subscriptionToAdd); // May throw exception if subscription details are not valid
+
+
         subscriptionPersistence.addSubscriptionToDB(subscriptionToAdd); // Add to database, will throw DataBaseException if subscription could not be added to dat base.
+
+        for( SubscriptionTag currTag : subscriptionToAdd.getTagList())
+        {
+           tagHandler.addTag(currTag);
+           this.tagHandler.changeSubTags( subscriptionToAdd); //Associate tags with sub
+
+        }
+
+    }
+
+
+
+
+
+    public void setTags(SubscriptionObj subscriptionToSet,String stringTag)
+    {
+        subscriptionToSet.setTagList(tagHandler.stringToTags(stringTag));
     }
 
 
@@ -92,6 +119,22 @@ public class SubscriptionHandler {
         validateName(subscriptionToValidate.getName());
         validateFrequency(subscriptionToValidate.getPaymentFrequency());
         validatePaymentAmount(subscriptionToValidate.getTotalPaymentInCents());
+        validateTagList(subscriptionToValidate.getTagList());
+
+    }
+
+    public void validateTagList(List<SubscriptionTag> tagsToValidate) throws SubscriptionTagException
+    {
+        if (tagsToValidate.size() > MAX_TAGS)
+        {
+            throw new SubscriptionTagException("Max of " + MAX_TAGS + " tags allowed");
+        }
+
+        for( SubscriptionTag currTag : tagsToValidate)
+        {
+            tagHandler.validateTagName(currTag.getName());
+        }
+
     }
 
 
@@ -170,6 +213,7 @@ public class SubscriptionHandler {
     public SubscriptionObj getSubscriptionByID(int inputID) throws DatabaseException {
 
         SubscriptionObj returnSub = this.subscriptionPersistence.getSubscriptionByID(inputID);
+        returnSub.setTagList(tagHandler.getTagsForSubscription(returnSub));
         return returnSub;
 
     }
@@ -177,7 +221,13 @@ public class SubscriptionHandler {
     // Gets and returns list of all the subscriptions in the database
     public List<SubscriptionObj> getAllSubscriptions() throws DatabaseException
     {
-        return this.subscriptionPersistence.getAllSubscriptions();
+        List<SubscriptionObj> listOFSubs =  this.subscriptionPersistence.getAllSubscriptions();
+
+        for ( SubscriptionObj currSub : listOFSubs)
+        {
+            currSub.setTagList(tagHandler.getTagsForSubscription(currSub));
+        }
+        return listOFSubs;
     }
 
 
@@ -196,8 +246,14 @@ public class SubscriptionHandler {
     //       subscriptionToEdit - The details that the subscription will be changed to.
     public void editWholeSubscription(int subscriptionID,final SubscriptionObj newSubDetails) throws DatabaseException, SubscriptionException {
         validateWholeSubscription(newSubDetails); // Validate the subscription
-        this.subscriptionPersistence.editSubscriptionByID(subscriptionID, newSubDetails); // save the edits to subscription persistence.
+        this.subscriptionPersistence.editSubscriptionByID(subscriptionID, newSubDetails); // save the edits to subscription persistence
+
+        this.tagHandler.changeSubTags( newSubDetails); // save the edits to subscription persistence
+
+
+
     }
+
 
 
     //returns the maximum amount a payment can be in cents

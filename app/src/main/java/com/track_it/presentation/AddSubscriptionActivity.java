@@ -14,9 +14,11 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.track_it.R;
 import com.track_it.application.SetupParameters;
 import com.track_it.domainobject.SubscriptionObj;
+import com.track_it.domainobject.SubscriptionTag;
 import com.track_it.logic.SubscriptionHandler;
 import com.track_it.logic.exceptions.DatabaseException;
 import com.track_it.logic.exceptions.SubscriptionException;
+import com.track_it.logic.exceptions.SubscriptionTagException;
 
 
 // This class handles the presentation of the add subscription page for the app.
@@ -35,8 +37,11 @@ public class AddSubscriptionActivity extends AppCompatActivity {
     private TextView generalErrorTarget; // where general error messages are displayed
 
     private TextView paymentAmountError;
+    private TextView tagError;
     private TextView nameError;
     private TextView frequencyError;
+
+    private TextView tagInput;
 
 
     private boolean successTry; // used by the clickedAddSubscriptionButton function, to keep track of if all the input is valid
@@ -83,7 +88,9 @@ public class AddSubscriptionActivity extends AppCompatActivity {
         paymentAmountError = ((TextView) findViewById(R.id.input_payment_amount_error));
         nameError = ((TextView) findViewById(R.id.input_subscription_name_error)); // where to display name errors
         frequencyError = ((TextView) findViewById(R.id.input_frequency_error)); // where to display name errors
-
+        tagError = ((TextView) findViewById(R.id.tag_input_error));
+        //Get tag input target
+        tagInput = ((TextView) findViewById(R.id.tag_input));
 
     }
 
@@ -144,20 +151,35 @@ public class AddSubscriptionActivity extends AppCompatActivity {
             subHandler.validatePaymentAmount(paymentInCents);
             paymentAmountError.setVisibility(View.INVISIBLE);
 
-        } catch (SubscriptionException e) {
+
+        } catch (SubscriptionException  e ) {
+
             successTry = false;
             paymentAmountError.setText(e.getMessage());
             paymentAmountError.setVisibility(View.VISIBLE);
         }
 
-
         String PaymentFrequency = getPaymentFrequency(view); //Get input for payment frequency
+        SubscriptionObj newSubscription = new SubscriptionObj(userNameInput, paymentInCents, PaymentFrequency);
 
+        try {
+            //Get tag input from user
+            String getTagInput = tagInput.getText().toString().trim();
+            subHandler.setTags(newSubscription, getTagInput); // Try to set tags based on input from user
+            subHandler.validateTagList(newSubscription.getTagList()); // Try to set tags based on input from user
+
+        }
+        catch (SubscriptionException | SubscriptionTagException e ) {
+
+            successTry = false;
+            tagError.setText(e.getMessage());
+            tagError.setVisibility(View.VISIBLE);
+        }
+
+        
 
         if (successTry)  // Only if all of our internal checks have passed, try to add subscription to database
         {
-            // Create a new Subscription object
-            SubscriptionObj newSubscription = new SubscriptionObj(userNameInput, paymentInCents, PaymentFrequency); // Sets the parameters
 
             try { // Try to add subscription to database
 

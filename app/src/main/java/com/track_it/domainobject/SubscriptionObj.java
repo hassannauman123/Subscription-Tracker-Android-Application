@@ -5,6 +5,9 @@ package com.track_it.domainobject;
 // This class is used to represent a subscription object
 //
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class SubscriptionObj
 {
 
@@ -12,15 +15,28 @@ public class SubscriptionObj
     private String name; // The name of the subscription
     private int paymentInCents; // The payment amount in cents
     private String paymentFrequencyName; // - How often a payment happens.
-
+    private List<SubscriptionTag> subscriptionTagList;
 
     public SubscriptionObj(String inputName, int inputPayments, String inputPaymentFrequency )
     {
+
+        this.subscriptionTagList = new ArrayList<>();
         this.name = inputName;
         this.paymentInCents = inputPayments;
         this.paymentFrequencyName = inputPaymentFrequency;
     }
 
+
+    public void setTagList(List<SubscriptionTag> inputList)
+    {
+        this.subscriptionTagList = inputList;
+    }
+
+
+    public  List<SubscriptionTag> getTagList()
+    {
+        return subscriptionTagList;
+    }
 
     public int getID()
     {

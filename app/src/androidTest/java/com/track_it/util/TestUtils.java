@@ -1,9 +1,10 @@
 package com.track_it.util;
 
+import com.track_it.application.Main;
+import com.track_it.application.SetupParameters;
 import com.track_it.persistence.SubscriptionPersistence;
 import com.track_it.persistence.fakes.FakeSubscriptionPersistenceDatabase;
 import com.track_it.persistence.hsqldb.SubscriptionPersistenceHSQLDB;
-import com.track_it.presentation.util.SetupParameters;
 
 import java.io.File;
 import java.io.IOException;
@@ -16,7 +17,7 @@ public class TestUtils {
 
     public static File copyDB() throws IOException {
         final File target = File.createTempFile("temp-db", ".script");
-        comp3350.srsys.application.Main.setDBPathName(target.getAbsolutePath().replace(".script", ""));
+        Main.setDBPathName(target.getAbsolutePath().replace(".script", ""));
         return target;
     }
 

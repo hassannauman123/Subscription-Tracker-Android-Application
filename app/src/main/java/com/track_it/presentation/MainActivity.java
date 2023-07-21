@@ -13,7 +13,8 @@ import android.widget.Button;
 import com.track_it.R;
  import com.track_it.application.SetupParameters;
  import com.track_it.domainobject.SubscriptionObj;
-import com.track_it.logic.SubscriptionHandler;
+ import com.track_it.domainobject.SubscriptionTag;
+ import com.track_it.logic.SubscriptionHandler;
 import com.track_it.logic.comparators.*;
 import com.track_it.logic.exceptions.DatabaseException;
 import com.track_it.logic.exceptions.SubscriptionException;
@@ -319,9 +320,28 @@ public class MainActivity extends AppCompatActivity {
         targetPaymentAmount.setText("Payment Amount: $" + subInput.getPaymentDollars() + "." + String.format("%02d", subInput.getPaymentCents()));
 
 
+        // Set Payment amount to display
+        TextView tagTarget = subscriptionBox.findViewById(R.id.tag_input);
+        String allTags = "";
+        for (SubscriptionTag currTag : subInput.getTagList() )
+        {
+            allTags += currTag.getName() + " ";
+        }
+
+        if ( !allTags.equals(""))
+        {
+            allTags = "Tags: " + allTags;
+        }
+
+        tagTarget.setText(allTags);
+
+
         //Set ID - Just as a reminder, these might not be unique ID's on this page, as other elements may have these ID numbers
         // but for how we are using them right now it's fine.
         subscriptionBox.setId(subInput.getID());
+
+
+
 
 
         //Every other subscription has a different background color

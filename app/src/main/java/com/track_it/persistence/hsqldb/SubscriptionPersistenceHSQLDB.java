@@ -3,6 +3,7 @@ package com.track_it.persistence.hsqldb;
 import android.util.Log;
 
 import com.track_it.domainobject.SubscriptionObj;
+import com.track_it.domainobject.SubscriptionTag;
 import com.track_it.logic.exceptions.DatabaseException;
 import com.track_it.logic.exceptions.DatabaseSubNotFoundException;
 import com.track_it.persistence.SubscriptionPersistence;
@@ -124,18 +125,19 @@ public class SubscriptionPersistenceHSQLDB implements SubscriptionPersistence
     public void addSubscriptionToDB(SubscriptionObj subscriptionToAdd) throws DatabaseException {
 
         try (Connection connection = connect()) {
-            final PreparedStatement statement = connection.prepareStatement("INSERT INTO SUBSCRIPTIONS VALUES(DEFAULT, ?,?, ?)");
+            final PreparedStatement statement = connection.prepareStatement("INSERT INTO SUBSCRIPTIONS VALUES(DEFAULT, ?,?, ?)",Statement.RETURN_GENERATED_KEYS);
             statement.setString(1, subscriptionToAdd.getName());
             statement.setString(2, subscriptionToAdd.getPaymentFrequency());
             statement.setInt(3, subscriptionToAdd.getTotalPaymentInCents());
 
-            statement.executeUpdate(); // execute insertion statement
+            statement.executeUpdate( ); // execute insertion statement
 
             // We need to the get the ID of the subscription added to the database so that we can set the ID of the subscription object
             final ResultSet returnedResults = statement.getGeneratedKeys();
 
-            if (returnedResults.next()) {
-                subscriptionToAdd.setID(returnedResults.getInt(0));
+            if (returnedResults.next())
+            {
+                subscriptionToAdd.setID(returnedResults.getInt(1));
             }
 
             statement.close();
@@ -149,6 +151,37 @@ public class SubscriptionPersistenceHSQLDB implements SubscriptionPersistence
         }
 
     }
+
+
+
+
+
+
+    @Override
+    public void associateTagWithSubscription(SubscriptionObj inputSubscription, SubscriptionTag insertTag)
+    {
+        try (Connection connection = connect()) {
+            final PreparedStatement statement = connection.prepareStatement("INSERT INTO SUBSCRIPTIONS_TAGS VALUES(?, ?)");
+            statement.setInt(1, inputSubscription.getID());
+            statement.setInt(2, insertTag.getID());
+
+
+            statement.executeUpdate(); // execute insertion statement
+            statement.close();
+            connection.close();
+
+        } catch (final SQLException e)
+        {
+            Log.e("Connect SQL", e.getMessage() + e.getSQLState());
+            e.printStackTrace();
+            throw new DatabaseException(e.getMessage());
+        }
+
+    }
+
+
+
+
 
     @Override
     public void removeSubscriptionByID(int subscriptionIDToRemove) throws DatabaseException {
