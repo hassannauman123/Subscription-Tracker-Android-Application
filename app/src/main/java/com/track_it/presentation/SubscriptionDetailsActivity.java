@@ -191,12 +191,7 @@ public class SubscriptionDetailsActivity extends AppCompatActivity {
     private void enableDeleteAndEditButtons() {
         deleteButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-
-                if (editMode)  // If we are not in edit mode, let the user delete it
-                {
                     createDialog(subscriptionToDisplay.getID());
-                }
-
             }
         });
 
@@ -364,7 +359,7 @@ public class SubscriptionDetailsActivity extends AppCompatActivity {
         }
 
         // Get the string the user entered for tags
-        String tagSting = tagInput.getText().toString().trim(); // get string, and remove white spaces
+        String tagSting = tagInput.getText().toString().trim().toLowerCase(); // get string, and remove white spaces, and change to lowercase
         try {
             subHandler.setTags(subscriptionToDisplay,tagSting); // Set tags
             subHandler.validateTagList(subscriptionToDisplay.getTagList()); //Validate tags

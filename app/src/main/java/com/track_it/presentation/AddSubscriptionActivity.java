@@ -165,7 +165,7 @@ public class AddSubscriptionActivity extends AppCompatActivity {
 
         try {
             //Get tag input from user
-            String getTagInput = tagInput.getText().toString().trim();
+            String getTagInput = tagInput.getText().toString().toLowerCase().trim().toLowerCase();
             subHandler.setTags(newSubscription, getTagInput); // Try to set tags based on input from user
             subHandler.validateTagList(newSubscription.getTagList()); // Try to set tags based on input from user
 

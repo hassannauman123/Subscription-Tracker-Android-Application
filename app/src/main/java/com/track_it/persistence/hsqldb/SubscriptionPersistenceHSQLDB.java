@@ -3,7 +3,6 @@ package com.track_it.persistence.hsqldb;
 import android.util.Log;
 
 import com.track_it.domainobject.SubscriptionObj;
-import com.track_it.domainobject.SubscriptionTag;
 import com.track_it.logic.exceptions.DatabaseException;
 import com.track_it.logic.exceptions.DatabaseSubNotFoundException;
 import com.track_it.persistence.SubscriptionPersistence;
@@ -156,33 +155,6 @@ public class SubscriptionPersistenceHSQLDB implements SubscriptionPersistence
 
 
 
-
-    @Override
-    public void associateTagWithSubscription(SubscriptionObj inputSubscription, SubscriptionTag insertTag)
-    {
-        try (Connection connection = connect()) {
-            final PreparedStatement statement = connection.prepareStatement("INSERT INTO SUBSCRIPTIONS_TAGS VALUES(?, ?)");
-            statement.setInt(1, inputSubscription.getID());
-            statement.setInt(2, insertTag.getID());
-
-
-            statement.executeUpdate(); // execute insertion statement
-            statement.close();
-            connection.close();
-
-        } catch (final SQLException e)
-        {
-            Log.e("Connect SQL", e.getMessage() + e.getSQLState());
-            e.printStackTrace();
-            throw new DatabaseException(e.getMessage());
-        }
-
-    }
-
-
-
-
-
     @Override
     public void removeSubscriptionByID(int subscriptionIDToRemove) throws DatabaseException {
         //If a subscription with id of subscriptionID is not found in database throw a DataBaseException exception
@@ -204,7 +176,6 @@ public class SubscriptionPersistenceHSQLDB implements SubscriptionPersistence
             Log.e("Connect SQL", e.getMessage() + e.getSQLState());
             e.printStackTrace();
             throw new DatabaseException(e.getMessage());
-
         }
     }
 

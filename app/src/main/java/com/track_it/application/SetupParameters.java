@@ -13,6 +13,8 @@ import com.track_it.logic.frequencies.WeeklyFrequency;
 import com.track_it.logic.frequencies.YearlyFrequency;
 import com.track_it.persistence.SubscriptionPersistence;
 import com.track_it.persistence.SubscriptionTagPersistence;
+import com.track_it.persistence.fakes.FakeSubscriptionPersistenceDatabase;
+import com.track_it.persistence.fakes.FakeSubscriptionTagPersistence;
 import com.track_it.persistence.hsqldb.SubscriptionPersistenceHSQLDB;
 
 import java.util.ArrayList;
@@ -37,6 +39,8 @@ public class SetupParameters {
     private static  final List<Frequency> allowableFrequencies =  InitFrequency() ; // will hold allowable frequencies
     private static SubscriptionPersistence subscriptionPersistenceDatabase = Services.getSubscriptionPersistence();  // Database that we will use
     private static SubscriptionTagPersistence subscriptionTagPersistenceDatabase = Services.getSubscriptionTagPersistence();  // Database that we will use
+    // private static SubscriptionPersistence subscriptionPersistenceDatabase = new FakeSubscriptionPersistenceDatabase();  // Database that we will use
+    // static SubscriptionTagPersistence subscriptionTagPersistenceDatabase = new FakeSubscriptionTagPersistence();  //;  // Database that we will use
 
     private static SubscriptionHandler subHandler = null; // subscription handler
 
@@ -63,6 +67,7 @@ public class SetupParameters {
         if (subHandler == null) // Only create one instance of the subscription handler, and return it each time
         {
             subHandler = new SubscriptionHandler(MIN_NAME_LENGTH, MAX_NAME_LENGTH, MIN_PAYMENT_IN_CENTS, MAX_PAYMENT_IN_CENTS, allowableCharactersInName, MAX_TAGS, allowableFrequencies, subscriptionPersistenceDatabase);
+
         }
         return subHandler;
     }

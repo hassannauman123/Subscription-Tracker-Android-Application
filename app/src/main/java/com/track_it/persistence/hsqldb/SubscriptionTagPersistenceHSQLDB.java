@@ -67,12 +67,46 @@ public class SubscriptionTagPersistenceHSQLDB implements SubscriptionTagPersiste
                   associateTagWithSubscription(inputSub,insertTag);
             }
 
+            removeUnusedTags();
+        } catch (final SQLException e) {
+            Log.e("Connect SQL", e.getMessage() + e.getSQLState());
+            e.printStackTrace();
+            throw new DatabaseException(e.getMessage());
+        }
+
+    }
+
+
+
+
+
+    public List<SubscriptionTag> getAllTags()
+    {
+
+        List<SubscriptionTag> listAllTags = new ArrayList<SubscriptionTag>();
+
+        try (Connection connection = connect())
+        {
+
+            final PreparedStatement statement = connection.prepareStatement("SELECT * from TAGS");
+
+            final ResultSet returnedResults = statement.executeQuery();
+
+            while (returnedResults.next())
+            {
+                final SubscriptionTag newTag = fromResultSet(returnedResults);
+                listAllTags.add(newTag);
+            }
+
 
         } catch (final SQLException e) {
             Log.e("Connect SQL", e.getMessage() + e.getSQLState());
             e.printStackTrace();
             throw new DatabaseException(e.getMessage());
         }
+
+        return listAllTags;
+
 
     }
 
@@ -96,6 +130,23 @@ public class SubscriptionTagPersistenceHSQLDB implements SubscriptionTagPersiste
             throw new DatabaseException(e.getMessage());
         }
 
+    }
+
+    private void removeUnusedTags()
+    {
+        try (Connection connection = connect())
+        {
+
+            final PreparedStatement statement = connection.prepareStatement("DELETE from TAGS where id NOT IN (SELECT tag_id from SUBSCRIPTIONS_TAGS)");
+            statement.executeUpdate();
+
+
+
+        } catch (final SQLException e) {
+            Log.e("Connect SQL", e.getMessage() + e.getSQLState());
+            e.printStackTrace();
+            throw new DatabaseException(e.getMessage());
+        }
     }
 
 
@@ -132,6 +183,24 @@ public class SubscriptionTagPersistenceHSQLDB implements SubscriptionTagPersiste
 
     }
 
+
+    public void removeAllTagsBySubID(int inputSub)
+    {
+        try (Connection connection = connect())
+        {
+
+            final PreparedStatement statement = connection.prepareStatement("DELETE from SUBSCRIPTIONS_TAGS where SUBSCRIPTIONS_TAGS.subscription_id = ?");
+            statement.setInt(1,inputSub);
+            statement.executeUpdate();
+
+            removeUnusedTags();
+        } catch (final SQLException e) {
+            Log.e("Connect SQL", e.getMessage() + e.getSQLState());
+            e.printStackTrace();
+            throw new DatabaseException(e.getMessage());
+        }
+
+    }
 
 
 

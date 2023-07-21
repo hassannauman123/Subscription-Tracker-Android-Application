@@ -1,9 +1,11 @@
 package com.track_it.presentation;
 
 
- import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -11,18 +13,18 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 
 import com.track_it.R;
- import com.track_it.application.SetupParameters;
- import com.track_it.domainobject.SubscriptionObj;
- import com.track_it.domainobject.SubscriptionTag;
- import com.track_it.logic.SubscriptionHandler;
+import com.track_it.application.SetupParameters;
+import com.track_it.domainobject.SubscriptionObj;
+import com.track_it.domainobject.SubscriptionTag;
+import com.track_it.logic.SubscriptionHandler;
 import com.track_it.logic.comparators.*;
 import com.track_it.logic.exceptions.DatabaseException;
 import com.track_it.logic.exceptions.SubscriptionException;
 import com.track_it.logic.exceptions.SubscriptionInvalidFrequencyException;
- import com.track_it.persistence.utils.DBHelper;
+import com.track_it.persistence.utils.DBHelper;
 
 
- import android.content.Intent;
+import android.content.Intent;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
@@ -57,13 +59,11 @@ public class MainActivity extends AppCompatActivity {
     private String searchString = ""; // Only subscriptions that contain the searchString will be shown ( by default all subs are shown)
 
     private List<SubscriptionObj> listOfSubs; // hold all the subscriptions to display
-    private  Comparator <SubscriptionObj> subSorter = null; //How we will sort subscriptions (By default we won't sort the subscriptions)
+    private Comparator<SubscriptionObj> subSorter = null; //How we will sort subscriptions (By default we won't sort the subscriptions)
     private TextView errorDisplay; // target to display errors
-    private  LinearLayout displaySubList; // Target for subscription list
+    private LinearLayout displaySubList; // Target for subscription list
 
     private boolean firstColor = true; // Every second subscription will have a slightly different color, and this will toggle between the colors
-
-
 
 
     @Override
@@ -71,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main); // Switch screen to display main page
 
-         DBHelper.copyDatabaseToDevice(this); // Copy database
+        DBHelper.copyDatabaseToDevice(this); // Copy database
 
         //Get subscription handler
         subHandler = SetupParameters.getSubscriptionHandler();
@@ -97,14 +97,13 @@ public class MainActivity extends AppCompatActivity {
             current.clearFocus();
         }
 
+        tagFilter.clear();  //Clear filter on restart
         displayAllSubscriptions(); // Display all the subs
     }
 
 
-
     //Set all the targets for the global variables for this activity
-    private void setTargets()
-    {
+    private void setTargets() {
         //Where errors will show
         errorDisplay = (TextView) this.findViewById(R.id.details_general_error);
         displaySubList = (LinearLayout) this.findViewById(R.id.subscription_list);
@@ -123,36 +122,31 @@ public class MainActivity extends AppCompatActivity {
 
 
     //Get the all subscriptions from the logic layer, and store in listOfSubs
-    private void getSubList()
-    {
+    private void getSubList() {
 
         listOfSubs = new ArrayList<SubscriptionObj>(); // make list empty
         try {
             //Get list of subscriptions
             listOfSubs = subHandler.getAllSubscriptions();
-         }
-        catch( SubscriptionException e) //Something went wrong with getting subs, display error
+        } catch (SubscriptionException e) //Something went wrong with getting subs, display error
         {
             enableError(e.getMessage());
 
-        }
-        catch( DatabaseException e)  //Something went wrong with getting subs, display error
+        } catch (DatabaseException e)  //Something went wrong with getting subs, display error
         {
             enableError(e.getMessage());
         }
     }
 
     //Set the error message, and make it visible
-    private void enableError(String inputMsg)
-    {
+    private void enableError(String inputMsg) {
         errorDisplay.setText(inputMsg);
         errorDisplay.setVisibility(View.VISIBLE);
 
     }
 
     //Remove the error message, and make it invisible
-    private void disableError()
-    {
+    private void disableError() {
         errorDisplay.setText("");
         errorDisplay.setVisibility(View.INVISIBLE);
     }
@@ -178,7 +172,6 @@ public class MainActivity extends AppCompatActivity {
 
     //Enable search input
     private void enableSearchInput() {
-
 
 
         //Set what happens when the user types into the search bar
@@ -216,7 +209,6 @@ public class MainActivity extends AppCompatActivity {
     private void enableSortFilterInput() {
 
 
-
         // Setting onClick behavior for the sort button
         filterButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -233,7 +225,9 @@ public class MainActivity extends AppCompatActivity {
                     public boolean onMenuItemClick(MenuItem menuItem) {
                         //Setting what filter to use to sort the subscriptions (ie, set subSorter)
                         String sortInput = menuItem.getTitle().toString();
-                        if (sortInput.equals(getString(R.string.sort_a_z))) {
+                        if (sortInput.equals(getString(R.string.filter_list))) {
+                            showFilterList();
+                        } else if (sortInput.equals(getString(R.string.sort_a_z))) {
                             subSorter = new CompareSubscriptionName();
                         } else if (sortInput.equals(getString(R.string.sort_payment))) {
                             subSorter = new CompareSubscriptionPayment();
@@ -256,18 +250,81 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    private List<SubscriptionTag> tagFilter = new ArrayList<SubscriptionTag>();
+
+
+    //This is what the user will see when they click filter list by tags
+    private void showFilterList() {
+        List<SubscriptionTag> tags = subHandler.getTagHandler().getAllSubTags(); //Get all tags from dataBase
+
+        final boolean[] checkedArray = new boolean[tags.size()];
+        final String[] tagNameArray = new String[tags.size()];
+
+        for (int i = 0; i < tagNameArray.length; i++)
+        {
+            tagNameArray[i] = tags.get(i).getName();
+
+
+            //this part make it such that a check box already is clicked if that filter is currently applied
+            for (SubscriptionTag currTag : tagFilter)
+            {
+                if ( currTag.getName().equals(tags.get(i).getName()))
+                {
+                    checkedArray[i] = true;
+                }
+            }
+        }
+
+
+
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Filter By");
+
+        builder.setMultiChoiceItems(tagNameArray, checkedArray, new DialogInterface.OnMultiChoiceClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which, boolean isChecked) {
+                checkedArray[which] = isChecked;
+            }
+        });
+
+        builder.setPositiveButton("Apply", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which)
+            {
+
+                tagFilter.clear();
+                for (int i = 0; i < checkedArray.length; i++) {
+                    if (checkedArray[i]) {
+                        tagFilter.add(tags.get(i));
+                    }
+                }
+                displayAllSubscriptions();
+            }
+        });
+
+        builder.setNegativeButton("Clear", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which)
+            {
+                tagFilter.clear();
+                displayAllSubscriptions();
+            }
+        });
+
+        builder.show();
+    }
+
+
     //Sort the subscription using Comparator object (sortSubsBy).
     // If sortSubsBy is null, subs will not be sorted
-    private void sortSubs(List<SubscriptionObj> listOfSubs,   Comparator <SubscriptionObj> sortSubsBy)
-    {
+    private void sortSubs(List<SubscriptionObj> listOfSubs, Comparator<SubscriptionObj> sortSubsBy) {
 
         try {
             if (sortSubsBy != null) {
                 Collections.sort(listOfSubs, sortSubsBy);
             }
-        }
-        catch(SubscriptionInvalidFrequencyException e)
-        {
+        } catch (SubscriptionInvalidFrequencyException e) {
             enableError("can't sort subs because " + e.getMessage());
         }
 
@@ -283,23 +340,36 @@ public class MainActivity extends AppCompatActivity {
         displaySubList.removeAllViews();
 
 
-         firstColor = true; // Every second subscription will have a slightly different color
+        firstColor = true; // Every second subscription will have a slightly different color
 
         //Create a subscription box for each subscription that we will show
-        for (SubscriptionObj curr : listOfSubs) {
-
+        for (SubscriptionObj curr : listOfSubs)
+        {
+            System.out.println("THESE ARE SUBS");
             if (curr.getName().toLowerCase().contains(searchString)) // only show this subscription if it matches the search criteria
             {
-                createBoxForSubscription(curr);
+                if (checkFilter(curr)) {
+                    createBoxForSubscription(curr);
+                }
             }
 
         }
     }
 
+    private boolean checkFilter(SubscriptionObj curr) {
+
+        boolean passFilter = true;
+        if (tagFilter.size() > 0) // If there are no tag filters, then all subscriptions pass the filter check
+        {
+            passFilter = subHandler.checkTags(curr, tagFilter); //Check if the subscription has at least one of the tags in tagFilter
+        }
+
+        return passFilter;
+    }
+
 
     //Create a box for subInput, and add it to displaySubList, and then display it
-    private void createBoxForSubscription(SubscriptionObj subInput)
-    {
+    private void createBoxForSubscription(SubscriptionObj subInput) {
 
         // Create a new box to display subscription
         View subscriptionBox = getLayoutInflater().inflate(R.layout.subscription_box, displaySubList, false);
@@ -323,13 +393,11 @@ public class MainActivity extends AppCompatActivity {
         // Set Payment amount to display
         TextView tagTarget = subscriptionBox.findViewById(R.id.tag_input);
         String allTags = "";
-        for (SubscriptionTag currTag : subInput.getTagList() )
-        {
+        for (SubscriptionTag currTag : subInput.getTagList()) {
             allTags += currTag.getName() + " ";
         }
 
-        if ( !allTags.equals(""))
-        {
+        if (!allTags.equals("")) {
             allTags = "Tags: " + allTags;
         }
 
@@ -339,9 +407,6 @@ public class MainActivity extends AppCompatActivity {
         //Set ID - Just as a reminder, these might not be unique ID's on this page, as other elements may have these ID numbers
         // but for how we are using them right now it's fine.
         subscriptionBox.setId(subInput.getID());
-
-
-
 
 
         //Every other subscription has a different background color
@@ -358,10 +423,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
     //Set the behavior of a subscriptionBox when it's clicked
-    private void setSubscriptionBoxBehaviour(View subscriptionBox)
-    {
+    private void setSubscriptionBoxBehaviour(View subscriptionBox) {
 
         //Set what happens when the user does a long click on a subscription box
         subscriptionBox.setOnLongClickListener(new View.OnLongClickListener() {

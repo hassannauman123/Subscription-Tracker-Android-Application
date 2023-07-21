@@ -17,5 +17,10 @@ public interface SubscriptionTagPersistence
      List<SubscriptionTag> getTagsForSubscription(SubscriptionObj inputSub);
 
 
+    List<SubscriptionTag>  getAllTags();
+
+    void removeAllTagsBySubID(int subID);
+
+
 
 }

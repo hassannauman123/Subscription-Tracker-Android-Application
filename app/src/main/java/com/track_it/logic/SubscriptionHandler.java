@@ -138,6 +138,35 @@ public class SubscriptionHandler {
     }
 
 
+
+    //This function will check if inputSub has any of the tags in list inputTags
+    public boolean checkTags(SubscriptionObj inputSub, List<SubscriptionTag> inputTags)
+    {
+        boolean hasTags = false;
+
+        for (SubscriptionTag currTag : inputTags) //For all tags in input tags
+        {
+            for ( SubscriptionTag currSubTag : inputSub.getTagList()) // for all tags in inputSubscription
+            {
+
+                if ( currSubTag.getName().equals(currTag.getName())) // Check if tags are the same
+                {
+                    hasTags = true; // This sub has at least one tag from inputTags
+                }
+            }
+        }
+
+
+        return hasTags;
+
+    }
+
+    public SubscriptionTagHandler getTagHandler()
+    {
+        return this.tagHandler;
+    }
+
+
     // Validate the Frequency input string
     // Must be one of the allowable frequencies in FrequencyList
     public void validateFrequency(final String inputName) throws SubscriptionInvalidFrequencyException {
@@ -235,7 +264,11 @@ public class SubscriptionHandler {
     // Will throw an Exception if subscription could not be deleted from database
     public void removeSubscriptionByID(int subscriptionID) throws DatabaseException {
 
-        subscriptionPersistence.removeSubscriptionByID(subscriptionID); // Remove it
+
+        this.tagHandler.removeSubTagsByID(subscriptionID); //Remove all tags first
+        this.subscriptionPersistence.removeSubscriptionByID(subscriptionID); // Remove sub from it database
+
+
     }
 
 
@@ -247,9 +280,7 @@ public class SubscriptionHandler {
     public void editWholeSubscription(int subscriptionID,final SubscriptionObj newSubDetails) throws DatabaseException, SubscriptionException {
         validateWholeSubscription(newSubDetails); // Validate the subscription
         this.subscriptionPersistence.editSubscriptionByID(subscriptionID, newSubDetails); // save the edits to subscription persistence
-
         this.tagHandler.changeSubTags( newSubDetails); // save the edits to subscription persistence
-
 
 
     }

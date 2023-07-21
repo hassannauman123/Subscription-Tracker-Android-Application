@@ -34,6 +34,11 @@ public class SubscriptionTagHandler
 
 
 
+    public void removeSubTagsByID(int subID)
+    {
+        this.subscriptionTagPersistence.removeAllTagsBySubID(subID);
+    }
+
     public void addTag(SubscriptionTag tagToAdd)
     {
         this.subscriptionTagPersistence.addTagToPersistence(tagToAdd);
@@ -56,6 +61,12 @@ public class SubscriptionTagHandler
         {
             validateTagName(currName);
         }
+    }
+
+
+    public List<SubscriptionTag> getAllSubTags()
+    {
+       return this.subscriptionTagPersistence.getAllTags();
     }
 
     public void validateTagName(String inputName ) throws SubscriptionTagException
@@ -82,15 +93,31 @@ public class SubscriptionTagHandler
     }
 
 
-    public List<SubscriptionTag> stringToTags(String inputTagString)  throws SubscriptionTagException {
+    public List<SubscriptionTag> stringToTags(String inputTagString)  throws SubscriptionTagException
+    {
         List<SubscriptionTag> tagList = new ArrayList<SubscriptionTag>();
         String splitTagString[] = inputTagString.split(TAG_SPLIT_CRITERIA);
+
 
         for (String newTag : splitTagString) {
             if (!newTag.trim().equals("")) // Only bother adding non blank tags
             {
                 validateTagName(newTag);
-                tagList.add(new SubscriptionTag((newTag)));
+
+                //Check if that tag has already been added ot list (this prevents to identical tags from being added to list)
+                boolean tagAlreadyAdded = false;
+                for ( SubscriptionTag currTag:tagList )
+                {
+                    if (currTag.getName().equals(newTag))
+                    {
+                        tagAlreadyAdded = true;
+                    }
+                }
+
+                if (!tagAlreadyAdded)
+                {
+                    tagList.add(new SubscriptionTag((newTag)));
+                }
             }
         }
 

@@ -22,6 +22,5 @@ public  interface  SubscriptionPersistence
     //Get a subscription object returned from the database by subscriptionID
     SubscriptionObj getSubscriptionByID(int subscriptionID);
 
-    public void associateTagWithSubscription(SubscriptionObj inputSubscription, SubscriptionTag insertTag);
 
 }

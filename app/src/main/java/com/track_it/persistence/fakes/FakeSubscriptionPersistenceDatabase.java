@@ -13,16 +13,6 @@ public class FakeSubscriptionPersistenceDatabase implements SubscriptionPersiste
 {
 
 
-   // YOU NEED TO UPDATE THIS METHOD BELOW LATER!!!!
-    @Override
-    public void associateTagWithSubscription(SubscriptionObj inputSubscription, SubscriptionTag insertTag)
-    {
-                        //TELL SOMEONE TO UPDATE !!
-    }
-
-
-
-
 
     // A static Arraylist to hold subscriptions.
     private static ArrayList<SubscriptionObj> subscriptionDB  = new ArrayList<SubscriptionObj>(); // Create a static ArrayList that hold subscription Objects
@@ -41,7 +31,6 @@ public class FakeSubscriptionPersistenceDatabase implements SubscriptionPersiste
     // Add a subscription to the database.
     public void addSubscriptionToDB( SubscriptionObj inputSubscription)
     {
-
         inputSubscription.setID(databaseCount);   // Set id
         subscriptionDB.add(inputSubscription); // ADD to database
         databaseCount++;
