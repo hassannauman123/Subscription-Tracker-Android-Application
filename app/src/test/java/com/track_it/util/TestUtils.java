@@ -39,7 +39,7 @@ public class TestUtils {
                 File tempDB;
                 tempDB = TestUtils.copyDB();
                 final SubscriptionPersistence subPersistence = new SubscriptionPersistenceHSQLDB(tempDB.getAbsolutePath().replace(".script", ""), "false");
-                final SubscriptionTagPersistence subTagPersistence = new SubscriptionTagPersistenceHSQLDB(tempDB.getAbsolutePath().replace(".script", "")) {
+                final SubscriptionTagPersistence subTagPersistence = new SubscriptionTagPersistenceHSQLDB(tempDB.getAbsolutePath().replace(".script", ""),"false") {
                 };
 
                 SetupParameters.initializeDatabase(subPersistence,subTagPersistence);

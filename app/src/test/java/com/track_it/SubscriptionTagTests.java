@@ -48,18 +48,17 @@ public class SubscriptionTagTests {
         subHandle.setTags(newSubToAdd, tag1 + " " + tag2);
         subHandle.addSubscription(newSubToAdd);
 
-
         SubscriptionObj subReturnedFromDatabase = subHandle.getSubscriptionByID(newSubToAdd.getID());
         List<SubscriptionTag> returnedTags = subReturnedFromDatabase.getTagList();
 
-        assertTrue("Failed tag test, added 2 tags, and received a sub back with " + returnedTags.size() + "number of subs " , returnedTags.size() == 2);
+        assertTrue("Failed tag test, added 2 tags, and received a sub back with " + returnedTags.size() + " number of tags " , returnedTags.size() == 2);
 
 
 
         for ( SubscriptionTag currTag: returnedTags)
         {
             String currTagName = currTag.getName();
-            assertTrue (  "Failed tag test, a sub was added with tags named " + tag1 + " " + tag2 + " but received " + currTagName  + " back."   ,currTagName.equals(tag1) ||currTagName.equals(tag2)  );
+            assertTrue (  "Failed tag test, a sub was added with tags named " + tag1 + " " + tag2 + " but received " + currTagName.length()  ,currTagName.equals(tag1) ||currTagName.equals(tag2)  );
         }
 
 
@@ -96,7 +95,7 @@ public class SubscriptionTagTests {
         // Get all tags from database
         List<SubscriptionTag> returnedTags = subHandle.getTagHandler().getAllSubTags();
 
-        //assertTrue( "Failed tag test! Did not get back 5 tags when added across 2 different sub, " +returnedTags.size() + " was the returned size.", returnedTags.size() == addTags.length  );
+        assertTrue( "Failed tag test! Did not get back 5 tags when added across 2 different sub, " +returnedTags.size() + " was the returned size.", returnedTags.size() == addTags.length  );
 
 
         for ( SubscriptionTag currTag: returnedTags)
@@ -111,7 +110,7 @@ public class SubscriptionTagTests {
                 }
             }
 
-          //  assertTrue("Failed tag test!, added tags to sub, but got subs back from database that did not match any added ags", match);
+             assertTrue("Failed tag test!, added tags to sub, but got subs back from database that did not match any added tags", match);
         }
 
 
@@ -134,12 +133,12 @@ public class SubscriptionTagTests {
 
         SubscriptionObj subReturnedFromDatabase = subHandle.getSubscriptionByID(newSubToAdd.getID());
         subReturnedFromDatabase.setTagList(new ArrayList<SubscriptionTag>());
-        //subHandle.editWholeSubscription(subReturnedFromDatabase.getID(),subReturnedFromDatabase);
+        subHandle.editWholeSubscription(subReturnedFromDatabase.getID(),subReturnedFromDatabase);
 
-        // Get all return tags
+        //Get all return tags
         List<SubscriptionTag> returnedTags = subReturnedFromDatabase.getTagList();
 
-      //  assertTrue("FAILED TAG TEST: failed to remove tags added to a subscription" , returnedTags.size() == 0 );
+        assertTrue("FAILED TAG TEST: failed to remove tags added to a subscription" , returnedTags.size() == 0);
 
 
 
