@@ -53,8 +53,7 @@ public class SetupParameters {
         //Create a new subscription handler if the database has changed
         tagPersistenceDatabase = inputTagDB;
         subscriptionPersistenceDatabase = inputSubDB;
-        subHandler = new SubscriptionHandler(MIN_NAME_LENGTH, MAX_NAME_LENGTH, MIN_PAYMENT_IN_CENTS, MAX_PAYMENT_IN_CENTS, allowableCharactersInName, MAX_TAGS, allowableFrequencies, subscriptionPersistenceDatabase);
-        tagHandler = new SubscriptionTagHandler(TAG_SPLIT, TAG_MIN_LENGTH, TAG_MAX_LENGTH, tagPersistenceDatabase);
+        subHandler = new SubscriptionHandler(MIN_NAME_LENGTH, MAX_NAME_LENGTH, MIN_PAYMENT_IN_CENTS, MAX_PAYMENT_IN_CENTS, allowableCharactersInName, MAX_TAGS, allowableFrequencies, getTagHandler() , subscriptionPersistenceDatabase);
 
     }
 
@@ -63,12 +62,21 @@ public class SetupParameters {
 
         if (subHandler == null) // Only create one instance of the subscription handler, and return it each time
         {
-            subHandler = new SubscriptionHandler(MIN_NAME_LENGTH, MAX_NAME_LENGTH, MIN_PAYMENT_IN_CENTS, MAX_PAYMENT_IN_CENTS, allowableCharactersInName, MAX_TAGS, allowableFrequencies, subscriptionPersistenceDatabase);
-
+            subHandler = new SubscriptionHandler(MIN_NAME_LENGTH, MAX_NAME_LENGTH, MIN_PAYMENT_IN_CENTS, MAX_PAYMENT_IN_CENTS, allowableCharactersInName, MAX_TAGS, allowableFrequencies, getTagHandler() , subscriptionPersistenceDatabase);
         }
         return subHandler;
     }
 
+
+    //Wrapper for the logic layer
+    public static SubscriptionTagHandler getTagHandler() {
+
+        if (tagHandler == null) // Only create one instance of the subscription handler, and return it each time
+        {
+            tagHandler = new SubscriptionTagHandler(TAG_SPLIT, TAG_MIN_LENGTH, TAG_MAX_LENGTH, tagPersistenceDatabase);
+        }
+        return tagHandler;
+    }
 
     //Initialize the frequency list
     private static List<Frequency> InitFrequency() {
@@ -84,16 +92,6 @@ public class SetupParameters {
 
         return returnList;
 
-    }
-
-    //Wrapper for the logic layer
-    public static SubscriptionTagHandler getTagHandler() {
-
-        if (tagHandler == null) // Only create one instance of the subscription handler, and return it each time
-        {
-            tagHandler = new SubscriptionTagHandler(TAG_SPLIT, TAG_MIN_LENGTH, TAG_MAX_LENGTH, tagPersistenceDatabase);
-        }
-        return tagHandler;
     }
 
 

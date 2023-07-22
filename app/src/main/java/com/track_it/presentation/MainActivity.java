@@ -16,6 +16,7 @@ import com.track_it.R;
 import com.track_it.application.SetupParameters;
 import com.track_it.domainobject.SubscriptionObj;
 import com.track_it.domainobject.SubscriptionTag;
+import com.track_it.logic.SubscriptionFilter;
 import com.track_it.logic.SubscriptionHandler;
 import com.track_it.logic.comparators.*;
 import com.track_it.logic.exceptions.RetrievalException;
@@ -51,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     private SubscriptionHandler subHandler;
+    private SubscriptionFilter subFilter;
 
     private Button addSubButton; // button to add a subscription
     private SearchView searchInput; // Search input target
@@ -65,6 +67,8 @@ public class MainActivity extends AppCompatActivity {
 
     private boolean firstColor = true; // Every second subscription will have a slightly different color, and this will toggle between the colors
 
+    private List<SubscriptionTag> tagFilterList = new ArrayList<SubscriptionTag>(); //Will hold a list of tags, and we will filter subs based on that
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +79,7 @@ public class MainActivity extends AppCompatActivity {
 
         //Get subscription handler
         subHandler = SetupParameters.getSubscriptionHandler();
+        subFilter = new SubscriptionFilter();
 
         setTargets(); //Set the targets for the global variables
         getSubList(); // Get list of subs from database, and store in listOfSubs
@@ -97,7 +102,7 @@ public class MainActivity extends AppCompatActivity {
             current.clearFocus();
         }
 
-        tagFilter.clear();  //Clear filter on restart
+        tagFilterList.clear();  //Clear filter on restart
         displayAllSubscriptions(); // Display all the subs
     }
 
@@ -250,8 +255,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private List<SubscriptionTag> tagFilter = new ArrayList<SubscriptionTag>();
-
 
     //This is what the user will see when they click filter list by tags
     private void showFilterList() {
@@ -265,7 +268,7 @@ public class MainActivity extends AppCompatActivity {
 
 
             //this part make it such that a check box already is clicked if that filter is currently applied
-            for (SubscriptionTag currTag : tagFilter) {
+            for (SubscriptionTag currTag : tagFilterList) {
                 if (currTag.getName().equals(tags.get(i).getName())) {
                     checkedArray[i] = true;
                 }
@@ -288,10 +291,10 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int which) {
 
                 // Clear filter list, and build a new one based on the click checked marks
-                tagFilter.clear();
+                tagFilterList.clear();
                 for (int i = 0; i < checkedArray.length; i++) {
                     if (checkedArray[i]) {
-                        tagFilter.add(tags.get(i));
+                        tagFilterList.add(tags.get(i));
                     }
                 }
                 //Display subs ( will use the filters)
@@ -303,7 +306,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 // Clear all filters
-                tagFilter.clear();
+                tagFilterList.clear();
                 displayAllSubscriptions();
             }
         });
@@ -329,7 +332,7 @@ public class MainActivity extends AppCompatActivity {
     // Display all the subscriptions currently in listOfSubs in a scrollable list
     private void displayAllSubscriptions() {
 
-        searchString = searchInput.getQuery().toString().toLowerCase(); // Get the search string ( We will only show subs where the name contains the search string)
+        searchString = searchInput.getQuery().toString().toLowerCase().trim(); // Get the search string ( We will only show subs where the name contains the search string)
         sortSubs(listOfSubs, subSorter); // Sort the subscription
 
         // Clears all the subscription boxes that were previously displayed on screen
@@ -342,7 +345,8 @@ public class MainActivity extends AppCompatActivity {
         for (SubscriptionObj curr : listOfSubs) {
             if (curr.getName().toLowerCase().contains(searchString)) // only show this subscription if it matches the search criteria
             {
-                if (checkFilter(curr)) {
+                if (checkFilter(curr)) // Only show sub if it passes the filter check
+                {
                     createBoxForSubscription(curr);
                 }
             }
@@ -350,19 +354,19 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private boolean checkFilter(SubscriptionObj curr) {
+    private boolean checkFilter(SubscriptionObj inputSub) {
 
         boolean passFilter = true;
-        if (tagFilter.size() > 0) // If there are no tag filters, then all subscriptions pass the filter check
+        if (tagFilterList.size() > 0) // If there are no tag filters, then all subscriptions pass the filter check
         {
-            passFilter = subHandler.checkIfSubHasTags(curr, tagFilter); //Check if the subscription has at least one of the tags in tagFilter
+            passFilter = subFilter.checkIfSubHasTags(inputSub, tagFilterList); //Check if the subscription has at least one of the tags in tagFilter
         }
 
         return passFilter;
     }
 
 
-    //Create a box for subInput, and add it to displaySubList, and then display it
+    //Create a box for subscription , add it to displaySubList, and then display it
     private void createBoxForSubscription(SubscriptionObj subInput) {
 
         // Create a new box to display subscription

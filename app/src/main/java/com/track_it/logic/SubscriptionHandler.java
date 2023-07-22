@@ -40,7 +40,7 @@ public class SubscriptionHandler {
 
     private final SubscriptionTagHandler tagHandler;
 
-    public SubscriptionHandler(int inputMinNameLen, int inputMaxNameLen, int inputMinPayment, int inputMaxPayment, String inputAllowableChars, int inputMaxTags, List<Frequency> inputAllowableFrequencies, SubscriptionPersistence inputDB) {
+    public SubscriptionHandler(int inputMinNameLen, int inputMaxNameLen, int inputMinPayment, int inputMaxPayment, String inputAllowableChars, int inputMaxTags, List<Frequency> inputAllowableFrequencies, SubscriptionTagHandler inputTagHandler, SubscriptionPersistence inputDB) {
         //Set the Database used, and various parameters for what is a valid subscription
         this.subscriptionPersistence = inputDB;
         this.MIN_NAME_LENGTH = inputMinNameLen;
@@ -52,7 +52,7 @@ public class SubscriptionHandler {
         this.allowableCharactersInName = inputAllowableChars;
         this.frequencyList = inputAllowableFrequencies;
         this.MAX_TAGS = inputMaxTags;
-        tagHandler = SetupParameters.getTagHandler();
+        this.tagHandler = inputTagHandler;
     }
 
 
@@ -68,7 +68,7 @@ public class SubscriptionHandler {
 
 
     //This is a function that simplifies the process of creating a tag list for a subscription.
-    // String tag will automatically be turned into a list of tags, and added to subscription.
+    // String tag will automatically be turned into a list of tags, and be added to subscription.
     public void setTags(SubscriptionObj subscriptionToSet, String stringTag) {
         subscriptionToSet.setTagList(tagHandler.stringToTags(stringTag));
     }
@@ -94,26 +94,6 @@ public class SubscriptionHandler {
 
         return returnFrequency; // return frequency
 
-    }
-
-
-    //This function will check if inputSub has any of the tags in list inputTags
-    public boolean checkIfSubHasTags(SubscriptionObj inputSub, List<SubscriptionTag> inputTags) {
-        boolean hasTags = false;
-
-        for (SubscriptionTag currTag : inputTags) //For all tags in input tags
-        {
-            for (SubscriptionTag currSubTag : inputSub.getTagList()) // for all tags in inputSubscription
-            {
-
-                if (currSubTag.getName().equals(currTag.getName())) // Check if tags are the same
-                {
-                    hasTags = true; // This sub has at least one tag from inputTags
-                }
-            }
-        }
-
-        return hasTags;
     }
 
 
@@ -231,12 +211,10 @@ public class SubscriptionHandler {
 
     // Removes a subscription by ID from the database.
     // Will throw an Exception if subscription could not be deleted from database
-    public void removeSubscriptionByID(int subscriptionID) throws RetrievalException {
-
+    public void removeSubscriptionByID(int subscriptionID) throws RetrievalException
+    {
         this.tagHandler.removeSubTagsByID(subscriptionID); //Remove all tags first
         this.subscriptionPersistence.removeSubscriptionByID(subscriptionID); // Remove sub from it database
-
-
     }
 
 

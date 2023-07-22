@@ -4,6 +4,7 @@ package com.track_it;
 import androidx.test.filters.LargeTest;
 
 import com.track_it.application.Main;
+import com.track_it.application.SetupParameters;
 import com.track_it.presentation.SubscriptionTest;
 import com.track_it.util.TestUtils;
 
@@ -25,9 +26,7 @@ public class AllAcceptanceTests {
     public static ExternalResource testRule = new ExternalResource() {
         @Override
         protected void before() throws Throwable {
-            //Main.setDBPathName("TestAcceptance");
-            TestUtils.setUseRealDatabase(false);
-            TestUtils.changeDatabase();
+            Main.setDBPathName("TestAcceptance");
         }
     };
 

@@ -12,10 +12,7 @@ public class FillDatabase {
 
 
 
-
-
-
-    //Fill database with fake data that is not random, using defined objects
+    //Fill database with fake data.
     public static void fillDataBase(final SubscriptionHandler subHandler)
     {
         // Create 10 subs, with less random Names
