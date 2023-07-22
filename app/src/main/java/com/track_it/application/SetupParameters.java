@@ -17,9 +17,10 @@ import com.track_it.persistence.fakes.FakeSubscriptionTagPersistenceDatabase;
 import java.util.ArrayList;
 import java.util.List;
 
+
 //This is wrapper class for the logic layer.
-// It will return a subscription Handler with appropriate set parameters and database.
-// Will return the same SubscriptionHandler each time (single item) if the database has not been changed.
+// It will return a subscription handler and tag handler with appropriate set parameters.
+// Will return the same SubscriptionHandler and tagHandler each time (singleton item) if the database has not been changed.
 
 public class SetupParameters {
 
@@ -28,32 +29,32 @@ public class SetupParameters {
     private static final int MAX_NAME_LENGTH = 30;
     private static final int MAX_PAYMENT_IN_CENTS = 999999;
     private static final int MIN_PAYMENT_IN_CENTS = 0;
-    private static final int MAX_TAGS = 5;
 
     private static final String allowableCharactersInName = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890 -!@#$%^&*()_+=|{=}[]':?<>',."; // Our current list of allowable characters in the name
 
 
     private static final List<Frequency> allowableFrequencies = InitFrequency(); // will hold allowable frequencies
-    // private static SubscriptionPersistence subscriptionPersistenceDatabase = Services.getSubscriptionPersistence();  // Database that we will use
-    // private static SubscriptionTagPersistence tagPersistenceDatabase = Services.getSubscriptionTagPersistence();  // Database that we will use
-    private static SubscriptionPersistence subscriptionPersistenceDatabase = new FakeSubscriptionPersistenceDatabase();  // Database that we will use
-    private static SubscriptionTagPersistence subscriptionTagPersistenceDatabase = new FakeSubscriptionTagPersistenceDatabase();  //;  // Database that we will use
+    private static SubscriptionPersistence subscriptionPersistenceDatabase = Services.getSubscriptionPersistence();  // Database that we will use
+    private static SubscriptionTagPersistence tagPersistenceDatabase = Services.getSubscriptionTagPersistence();  // Database that we will use
+    //private static SubscriptionPersistence subscriptionPersistenceDatabase = new FakeSubscriptionPersistenceDatabase();  // Database that we will use
+    //private static SubscriptionTagPersistence subscriptionTagPersistenceDatabase = new FakeSubscriptionTagPersistenceDatabase();  //;  // Database that we will use
 
     private static SubscriptionHandler subHandler = null; // subscription handler
 
     private static SubscriptionTagHandler tagHandler = null; // subscription handler
 
-    private static String TAG_SPLIT = " ";
-    private static int TAG_MIN_LENGTH = 1;
-    private static int TAG_MAX_LENGTH = 20;
+    private static String TAG_SPLIT = " "; // set how tags will be delimited, allows for easily changing tag behavior
+    private static int TAG_MIN_LENGTH = 1; // Max tag length
+    private static int TAG_MAX_LENGTH = 20; // Min tax length
+    private static final int MAX_TAGS = 5; // How many tags can a subscription have?
 
 
     public static void initializeDatabase(SubscriptionPersistence inputSubDB, SubscriptionTagPersistence inputTagDB) {
         //Create a new subscription handler if the database has changed
-        subscriptionTagPersistenceDatabase = inputTagDB;
+        tagPersistenceDatabase = inputTagDB;
         subscriptionPersistenceDatabase = inputSubDB;
         subHandler = new SubscriptionHandler(MIN_NAME_LENGTH, MAX_NAME_LENGTH, MIN_PAYMENT_IN_CENTS, MAX_PAYMENT_IN_CENTS, allowableCharactersInName, MAX_TAGS, allowableFrequencies, subscriptionPersistenceDatabase);
-        tagHandler = new SubscriptionTagHandler(TAG_SPLIT, TAG_MIN_LENGTH, TAG_MAX_LENGTH, subscriptionTagPersistenceDatabase);
+        tagHandler = new SubscriptionTagHandler(TAG_SPLIT, TAG_MIN_LENGTH, TAG_MAX_LENGTH, tagPersistenceDatabase);
 
     }
 
@@ -90,7 +91,7 @@ public class SetupParameters {
 
         if (tagHandler == null) // Only create one instance of the subscription handler, and return it each time
         {
-            tagHandler = new SubscriptionTagHandler(TAG_SPLIT, TAG_MIN_LENGTH, TAG_MAX_LENGTH, subscriptionTagPersistenceDatabase);
+            tagHandler = new SubscriptionTagHandler(TAG_SPLIT, TAG_MIN_LENGTH, TAG_MAX_LENGTH, tagPersistenceDatabase);
         }
         return tagHandler;
     }

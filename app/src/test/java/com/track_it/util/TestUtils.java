@@ -1,11 +1,8 @@
 package com.track_it.util;
 
-
 import com.track_it.application.Main;
-
 import java.io.File;
 import java.io.IOException;
-
 import com.google.common.io.Files;
 import com.track_it.persistence.SubscriptionPersistence;
 import com.track_it.persistence.SubscriptionTagPersistence;
@@ -18,7 +15,7 @@ import com.track_it.persistence.hsqldb.SubscriptionTagPersistenceHSQLDB;
 public class TestUtils {
     private static final File DB_SRC = new File("src/main/assets/db/Test.script");
 
-    private static boolean useRealDatabase = false; //Should we use real database? - Default false means use fakeDataBase
+    private static boolean useRealDatabase = false; //Should we use real database? - We use this below in the changeDatabase function
 
 
     public static File copyDB() throws IOException {
@@ -32,7 +29,7 @@ public class TestUtils {
 
     //Change the DataBase - Either to a real SQL database, or a fake database, depending on what useRealDatabase is set to
     public static void changeDatabase() {
-        if (TestUtils.getUseRealDatabase())//Use real SQL database
+        if (useRealDatabase)// Should we use a real SQL database
         {
 
             try {
@@ -45,7 +42,6 @@ public class TestUtils {
                 SetupParameters.initializeDatabase(subPersistence,subTagPersistence);
             } catch (IOException e) {
                 System.out.println(e.getMessage());
-                assert (false);
 
             }
         } else //Use fake Database
@@ -61,7 +57,7 @@ public class TestUtils {
         useRealDatabase = input;
     }
 
-    //Get whether we should use real database
+    //Get whether we should use real database, in case someone else wants this information
     public static boolean getUseRealDatabase() {
         return useRealDatabase;
     }

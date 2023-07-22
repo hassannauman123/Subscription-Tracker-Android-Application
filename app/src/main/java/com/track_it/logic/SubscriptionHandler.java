@@ -3,7 +3,7 @@ package com.track_it.logic;
 import com.track_it.application.SetupParameters;
 import com.track_it.domainobject.SubscriptionObj;
 import com.track_it.domainobject.SubscriptionTag;
-import com.track_it.logic.exceptions.DatabaseException;
+import com.track_it.logic.exceptions.RetrievalException;
 import com.track_it.logic.exceptions.SubscriptionException;
 import com.track_it.logic.exceptions.SubscriptionInvalidFrequencyException;
 import com.track_it.logic.exceptions.SubscriptionInvalidNameException;
@@ -11,7 +11,6 @@ import com.track_it.logic.exceptions.SubscriptionInvalidPaymentException;
 import com.track_it.logic.exceptions.SubscriptionTagException;
 import com.track_it.logic.frequencies.*;
 import com.track_it.persistence.SubscriptionPersistence;
-import com.track_it.persistence.SubscriptionTagPersistence;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,10 +40,9 @@ public class SubscriptionHandler {
 
     private final SubscriptionTagHandler tagHandler;
 
-    public SubscriptionHandler( int inputMinNameLen, int inputMaxNameLen, int inputMinPayment, int inputMaxPayment,String inputAllowableChars, int inputMaxTags, List<Frequency> inputAllowableFrequencies,  SubscriptionPersistence inputDB )
-    {
+    public SubscriptionHandler(int inputMinNameLen, int inputMaxNameLen, int inputMinPayment, int inputMaxPayment, String inputAllowableChars, int inputMaxTags, List<Frequency> inputAllowableFrequencies, SubscriptionPersistence inputDB) {
         //Set the Database used, and various parameters for what is a valid subscription
-        this.subscriptionPersistence =  inputDB;
+        this.subscriptionPersistence = inputDB;
         this.MIN_NAME_LENGTH = inputMinNameLen;
         this.MAX_NAME_LENGTH = inputMaxNameLen;
         this.MAX_PAYMENT = inputMaxPayment;
@@ -54,50 +52,36 @@ public class SubscriptionHandler {
         this.allowableCharactersInName = inputAllowableChars;
         this.frequencyList = inputAllowableFrequencies;
         this.MAX_TAGS = inputMaxTags;
-        tagHandler =   SetupParameters.getTagHandler();
+        tagHandler = SetupParameters.getTagHandler();
     }
 
 
     // This function will add subscriptionToAdd to database. It will first validate subscription, and then
     // try to add to database.
     // It will throw Exceptions if anything goes wrong (like invalid data), so caller should be prepared to catch them.
-    public void addSubscription(SubscriptionObj subscriptionToAdd) throws DatabaseException, SubscriptionException
-    {
+    public void addSubscription(SubscriptionObj subscriptionToAdd) throws RetrievalException, SubscriptionException {
         validateWholeSubscription(subscriptionToAdd); // May throw exception if subscription details are not valid
 
-
         subscriptionPersistence.addSubscriptionToDB(subscriptionToAdd); // Add to database, will throw DataBaseException if subscription could not be added to dat base.
-
-        for( SubscriptionTag currTag : subscriptionToAdd.getTagList())
-        {
-           tagHandler.addTag(currTag);
-           this.tagHandler.changeSubTags( subscriptionToAdd); //Associate tags with sub
-
-        }
-
+        this.tagHandler.changeSubTags(subscriptionToAdd); //Associate tags with subscription, saving to database
     }
 
 
-
-
-
-    public void setTags(SubscriptionObj subscriptionToSet,String stringTag)
-    {
+    //This is a function that simplifies the process of creating a tag list for a subscription.
+    // String tag will automatically be turned into a list of tags, and added to subscription.
+    public void setTags(SubscriptionObj subscriptionToSet, String stringTag) {
         subscriptionToSet.setTagList(tagHandler.stringToTags(stringTag));
     }
 
 
-
-    //Return a frequency object that matches the frequency type of inputSubscription.
+    // Return a frequency object that matches the frequency type of inputSubscription.
     // will throw SubscriptionInvalidFrequencyException if frequency of inputSubscription is not valid
-    public Frequency getFrequencyObject(final SubscriptionObj inputSubscription) throws SubscriptionInvalidFrequencyException
-    {
+    public Frequency getFrequencyObject(final SubscriptionObj inputSubscription) throws SubscriptionInvalidFrequencyException {
         Frequency returnFrequency = null;
 
-        for ( Frequency currFrequency : frequencyList) // Get a frequency object that matches the frequency of the inputSubscription
+        for (Frequency currFrequency : frequencyList) // Get a frequency object that matches the frequency of the inputSubscription
         {
-            if (currFrequency.checkMatch(inputSubscription.getPaymentFrequency()))
-            {
+            if (currFrequency.checkMatch(inputSubscription.getPaymentFrequency())) {
                 returnFrequency = currFrequency; //It's Fine to return a non-copied object
             }
         }
@@ -112,78 +96,30 @@ public class SubscriptionHandler {
 
     }
 
-    // Validate the whole subscription.
-    // Throws exception if object is invalid
-    public void validateWholeSubscription(final SubscriptionObj subscriptionToValidate) throws SubscriptionException
-    {
-        validateName(subscriptionToValidate.getName());
-        validateFrequency(subscriptionToValidate.getPaymentFrequency());
-        validatePaymentAmount(subscriptionToValidate.getTotalPaymentInCents());
-        validateTagList(subscriptionToValidate.getTagList());
-
-    }
-
-    public void validateTagList(List<SubscriptionTag> tagsToValidate) throws SubscriptionTagException
-    {
-        if (tagsToValidate.size() > MAX_TAGS)
-        {
-            throw new SubscriptionTagException("Max of " + MAX_TAGS + " tags allowed");
-        }
-
-        for( SubscriptionTag currTag : tagsToValidate)
-        {
-            tagHandler.validateTagName(currTag.getName());
-        }
-
-    }
-
-
 
     //This function will check if inputSub has any of the tags in list inputTags
-    public boolean checkTags(SubscriptionObj inputSub, List<SubscriptionTag> inputTags)
-    {
+    public boolean checkIfSubHasTags(SubscriptionObj inputSub, List<SubscriptionTag> inputTags) {
         boolean hasTags = false;
 
         for (SubscriptionTag currTag : inputTags) //For all tags in input tags
         {
-            for ( SubscriptionTag currSubTag : inputSub.getTagList()) // for all tags in inputSubscription
+            for (SubscriptionTag currSubTag : inputSub.getTagList()) // for all tags in inputSubscription
             {
 
-                if ( currSubTag.getName().equals(currTag.getName())) // Check if tags are the same
+                if (currSubTag.getName().equals(currTag.getName())) // Check if tags are the same
                 {
                     hasTags = true; // This sub has at least one tag from inputTags
                 }
             }
         }
 
-
         return hasTags;
-
     }
 
-    public SubscriptionTagHandler getTagHandler()
-    {
+
+    //Return the tag handler associated with this subscription handler
+    public SubscriptionTagHandler getTagHandler() {
         return this.tagHandler;
-    }
-
-
-    // Validate the Frequency input string
-    // Must be one of the allowable frequencies in FrequencyList
-    public void validateFrequency(final String inputName) throws SubscriptionInvalidFrequencyException {
-        boolean match = false; // A boolean to tell if inputName matches any of our payment Frequencies
-
-        for (Frequency currFrequency : frequencyList)
-        {
-            if (currFrequency.checkMatch(inputName))
-            {
-                match = true;
-            }
-        }
-        if (!match) // If there was no match
-        {
-            throw new SubscriptionInvalidFrequencyException(inputName + " is not a valid frequency");
-        }
-
     }
 
 
@@ -195,15 +131,14 @@ public class SubscriptionHandler {
     //      Must be less than or equal to MAX_NAME_LENGTH characters long
     //      chars are restricted to certain characters (look at allowableCharactersInName)
 
-    public void validateName(final String inputName) throws SubscriptionInvalidNameException
-    {
+    public void validateName(final String inputName) throws SubscriptionInvalidNameException {
 
         //The name has to be a minimum length
         if (inputName.trim().length() < MIN_NAME_LENGTH) {
             throw new SubscriptionInvalidNameException("Name required");
         }
 
-         if (inputName.length() > MAX_NAME_LENGTH) {
+        if (inputName.length() > MAX_NAME_LENGTH) {
             throw new SubscriptionInvalidNameException("Name is too long");
         }
 
@@ -220,9 +155,45 @@ public class SubscriptionHandler {
                 throw new SubscriptionInvalidNameException(inputName.charAt(i) + " is not an allowable\nchar in name");
             }
         }
+    }
 
+
+    // Validate the whole subscription.
+    // Throws exception if object is invalid
+    public void validateWholeSubscription(final SubscriptionObj subscriptionToValidate) throws SubscriptionException {
+        validateName(subscriptionToValidate.getName());
+        validateFrequency(subscriptionToValidate.getPaymentFrequency());
+        validatePaymentAmount(subscriptionToValidate.getTotalPaymentInCents());
+        validateTagList(subscriptionToValidate.getTagList());
 
     }
+
+    public void validateTagList(List<SubscriptionTag> tagsToValidate) throws SubscriptionTagException {
+        if (tagsToValidate.size() > MAX_TAGS) {
+            throw new SubscriptionTagException("Max of " + MAX_TAGS + " tags allowed");
+        }
+
+        for (SubscriptionTag currTag : tagsToValidate) {
+            tagHandler.validateTagName(currTag.getName());
+        }
+    }
+
+    // Validate the Frequency input string
+    // Must be one of the allowable frequencies in FrequencyList
+    public void validateFrequency(final String inputName) throws SubscriptionInvalidFrequencyException {
+        boolean match = false; // A boolean to tell if inputName matches any of our payment Frequencies
+
+        for (Frequency currFrequency : frequencyList) {
+            if (currFrequency.checkMatch(inputName)) {
+                match = true;
+            }
+        }
+        if (!match) // If there was no match
+        {
+            throw new SubscriptionInvalidFrequencyException(inputName + " is not a valid frequency");
+        }
+    }
+
 
     // This validates the input Payment amount
     // Throw exceptions if invalid.
@@ -239,7 +210,7 @@ public class SubscriptionHandler {
 
 
     // Gets and returns a single subscription by ID from the database.
-    public SubscriptionObj getSubscriptionByID(int inputID) throws DatabaseException {
+    public SubscriptionObj getSubscriptionByID(int inputID) throws RetrievalException {
 
         SubscriptionObj returnSub = this.subscriptionPersistence.getSubscriptionByID(inputID);
         returnSub.setTagList(tagHandler.getTagsForSubscription(returnSub));
@@ -248,12 +219,10 @@ public class SubscriptionHandler {
     }
 
     // Gets and returns list of all the subscriptions in the database
-    public List<SubscriptionObj> getAllSubscriptions() throws DatabaseException
-    {
-        List<SubscriptionObj> listOFSubs =  this.subscriptionPersistence.getAllSubscriptions();
+    public List<SubscriptionObj> getAllSubscriptions() throws RetrievalException {
+        List<SubscriptionObj> listOFSubs = this.subscriptionPersistence.getAllSubscriptions();
 
-        for ( SubscriptionObj currSub : listOFSubs)
-        {
+        for (SubscriptionObj currSub : listOFSubs) {
             currSub.setTagList(tagHandler.getTagsForSubscription(currSub));
         }
         return listOFSubs;
@@ -262,8 +231,7 @@ public class SubscriptionHandler {
 
     // Removes a subscription by ID from the database.
     // Will throw an Exception if subscription could not be deleted from database
-    public void removeSubscriptionByID(int subscriptionID) throws DatabaseException {
-
+    public void removeSubscriptionByID(int subscriptionID) throws RetrievalException {
 
         this.tagHandler.removeSubTagsByID(subscriptionID); //Remove all tags first
         this.subscriptionPersistence.removeSubscriptionByID(subscriptionID); // Remove sub from it database
@@ -277,58 +245,48 @@ public class SubscriptionHandler {
     // Input Parameters:
     //       subscriptionID  - The id of the subscription to change
     //       subscriptionToEdit - The details that the subscription will be changed to.
-    public void editWholeSubscription(int subscriptionID,final SubscriptionObj newSubDetails) throws DatabaseException, SubscriptionException {
+    public void editWholeSubscription(int subscriptionID, final SubscriptionObj newSubDetails) throws RetrievalException, SubscriptionException {
         validateWholeSubscription(newSubDetails); // Validate the subscription
         this.subscriptionPersistence.editSubscriptionByID(subscriptionID, newSubDetails); // save the edits to subscription persistence
-        this.tagHandler.changeSubTags( newSubDetails); // save the edits to subscription persistence
+        this.tagHandler.changeSubTags(newSubDetails); // save the edits to subscription persistence
 
 
     }
 
 
-
     //returns the maximum amount a payment can be in cents
-    public  int getMaxPaymentTotal()
-    {
+    public int getMaxPaymentTotal() {
         return MAX_PAYMENT;
     }
 
 
     //returns the maximum amount a payment can be in dollars (just the dollar amount)
-    public  int getMaxPaymentDollars()
-
-    {
+    public int getMaxPaymentDollars() {
         return MAX_PAYMENT_DOLLAR;
     }
 
 
-
-
-
-
     //Returns Min length a subscription name has to be
-    public  int getMinNameLength() {
+    public int getMinNameLength() {
         return MIN_NAME_LENGTH;
     }
 
 
     // Returns the Max length a subscription name can be
-    public  int getMaxNameLength() {
+    public int getMaxNameLength() {
         return MAX_NAME_LENGTH;
     }
 
     // Returns the string of Allowable chars in name
-    public  String getAllowableChars()
-    {
+    public String getAllowableChars() {
         return allowableCharactersInName;
     }
 
     // Returns a string list of allowable frequencies in order
     public List<String> getFrequencyNameList() {
-        List<String> returnAllowableFrequencies = new ArrayList<String> ();
+        List<String> returnAllowableFrequencies = new ArrayList<String>();
 
-        for ( Frequency currFrequency : frequencyList )
-        {
+        for (Frequency currFrequency : frequencyList) {
             returnAllowableFrequencies.add(currFrequency.getFrequencyName());
         }
 
@@ -336,8 +294,7 @@ public class SubscriptionHandler {
     }
 
     // Return the number of frequencies
-    public int getNumFrequencies()
-    {
+    public int getNumFrequencies() {
         return frequencyList.size();
     }
 

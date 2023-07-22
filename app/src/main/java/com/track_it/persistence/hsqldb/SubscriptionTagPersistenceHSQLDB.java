@@ -4,8 +4,7 @@ import android.util.Log;
 
 import com.track_it.domainobject.SubscriptionObj;
 import com.track_it.domainobject.SubscriptionTag;
-import com.track_it.logic.exceptions.DatabaseException;
-import com.track_it.logic.exceptions.DatabaseSubNotFoundException;
+import com.track_it.logic.exceptions.RetrievalException;
 import com.track_it.persistence.SubscriptionTagPersistence;
 
 import java.sql.Connection;
@@ -66,7 +65,7 @@ public class SubscriptionTagPersistenceHSQLDB implements SubscriptionTagPersiste
         } catch (final SQLException e) {
             Log.e("Connect SQL", e.getMessage() + e.getSQLState());
             e.printStackTrace();
-            throw new DatabaseException(e.getMessage());
+            throw new RetrievalException(e.getMessage());
         }
 
     }
@@ -91,7 +90,7 @@ public class SubscriptionTagPersistenceHSQLDB implements SubscriptionTagPersiste
         } catch (final SQLException e) {
             Log.e("Connect SQL", e.getMessage() + e.getSQLState());
             e.printStackTrace();
-            throw new DatabaseException(e.getMessage());
+            throw new RetrievalException(e.getMessage());
         }
 
         return listAllTags;
@@ -113,7 +112,7 @@ public class SubscriptionTagPersistenceHSQLDB implements SubscriptionTagPersiste
         } catch (final SQLException e) {
             Log.e("Connect SQL", e.getMessage() + e.getSQLState());
             e.printStackTrace();
-            throw new DatabaseException(e.getMessage());
+            throw new RetrievalException(e.getMessage());
         }
 
     }
@@ -128,7 +127,7 @@ public class SubscriptionTagPersistenceHSQLDB implements SubscriptionTagPersiste
         } catch (final SQLException e) {
             Log.e("Connect SQL", e.getMessage() + e.getSQLState());
             e.printStackTrace();
-            throw new DatabaseException(e.getMessage());
+            throw new RetrievalException(e.getMessage());
         }
     }
 
@@ -154,7 +153,7 @@ public class SubscriptionTagPersistenceHSQLDB implements SubscriptionTagPersiste
         } catch (final SQLException e) {
             Log.e("Connect SQL", e.getMessage() + e.getSQLState());
             e.printStackTrace();
-            throw new DatabaseException(e.getMessage());
+            throw new RetrievalException(e.getMessage());
         }
 
         return listOfTagsForSub;
@@ -173,7 +172,7 @@ public class SubscriptionTagPersistenceHSQLDB implements SubscriptionTagPersiste
         } catch (final SQLException e) {
             Log.e("Connect SQL", e.getMessage() + e.getSQLState());
             e.printStackTrace();
-            throw new DatabaseException(e.getMessage());
+            throw new RetrievalException(e.getMessage());
         }
 
     }
@@ -207,7 +206,7 @@ public class SubscriptionTagPersistenceHSQLDB implements SubscriptionTagPersiste
             } catch (final SQLException e) {
                 Log.e("Connect SQL", e.getMessage() + e.getSQLState());
                 e.printStackTrace();
-                throw new DatabaseException(e.getMessage());
+                throw new RetrievalException(e.getMessage());
             }
         } else // Else set it's id by the value in database
         {
@@ -239,7 +238,7 @@ public class SubscriptionTagPersistenceHSQLDB implements SubscriptionTagPersiste
         } catch (final SQLException e) {
             Log.e("Connect SQL", e.getMessage() + e.getSQLState());
             e.printStackTrace();
-            throw new DatabaseException(e.getMessage());
+            throw new RetrievalException(e.getMessage());
         }
 
 
@@ -254,7 +253,6 @@ public class SubscriptionTagPersistenceHSQLDB implements SubscriptionTagPersiste
             statement.setString(1, searchTag);
 
 
-            // We need to the get the ID of the subscription added to the database so that we can set the ID of the subscription object
             final ResultSet returnedResults = statement.executeQuery();
 
             if (returnedResults.next()) {
@@ -268,7 +266,7 @@ public class SubscriptionTagPersistenceHSQLDB implements SubscriptionTagPersiste
         } catch (final SQLException e) {
             Log.e("Connect SQL", e.getMessage() + e.getSQLState());
             e.printStackTrace();
-            throw new DatabaseException(e.getMessage());
+            throw new RetrievalException(e.getMessage());
         }
 
 

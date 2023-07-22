@@ -74,8 +74,7 @@ public class SubscriptionSortTest {
 
 
     @Test
-    public void testSortFrequency()
-    {
+    public void testSortFrequency() {
         Collections.sort(listOfSubs, new CompareSubscriptionFrequency()); // Sort by frequency amount
 
         for (int i = 0; i < listOfSubs.size() - 1; i++) {

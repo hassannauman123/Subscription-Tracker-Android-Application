@@ -1,6 +1,7 @@
 package com.track_it.presentation;
 
 import androidx.appcompat.app.AppCompatActivity;
+
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
@@ -10,13 +11,13 @@ import android.widget.EditText;
 import android.text.InputFilter;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.google.android.material.textfield.TextInputLayout;
 import com.track_it.R;
 import com.track_it.application.SetupParameters;
 import com.track_it.domainobject.SubscriptionObj;
-import com.track_it.domainobject.SubscriptionTag;
 import com.track_it.logic.SubscriptionHandler;
-import com.track_it.logic.exceptions.DatabaseException;
+import com.track_it.logic.exceptions.RetrievalException;
 import com.track_it.logic.exceptions.SubscriptionException;
 import com.track_it.logic.exceptions.SubscriptionTagException;
 
@@ -62,7 +63,7 @@ public class AddSubscriptionActivity extends AppCompatActivity {
         constrainUserInput(); //Set what a user can enter for input
         FrequencyMenu.initializeMenu(this, subHandler, frequencyTarget); // Enable drop down menu
         setButtonActions(); //Set what happens when buttons are clicked
-        TagSet.setTextWatcher(this,tagInput); // Set the tag box such that it displays seperated words in different color
+        TagSet.setTextWatcher(this, tagInput); // Set the tag box such that it displays seperated words in different color
     }
 
 
@@ -153,7 +154,7 @@ public class AddSubscriptionActivity extends AppCompatActivity {
             paymentAmountError.setVisibility(View.INVISIBLE);
 
 
-        } catch (SubscriptionException  e ) {
+        } catch (SubscriptionException e) {
 
             successTry = false;
             paymentAmountError.setText(e.getMessage());
@@ -169,15 +170,13 @@ public class AddSubscriptionActivity extends AppCompatActivity {
             subHandler.setTags(newSubscription, getTagInput); // Try to set tags based on input from user
             subHandler.validateTagList(newSubscription.getTagList()); // Try to set tags based on input from user
 
-        }
-        catch (SubscriptionException | SubscriptionTagException e ) {
+        } catch (SubscriptionException | SubscriptionTagException e) {
 
             successTry = false;
             tagError.setText(e.getMessage());
             tagError.setVisibility(View.VISIBLE);
         }
 
-        
 
         if (successTry)  // Only if all of our internal checks have passed, try to add subscription to database
         {
@@ -189,7 +188,7 @@ public class AddSubscriptionActivity extends AppCompatActivity {
 
             }
             // Something went wrong, display error for user
-            catch (SubscriptionException | DatabaseException e) {
+            catch (SubscriptionException | RetrievalException e) {
                 generalErrorTarget.setText(e.getMessage());
                 generalErrorTarget.setVisibility(view.VISIBLE);
                 successTry = false;

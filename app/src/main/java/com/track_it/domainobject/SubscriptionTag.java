@@ -1,5 +1,7 @@
 package com.track_it.domainobject;
 
+
+//This class represents a tag that can be associated with a subscription
 public class SubscriptionTag
 {
 

@@ -18,7 +18,7 @@ import com.track_it.domainobject.SubscriptionObj;
 import com.track_it.domainobject.SubscriptionTag;
 import com.track_it.logic.SubscriptionHandler;
 import com.track_it.logic.comparators.*;
-import com.track_it.logic.exceptions.DatabaseException;
+import com.track_it.logic.exceptions.RetrievalException;
 import com.track_it.logic.exceptions.SubscriptionException;
 import com.track_it.logic.exceptions.SubscriptionInvalidFrequencyException;
 import com.track_it.persistence.utils.DBHelper;
@@ -132,7 +132,7 @@ public class MainActivity extends AppCompatActivity {
         {
             enableError(e.getMessage());
 
-        } catch (DatabaseException e)  //Something went wrong with getting subs, display error
+        } catch (RetrievalException e)  //Something went wrong with getting subs, display error
         {
             enableError(e.getMessage());
         }
@@ -255,27 +255,22 @@ public class MainActivity extends AppCompatActivity {
 
     //This is what the user will see when they click filter list by tags
     private void showFilterList() {
-        List<SubscriptionTag> tags = subHandler.getTagHandler().getAllSubTags(); //Get all tags from dataBase
+        List<SubscriptionTag> tags = subHandler.getTagHandler().getAllSubTags(); //Get all tags from database
 
         final boolean[] checkedArray = new boolean[tags.size()];
         final String[] tagNameArray = new String[tags.size()];
 
-        for (int i = 0; i < tagNameArray.length; i++)
-        {
+        for (int i = 0; i < tagNameArray.length; i++) {
             tagNameArray[i] = tags.get(i).getName();
 
 
             //this part make it such that a check box already is clicked if that filter is currently applied
-            for (SubscriptionTag currTag : tagFilter)
-            {
-                if ( currTag.getName().equals(tags.get(i).getName()))
-                {
+            for (SubscriptionTag currTag : tagFilter) {
+                if (currTag.getName().equals(tags.get(i).getName())) {
                     checkedArray[i] = true;
                 }
             }
         }
-
-
 
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -290,8 +285,7 @@ public class MainActivity extends AppCompatActivity {
 
         builder.setPositiveButton("Apply", new DialogInterface.OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialog, int which)
-            {
+            public void onClick(DialogInterface dialog, int which) {
 
                 // Clear filter list, and build a new one based on the click checked marks
                 tagFilter.clear();
@@ -307,8 +301,7 @@ public class MainActivity extends AppCompatActivity {
 
         builder.setNegativeButton("Clear", new DialogInterface.OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialog, int which)
-            {
+            public void onClick(DialogInterface dialog, int which) {
                 // Clear all filters
                 tagFilter.clear();
                 displayAllSubscriptions();
@@ -346,8 +339,8 @@ public class MainActivity extends AppCompatActivity {
         firstColor = true; // Every second subscription will have a slightly different color
 
         //Create a subscription box for each subscription that we will show
-        for (SubscriptionObj curr : listOfSubs)
-        {if (curr.getName().toLowerCase().contains(searchString)) // only show this subscription if it matches the search criteria
+        for (SubscriptionObj curr : listOfSubs) {
+            if (curr.getName().toLowerCase().contains(searchString)) // only show this subscription if it matches the search criteria
             {
                 if (checkFilter(curr)) {
                     createBoxForSubscription(curr);
@@ -362,7 +355,7 @@ public class MainActivity extends AppCompatActivity {
         boolean passFilter = true;
         if (tagFilter.size() > 0) // If there are no tag filters, then all subscriptions pass the filter check
         {
-            passFilter = subHandler.checkTags(curr, tagFilter); //Check if the subscription has at least one of the tags in tagFilter
+            passFilter = subHandler.checkIfSubHasTags(curr, tagFilter); //Check if the subscription has at least one of the tags in tagFilter
         }
 
         return passFilter;

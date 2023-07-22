@@ -39,7 +39,6 @@ public class FakeSubscriptionTagPersistenceDatabase implements SubscriptionTagPe
         }
 
         return found;
-
     }
 
 
@@ -57,6 +56,7 @@ public class FakeSubscriptionTagPersistenceDatabase implements SubscriptionTagPe
 
 
         removeUnusedTags();
+
         // Add all new tag associations
         for (SubscriptionTag currTag : inputSub.getTagList()) {
 
@@ -151,7 +151,6 @@ public class FakeSubscriptionTagPersistenceDatabase implements SubscriptionTagPe
             }
         }
 
-
         return allTagsForSub;
     }
 
@@ -166,7 +165,6 @@ public class FakeSubscriptionTagPersistenceDatabase implements SubscriptionTagPe
         }
 
         removeUnusedTags();
-
     }
 
 

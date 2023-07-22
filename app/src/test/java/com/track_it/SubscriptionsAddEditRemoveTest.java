@@ -3,7 +3,7 @@ package com.track_it;
 
 import com.track_it.domainobject.SubscriptionObj;
 import com.track_it.logic.SubscriptionHandler;
-import com.track_it.logic.exceptions.DatabaseException;
+import com.track_it.logic.exceptions.RetrievalException;
 import com.track_it.logic.exceptions.SubscriptionException;
 import com.track_it.application.SetupParameters;
 import com.track_it.util.TestUtils;
@@ -15,44 +15,38 @@ import static org.junit.Assert.*;
 import static org.junit.Assert.assertFalse;
 
 
-public class SubscriptionsAddEditRemoveTest
-{
+public class SubscriptionsAddEditRemoveTest {
 
     private SubscriptionHandler subHandle;
 
 
     //Setup the database each time
     @Before
-    public void setTestHandle()
-    {
-            TestUtils.changeDatabase();
-            subHandle = SetupParameters.getSubscriptionHandler();
+    public void setTestHandle() {
+        TestUtils.changeDatabase();
+        subHandle = SetupParameters.getSubscriptionHandler();
 
-     }
+    }
 
 
-     // Test Adding a subscription object.
+    //Test Adding a subscription object.
     //Creates a new subscription object then adds it to database (using subHandler logic layer), and then retrieve the subscription, and check that it has the correct information
     @Test
-    public void testAddSub()
-    {
+    public void testAddSub() {
 
         String name = "Valid Name";
         String paymentFrequency = subHandle.getFrequencyNameList().get(0);
-        int paymentAmount =  222;
+        int paymentAmount = 222;
 
 
         boolean thrown = false;
-        SubscriptionObj newSub = new SubscriptionObj(name,paymentAmount,paymentFrequency);
+        SubscriptionObj newSub = new SubscriptionObj(name, paymentAmount, paymentFrequency);
         try {
             subHandle.addSubscription(newSub);
-        }
-
-        catch(Exception e)
-        {
+        } catch (Exception e) {
             System.out.println("Failed add subscription");
             System.out.println(e.getMessage());
-            thrown= true;
+            thrown = true;
 
         }
         assertFalse("Unable to add new subscription", thrown);
@@ -71,25 +65,20 @@ public class SubscriptionsAddEditRemoveTest
     }
 
 
-
     //Creates a new subscription object then adds it to database (using subHandler logic layer) , and then tries to edit that subscription object (All with valid data)
     @Test
-    public void testEditValid()
-    {
+    public void testEditValid() {
 
         String Name = "Valid Name";
         String paymentFrequency = subHandle.getFrequencyNameList().get(0);
         int PaymentAmount = 11;
 
-        SubscriptionObj newSub = new SubscriptionObj(Name,PaymentAmount,paymentFrequency);
+        SubscriptionObj newSub = new SubscriptionObj(Name, PaymentAmount, paymentFrequency);
 
         try {
             subHandle.addSubscription(newSub);
 
-        }
-
-        catch(DatabaseException | SubscriptionException e)
-        {
+        } catch (RetrievalException | SubscriptionException e) {
             System.out.println("FAILED Edit subscription test before running. Failed to add the subscription");
             System.out.println(e.getMessage());
 
@@ -101,28 +90,23 @@ public class SubscriptionsAddEditRemoveTest
 
         String newName = "New name";
         int newPayment = 47555;
-        while (newPayment == PaymentAmount)
-        {
+        while (newPayment == PaymentAmount) {
             newPayment = 221; //Make sure the new payment is not the same as the old
         }
         String newPaymentFrequency = subHandle.getFrequencyNameList().get(1); //Get different payment frequency
 
-        SubscriptionObj subWithEditDetails = new SubscriptionObj(newName,newPayment,newPaymentFrequency);
+        SubscriptionObj subWithEditDetails = new SubscriptionObj(newName, newPayment, newPaymentFrequency);
 
         //Try to edit the sub
         try {
             subHandle.editWholeSubscription(newSub.getID(), subWithEditDetails);
-        }
-
-        catch(Exception e)
-        {
-           thrown = true;
-           System.out.println(e.getMessage());
+        } catch (Exception e) {
+            thrown = true;
+            System.out.println(e.getMessage());
 
         }
 
         assertFalse("Editing the subscription was unsuccessful", thrown);
-
 
 
         //Make sure the sub details have changed
@@ -135,7 +119,6 @@ public class SubscriptionsAddEditRemoveTest
         assertEquals(retrieveSubFomDataBase.getTotalPaymentInCents() + " should be equal to " + newPayment, retrieveSubFomDataBase.getTotalPaymentInCents(), newPayment);
 
 
-
         System.out.println("PASSED the edit subscription test!");
 
 
@@ -144,14 +127,13 @@ public class SubscriptionsAddEditRemoveTest
 
     // Test editing a subscription object with invalid changes
     @Test
-    public void testEditInValid()
-    {
+    public void testEditInValid() {
 
         String name = "Valid Name";
         String paymentFrequency = subHandle.getFrequencyNameList().get(0);
         int paymentAmount = 1;
 
-        SubscriptionObj newSub = new SubscriptionObj(name,paymentAmount,paymentFrequency);
+        SubscriptionObj newSub = new SubscriptionObj(name, paymentAmount, paymentFrequency);
         subHandle.addSubscription(newSub);
 
         boolean thrown = false;
@@ -162,21 +144,16 @@ public class SubscriptionsAddEditRemoveTest
 
         String newPaymentFrequency = subHandle.getFrequencyNameList().get(1);
 
-        SubscriptionObj subWithEditDetails = new SubscriptionObj(newName,newPayment,newPaymentFrequency);
+        SubscriptionObj subWithEditDetails = new SubscriptionObj(newName, newPayment, newPaymentFrequency);
 
         //Try to edit the sub
         try {
             subHandle.editWholeSubscription(newSub.getID(), subWithEditDetails);
-        }
-
-        catch(Exception e)
-        {
+        } catch (Exception e) {
             thrown = true;
 
         }
         assertTrue("Subscription was edited with invalid input", thrown);
-
-
 
 
         //Make sure the sub details have NOT changed
@@ -197,21 +174,19 @@ public class SubscriptionsAddEditRemoveTest
         assertTrue("The subscription cost should not have changed as the input was invalid", retrieveSubFomDataBase.getTotalPaymentInCents() == paymentAmount);
 
 
-
         System.out.println("PASSED the edit subscription test with invalid Edits!");
 
     }
 
     //Test removing a subscription object
     @Test
-    public void testRemove()
-    {
+    public void testRemove() {
 
         String name = "Valid Name";
         String paymentFrequency = subHandle.getFrequencyNameList().get(0);
         int paymentAmount = 23441;
 
-        SubscriptionObj newSub = new SubscriptionObj(name,paymentAmount,paymentFrequency);
+        SubscriptionObj newSub = new SubscriptionObj(name, paymentAmount, paymentFrequency);
 
         //ADD SUB
         subHandle.addSubscription(newSub);
@@ -220,11 +195,8 @@ public class SubscriptionsAddEditRemoveTest
         //REMOVE SUB
         try {
             subHandle.removeSubscriptionByID(newSub.getID());
-        }
-
-        catch(Exception e)
-        {
-            System.out.println(e.getMessage()  + "one");
+        } catch (Exception e) {
+            System.out.println(e.getMessage() + "one");
             thrown = true;
 
         }
@@ -232,14 +204,11 @@ public class SubscriptionsAddEditRemoveTest
 
 
         //TRY TO REMOVE SUB again, should be unsuccessful
-         thrown = false;
+        thrown = false;
         try {
             subHandle.removeSubscriptionByID(newSub.getID());
-        }
-
-        catch(Exception e)
-        {
-             thrown = true;
+        } catch (Exception e) {
+            thrown = true;
         }
         assertTrue("Sub removal method worked for a subscription object that should no longer be in the database", thrown);
 

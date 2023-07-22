@@ -18,14 +18,13 @@ public class DecimalDigitsInputFilter implements InputFilter {
 
 
     // Makes it such that the string the user is allowed to entered will be in the format such that the number of digits before the decimal will be at most digitBeforeDecimal
-    // and the number of digits after the decimal will be decimalDigits
+    // and the number of digits after the decimal will be at most decimalDigits.
     @Override
     public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
 
         //Reminder
         // source is the char being added.
-        // destination is the previous string. Source will be added to destination at position dstart if we return null, else it will be reject if we return ""
-
+        // destination is the previous string. Source will be added to destination at position dstart if we return null, else it will be rejected if we return ""
 
         CharSequence returnValue = null; // Null means we accept source, "" means we reject it
 
@@ -38,13 +37,10 @@ public class DecimalDigitsInputFilter implements InputFilter {
         if (splitAlongDecimal.length > 0 && splitAlongDecimal[0].length() > this.digitBeforeDecimal) //Only accept input if there are no more than digitBeforeDecimal number of decimals before decimal point
         {
             returnValue = "";
-        }
-        else if (splitAlongDecimal.length > 1 && splitAlongDecimal[1].length() > this.decimalDigitsAfter) // Else - only accept if there is a correct number of digits after decimal
+        } else if (splitAlongDecimal.length > 1 && splitAlongDecimal[1].length() > this.decimalDigitsAfter) // Else - only accept if there is a correct number of digits after decimal
         {
             returnValue = "";
-        }
-
-       else if (splitAlongDecimal.length > 2) //Only accept if there is 1 decimal
+        } else if (splitAlongDecimal.length > 2) // Only accept if there is 1 decimal point
         {
             returnValue = "";
         }

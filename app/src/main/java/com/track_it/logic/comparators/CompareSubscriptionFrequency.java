@@ -16,12 +16,8 @@ public class CompareSubscriptionFrequency implements Comparator<SubscriptionObj>
 
     public CompareSubscriptionFrequency()
     {
-
         subhandler = SetupParameters.getSubscriptionHandler();
     }
-
-
-
 
 
     @Override
@@ -29,7 +25,6 @@ public class CompareSubscriptionFrequency implements Comparator<SubscriptionObj>
     {
         int leftDaysBetweenPayment = subhandler.getFrequencyObject(left).daysBetweenPayment();
         int rightDaysBetweenPayment = subhandler.getFrequencyObject(right).daysBetweenPayment();
-
         return leftDaysBetweenPayment  - rightDaysBetweenPayment;
 
     }

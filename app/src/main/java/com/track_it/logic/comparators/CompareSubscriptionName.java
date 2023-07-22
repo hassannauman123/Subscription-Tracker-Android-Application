@@ -13,7 +13,6 @@ public class CompareSubscriptionName implements Comparator <SubscriptionObj>
 
     public int compare(SubscriptionObj left, SubscriptionObj right)
     {
-
         return left.getName().toLowerCase().compareTo(right.getName().toLowerCase());
     }
 

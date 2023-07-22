@@ -6,11 +6,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.Html;
 import android.text.InputFilter;
-import android.text.Selection;
-import android.text.TextWatcher;
 import android.view.View;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -25,8 +21,7 @@ import com.track_it.R;
 import com.track_it.application.SetupParameters;
 import com.track_it.domainobject.SubscriptionObj;
 import com.track_it.domainobject.SubscriptionTag;
-import com.track_it.logic.SubscriptionTagHandler;
-import com.track_it.logic.exceptions.DatabaseException;
+import com.track_it.logic.exceptions.RetrievalException;
 import com.track_it.logic.exceptions.SubscriptionException;
 import com.track_it.logic.SubscriptionHandler;
 import com.track_it.logic.exceptions.SubscriptionTagException;
@@ -85,8 +80,6 @@ public class SubscriptionDetailsActivity extends AppCompatActivity {
     private TextInputLayout dropDownMenuParent;
 
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -115,7 +108,7 @@ public class SubscriptionDetailsActivity extends AppCompatActivity {
             enableDeleteAndEditButtons();
         }
 
-        TagSet.setTextWatcher(this,tagInput);
+        TagSet.setTextWatcher(this, tagInput);
 
 
     }
@@ -191,7 +184,7 @@ public class SubscriptionDetailsActivity extends AppCompatActivity {
     private void enableDeleteAndEditButtons() {
         deleteButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                    createDialog(subscriptionToDisplay.getID());
+                createDialog(subscriptionToDisplay.getID());
             }
         });
 
@@ -224,7 +217,7 @@ public class SubscriptionDetailsActivity extends AppCompatActivity {
             } catch (SubscriptionException e) // Failed to get subscription
             {
                 setGeneralError(e.getMessage(), errorColor);
-            } catch (DatabaseException e) {
+            } catch (RetrievalException e) {
                 setGeneralError(e.getMessage(), errorColor);
             }
         } else  // Display an error letting the user know that there was an error getting subscription
@@ -335,7 +328,7 @@ public class SubscriptionDetailsActivity extends AppCompatActivity {
         try {
             inputPaymentAmount = subInput.getPaymentAmountInput(paymentAmountTarget); // This function throws exceptions if payment invalid
             subHandler.validatePaymentAmount(inputPaymentAmount);
-        } catch (SubscriptionException  e) // Payment amount not valid
+        } catch (SubscriptionException e) // Payment amount not valid
         {
             // Display errors
             valid = false;
@@ -361,7 +354,7 @@ public class SubscriptionDetailsActivity extends AppCompatActivity {
         // Get the string the user entered for tags
         String tagSting = tagInput.getText().toString().trim().toLowerCase(); // get string, and remove white spaces, and change to lowercase
         try {
-            subHandler.setTags(subscriptionToDisplay,tagSting); // Set tags
+            subHandler.setTags(subscriptionToDisplay, tagSting); // Set tags
             subHandler.validateTagList(subscriptionToDisplay.getTagList()); //Validate tags
 
         } catch (SubscriptionException | SubscriptionTagException e) // Catch - tags not valid
@@ -389,12 +382,13 @@ public class SubscriptionDetailsActivity extends AppCompatActivity {
                 //Everything worked, so time to switch back to none-edit mode!
                 switchEditModes();
 
-            } catch (SubscriptionException | SubscriptionTagException  e)   //There was some error with the changes
+            } catch (SubscriptionException |
+                     SubscriptionTagException e)   //There was some error with the changes
             {
                 // Display error
                 setGeneralError(e.getMessage(), errorColor);
                 generalErrorTarget.setVisibility(View.VISIBLE);
-            } catch (DatabaseException e)  //Catch - Something wrong with database saving changes
+            } catch (RetrievalException e)  //Catch - Something wrong with database saving changes
             {
                 // Display error
                 setGeneralError(e.getMessage(), errorColor);
@@ -488,16 +482,12 @@ public class SubscriptionDetailsActivity extends AppCompatActivity {
         frequencyTarget.setText((subscriptionToDisplay.getPaymentFrequency()), false);
 
         String allTags = "";
-        for (  SubscriptionTag currTag : subscriptionToDisplay.getTagList())
-        {
+        for (SubscriptionTag currTag : subscriptionToDisplay.getTagList()) {
             allTags += currTag.getName() + " ";
         }
 
-        TagSet.setTagColors(this, tagInput,allTags);
+        TagSet.setTagColors(this, tagInput, allTags);
     }
-
-
-
 
 
 }
