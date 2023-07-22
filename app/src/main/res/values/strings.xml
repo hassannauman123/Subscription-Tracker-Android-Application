@@ -12,7 +12,7 @@
     <string name="sort_frequency">Sort by frequency</string>
     <string name="filter_list">Filter by tags</string>
 
-    <string name="tag_color1">#319197</string>
+    <string name="tag_color1">#cad2c5</string>
     <string name="tag_color2">#ffa26e</string>
     <string name="tag_color3">#ff00ae</string>
     <string name="tag_color4">#5ab4c7</string>

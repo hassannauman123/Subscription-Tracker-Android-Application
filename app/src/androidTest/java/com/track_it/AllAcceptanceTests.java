@@ -4,9 +4,6 @@ package com.track_it;
 import androidx.test.filters.LargeTest;
 
 import com.track_it.application.Main;
-import com.track_it.application.SetupParameters;
-import com.track_it.presentation.SubscriptionTest;
-import com.track_it.util.TestUtils;
 
 import org.junit.ClassRule;
 import org.junit.rules.ExternalResource;

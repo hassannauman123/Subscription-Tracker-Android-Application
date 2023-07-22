@@ -1,4 +1,4 @@
-package com.track_it.presentation;
+package com.track_it;
 
 
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
@@ -35,6 +35,7 @@ import androidx.test.platform.app.InstrumentationRegistry;
 
 import com.track_it.R;
 import com.track_it.application.SetupParameters;
+import com.track_it.presentation.MainActivity;
 import com.track_it.util.TestUtils;
 
 import org.hamcrest.Description;
