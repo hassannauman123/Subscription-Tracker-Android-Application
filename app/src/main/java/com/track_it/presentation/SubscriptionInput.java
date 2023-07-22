@@ -1,4 +1,4 @@
-package com.track_it.presentation.util;
+package com.track_it.presentation;
 
 import android.text.InputFilter;
 import android.text.Spanned;
@@ -6,73 +6,58 @@ import android.widget.EditText;
 
 import com.track_it.logic.exceptions.SubscriptionInvalidPaymentException;
 import com.track_it.logic.SubscriptionHandler;
-//
-//  This is a general helper class, used to get user input using common functions.
-//
 
-
+//
+//  This is a class used to get payment input from a EditText object
+//
 public class SubscriptionInput {
-    private final SubscriptionHandler subHandle;
-
-    public SubscriptionInput(SubscriptionHandler inputSubHandle)
-    {
-        subHandle = inputSubHandle;
-    }
 
 
     // Get the input payment amount that the user entered.
-    public int getPaymentAmountInput(EditText inputLocation) throws SubscriptionInvalidPaymentException
-    {
+    public int getPaymentAmountInput(EditText inputLocation) {
 
-        String[] paymentAmountString = inputLocation.getText().toString().split("\\.");
-        int paymentInCents = Integer.MIN_VALUE;
+        String[] paymentAmountString = inputLocation.getText().toString().split("\\."); // Break up string along decimal
+        int paymentInCents = 0;
 
 
         // Get Payment amount in cents
         if (paymentAmountString.length > 0) {
-            if (isParsable(paymentAmountString[0])) {
+
+            if (isParsable(paymentAmountString[0]))  // First covert the dollar amount to cents ( the part before the decimal)
+            {
                 paymentInCents = Integer.parseInt(paymentAmountString[0]) * 100;
             }
 
-            if (paymentAmountString.length > 1) {
-
-                if (isParsable(paymentAmountString[1])) {
-
-                    if (paymentInCents == Integer.MIN_VALUE) {
-                        paymentInCents = 0;
-
-                    }
+            if (paymentAmountString.length > 1)  // If there was a decimal
+            {
+                if (isParsable(paymentAmountString[1]))
+                {
                     if (paymentAmountString[1].length() == 1)  // The payment is in the format like: 10.2, so we need to to multiply the 2 by 10 to get cents payment amount
                     {
                         paymentInCents = paymentInCents + Integer.parseInt(paymentAmountString[1]) * 10;
-                    } else if (paymentAmountString[1].length() > 2) // If there are more than 2 digits after decimal, then it is invalid.  ex  10.444 <- more than 2 digits after decimal
-                    {
-                        paymentInCents = Integer.MIN_VALUE;
                     } else {
-                        paymentInCents = paymentInCents + Integer.parseInt(paymentAmountString[1]);
+                        paymentInCents = paymentInCents + Integer.parseInt(paymentAmountString[1]); // Else just add as cents
                     }
                 }
             }
         }
-
-
-        subHandle.validatePaymentAmount(paymentInCents); // Try to validate payment amount. Will throw exception if invalid.
-
 
         return paymentInCents;
 
     }
 
 
-
     // check if the input string is parsable by Integer.parseInt function
     private boolean isParsable(String inputString) {
+        boolean isStringParableToInt;
         try {
             Integer.parseInt(inputString);
-            return true;
+            isStringParableToInt = true;
         } catch (final NumberFormatException e) {
-            return false;
+            isStringParableToInt = false;
         }
+
+        return isStringParableToInt;
     }
 
 

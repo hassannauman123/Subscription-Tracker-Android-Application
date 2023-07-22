@@ -4,5 +4,7 @@
     android:padding="16dp"
     android:maxLines="1"
     android:ellipsize="end"
-    android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1">
+    android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
+    android:id="@+id/list_item_frequency_menu"
+    >
 </TextView>

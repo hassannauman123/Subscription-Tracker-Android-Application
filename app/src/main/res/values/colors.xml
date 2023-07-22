@@ -1,7 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="black">#000000</color>
-    <color name="white">#FFFFFFFF</color>\
+    <color name="white">#FFFFFFFF</color>
     <color name="grey">#EEEEEE</color>
     <color name="white_grey">#FAFAFA</color>
+    <color name="error_color">#ff0002</color>
+    <color name="accomplish_color">#8c1f7c</color>
+    <color name="save_button_color">#57f2a0</color>
+    <color name="edit_button_color">#6632a8</color>
+    <color name="editable_color">#555555</color>
+    <color name="noneditable_color">#000000</color>
+
+
 </resources>
