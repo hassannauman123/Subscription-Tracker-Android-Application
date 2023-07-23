@@ -10,7 +10,7 @@ import java.util.List;
 
 
 //This is a fake database class that implements the SubscriptionPersistence interface.
-public class FakeSubscriptionPersistenceDatabase implements SubscriptionPersistence {
+public class FakeSubscriptionPersistenceDB implements SubscriptionPersistence {
 
 
     // A static Arraylist to hold subscriptions.
@@ -95,15 +95,15 @@ public class FakeSubscriptionPersistenceDatabase implements SubscriptionPersiste
     }
 
 
-    // Tries to remove a subscription with the id of subcriptionID from the database- will throw an exception if it can't be deleted
+    // Tries to remove a subscription with the id of subscriptionID from the database- will throw an exception if it can't be deleted
     @Override
-    public void removeSubscriptionByID(int subcriptionID) throws RetrievalSubException {
+    public void removeSubscriptionByID(int subscriptionID) throws RetrievalSubException {
 
         boolean removed = false; // Were we able to remove the sub
 
         for (int i = 0; i < subscriptionDB.size(); i++)  //Simply iterate through the list of subscriptions, and look for the one with the right id
         {
-            if (subscriptionDB.get(i).getID() == subcriptionID) {
+            if (subscriptionDB.get(i).getID() == subscriptionID) {
                 subscriptionDB.remove(i);
                 removed = true;
             }

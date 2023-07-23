@@ -2,7 +2,7 @@
 package com.track_it.application;
 
 public class Main {
-    private static String dbName = "SubscriptionDB";
+    private static String dbName = "TestAcceptance";
 
     public static void setDBPathName(final String name) {
         try {

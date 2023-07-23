@@ -9,7 +9,7 @@ import java.util.List;
 
 
 //This is fake database for tags. It implements that SubscriptionTagPersistence
-public class FakeSubscriptionTagPersistenceDatabase implements SubscriptionTagPersistence {
+public class FakeSubscriptionTagPersistenceDB implements SubscriptionTagPersistence {
     private static List<SubscriptionTag> listOfTags = new ArrayList<SubscriptionTag>();
     private static List<int[]> tagSubAssociation = new ArrayList<int[]>();
     private static int SUB_ID = 0;
@@ -55,8 +55,6 @@ public class FakeSubscriptionTagPersistenceDatabase implements SubscriptionTagPe
         }
 
 
-        removeUnusedTags();
-
         // Add all new tag associations
         for (SubscriptionTag currTag : inputSub.getTagList()) {
 
@@ -70,7 +68,7 @@ public class FakeSubscriptionTagPersistenceDatabase implements SubscriptionTagPe
             }
         }
 
-        removeUnusedTags();
+
 
     }
 
@@ -87,7 +85,7 @@ public class FakeSubscriptionTagPersistenceDatabase implements SubscriptionTagPe
 
 
     //Remove all tags that are not associated with a subscription
-    private void removeUnusedTags() {
+    public void removeUnusedTags() {
 
 
         for (int i = 0; i < listOfTags.size(); i++) {
@@ -164,7 +162,7 @@ public class FakeSubscriptionTagPersistenceDatabase implements SubscriptionTagPe
             }
         }
 
-        removeUnusedTags();
+
     }
 
 

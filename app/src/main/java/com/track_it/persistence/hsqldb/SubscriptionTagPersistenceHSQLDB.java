@@ -61,8 +61,7 @@ public class SubscriptionTagPersistenceHSQLDB implements SubscriptionTagPersiste
                 associateTagWithSubscription(inputSub, insertTag);
             }
 
-            removeUnusedTags();
-        } catch (final SQLException e) {
+         } catch (final SQLException e) {
             Log.e("Connect SQL", e.getMessage() + e.getSQLState());
             e.printStackTrace();
             throw new RetrievalException(e.getMessage());
@@ -117,7 +116,9 @@ public class SubscriptionTagPersistenceHSQLDB implements SubscriptionTagPersiste
 
     }
 
-    private void removeUnusedTags() {
+
+    @Override
+    public void removeUnusedTags() {
         try (Connection connection = connect()) {
 
             final PreparedStatement statement = connection.prepareStatement("DELETE from TAGS where id NOT IN (SELECT tag_id from SUBSCRIPTIONS_TAGS)");
@@ -168,8 +169,7 @@ public class SubscriptionTagPersistenceHSQLDB implements SubscriptionTagPersiste
             statement.setInt(1, inputSub);
             statement.executeUpdate();
 
-            removeUnusedTags();
-        } catch (final SQLException e) {
+         } catch (final SQLException e) {
             Log.e("Connect SQL", e.getMessage() + e.getSQLState());
             e.printStackTrace();
             throw new RetrievalException(e.getMessage());

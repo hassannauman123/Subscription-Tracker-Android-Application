@@ -1,6 +1,7 @@
 package com.track_it.util;
 
 
+import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
@@ -14,7 +15,7 @@ import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.is;
 
 import android.content.Context;
-import android.content.res.AssetManager;
+import android.content.Intent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
@@ -23,33 +24,46 @@ import androidx.test.espresso.ViewInteraction;
 import androidx.test.espresso.matcher.RootMatchers;
 import androidx.test.platform.app.InstrumentationRegistry;
 
-import com.google.common.io.Files;
 import com.track_it.R;
-import com.track_it.application.Main;
 import com.track_it.application.SetupParameters;
 import com.track_it.domainobject.SubscriptionObj;
 import com.track_it.logic.SubscriptionHandler;
-import com.track_it.persistence.SubscriptionPersistence;
-import com.track_it.persistence.SubscriptionTagPersistence;
-import com.track_it.persistence.fakes.FakeSubscriptionPersistenceDatabase;
-import com.track_it.persistence.fakes.FakeSubscriptionTagPersistenceDatabase;
-import com.track_it.persistence.hsqldb.SubscriptionPersistenceHSQLDB;
-import com.track_it.persistence.hsqldb.SubscriptionTagPersistenceHSQLDB;
+import com.track_it.presentation.MainActivity;
 
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
 
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.List;
 
 public class TestUtils {
     private static File DB_SRC;
 
     private static boolean useRealDatabase = false; //Should we use real database? - Default false means use fakeDataBase
+
+
+    private static final int SLEEP_TIME = 200;
+
+    public static void testSetup()
+    {
+        //Clear the database and then repopulate the database with some sample subscriptions
+        TestUtils.clearDatabase(SetupParameters.getSubscriptionHandler());
+        TestUtils.populateDatabase(SetupParameters.getSubscriptionHandler());
+
+        //We need the reload the activity, as it originally loaded with the database before the clear and populate methods happened.
+        Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
+        Intent refresh = new Intent(context, MainActivity.class);
+        refresh.setFlags(FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(refresh);
+    }
+
+
+    public static void testTearDown()
+    {
+        //Clear the database
+        TestUtils.clearDatabase(SetupParameters.getSubscriptionHandler());
+    }
 
 
     // Remove all subs in the database
@@ -61,6 +75,12 @@ public class TestUtils {
         }
 
 
+    }
+
+
+    public static int getSleepTime()
+    {
+        return SLEEP_TIME;
     }
 
     // Populate database with 3 subs
@@ -109,7 +129,7 @@ public class TestUtils {
                                                 0)),
                                 1),
                         isDisplayed()));
-        appCompatImageView.perform(click());
+        appCompatImageView.perform(click()); // Click search button
 
         ViewInteraction searchAutoComplete = onView(
                 allOf(withClassName(is("android.widget.SearchView$SearchAutoComplete")),
@@ -120,23 +140,15 @@ public class TestUtils {
                                                 1)),
                                 0),
                         isDisplayed()));
-        searchAutoComplete.perform(click());
+        searchAutoComplete.perform(click()); // Get search input target
 
-        ViewInteraction searchAutoComplete2 = onView(
-                allOf(withClassName(is("android.widget.SearchView$SearchAutoComplete")),
-                        childAtPosition(
-                                allOf(withClassName(is("android.widget.LinearLayout")),
-                                        TestUtils.childAtPosition(
-                                                withClassName(is("android.widget.LinearLayout")),
-                                                1)),
-                                0),
-                        isDisplayed()));
-        searchAutoComplete2.perform(replaceText(inputSearch), closeSoftKeyboard());
+
+        searchAutoComplete.perform(replaceText(inputSearch), closeSoftKeyboard()); // put search string into into search input
 
     }
 
     // Commonly used function. This adds a subscription to the database, starting from the home page, and then goes back to home page.
-    public static void addUser(String subName, String subPaymentAmount, String subFrequency, String subTags) {
+    public static void addSub(String subName, String subPaymentAmount, String subFrequency, String subTags) {
 
         onView(withId(R.id.add_subscription_button)).perform(click()); // Click add sub - Starting from home page
 
@@ -149,8 +161,6 @@ public class TestUtils {
         onView(withId(R.id.submit_sub_button)).perform(click()); // Click add, and go back to home back
 
     }
-
-
 
 
     // This is match function, auto generated by espresso.

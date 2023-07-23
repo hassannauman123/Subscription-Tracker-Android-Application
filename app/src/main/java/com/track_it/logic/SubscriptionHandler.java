@@ -62,8 +62,9 @@ public class SubscriptionHandler {
     public void addSubscription(SubscriptionObj subscriptionToAdd) throws RetrievalException, SubscriptionException {
         validateWholeSubscription(subscriptionToAdd); // May throw exception if subscription details are not valid
 
-        subscriptionPersistence.addSubscriptionToDB(subscriptionToAdd); // Add to database, will throw DataBaseException if subscription could not be added to dat base.
+        subscriptionPersistence.addSubscriptionToDB(subscriptionToAdd); // Add to database, will throw DataBaseException if subscription could not be added to database.
         this.tagHandler.changeSubTags(subscriptionToAdd); //Associate tags with subscription, saving to database
+        this.tagHandler.removeUnusedTags();
     }
 
 
@@ -140,7 +141,8 @@ public class SubscriptionHandler {
 
     // Validate the whole subscription.
     // Throws exception if object is invalid
-    public void validateWholeSubscription(final SubscriptionObj subscriptionToValidate) throws SubscriptionException {
+    public void validateWholeSubscription(final SubscriptionObj subscriptionToValidate) throws SubscriptionException, SubscriptionTagException
+    {
         validateName(subscriptionToValidate.getName());
         validateFrequency(subscriptionToValidate.getPaymentFrequency());
         validatePaymentAmount(subscriptionToValidate.getTotalPaymentInCents());
@@ -152,9 +154,8 @@ public class SubscriptionHandler {
         if (tagsToValidate.size() > MAX_TAGS) {
             throw new SubscriptionTagException("Max of " + MAX_TAGS + " tags allowed");
         }
-
         for (SubscriptionTag currTag : tagsToValidate) {
-            tagHandler.validateTagName(currTag.getName());
+            tagHandler.validateTag( currTag);
         }
     }
 
@@ -214,7 +215,10 @@ public class SubscriptionHandler {
     public void removeSubscriptionByID(int subscriptionID) throws RetrievalException
     {
         this.tagHandler.removeSubTagsByID(subscriptionID); //Remove all tags first
+        this.tagHandler.removeUnusedTags(); // remove unused tags
         this.subscriptionPersistence.removeSubscriptionByID(subscriptionID); // Remove sub from it database
+
+
     }
 
 
@@ -223,12 +227,11 @@ public class SubscriptionHandler {
     // Input Parameters:
     //       subscriptionID  - The id of the subscription to change
     //       subscriptionToEdit - The details that the subscription will be changed to.
-    public void editWholeSubscription(int subscriptionID, final SubscriptionObj newSubDetails) throws RetrievalException, SubscriptionException {
+    public void editWholeSubscription(int subscriptionID, final SubscriptionObj newSubDetails) throws RetrievalException, SubscriptionException, SubscriptionTagException {
         validateWholeSubscription(newSubDetails); // Validate the subscription
         this.subscriptionPersistence.editSubscriptionByID(subscriptionID, newSubDetails); // save the edits to subscription persistence
         this.tagHandler.changeSubTags(newSubDetails); // save the edits to subscription persistence
-
-
+        this.tagHandler.removeUnusedTags(); // remove unused tags
     }
 
 
@@ -258,6 +261,10 @@ public class SubscriptionHandler {
     // Returns the string of Allowable chars in name
     public String getAllowableChars() {
         return allowableCharactersInName;
+    }
+
+    public int getMaxTags() {
+        return MAX_TAGS;
     }
 
     // Returns a string list of allowable frequencies in order

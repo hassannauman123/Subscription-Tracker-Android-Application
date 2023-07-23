@@ -18,10 +18,10 @@ public class SubscriptionTagHandler {
     private final SubscriptionTagPersistence subscriptionTagPersistence;
 
     public SubscriptionTagHandler(String inputTagSplitCriteria, int inputMinNameLength, int inputMaxNameLength, SubscriptionTagPersistence inputDatabase) {
-        subscriptionTagPersistence = inputDatabase;
-        TAG_SPLIT_CRITERIA = inputTagSplitCriteria;
-        MIN_NAME_TAG_LENGTH = inputMinNameLength;
-        MAX_NAME_TAG_LENGTH = inputMaxNameLength;
+        this.subscriptionTagPersistence = inputDatabase;
+        this.TAG_SPLIT_CRITERIA = inputTagSplitCriteria;
+        this.MIN_NAME_TAG_LENGTH = inputMinNameLength;
+        this.MAX_NAME_TAG_LENGTH = inputMaxNameLength;
     }
 
 
@@ -32,6 +32,10 @@ public class SubscriptionTagHandler {
 
     public void removeSubTagsByID(int subID) {
         this.subscriptionTagPersistence.removeAllTagsBySubID(subID);
+    }
+
+    public void removeUnusedTags() {
+        this.subscriptionTagPersistence.removeUnusedTags();
     }
 
     public void addTag(SubscriptionTag tagToAdd) {
@@ -56,6 +60,11 @@ public class SubscriptionTagHandler {
         }
     }
 
+
+    public void validateTag(SubscriptionTag inputTag) throws SubscriptionTagException
+    {
+        validateTagName(inputTag.getName());
+    }
 
     public void validateTagName(String inputName) throws SubscriptionTagException {
 

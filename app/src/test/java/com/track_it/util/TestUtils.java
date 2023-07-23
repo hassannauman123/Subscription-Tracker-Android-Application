@@ -6,8 +6,8 @@ import java.io.IOException;
 import com.google.common.io.Files;
 import com.track_it.persistence.SubscriptionPersistence;
 import com.track_it.persistence.SubscriptionTagPersistence;
-import com.track_it.persistence.fakes.FakeSubscriptionPersistenceDatabase;
-import com.track_it.persistence.fakes.FakeSubscriptionTagPersistenceDatabase;
+import com.track_it.persistence.fakes.FakeSubscriptionPersistenceDB;
+import com.track_it.persistence.fakes.FakeSubscriptionTagPersistenceDB;
 import com.track_it.persistence.hsqldb.SubscriptionPersistenceHSQLDB;
 import com.track_it.application.SetupParameters;
 import com.track_it.persistence.hsqldb.SubscriptionTagPersistenceHSQLDB;
@@ -47,7 +47,7 @@ public class TestUtils {
         } else //Use fake Database
         {
 
-            SetupParameters.initializeDatabase(new FakeSubscriptionPersistenceDatabase(), new FakeSubscriptionTagPersistenceDatabase());
+            SetupParameters.initializeDatabase(new FakeSubscriptionPersistenceDB(), new FakeSubscriptionTagPersistenceDB());
         }
     }
 
