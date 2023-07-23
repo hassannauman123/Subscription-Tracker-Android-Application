@@ -49,13 +49,12 @@ public class SetupParameters {
     private static SubscriptionTagHandler tagHandler = null; // subscription handler
 
 
-
-
     public static void initializeDatabase(SubscriptionPersistence inputSubDB, SubscriptionTagPersistence inputTagDB) {
         //Create a new subscription handler if the database has changed
         tagPersistenceDatabase = inputTagDB;
         subscriptionPersistenceDatabase = inputSubDB;
-        subHandler = new SubscriptionHandler(MIN_NAME_LENGTH, MAX_NAME_LENGTH, MIN_PAYMENT_IN_CENTS, MAX_PAYMENT_IN_CENTS, allowableCharactersInName, MAX_TAGS, allowableFrequencies, getTagHandler(), subscriptionPersistenceDatabase);
+        tagHandler = new SubscriptionTagHandler(TAG_SPLIT, TAG_MIN_LENGTH, TAG_MAX_LENGTH, inputTagDB);
+        subHandler = new SubscriptionHandler(MIN_NAME_LENGTH, MAX_NAME_LENGTH, MIN_PAYMENT_IN_CENTS, MAX_PAYMENT_IN_CENTS, allowableCharactersInName, MAX_TAGS, allowableFrequencies, tagHandler, subscriptionPersistenceDatabase);
 
     }
 

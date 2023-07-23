@@ -34,6 +34,7 @@ public class SubscriptionAddTest {
 
 
 
+    //Details for a subscription
     private static final String originalName = "Lawn Care";
     private static final String originalpayment = "500";
     private static final String originalFrequency = "daily";
@@ -56,15 +57,15 @@ public class SubscriptionAddTest {
 
 
 
+    //Test adding as subscription. Add a subscription, and then verify that it shows up.
     @Test
     public void addSubTest() {
 
         SystemClock.sleep(TestUtils.getSleepTime());
 
-        TestUtils.addSub(originalName, originalpayment, originalFrequency, "");
+        TestUtils.addSub(originalName, originalpayment, originalFrequency, ""); // This adds a subscription using UI clicks
 
-        // This verifies the subscription has been added.
-        //Looks strange, but it will only work if the subscription shows up on main page with the exact correct text
+        // This verifies the subscription has been added, and shows up correctly as expectd
         onView(withText("Name: " + originalName)).check(matches(withText("Name: " + originalName)));
         onView(withText("Payment Amount: $" + originalpayment + ".00")).check(matches(withText("Payment Amount: $" + originalpayment + ".00")));
         onView(withText("Frequency: " + originalFrequency)).check(matches(withText("Frequency: " + originalFrequency)));

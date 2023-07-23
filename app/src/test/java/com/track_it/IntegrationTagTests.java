@@ -8,8 +8,6 @@ import com.track_it.domainobject.SubscriptionObj;
 import com.track_it.domainobject.SubscriptionTag;
 import com.track_it.logic.SubscriptionHandler;
 import com.track_it.logic.exceptions.SubscriptionTagException;
-import com.track_it.persistence.fakes.FakeSubscriptionPersistenceDB;
-import com.track_it.persistence.fakes.FakeSubscriptionTagPersistenceDB;
 import com.track_it.util.TestUtils;
 
 import org.junit.Before;
@@ -22,7 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class SubscriptionTagTests {
+public class IntegrationTagTests {
 
     private SubscriptionHandler subHandle;
 
@@ -42,6 +40,7 @@ public class SubscriptionTagTests {
     @Test
     public void addSubWithTagsTest()
     {
+
 
 
         subHandle =  SetupParameters.getSubscriptionHandler();

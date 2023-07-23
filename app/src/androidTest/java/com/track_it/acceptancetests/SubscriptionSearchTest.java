@@ -36,18 +36,17 @@ public class SubscriptionSearchTest {
 
 
 
-    //Input for 1 subscription
+    //Details for 1 subscription
     private final String partialName = "cart";
     private static final String originalName = "Streaming Cartoon Central";
-    private static final String originalpayment = "500";
+    private static final String originalPayment = "500";
     private static final String originalFrequency = "daily";
     private static final String originalTag1 = "customtag1";
     private static final String originalTag2 = "customtag2";
 
-    //Input for another subscription
-
+    //Details for another subscription
     private static final String originalName2 = "Costco membership";
-    private static final String originalpayment2 = "1000";
+    private static final String originalPayment2 = "1000";
     private static final String originalFrequency2 = "monthly";
     private static final String originalTag3 = "customtag1";
     private static final String originalTag4 = "customtag2";
@@ -68,12 +67,15 @@ public class SubscriptionSearchTest {
     }
 
 
+
+
+    //Test the search by name for subscriptions feature.
     @Test
     public void searchTest() {
 
         //Add both subscriptions
-        TestUtils.addSub(originalName, originalpayment, originalFrequency, originalTag1 + " " + originalTag2); //Add sub 1
-        TestUtils.addSub(originalName2, originalpayment2, originalFrequency2, originalTag1 + " " + originalTag2); //Add sub 2
+        TestUtils.addSub(originalName, originalPayment, originalFrequency, originalTag1 + " " + originalTag2); //Add sub 1
+        TestUtils.addSub(originalName2, originalPayment2, originalFrequency2, originalTag1 + " " + originalTag2); //Add sub 2
 
         SystemClock.sleep(TestUtils.getSleepTime());
 
@@ -81,7 +83,7 @@ public class SubscriptionSearchTest {
         TestUtils.typeInSearch(partialName); // Search for part of the name
 
 
-        // Verify that the sub shows up with the search applied
+        // Verify that the first sub shows up with the search applied
         onView(withText("Name: " + originalName)).check(matches(withText("Name: " + originalName)));
 
         //Verify that the other sub does no show up
