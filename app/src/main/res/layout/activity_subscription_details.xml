@@ -102,7 +102,6 @@
         android:layout_height="48dp"
         android:layout_marginBottom="224dp"
         android:ems="10"
-
         android:hint="Add Tags"
         android:inputType="text"
         app:layout_constraintBottom_toBottomOf="parent"

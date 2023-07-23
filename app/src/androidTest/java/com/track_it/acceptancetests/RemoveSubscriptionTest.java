@@ -61,6 +61,7 @@ public class RemoveSubscriptionTest {
 
 
 
+    //Create a Subscription, then remove it.
     @Test
     public void removeSub() {
 
@@ -73,7 +74,7 @@ public class RemoveSubscriptionTest {
         onView(withText("Name: " + originalName)).perform(click());
         onView(ViewMatchers.withId(R.id.details_delete_subscription)).perform(click()); // Click delete sub
         //Click the yes button to confirm delete
-        onView(allOf(withId(android.R.id.button2), withText("Yes"), TestUtils.childAtPosition(TestUtils.childAtPosition(withClassName(is("android.widget.ScrollView")), 0), 2))).perform(click());
+        onView(allOf(withId(android.R.id.button2), withText("Yes"))).perform(click());
 
 
         //Verify that the sub has been deleted

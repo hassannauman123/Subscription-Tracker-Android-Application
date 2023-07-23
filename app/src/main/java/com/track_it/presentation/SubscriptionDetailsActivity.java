@@ -108,7 +108,7 @@ public class SubscriptionDetailsActivity extends AppCompatActivity {
             enableDeleteAndEditButtons();
         }
 
-        TagSet.setTextWatcher(this, tagInput);
+        TagColors.setTextWatcher(this, tagInput);
 
 
     }
@@ -486,7 +486,7 @@ public class SubscriptionDetailsActivity extends AppCompatActivity {
             allTags += currTag.getName() + " ";
         }
 
-        TagSet.setTagColors(this, tagInput, allTags);
+        TagColors.setTagColors(this, tagInput, allTags);
     }
 
 

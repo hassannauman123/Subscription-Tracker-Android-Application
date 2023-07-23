@@ -63,7 +63,7 @@ public class AddSubscriptionActivity extends AppCompatActivity {
         constrainUserInput(); //Set what a user can enter for input
         FrequencyMenu.initializeMenu(this, subHandler, frequencyTarget); // Enable drop down menu
         setButtonActions(); //Set what happens when buttons are clicked
-        TagSet.setTextWatcher(this, tagInput); // Set the tag box such that it displays seperated words in different color
+        TagColors.setTextWatcher(this, tagInput); // Set the tag box such that it displays seperated words in different color
     }
 
 

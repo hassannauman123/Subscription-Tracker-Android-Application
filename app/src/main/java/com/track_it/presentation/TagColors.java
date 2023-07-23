@@ -1,24 +1,16 @@
 package com.track_it.presentation;
 
-import static com.google.android.material.internal.ContextUtils.getActivity;
-
-import static java.security.AccessController.getContext;
-
 import android.content.Context;
-import android.content.res.Resources;
 import android.text.Editable;
 import android.text.Html;
 import android.text.TextWatcher;
 import android.widget.EditText;
-import android.widget.TextView;
 
 import com.track_it.R;
 import com.track_it.application.SetupParameters;
 
-import androidx.appcompat.app.AppCompatActivity;
 
-
-public class TagSet {
+public class TagColors {
 
 
     private static String[] tagColorList = null; // List of colors (tag colors will iterate through this list)
@@ -88,7 +80,7 @@ public class TagSet {
                 tagInput.removeTextChangedListener(this);
                 int cursorPosition = tagInput.getSelectionStart(); //save cursor position
 
-                TagSet.setTagColors(context, tagInput, tagInput.getText().toString()); //Set colors
+                TagColors.setTagColors(context, tagInput, tagInput.getText().toString()); //Set colors
 
                 tagInput.setSelection(Math.min(tagInput.getText().length(), cursorPosition)); // Put the cursor back into correct position
                 tagInput.addTextChangedListener(this);

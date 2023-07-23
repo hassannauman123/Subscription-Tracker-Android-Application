@@ -30,11 +30,11 @@ import org.junit.runner.RunWith;
 @LargeTest
 @RunWith(AndroidJUnit4.class)
 
-public class AddSubscriptionTest {
+public class AddSubscriptionTest
+{
 
 
-
-    //Details for a subscription
+    //Details for a subscription to be added
     private static final String originalName = "Lawn Care";
     private static final String originalpayment = "500";
     private static final String originalFrequency = "weekly";
@@ -57,7 +57,8 @@ public class AddSubscriptionTest {
 
 
 
-    //Test adding as subscription. Add a subscription, and then verify that it shows up.
+    //Test adding as subscription.
+    // This will add a subscription, and then verify that it shows up with correct information
     @Test
     public void addSubTest() {
 

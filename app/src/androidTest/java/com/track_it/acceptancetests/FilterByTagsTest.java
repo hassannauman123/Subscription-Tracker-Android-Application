@@ -34,17 +34,17 @@ import org.junit.runner.RunWith;
 @LargeTest
 @RunWith(AndroidJUnit4.class)
 
-public class TagsTest {
+public class FilterByTagsTest {
 
 
-    //Details 1 subsubscription
+    //Details for a subscription
     private static final String originalName = "Park pass";
     private static final String originalPayment = "1600";
     private static final String originalFrequency = "monthly";
     private static final String originalTag1 = "tag1";
     private static final String originalTag2 = "tag2";
 
-    //Input for anther subscription
+    //Details for anther subscription
     private static final String originalName2 = "Costco membership";
     private static final String originalPayment2 = "1000";
     private static final String originalFrequency2 = "monthly";
@@ -64,30 +64,6 @@ public class TagsTest {
     @After
     public void testTearDown() {
         TestUtils.testTearDown();
-    }
-
-
-
-    // Create a subscription with tags, and then check that those tags show up in the subscription details.
-    @Test
-    public void addTagTest() {
-
-        TestUtils.addSub(originalName, originalPayment, originalFrequency, originalTag1 + " " + originalTag2); //ADD SUB
-
-        SystemClock.sleep(TestUtils.getSleepTime());
-
-        //Go to sub details
-        onView(withText(containsString(originalName))).perform(click());
-        SystemClock.sleep(TestUtils.getSleepTime());
-
-        //Make sure tags show up
-        onView(withText(containsString(originalTag1))).check(matches(isDisplayed()));
-        onView(withText(containsString(originalTag2))).check(matches(isDisplayed()));
-
-
-        System.out.println("PASSED: add tags test!");
-        SystemClock.sleep(TestUtils.getSleepTime());
-
     }
 
 

@@ -12,7 +12,7 @@ public class FillDatabase {
 
 
 
-    //Fill database with fake data.
+    //Fill database with fake data - Used for testing sorting
     public static void fillDataBase(final SubscriptionHandler subHandler)
     {
         // Create 10 subs, with less random Names

@@ -10,12 +10,15 @@ import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withParent;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.Matchers.allOf;
 
+import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
 
+import androidx.test.core.app.ApplicationProvider;
 import androidx.test.espresso.ViewInteraction;
 import androidx.test.espresso.assertion.ViewAssertions;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
@@ -34,6 +37,10 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 @LargeTest
 @RunWith(AndroidJUnit4.class)
@@ -56,190 +63,96 @@ public class SortSubscriptionTest {
     }
 
 
-    //This test was created with the help of espresso recorder to test that the sort by name feature works.
+    //This tests sorting the subscriptions by name
     @Test
     public void sortByNameSubscriptionTest() {
 
+        List<String> nameList = Arrays.asList(TestUtils.getNames());// Get the list of subscription names that currently exist
+        Collections.sort(nameList); // sort that list alphabetically
 
-        ViewInteraction appCompatImageButton = onView(
-                allOf(withId(R.id.sort_button),
-                        childAtPosition(
-                                allOf(withId(R.id.main_page),
-                                        childAtPosition(
-                                                withId(android.R.id.content),
-                                                0)),
-                                3),
-                        isDisplayed()));
-        appCompatImageButton.perform(click());
+        Context currContext = ApplicationProvider.getApplicationContext(); // Get current context so we can use string resources
+        String sortCriteria = currContext.getResources().getString(R.string.sort_a_z); // The current sort button will have a text of this
 
+        onView(withId(R.id.sort_button)).perform(click()); //Click the sort button
+        onView(withText(containsString(sortCriteria))).perform(click()); // Sort alphabetically
 
-        //Click the correct sort button
-        ViewInteraction materialTextView = onView(
-                allOf(withId(android.R.id.title), withText("Sort A-Z"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(android.R.id.content),
-                                        0),
-                                0),
-                        isDisplayed()));
-        materialTextView.perform(click());
+        //Target and make sure all the subscriptions still show up
+        ViewInteraction textViewAmazon = onView(withText(containsString("Name: " + nameList.get(0))));
+        textViewAmazon.check(matches(withText("Name: " + nameList.get(0))));
 
+        ViewInteraction textViewDark = onView(withText(containsString("Name: " + nameList.get(1))));
+        textViewDark.check(matches(withText("Name: " + nameList.get(1))));
 
-        //Make sure all the subscriptions still show up
-
-        ViewInteraction textViewAmazon = onView(
-                allOf(withId(R.id.subscription_name), withText("Name: Amazon prime"),
-                        withParent(withParent(withId(R.id.subscription_list))),
-                        isDisplayed()));
-        textViewAmazon.check(matches(withText("Name: Amazon prime")));
-
-
-        ViewInteraction textViewDark = onView(
-                allOf(withId(R.id.subscription_name), withText("Name: Dark-Zone Pass"),
-                        withParent(withParent(withId(R.id.subscription_list))),
-                        isDisplayed()));
-        textViewDark.check(matches(withText("Name: Dark-Zone Pass")));
-
-        ViewInteraction textViewYoutube = onView(
-                allOf(withId(R.id.subscription_name), withText("Name: Youtube"),
-                        withParent(withParent(withId(R.id.subscription_list))),
-                        isDisplayed()));
-        textViewYoutube.check(matches(withText("Name: Youtube")));
+        ViewInteraction textViewYoutube = onView(withText(containsString("Name: " + nameList.get(2))));
+        textViewYoutube.check(matches(withText("Name: " + nameList.get(2))));
 
 
         //Make sure the subscription show up in the correct order
-        textViewAmazon.check(isCompletelyAbove(withText("Name: Dark-Zone Pass")));
-        textViewDark.check(isCompletelyAbove(withText("Name: Youtube")));
+        textViewAmazon.check(isCompletelyAbove(withText("Name: " + nameList.get(1))));
+        textViewDark.check(isCompletelyAbove(withText("Name: " + nameList.get(2))));
 
 
     }
 
-    //This test was auto created by espresso recorder to test that the sort by payment feature works.
+    //This tests sorting the subscriptions by payment
     @Test
     public void sortByPaymentTest() {
-        ViewInteraction appCompatImageButton = onView(
-                allOf(withId(R.id.sort_button),
-                        childAtPosition(
-                                allOf(withId(R.id.main_page),
-                                        childAtPosition(
-                                                withId(android.R.id.content),
-                                                0)),
-                                3),
-                        isDisplayed()));
-        appCompatImageButton.perform(click());
+
+        String[] paymentInOrder = TestUtils.getStringPayments(); // Get all the existing payment amount for subscriptions in order
+
+        Context currContext = ApplicationProvider.getApplicationContext(); // Get current context so we can use string resources
+        String sortCriteria = currContext.getResources().getString(R.string.sort_payment); // The current sort button will have a text of this
+
+        onView(withId(R.id.sort_button)).perform(click());
+        onView(withText(containsString(sortCriteria))).perform(click());
 
 
-        //Click the correct sort button
-        ViewInteraction materialTextView = onView(
-                allOf(withId(android.R.id.title), withText("Sort by Payment"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(android.R.id.content),
-                                        0),
-                                0),
-                        isDisplayed()));
-        materialTextView.perform(click());
+        //Target, and make sure all the subscriptions still show up
+        ViewInteraction textView10 = onView(withText(containsString("$" + paymentInOrder[0])));
+        textView10.check(matches(withText("Payment Amount: $" + paymentInOrder[0])));
+
+        ViewInteraction textView1350 = onView(withText(containsString(paymentInOrder[1])));
+        textView1350.check(matches(withText("Payment Amount: $" + paymentInOrder[1])));
+
+        ViewInteraction textView1956 = onView(withText(containsString(paymentInOrder[2])));
+        textView1956.check(matches(withText("Payment Amount: $" + paymentInOrder[2])));
 
 
-        //Make sure all the subscriptions still show up
-        ViewInteraction textView10 = onView(
-                allOf(withId(R.id.subscription_amount), withText("Payment Amount: $10.00"),
-                        withParent(withParent(withId(R.id.subscription_list))),
-                        isDisplayed()));
-        textView10.check(matches(withText("Payment Amount: $10.00")));
-
-
-        ViewInteraction textView1350 = onView(
-                allOf(withId(R.id.subscription_amount), withText("Payment Amount: $13.50"),
-                        withParent(withParent(withId(R.id.subscription_list))),
-                        isDisplayed()));
-        textView1350.check(matches(withText("Payment Amount: $13.50")));
-
-        ViewInteraction textView1956 = onView(
-                allOf(withId(R.id.subscription_amount), withText("Payment Amount: $19.56"),
-                        withParent(withParent(withId(R.id.subscription_list))),
-                        isDisplayed()));
-        textView1956.check(matches(withText("Payment Amount: $19.56")));
-
-
-        //Make sure the subscription show up in the correct order
-        textView10.check(isCompletelyAbove(withText("Payment Amount: $13.50")));
-        textView1350.check(isCompletelyAbove(withText("Payment Amount: $19.56")));
+        //Make sure the subscriptions show up in the correct order
+        textView10.check(isCompletelyAbove(withText("Payment Amount: $" + paymentInOrder[1])));
+        textView1350.check(isCompletelyAbove(withText("Payment Amount: $" + paymentInOrder[2])));
 
     }
 
-    //This test was created with the help of espresso recorder to test that the sort by payment feature works.
+    //This tests sorting the subscriptions by frequency
     @Test
     public void sortByFrequencyTest() {
 
+        String[] frequencyInOrder = TestUtils.getFrequencyInOrder();
 
-        ViewInteraction appCompatImageButton = onView(
-                allOf(withId(R.id.sort_button),
-                        childAtPosition(
-                                allOf(withId(R.id.main_page),
-                                        childAtPosition(
-                                                withId(android.R.id.content),
-                                                0)),
-                                3),
-                        isDisplayed()));
-        appCompatImageButton.perform(click());
+        Context currContext = ApplicationProvider.getApplicationContext(); // Get current context so we can use string resources
+        String sortCriteria = currContext.getResources().getString(R.string.sort_frequency); // The current sort button will have a text of this
 
-        //Click the correct sort option
-        ViewInteraction materialTextView = onView(
-                allOf(withId(android.R.id.title), withText("Sort by frequency"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(android.R.id.content),
-                                        0),
-                                0),
-                        isDisplayed()));
-        materialTextView.perform(click());
+        onView(withId(R.id.sort_button)).perform(click());
+        onView(withText(containsString(sortCriteria))).perform(click());
 
 
         //Target and make sure all the subscriptions show up
-        ViewInteraction textViewDaily = onView(
-                allOf(withId(R.id.subscription_frequency), withText("Frequency: daily"),
-                        withParent(withParent(withId(R.id.subscription_list))),
-                        isDisplayed()));
-        textViewDaily.check(matches(withText("Frequency: daily")));
+        ViewInteraction textViewDaily = onView(withText(containsString("Frequency: " + frequencyInOrder[0])));
+        textViewDaily.check(matches(withText("Frequency: " + frequencyInOrder[0])));
 
-        ViewInteraction textViewMonthly = onView(
-                allOf(withId(R.id.subscription_frequency), withText("Frequency: monthly"),
-                        withParent(withParent(withId(R.id.subscription_list))),
-                        isDisplayed()));
-        textViewMonthly.check(matches(withText("Frequency: monthly")));
+        ViewInteraction textViewMonthly = onView(withText(containsString("Frequency: " + frequencyInOrder[1])));
+        textViewMonthly.check(matches(withText("Frequency: " + frequencyInOrder[1])));
 
-        ViewInteraction textViewYearly = onView(
-                allOf(withId(R.id.subscription_frequency), withText("Frequency: yearly"),
-                        withParent(withParent(withId(R.id.subscription_list))),
-                        isDisplayed()));
-        textViewYearly.check(matches(withText("Frequency: yearly")));
+        ViewInteraction textViewYearly = onView(withText(containsString("Frequency: " + frequencyInOrder[2])));
+        textViewYearly.check(matches(withText("Frequency: " + frequencyInOrder[2])));
 
 
-        //Make sure the subscription show up in the correct order
-        textViewDaily.check(isCompletelyAbove(withText("Frequency: monthly")));
-        textViewMonthly.check(isCompletelyAbove(withText("Frequency: yearly")));
+        //Make sure the subscriptions show up in the correct order
+        textViewDaily.check(isCompletelyAbove(withText("Frequency: " + frequencyInOrder[1])));
+        textViewMonthly.check(isCompletelyAbove(withText("Frequency: " + frequencyInOrder[2])));
 
 
     }
 
-
-    private static Matcher<View> childAtPosition(
-            final Matcher<View> parentMatcher, final int position) {
-
-        return new TypeSafeMatcher<View>() {
-            @Override
-            public void describeTo(Description description) {
-                description.appendText("Child at position " + position + " in parent ");
-                parentMatcher.describeTo(description);
-            }
-
-            @Override
-            public boolean matchesSafely(View view) {
-                ViewParent parent = view.getParent();
-                return parent instanceof ViewGroup && parentMatcher.matches(parent)
-                        && view.equals(((ViewGroup) parent).getChildAt(position));
-            }
-        };
-    }
 }

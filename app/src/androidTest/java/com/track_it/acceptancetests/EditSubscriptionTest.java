@@ -88,7 +88,7 @@ public class EditSubscriptionTest {
         onView(withId(R.id.go_home)).perform(click()); // go home
         SystemClock.sleep(TestUtils.getSleepTime());
 
-        //Verify that the sub details have saved
+        //Verify that the new sub details have saved
         onView(withText("Name: " + newName)).check(matches(withText("Name: " + newName)));
         onView(withText("Payment Amount: $" + newPaymentAmount)).check(matches(withText("Payment Amount: $" + newPaymentAmount)));
         onView(withText("Frequency: " + newFrequency)).check(matches(withText("Frequency: " + newFrequency)));

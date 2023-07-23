@@ -3,9 +3,12 @@ package com.track_it.acceptancetests;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.pressKey;
+import static androidx.test.espresso.action.ViewActions.replaceText;
 import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
 import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
@@ -15,6 +18,7 @@ import static org.hamcrest.Matchers.is;
 
 import android.os.SystemClock;
 
+import androidx.test.espresso.ViewInteraction;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.filters.LargeTest;
@@ -35,7 +39,6 @@ import org.junit.runner.RunWith;
 public class SearchSubscriptionTest {
 
 
-
     //Details for 1 subscription
     private final String partialName = "cart";
     private static final String originalName = "Streaming Cartoon Central";
@@ -52,7 +55,6 @@ public class SearchSubscriptionTest {
     private static final String originalTag4 = "customtag2";
 
 
-
     @Rule
     public ActivityScenarioRule<MainActivity> mActivityScenarioRule = new ActivityScenarioRule<>(MainActivity.class);
 
@@ -67,9 +69,7 @@ public class SearchSubscriptionTest {
     }
 
 
-
-
-    //Test the search by name for subscriptions feature.
+    //Test the searching by name for a subscriptions.
     @Test
     public void searchTest() {
 
@@ -80,13 +80,18 @@ public class SearchSubscriptionTest {
         SystemClock.sleep(TestUtils.getSleepTime());
 
 
-        TestUtils.typeInSearch(partialName); // Search for part of the name
+        onView(withContentDescription("Search")).perform(click()); // Click search button
+
+        SystemClock.sleep(TestUtils.getSleepTime());
+        ViewInteraction searchAutoComplete = onView(allOf(withClassName(is("android.widget.SearchView$SearchAutoComplete")))); // Get search input target
+        searchAutoComplete.perform(click()); // click it
+        searchAutoComplete.perform(replaceText(partialName), closeSoftKeyboard()); // put search string into into search input
 
 
         // Verify that the first sub shows up with the search applied
         onView(withText("Name: " + originalName)).check(matches(withText("Name: " + originalName)));
 
-        //Verify that the other sub does no show up
+        //Verify that the other sub does not show up
         onView(withText("Name: " + originalName2)).check(doesNotExist());
 
 
