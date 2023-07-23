@@ -1,10 +1,8 @@
 package com.track_it.acceptancetests;
 
-
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.pressKey;
-import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
@@ -32,25 +30,16 @@ import org.junit.runner.RunWith;
 @LargeTest
 @RunWith(AndroidJUnit4.class)
 
-public class SubscriptionSearchTest {
+public class AddSubscriptionTest {
 
 
 
-    //Details for 1 subscription
-    private final String partialName = "cart";
-    private static final String originalName = "Streaming Cartoon Central";
-    private static final String originalPayment = "500";
-    private static final String originalFrequency = "daily";
+    //Details for a subscription
+    private static final String originalName = "Lawn Care";
+    private static final String originalpayment = "500";
+    private static final String originalFrequency = "weekly";
     private static final String originalTag1 = "customtag1";
     private static final String originalTag2 = "customtag2";
-
-    //Details for another subscription
-    private static final String originalName2 = "Costco membership";
-    private static final String originalPayment2 = "1000";
-    private static final String originalFrequency2 = "monthly";
-    private static final String originalTag3 = "customtag1";
-    private static final String originalTag4 = "customtag2";
-
 
 
     @Rule
@@ -68,32 +57,27 @@ public class SubscriptionSearchTest {
 
 
 
-
-    //Test the search by name for subscriptions feature.
+    //Test adding as subscription. Add a subscription, and then verify that it shows up.
     @Test
-    public void searchTest() {
-
-        //Add both subscriptions
-        TestUtils.addSub(originalName, originalPayment, originalFrequency, originalTag1 + " " + originalTag2); //Add sub 1
-        TestUtils.addSub(originalName2, originalPayment2, originalFrequency2, originalTag1 + " " + originalTag2); //Add sub 2
+    public void addSubTest() {
 
         SystemClock.sleep(TestUtils.getSleepTime());
 
+        TestUtils.addSub(originalName, originalpayment, originalFrequency, ""); // This adds a subscription using UI clicks
 
-        TestUtils.typeInSearch(partialName); // Search for part of the name
-
-
-        // Verify that the first sub shows up with the search applied
+        // This verifies the subscription has been added, and shows up correctly as expected
         onView(withText("Name: " + originalName)).check(matches(withText("Name: " + originalName)));
+        onView(withText("Payment Amount: $" + originalpayment + ".00")).check(matches(withText("Payment Amount: $" + originalpayment + ".00")));
+        onView(withText("Frequency: " + originalFrequency)).check(matches(withText("Frequency: " + originalFrequency)));
 
-        //Verify that the other sub does no show up
-        onView(withText("Name: " + originalName2)).check(doesNotExist());
 
-
-        System.out.println("PASSED: search test!");
         SystemClock.sleep(TestUtils.getSleepTime());
+
+        System.out.println("PASSED: sub add Test!");
+
 
     }
+
 
 
 }

@@ -95,7 +95,7 @@ public class TestUtils {
 
         //Create sub 2
         String name_2 = "Amazon prime";
-        String frequency_2 = subHandler.getFrequencyNameList().get(4);
+        String frequency_2 = subHandler.getFrequencyNameList().get(0);
         int Payment_2 = 1000;
         String tags_2 = "movies";
 

@@ -6,8 +6,8 @@ import androidx.test.filters.LargeTest;
 import com.track_it.acceptancetests.EditSubscriptionTest;
 import com.track_it.acceptancetests.RemoveSubscriptionTest;
 import com.track_it.acceptancetests.SortSubscriptionTest;
-import com.track_it.acceptancetests.SubscriptionAddTest;
-import com.track_it.acceptancetests.SubscriptionSearchTest;
+import com.track_it.acceptancetests.AddSubscriptionTest;
+import com.track_it.acceptancetests.SearchSubscriptionTest;
 import com.track_it.acceptancetests.TagsTest;
 import com.track_it.application.Main;
 
@@ -19,10 +19,10 @@ import org.junit.runners.Suite;
 @LargeTest
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-        SubscriptionAddTest.class,
+        AddSubscriptionTest.class,
         RemoveSubscriptionTest.class,
         EditSubscriptionTest.class,
-        SubscriptionSearchTest.class,
+        SearchSubscriptionTest.class,
         TagsTest.class,
         SortSubscriptionTest.class
 
