@@ -49,15 +49,16 @@ public class SubscriptionInput {
 
     // check if the input string is parsable by Integer.parseInt function
     private boolean isParsable(String inputString) {
-        boolean isStringParableToInt;
+        boolean isStringParsableToInt;
+
         try {
             Integer.parseInt(inputString);
-            isStringParableToInt = true;
+            isStringParsableToInt = true;
         } catch (final NumberFormatException e) {
-            isStringParableToInt = false;
+            isStringParsableToInt = false;
         }
 
-        return isStringParableToInt;
+        return isStringParsableToInt;
     }
 
 

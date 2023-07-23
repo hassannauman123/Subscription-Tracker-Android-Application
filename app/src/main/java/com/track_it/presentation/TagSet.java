@@ -24,7 +24,7 @@ public class TagSet {
     private static String[] tagColorList = null; // List of colors (tag colors will iterate through this list)
 
 
-    //Set the input for tax box such that each individual spaced word in a string shows up as a different color
+    //Set the input for a tag box input such that each tag in the string shows up as a different color
     public static void setTagColors(Context context, EditText tagInput, String input) {
 
         if (tagColorList == null)  //Initialize the string colors once
@@ -32,15 +32,15 @@ public class TagSet {
             initColorList(context);
         }
 
-        String[] getSplit = input.split(SetupParameters.getTagHandler().getSplitCriteria()); // Split up the string the same way our tags are
+        String[] getSplit = input.split(SetupParameters.getTagHandler().getSplitCriteria()); // Split up the input string into tags
 
-        //Go through each tag and give them a different color
+
         int itr = 0;
-        String allTagsName = "";
-
+        String allTagsName = ""; // what we will set the tagInput text to be
+        //Go through each tag and give them a different color
         for (String currTagName : getSplit) {
 
-            if (!currTagName.trim().equals("")) //Only add word if it is non blank
+            if (!currTagName.trim().equals("")) //Only add word if it is not blank
             {
                 allTagsName += "<span style='background:" + tagColorList[itr % tagColorList.length] + "';>" + currTagName + "</span>";
                 itr++;
@@ -53,10 +53,13 @@ public class TagSet {
 
         //If the last chars of the original string were blank spaces before, add them back now
         int endSpaceItr = input.length() - 1;
-        while (endSpaceItr >= 0 && input.charAt(endSpaceItr) == ' ') {
+        while (endSpaceItr >= 0 && input.charAt(endSpaceItr) == ' ')
+        {
             allTagsName += " ";
             endSpaceItr--;
         }
+
+
         tagInput.clearComposingText();
         tagInput.setText(Html.fromHtml(allTagsName)); //Set the text to the newly created one with proper colors
 
