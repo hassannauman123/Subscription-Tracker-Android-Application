@@ -14,7 +14,7 @@
 
     <string name="filter_option_title">Filter by tags</string>
     <string name="apply_filter_confirmation">Apply</string>
-    <string name="clear_filter_confirmation">Previous</string>
+    <string name="clear_filter_confirmation">Clear</string>
 
     <string name="tag_color1">#ffa26e</string>
     <string name="tag_color2">#ff00ae</string>

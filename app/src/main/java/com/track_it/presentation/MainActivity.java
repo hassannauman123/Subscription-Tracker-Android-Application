@@ -26,10 +26,12 @@ import com.track_it.persistence.utils.DBHelper;
 
 
 import android.content.Intent;
+import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.SearchView;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -69,6 +71,9 @@ public class MainActivity extends AppCompatActivity {
 
     private List<SubscriptionTag> tagFilterList = new ArrayList<SubscriptionTag>(); //Will hold a list of tags, and we will filter subs based on that
 
+    private boolean filterAny = false; // Should we show subscriptions that match any filter ( default is to only show ones that match all filters)
+
+    private Switch filterSwitch;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,6 +108,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         tagFilterList.clear();  //Clear filter on restart
+        enableDisplayFilterSwitch(false);
         displayAllSubscriptions(); // Display all the subs
     }
 
@@ -121,6 +127,8 @@ public class MainActivity extends AppCompatActivity {
 
         // target filter button
         filterButton = (ImageButton) findViewById(R.id.sort_button);
+
+        filterSwitch = (Switch) this.findViewById(R.id.fitler_match_any_switch);
 
 
     }
@@ -150,6 +158,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+
     //Remove the error message, and make it invisible
     private void disableError() {
         errorDisplay.setText("");
@@ -160,6 +169,36 @@ public class MainActivity extends AppCompatActivity {
         enableAddSubButton();
         enableSearchInput();
         enableSortFilterInput();
+        setUpFilterSwitch();
+        enableDisplayFilterSwitch(false);
+    }
+
+
+    //Set up filter button
+    private void setUpFilterSwitch() {
+
+        //Set what happens when filter is clicked
+        filterSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                filterAny = isChecked;
+                displayAllSubscriptions();
+            }
+        });
+    }
+
+
+    //Display the filter option switch
+    public void enableDisplayFilterSwitch(boolean enableSwitch) {
+        filterSwitch.setEnabled(enableSwitch);
+        filterSwitch.setClickable(enableSwitch);
+
+        if (enableSwitch) {
+            filterSwitch.setVisibility(View.VISIBLE);
+        } else {
+            filterSwitch.setVisibility(View.INVISIBLE);
+            filterAny = enableSwitch;
+            filterSwitch.setChecked(enableSwitch);
+        }
     }
 
     //Enable the add subscription button
@@ -228,6 +267,7 @@ public class MainActivity extends AppCompatActivity {
                 popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     @Override
                     public boolean onMenuItemClick(MenuItem menuItem) {
+                        subSorter = null;
                         //Setting what filter to use to sort the subscriptions (ie, set subSorter)
                         String sortInput = menuItem.getTitle().toString();
                         if (sortInput.equals(getString(R.string.filter_option_title))) {
@@ -238,36 +278,33 @@ public class MainActivity extends AppCompatActivity {
                             subSorter = new CompareSubscriptionPayment();
                         } else if (sortInput.equals(getString(R.string.sort_frequency))) {
                             subSorter = new CompareSubscriptionFrequency();
-                        } else {
-                            subSorter = null;
                         }
+
                         displayAllSubscriptions();
                         return true;
                     }
 
-
                 });
 
                 popupMenu.show(); //Enable the popup menu, allowing user to choose sort criteria
-
             }
         });
     }
 
 
-
-    //This is what the user will see when they click filter list by tags
+    //This is what the user will see when they click filter list by tags.
+    //This is a pop up with each tag having a check box, and 2 buttons (apply and clear).
     private void showFilterList() {
         List<SubscriptionTag> tags = subHandler.getTagHandler().getAllSubTags(); //Get all tags from database
 
-        final boolean[] checkedArray = new boolean[tags.size()];
+        final boolean[] checkedArray = new boolean[tags.size()]; //What tags are selected
         final String[] tagNameArray = new String[tags.size()];
 
+        //  Turn the list of tags into an array of strings so that builder can use it.
         for (int i = 0; i < tagNameArray.length; i++) {
             tagNameArray[i] = tags.get(i).getName();
 
-
-            //this part make it such that a check box already is clicked if that filter is currently applied
+            //This makes it such that a check box will already be checked if that filter is currently applied
             for (SubscriptionTag currTag : tagFilterList) {
                 if (currTag.getName().equals(tags.get(i).getName())) {
                     checkedArray[i] = true;
@@ -275,10 +312,11 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-
+        //Create builder
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Filter By");
+        builder.setTitle(R.string.filter_option_title);
 
+        //Set up the filter options as a series of check boxes for the user to click
         builder.setMultiChoiceItems(tagNameArray, checkedArray, new DialogInterface.OnMultiChoiceClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which, boolean isChecked) {
@@ -286,32 +324,51 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        setFilterPopButtonBehavior(builder, checkedArray, tags);
+        builder.show();
+    }
+
+
+    //Set the button behavior for the popup filter options
+    private void setFilterPopButtonBehavior(AlertDialog.Builder builder, boolean[] checkedArray, List<SubscriptionTag> tags) {
+
+
+        //What happens if the apply button is clicked
         builder.setPositiveButton(getResources().getString(R.string.apply_filter_confirmation), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
-                // Clear filter list, and build a new one based on the click checked marks
+                // Clear filter list, and build a new one based on the checked filters
                 tagFilterList.clear();
                 for (int i = 0; i < checkedArray.length; i++) {
                     if (checkedArray[i]) {
                         tagFilterList.add(tags.get(i));
                     }
                 }
-                //Display subs ( will use the filters)
-                displayAllSubscriptions();
+                if (tagFilterList.size() > 0) {
+                    enableDisplayFilterSwitch(true);
+                } else {
+                    enableDisplayFilterSwitch(false);
+                }
+
+
+                displayAllSubscriptions();  //Display subs ( will use the filters)
             }
         });
 
+        // Set what happens if the clear button is clicked
         builder.setNegativeButton(getResources().getString(R.string.clear_filter_confirmation), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 // Clear all filters
                 tagFilterList.clear();
                 displayAllSubscriptions();
+                enableDisplayFilterSwitch(false);
+
             }
         });
 
-        builder.show();
+
     }
 
 
@@ -359,19 +416,24 @@ public class MainActivity extends AppCompatActivity {
         boolean passFilter = true;
         if (tagFilterList.size() > 0) // If there are no tag filters, then all subscriptions pass the filter check
         {
-            passFilter = subFilter.checkIfSubHasTags(inputSub, tagFilterList); //Check if the subscription has at least one of the tags in tagFilter
+            if (filterAny)  // filterAny means to display subscription that has as ANY matching filter tag
+            {
+                passFilter = subFilter.checkIfSubHasAnyMatchingTags(inputSub, tagFilterList); //Check if the subscription has at least one of the tags in tagFilter
+            } else // Check if subscription has ALL filter tags
+            {
+                passFilter = subFilter.checkIfSuHasAllTags(inputSub, tagFilterList); // Check if the sub has all tags
+            }
         }
 
         return passFilter;
     }
 
 
-    //Create a box for subscription , add it to displaySubList, and then display it
+    //Create a box for a subscription, add it to displaySubList and then display it
     private void createBoxForSubscription(SubscriptionObj subInput) {
 
         // Create a new box to display subscription
         View subscriptionBox = getLayoutInflater().inflate(R.layout.subscription_box, displaySubList, false);
-
 
         // Set Name of subscription to display
         TextView targetName = subscriptionBox.findViewById(R.id.subscription_name);
@@ -388,7 +450,7 @@ public class MainActivity extends AppCompatActivity {
         targetPaymentAmount.setText("Payment Amount: $" + subInput.getPaymentDollars() + "." + String.format("%02d", subInput.getPaymentCents()));
 
 
-        // Set Payment amount to display
+        //Convert the tags associated with subscription, and create a string out of it.
         TextView tagTarget = subscriptionBox.findViewById(R.id.tag_input);
         String allTags = "";
         for (SubscriptionTag currTag : subInput.getTagList()) {
@@ -396,14 +458,12 @@ public class MainActivity extends AppCompatActivity {
         }
 
         if (!allTags.equals("")) {
-            allTags = "Tags: " + allTags;
+            allTags = "Tags: " + allTags;  // Only display th term Tags if the sub had tags
         }
+        tagTarget.setText(allTags); //Set what will display for tags
 
-        tagTarget.setText(allTags);
 
-
-        //Set ID - Just as a reminder, these might not be unique ID's on this page, as other elements may have these ID numbers
-        // but for how we are using them right now it's fine.
+        //Set ID of the box
         subscriptionBox.setId(subInput.getID());
 
 
@@ -414,7 +474,6 @@ public class MainActivity extends AppCompatActivity {
         } else {
             subscriptionBox.setBackgroundColor(getResources().getColor(R.color.white));
         }
-
 
         setSubscriptionBoxBehaviour(subscriptionBox); //Set behavior of box whens it's clicked
         displaySubList.addView(subscriptionBox); // display box
