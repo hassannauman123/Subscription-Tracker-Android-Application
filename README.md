@@ -8,3 +8,4 @@ To run the app, download the android studio. (This was created and tested on And
 [Vision statement]()
 [Architecture]()
 [retrospective]()
+[Velocity Chart]()

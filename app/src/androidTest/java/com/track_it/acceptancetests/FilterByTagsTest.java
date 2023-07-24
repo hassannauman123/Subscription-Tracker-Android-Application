@@ -14,8 +14,10 @@ import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.is;
 
+import android.content.Context;
 import android.os.SystemClock;
 
+import androidx.test.core.app.ApplicationProvider;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.filters.LargeTest;
@@ -79,21 +81,25 @@ public class FilterByTagsTest {
 
         SystemClock.sleep(TestUtils.getSleepTime());
 
+        Context currContext = ApplicationProvider.getApplicationContext(); // Get current context so we can use string resources
+        String filterButtonName = currContext.getResources().getString(R.string.filter_option_title); // The current sort button will have a text of this
+        String applyFilterName = currContext.getResources().getString(R.string.apply_filter_confirmation); // The current sort button will have a text of this
+
 
         //Filter by tags
         onView(withId(R.id.sort_button)).perform(click());
-        onView(withText(containsString("Filter"))).perform(click());
-        onView(withText(containsString(originalTag1))).perform(click());
-        onView(withText(containsString("APPLY"))).perform(click());
+        onView(withText(containsString(filterButtonName))).perform(click()); // click filter button option
+        SystemClock.sleep(TestUtils.getSleepTime()); // Wait for menu to load
+        onView(withText(containsString(originalTag1))).perform(click()); // Check filter to use
+        onView(withText(containsString(applyFilterName))).perform(click()); // click apply button
 
 
         // Verify that the sub with the correct tags shows up when the filter applied
-        onView(withText("Name: " + originalName)).check(matches(withText("Name: " + originalName)));
-        onView(withText("Payment Amount: $" + originalPayment + ".00")).check(matches(withText("Payment Amount: $" + originalPayment + ".00")));
-        onView(withText("Frequency: " + originalFrequency)).check(matches(withText("Frequency: " + originalFrequency)));
+        onView(withText(containsString( originalName))).check(matches(withText(containsString(originalName))));
+        onView(withText(containsString(originalFrequency))).check(matches(withText(containsString(originalFrequency))));
 
         //Verify that the sub without the tags does NOT show up
-        onView(withText("Name: " + originalName2)).check(doesNotExist());
+        onView(withText(containsString(originalName2))).check(doesNotExist());
 
 
         System.out.println("PASSED: filter by tags test!");

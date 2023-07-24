@@ -230,7 +230,7 @@ public class MainActivity extends AppCompatActivity {
                     public boolean onMenuItemClick(MenuItem menuItem) {
                         //Setting what filter to use to sort the subscriptions (ie, set subSorter)
                         String sortInput = menuItem.getTitle().toString();
-                        if (sortInput.equals(getString(R.string.filter_list))) {
+                        if (sortInput.equals(getString(R.string.filter_option_title))) {
                             showFilterList();
                         } else if (sortInput.equals(getString(R.string.sort_a_z))) {
                             subSorter = new CompareSubscriptionName();
@@ -286,7 +286,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        builder.setPositiveButton("Apply", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton(getResources().getString(R.string.apply_filter_confirmation), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
@@ -302,7 +302,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        builder.setNegativeButton("Clear", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton(getResources().getString(R.string.clear_filter_confirmation), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 // Clear all filters
