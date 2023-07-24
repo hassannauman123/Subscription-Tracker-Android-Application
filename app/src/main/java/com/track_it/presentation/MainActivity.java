@@ -249,7 +249,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    //Enable the sort input - Allows user to sort subscriptions
+    //Enable the sort and fitler input - Allows user to sort or filter subscriptions
     private void enableSortFilterInput() {
 
 
@@ -419,9 +419,10 @@ public class MainActivity extends AppCompatActivity {
             if (filterAny)  // filterAny means to display subscription that has as ANY matching filter tag
             {
                 passFilter = subFilter.checkIfSubHasAnyMatchingTags(inputSub, tagFilterList); //Check if the subscription has at least one of the tags in tagFilter
-            } else // Check if subscription has ALL filter tags
+            }
+            else
             {
-                passFilter = subFilter.checkIfSuHasAllTags(inputSub, tagFilterList); // Check if the sub has all tags
+                passFilter = subFilter.checkIfSuHasAllTags(inputSub, tagFilterList); // Check if the sub has ALL tags
             }
         }
 
