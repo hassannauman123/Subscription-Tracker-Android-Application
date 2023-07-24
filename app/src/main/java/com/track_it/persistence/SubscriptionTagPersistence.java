@@ -21,6 +21,8 @@ public interface SubscriptionTagPersistence
 
     void removeAllTagsBySubID(int subID);
 
+     void removeUnusedTags();
+
 
 
 }

@@ -30,8 +30,7 @@ public class SubscriptionInput {
 
             if (paymentAmountString.length > 1)  // If there was a decimal
             {
-                if (isParsable(paymentAmountString[1]))
-                {
+                if (isParsable(paymentAmountString[1])) {
                     if (paymentAmountString[1].length() == 1)  // The payment is in the format like: 10.2, so we need to to multiply the 2 by 10 to get cents payment amount
                     {
                         paymentInCents = paymentInCents + Integer.parseInt(paymentAmountString[1]) * 10;
@@ -49,15 +48,17 @@ public class SubscriptionInput {
 
     // check if the input string is parsable by Integer.parseInt function
     private boolean isParsable(String inputString) {
-        boolean isStringParableToInt;
+
+        boolean isStringParsableToInt;
+
         try {
             Integer.parseInt(inputString);
-            isStringParableToInt = true;
+            isStringParsableToInt = true;
         } catch (final NumberFormatException e) {
-            isStringParableToInt = false;
+            isStringParsableToInt = false;
         }
 
-        return isStringParableToInt;
+        return isStringParsableToInt;
     }
 
 

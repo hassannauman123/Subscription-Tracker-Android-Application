@@ -6,34 +6,27 @@ import com.track_it.persistence.hsqldb.SubscriptionPersistenceHSQLDB;
 import com.track_it.persistence.hsqldb.SubscriptionTagPersistenceHSQLDB;
 
 
-public class Services
-{
+public class Services {
 
     private static SubscriptionPersistence subscriptionPersistence = null;
     private static SubscriptionTagPersistence subscriptionTagPersistence = null;
 
 
-
-    public static synchronized SubscriptionPersistence getSubscriptionPersistence()
-    {
-        if (subscriptionPersistence == null)
-        {
-             subscriptionPersistence = new SubscriptionPersistenceHSQLDB(Main.getDBPathName());
+    public static synchronized SubscriptionPersistence getSubscriptionPersistence() {
+        if (subscriptionPersistence == null) {
+            subscriptionPersistence = new SubscriptionPersistenceHSQLDB(Main.getDBPathName());
         }
 
         return subscriptionPersistence;
     }
 
-    public static synchronized SubscriptionTagPersistence getSubscriptionTagPersistence()
-    {
-        if (subscriptionTagPersistence == null)
-        {
+    public static synchronized SubscriptionTagPersistence getSubscriptionTagPersistence() {
+        if (subscriptionTagPersistence == null) {
             subscriptionTagPersistence = new SubscriptionTagPersistenceHSQLDB(Main.getDBPathName());
         }
 
         return subscriptionTagPersistence;
     }
-
 
 
 }

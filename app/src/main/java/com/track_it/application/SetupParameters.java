@@ -11,8 +11,8 @@ import com.track_it.logic.frequencies.WeeklyFrequency;
 import com.track_it.logic.frequencies.YearlyFrequency;
 import com.track_it.persistence.SubscriptionPersistence;
 import com.track_it.persistence.SubscriptionTagPersistence;
-import com.track_it.persistence.fakes.FakeSubscriptionPersistenceDatabase;
-import com.track_it.persistence.fakes.FakeSubscriptionTagPersistenceDatabase;
+import com.track_it.persistence.fakes.FakeSubscriptionPersistenceDB;
+import com.track_it.persistence.fakes.FakeSubscriptionTagPersistenceDB;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,29 +31,30 @@ public class SetupParameters {
     private static final int MIN_PAYMENT_IN_CENTS = 0;
 
     private static final String allowableCharactersInName = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890 -!@#$%^&*()_+=|{=}[]':?<>',."; // Our current list of allowable characters in the name
-
-
     private static final List<Frequency> allowableFrequencies = InitFrequency(); // will hold allowable frequencies
+
+    //Tag parameters
+    private static String TAG_SPLIT = " "; // set how tags will be delimited, allows us to easily define how tags are broken up
+    private static int TAG_MIN_LENGTH = 1; // min tag length
+    private static int TAG_MAX_LENGTH = 20; // max tax length
+    private static final int MAX_TAGS = 5; // How many tags can a subscription have?
+
+    //Database used
     private static SubscriptionPersistence subscriptionPersistenceDatabase = Services.getSubscriptionPersistence();  // Database that we will use
     private static SubscriptionTagPersistence tagPersistenceDatabase = Services.getSubscriptionTagPersistence();  // Database that we will use
-    //private static SubscriptionPersistence subscriptionPersistenceDatabase = new FakeSubscriptionPersistenceDatabase();  // Database that we will use
-    //private static SubscriptionTagPersistence subscriptionTagPersistenceDatabase = new FakeSubscriptionTagPersistenceDatabase();  //;  // Database that we will use
 
+    //Singleton items
     private static SubscriptionHandler subHandler = null; // subscription handler
 
     private static SubscriptionTagHandler tagHandler = null; // subscription handler
-
-    private static String TAG_SPLIT = " "; // set how tags will be delimited, allows for easily changing tag behavior
-    private static int TAG_MIN_LENGTH = 1; // Max tag length
-    private static int TAG_MAX_LENGTH = 20; // Min tax length
-    private static final int MAX_TAGS = 5; // How many tags can a subscription have?
 
 
     public static void initializeDatabase(SubscriptionPersistence inputSubDB, SubscriptionTagPersistence inputTagDB) {
         //Create a new subscription handler if the database has changed
         tagPersistenceDatabase = inputTagDB;
         subscriptionPersistenceDatabase = inputSubDB;
-        subHandler = new SubscriptionHandler(MIN_NAME_LENGTH, MAX_NAME_LENGTH, MIN_PAYMENT_IN_CENTS, MAX_PAYMENT_IN_CENTS, allowableCharactersInName, MAX_TAGS, allowableFrequencies, getTagHandler() , subscriptionPersistenceDatabase);
+        tagHandler = new SubscriptionTagHandler(TAG_SPLIT, TAG_MIN_LENGTH, TAG_MAX_LENGTH, inputTagDB);
+        subHandler = new SubscriptionHandler(MIN_NAME_LENGTH, MAX_NAME_LENGTH, MIN_PAYMENT_IN_CENTS, MAX_PAYMENT_IN_CENTS, allowableCharactersInName, MAX_TAGS, allowableFrequencies, tagHandler, subscriptionPersistenceDatabase);
 
     }
 
@@ -62,7 +63,7 @@ public class SetupParameters {
 
         if (subHandler == null) // Only create one instance of the subscription handler, and return it each time
         {
-            subHandler = new SubscriptionHandler(MIN_NAME_LENGTH, MAX_NAME_LENGTH, MIN_PAYMENT_IN_CENTS, MAX_PAYMENT_IN_CENTS, allowableCharactersInName, MAX_TAGS, allowableFrequencies, getTagHandler() , subscriptionPersistenceDatabase);
+            subHandler = new SubscriptionHandler(MIN_NAME_LENGTH, MAX_NAME_LENGTH, MIN_PAYMENT_IN_CENTS, MAX_PAYMENT_IN_CENTS, allowableCharactersInName, MAX_TAGS, allowableFrequencies, getTagHandler(), subscriptionPersistenceDatabase);
         }
         return subHandler;
     }
