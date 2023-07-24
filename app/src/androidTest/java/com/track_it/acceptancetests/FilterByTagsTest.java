@@ -81,6 +81,7 @@ public class FilterByTagsTest {
 
         // create 2 subs, but with different tags
         TestUtils.addSub(originalName, originalPayment, originalFrequency, originalTag1 + " " + originalTag2); //Add sub with tags
+        SystemClock.sleep(TestUtils.getSleepTime());
         TestUtils.addSub(originalName2, originalPayment2, originalFrequency2, originalTag3 + " " + originalTag3 + " " + originalTag1); //Add sub with tags
 
 

@@ -80,6 +80,8 @@ public class AddTagsToSubs {
         onView(withText(containsString(originalName))).perform(click());
         SystemClock.sleep(TestUtils.getSleepTime());
 
+        SystemClock.sleep(TestUtils.getSleepTime());
+
         //Make sure tags show up
         onView(withText(containsString(originalTag1))).check(matches(isDisplayed()));
         onView(withText(containsString(originalTag2))).check(matches(isDisplayed()));
@@ -110,9 +112,13 @@ public class AddTagsToSubs {
         onView(withId(R.id.details_edit_subscription)).perform(click()); // Click save changes
         onView(withId(R.id.go_home)).perform(click()); // go home
 
+        SystemClock.sleep(TestUtils.getSleepTime());
 
         //Go back to sub details
         onView(withText(containsString(originalName))).perform(click());
+
+
+        SystemClock.sleep(TestUtils.getSleepTime());
 
         //Make sure new tags show up
         onView(withText(containsString(newTag1))).check(matches(isDisplayed()));

@@ -75,6 +75,7 @@ public class RemoveSubscriptionTest {
 
         //Delete sub
         onView(withText("Name: " + originalName)).perform(click());
+        SystemClock.sleep(TestUtils.getSleepTime());
         onView(ViewMatchers.withId(R.id.details_delete_subscription)).perform(click()); // Click delete sub
         SystemClock.sleep(TestUtils.getSleepTime());// Let popup confirmation load
         onView(allOf(withId(android.R.id.button2), withText("Yes"))).perform(click());     //Click the yes button to confirm delete

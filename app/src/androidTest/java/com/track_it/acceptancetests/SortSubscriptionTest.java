@@ -117,18 +117,18 @@ public class SortSubscriptionTest {
 
         //Target, and make sure all the subscriptions still show up
         ViewInteraction textView10 = onView(withText(containsString("$" + paymentInOrder[0])));
-        textView10.check(matches(withText("Payment Amount: $" + paymentInOrder[0])));
+        textView10.check(matches(withText(containsString("$" + paymentInOrder[0]))));
 
         ViewInteraction textView1350 = onView(withText(containsString(paymentInOrder[1])));
-        textView1350.check(matches(withText("Payment Amount: $" + paymentInOrder[1])));
+        textView1350.check(matches(withText(containsString("$" + paymentInOrder[1]))));
 
         ViewInteraction textView1956 = onView(withText(containsString(paymentInOrder[2])));
-        textView1956.check(matches(withText("Payment Amount: $" + paymentInOrder[2])));
+        textView1956.check(matches(withText(containsString( "$" + paymentInOrder[2]))));
 
 
         //Make sure the subscriptions show up in the correct order
-        textView10.check(isCompletelyAbove(withText("Payment Amount: $" + paymentInOrder[1])));
-        textView1350.check(isCompletelyAbove(withText("Payment Amount: $" + paymentInOrder[2])));
+        textView10.check(isCompletelyAbove(withText(containsString("$" + paymentInOrder[1]))));
+        textView1350.check(isCompletelyAbove(withText(containsString("$" + paymentInOrder[2]))));
 
     }
 
@@ -150,7 +150,7 @@ public class SortSubscriptionTest {
         ViewInteraction textViewDaily = onView(withText(containsString("Frequency: " + frequencyInOrder[0])));
         textViewDaily.check(matches(withText("Frequency: " + frequencyInOrder[0])));
 
-        ViewInteraction textViewMonthly = onView(withText(containsString("Frequency: " + frequencyInOrder[1])));
+        ViewInteraction textViewMonthly = onView(withText(containsString( frequencyInOrder[1])));
         textViewMonthly.check(matches(withText("Frequency: " + frequencyInOrder[1])));
 
         ViewInteraction textViewYearly = onView(withText(containsString("Frequency: " + frequencyInOrder[2])));

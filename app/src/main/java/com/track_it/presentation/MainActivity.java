@@ -448,7 +448,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Set Payment amount to display
         TextView targetPaymentAmount = subscriptionBox.findViewById(R.id.subscription_amount);
-        targetPaymentAmount.setText("Payment Amount: $" + subInput.getPaymentDollars() + "." + String.format("%02d", subInput.getPaymentCents()));
+        targetPaymentAmount.setText("Payment: $" + subInput.getPaymentDollars() + "." + String.format("%02d", subInput.getPaymentCents()));
 
 
         //Convert the tags associated with subscription, and create a string out of it.

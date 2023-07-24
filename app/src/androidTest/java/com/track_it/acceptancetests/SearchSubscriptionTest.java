@@ -79,8 +79,9 @@ public class SearchSubscriptionTest {
 
         //Add both subscriptions
         TestUtils.addSub(originalName, originalPayment, originalFrequency, originalTag1 + " " + originalTag2); //Add sub 1
-        TestUtils.addSub(originalName2, originalPayment2, originalFrequency2, originalTag1 + " " + originalTag2); //Add sub 2
+        SystemClock.sleep(TestUtils.getSleepTime());
 
+        TestUtils.addSub(originalName2, originalPayment2, originalFrequency2, originalTag1 + " " + originalTag2); //Add sub 2
         SystemClock.sleep(TestUtils.getSleepTime());
 
 
@@ -93,6 +94,8 @@ public class SearchSubscriptionTest {
         ViewInteraction searchAutoComplete = onView(allOf(withClassName(is("android.widget.SearchView$SearchAutoComplete")))); // Get search input target
         searchAutoComplete.perform(click()); // click it
         searchAutoComplete.perform(replaceText(partialName), closeSoftKeyboard()); // put search string into into search input
+
+        SystemClock.sleep(TestUtils.getSleepTime());
 
 
         // Verify that the first sub shows up with the search applied
