@@ -23,6 +23,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.filters.LargeTest;
 
 import com.track_it.R;
+import com.track_it.application.SetupParameters;
 import com.track_it.presentation.MainActivity;
 import com.track_it.util.TestUtils;
 
@@ -49,7 +50,7 @@ public class FilterByTagsTest {
     //Details for anther subscription
     private static final String originalName2 = "Costco membership";
     private static final String originalPayment2 = "1000";
-    private static final String originalFrequency2 = "monthly";
+    private static final String originalFrequency2 = "yearly";
     private static final String originalTag3 = "tag3";
     private static final String originalTag4 = "tag4";
 
@@ -59,13 +60,16 @@ public class FilterByTagsTest {
     public ActivityScenarioRule<MainActivity> mActivityScenarioRule = new ActivityScenarioRule<>(MainActivity.class);
 
     @Before
-    public void testSetup() {
-        TestUtils.testSetup();
+    public void testSetup()
+    {
+        TestUtils.clearDatabase(SetupParameters.getSubscriptionHandler());
+        TestUtils.refreshPage();
+
     }
 
     @After
     public void testTearDown() {
-        TestUtils.testTearDown();
+        TestUtils.clearDatabase(SetupParameters.getSubscriptionHandler());
     }
 
 
@@ -77,7 +81,8 @@ public class FilterByTagsTest {
 
         // create 2 subs, but with different tags
         TestUtils.addSub(originalName, originalPayment, originalFrequency, originalTag1 + " " + originalTag2); //Add sub with tags
-        TestUtils.addSub(originalName2, originalPayment2, originalFrequency2, originalTag3 + " " + originalTag3); //Add sub with tags
+        TestUtils.addSub(originalName2, originalPayment2, originalFrequency2, originalTag3 + " " + originalTag3 + " " + originalTag1); //Add sub with tags
+
 
         SystemClock.sleep(TestUtils.getSleepTime());
 
@@ -91,6 +96,7 @@ public class FilterByTagsTest {
         onView(withText(containsString(filterButtonName))).perform(click()); // click filter button option
         SystemClock.sleep(TestUtils.getSleepTime()); // Wait for menu to load
         onView(withText(containsString(originalTag1))).perform(click()); // Check filter to use
+        onView(withText(containsString(originalTag2))).perform(click()); // Check filter to use
         onView(withText(containsString(applyFilterName))).perform(click()); // click apply button
 
 
@@ -100,6 +106,20 @@ public class FilterByTagsTest {
 
         //Verify that the sub without the tags does NOT show up
         onView(withText(containsString(originalName2))).check(doesNotExist());
+
+
+        SystemClock.sleep(TestUtils.getSleepTime());
+        //Filter by matching any tag
+        onView(withId(R.id.fitler_match_any_switch)).perform(click());
+
+
+        // Verify that both now show up
+        onView(withText(containsString( originalName))).check(matches(withText(containsString(originalName))));
+        onView(withText(containsString(originalFrequency))).check(matches(withText(containsString(originalFrequency))));
+
+        onView(withText(containsString(originalName2))).check(matches(isDisplayed()));
+
+
 
 
         System.out.println("PASSED: filter by tags test!");

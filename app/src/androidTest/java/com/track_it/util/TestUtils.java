@@ -53,26 +53,23 @@ public class TestUtils {
     private static String[] subFrequency = new String[3];
 
 
-    public static void testSetup() {
-        //Clear the database and then repopulate the database with some sample subscriptions
-        TestUtils.clearDatabase(SetupParameters.getSubscriptionHandler());
-        TestUtils.populateDatabaseWith3Subs(SetupParameters.getSubscriptionHandler());
 
-        //We need the reload the activity, as it originally loaded with the database before the clear and populate methods happened.
+
+    public static void refreshPage()
+    {
+        //Reload Activity
         Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
         Intent refresh = new Intent(context, MainActivity.class);
         refresh.setFlags(FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(refresh);
+
     }
 
-
-    public static void testTearDown() {
-        //Clear the database
-        TestUtils.clearDatabase(SetupParameters.getSubscriptionHandler());
-    }
 
     // Remove all subs in the database
-    public static void clearDatabase(SubscriptionHandler subHandler) {
+    public static void clearDatabase(SubscriptionHandler subHandler)
+    {
+
         List<SubscriptionObj> allSubs = subHandler.getAllSubscriptions();
         for (SubscriptionObj currSub : allSubs) {
             subHandler.removeSubscriptionByID(currSub.getID());
