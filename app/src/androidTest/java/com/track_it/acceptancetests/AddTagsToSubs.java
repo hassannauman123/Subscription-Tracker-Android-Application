@@ -97,12 +97,13 @@ public class AddTagsToSubs {
 
         //Go to sub details and change the tags of the sub
         onView(withText(containsString(originalName))).perform(click());
+        SystemClock.sleep(TestUtils.getSleepTime()); // let page load
         onView(ViewMatchers.withId(R.id.details_edit_subscription)).perform(click()); // Click edit sub
         onView(withId(R.id.tag_input)).perform(replaceText(newTag1 + " " + newTag2)); // change tags
 
-        SystemClock.sleep(TestUtils.getSleepTime());// Sleep, just to more clearly see whats happening
+        SystemClock.sleep(TestUtils.getSleepTime());
 
-        onView(withId(R.id.details_edit_subscription)).perform(click()); // Click edit sub
+        onView(withId(R.id.details_edit_subscription)).perform(click()); // Click save changes
         onView(withId(R.id.go_home)).perform(click()); // go home
 
 

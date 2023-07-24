@@ -78,11 +78,13 @@ public class EditSubscriptionTest {
         //EDIT SUB
         onView(ViewMatchers.withId(R.id.details_edit_subscription)).perform(click()); // Click edit sub
 
-        SystemClock.sleep(TestUtils.getSleepTime());// Sleep, just to more clearly see whats happening
+
         onView(withId(R.id.detail_subscription_name)).perform(replaceText(newName)); // change name
         onView(withId(R.id.detail_subscription_amount)).perform(replaceText(newPaymentAmount)); // Change amount
+        SystemClock.sleep(TestUtils.getSleepTime()); // Let pop up menu load
         onView(withId(R.id.AutoComplete_drop_menu)).perform(click()); // Give new frequency
         onView(withText(newFrequency)).inRoot(RootMatchers.isPlatformPopup()).perform(click()); // change frequency
+        SystemClock.sleep(TestUtils.getSleepTime());// Sleep, just to more clearly see whats happening
 
         onView(withId(R.id.details_edit_subscription)).perform(click()); // Click edit sub
         onView(withId(R.id.go_home)).perform(click()); // go home

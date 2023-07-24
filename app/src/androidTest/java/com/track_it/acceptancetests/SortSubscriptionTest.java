@@ -14,6 +14,7 @@ import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.Matchers.allOf;
 
 import android.content.Context;
+import android.os.SystemClock;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
@@ -74,7 +75,8 @@ public class SortSubscriptionTest {
         String sortCriteria = currContext.getResources().getString(R.string.sort_a_z); // The current sort button will have a text of this
 
         onView(withId(R.id.sort_button)).perform(click()); //Click the sort button
-        onView(withText(containsString(sortCriteria))).perform(click()); // Sort alphabetically
+        SystemClock.sleep(TestUtils.getSleepTime());// Let popup load
+        onView(withText(containsString(sortCriteria))).perform(click()); // click sort by A-z
 
         //Target and make sure all the subscriptions still show up
         ViewInteraction textViewAmazon = onView(withText(containsString("Name: " + nameList.get(0))));
@@ -104,7 +106,8 @@ public class SortSubscriptionTest {
         String sortCriteria = currContext.getResources().getString(R.string.sort_payment); // The current sort button will have a text of this
 
         onView(withId(R.id.sort_button)).perform(click());
-        onView(withText(containsString(sortCriteria))).perform(click());
+        SystemClock.sleep(TestUtils.getSleepTime());// Let popup load
+        onView(withText(containsString(sortCriteria))).perform(click()); //Click  sort by payment
 
 
         //Target, and make sure all the subscriptions still show up
@@ -134,7 +137,8 @@ public class SortSubscriptionTest {
         String sortCriteria = currContext.getResources().getString(R.string.sort_frequency); // The current sort button will have a text of this
 
         onView(withId(R.id.sort_button)).perform(click());
-        onView(withText(containsString(sortCriteria))).perform(click());
+        SystemClock.sleep(TestUtils.getSleepTime());// Let popup load
+        onView(withText(containsString(sortCriteria))).perform(click()); //Click sort by frequency
 
 
         //Target and make sure all the subscriptions show up

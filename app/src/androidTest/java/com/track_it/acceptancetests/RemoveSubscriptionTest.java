@@ -73,9 +73,10 @@ public class RemoveSubscriptionTest {
         //Delete sub
         onView(withText("Name: " + originalName)).perform(click());
         onView(ViewMatchers.withId(R.id.details_delete_subscription)).perform(click()); // Click delete sub
-        //Click the yes button to confirm delete
-        onView(allOf(withId(android.R.id.button2), withText("Yes"))).perform(click());
+        SystemClock.sleep(TestUtils.getSleepTime());// Let popup confirmation load
+        onView(allOf(withId(android.R.id.button2), withText("Yes"))).perform(click());     //Click the yes button to confirm delete
 
+        SystemClock.sleep(TestUtils.getSleepTime());// wait for main to load
 
         //Verify that the sub has been deleted
         onView(withText("Name: " + originalName)).check(doesNotExist());
