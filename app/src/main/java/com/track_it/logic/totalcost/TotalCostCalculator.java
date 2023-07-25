@@ -1,63 +1,66 @@
 package com.track_it.logic.totalcost;
+
 import com.track_it.domainobject.SubscriptionObj;
 import java.util.List;
-public class TotalCostCalculator {
 
+public class TotalCostCalculator implements SubscriptionCalculator {
 
-        double totalCost = 0;
-        private double yearlyCost = 0;
-        private double weeklyCost=0;
-        private double monthlyCost=0;
-        private double dailyCost=0;
-        private final List<SubscriptionObj> listOfSubs;
+    double totalCost = 0;
+    private double yearlyCost = 0;
+    private double weeklyCost = 0;
+    private double monthlyCost = 0;
+    private double dailyCost = 0;
+    private final List<SubscriptionObj> listOfSubs;
 
-        public TotalCostCalculator(List<SubscriptionObj> listOfSubs) {
-            this.listOfSubs = listOfSubs;
-        }
+    public TotalCostCalculator(List<SubscriptionObj> listOfSubs) {
+        //get the data from db
+        this.listOfSubs = listOfSubs;
+    }
 
-        public void cost() {
+    @Override
+    public void cost(List<SubscriptionObj> listOfSubs) {
+        for (SubscriptionObj subscription : listOfSubs) {
+            //get cost and paymentPeriod from db
+            double subscriptionCost = subscription.getPaymentDollars();
+            String paymentPeriod = subscription.getPaymentFrequency();
+            //calculate the cost
 
-            for (SubscriptionObj subscription : listOfSubs) {
-                double subscriptionCost = subscription.getPaymentDollars();
-                String paymentPeriod = subscription.getPaymentFrequency();
-
-                if (paymentPeriod.equals("daily")) {
-
-                    totalCost += subscriptionCost * 365;
-                } else if (paymentPeriod.equals("monthly")) {
-
-                    totalCost += subscriptionCost * 12;
-                }else if(paymentPeriod.equals("weekly")){
-                    totalCost +=subscriptionCost * 52;
-                }else if(paymentPeriod.equals("bi-weekly")){
-                    totalCost +=subscriptionCost * 26;
-                } else if (paymentPeriod.equals("yearly")) {
-
-                    totalCost += subscriptionCost;
-                }
+            if (paymentPeriod.equals("daily")) {
+                totalCost += subscriptionCost * 365;
+            } else if (paymentPeriod.equals("monthly")) {
+                totalCost += subscriptionCost * 12;
+            } else if (paymentPeriod.equals("weekly")) {
+                totalCost += subscriptionCost * 52;
+            } else if (paymentPeriod.equals("bi-weekly")) {
+                totalCost += subscriptionCost * 26;
+            } else if (paymentPeriod.equals("yearly")) {
+                totalCost += subscriptionCost;
             }
-
-
-             dailyCost = totalCost / 365;
-             weeklyCost = totalCost/ 52;
-             monthlyCost = totalCost / 12;
-             yearlyCost = totalCost;
-
         }
 
-
+        dailyCost = totalCost / 365;
+        weeklyCost = totalCost / 52;
+        monthlyCost = totalCost / 12;
+        yearlyCost = totalCost;
+    }
+    //return the cost
+    @Override
     public double getYearlyCost() {
-            return yearlyCost;
-        }
-    public double getweeklyCost() {
+        return yearlyCost;
+    }
+
+    @Override
+    public double getWeeklyCost() {
         return weeklyCost;
     }
-    public double getmonthlyCost() {
+
+    @Override
+    public double getMonthlyCost() {
         return monthlyCost;
     }
-    public double getdailyCost() {
+
+    @Override
+    public double getDailyCost() {
         return dailyCost;
     }
-    }
-
-
+}

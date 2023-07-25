@@ -18,6 +18,7 @@ import com.track_it.logic.exceptions.SubscriptionException;
 import com.track_it.logic.exceptions.SubscriptionInvalidFrequencyException;
 import com.track_it.logic.totalcost.TotalCostCalculator;
 import com.track_it.presentation.util.SetupParameters;
+import com.track_it.logic.totalcost.SubscriptionCalculator;
 
 
 import android.content.Intent;
@@ -79,8 +80,8 @@ public class MainActivity extends AppCompatActivity {
         getSubList(); // Get list of subs from database, and store in listOfSubs
         setUpButtonsAndInput(); // Setup the input fields and buttons
         displayAllSubscriptions(); // Display all the subscriptions
-        displaycost();
-        updateCost();
+        displaycost();//Display cost
+        updateCost();//update button
 
 
     }
@@ -369,31 +370,36 @@ public class MainActivity extends AppCompatActivity {
 
     }
     private void displaycost() {
-        TotalCostCalculator totalCostCalculator = new TotalCostCalculator(listOfSubs);
+        SubscriptionCalculator costCalculator = new TotalCostCalculator(listOfSubs);
+
+        //use costCalculator
 
 
-        totalCostCalculator.cost();
+        costCalculator.cost(listOfSubs);
 
-        double yearlyCost = totalCostCalculator.getYearlyCost();
-        double weeklyCost = totalCostCalculator.getweeklyCost();
-        double dailyCost = totalCostCalculator.getdailyCost();
-        double monthlyCost = totalCostCalculator.getmonthlyCost();
+        double yearlyCost = costCalculator.getYearlyCost();
+        double weeklyCost = costCalculator.getWeeklyCost();
+        double dailyCost = costCalculator.getDailyCost();
+        double monthlyCost = costCalculator.getMonthlyCost();
+
+        //show cost
 
         TextView yearlyCostTextView = findViewById(R.id.yearlyCostTextView);
         yearlyCostTextView.setText(String.format("Yearly Cost: $%.2f", yearlyCost));
 
         TextView monthlyCostTextView = findViewById(R.id.monthlyCostTextView);
-        monthlyCostTextView.setText(String.format("mounth Cost: $%.2f", monthlyCost));
+        monthlyCostTextView.setText(String.format("Mounth Cost: $%.2f", monthlyCost));
 
-        TextView weeklyCostTextView = findViewById(R.id.weeklyCostTextView);
-        weeklyCostTextView.setText(String.format("weekly Cost: $%.2f", weeklyCost));
+        //TextView weeklyCostTextView = findViewById(R.id.weeklyCostTextView);
+        //weeklyCostTextView.setText(String.format("weekly Cost: $%.2f", weeklyCost));
 
-        TextView dailyCostTextView = findViewById(R.id.dailyCostTextView);
-        dailyCostTextView.setText(String.format("daily Cost: $%.2f", dailyCost));
+        //TextView dailyCostTextView = findViewById(R.id.dailyCostTextView);
+        //dailyCostTextView.setText(String.format("Daily Cost: $%.2f", dailyCost));
     }
     private void updateCost() {
         Button updateButton = findViewById(R.id.update_cost);
         updateButton.setOnClickListener(new View.OnClickListener() {
+            //set the update button
             @Override
             public void onClick(View v) {
 
