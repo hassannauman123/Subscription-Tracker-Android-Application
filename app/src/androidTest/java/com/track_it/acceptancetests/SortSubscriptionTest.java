@@ -81,6 +81,7 @@ public class SortSubscriptionTest {
 
         onView(withId(R.id.sort_button)).perform(click()); //Click the sort button
         SystemClock.sleep(TestUtils.getSleepTime());// Let popup load
+        SystemClock.sleep(TestUtils.getSleepTime());// Let popup load
         onView(withText(containsString(sortCriteria))).perform(click()); // click sort by A-z
 
         //Target and make sure all the subscriptions still show up
@@ -112,6 +113,7 @@ public class SortSubscriptionTest {
 
         onView(withId(R.id.sort_button)).perform(click());
         SystemClock.sleep(TestUtils.getSleepTime());// Let popup load
+        SystemClock.sleep(TestUtils.getSleepTime());// Let popup load
         onView(withText(containsString(sortCriteria))).perform(click()); //Click  sort by payment
 
 
@@ -141,7 +143,10 @@ public class SortSubscriptionTest {
         Context currContext = ApplicationProvider.getApplicationContext(); // Get current context so we can use string resources
         String sortCriteria = currContext.getResources().getString(R.string.sort_frequency); // The current sort button will have a text of this
 
+        SystemClock.sleep(TestUtils.getSleepTime());// Let popup load
         onView(withId(R.id.sort_button)).perform(click());
+        SystemClock.sleep(TestUtils.getSleepTime());// Let popup load
+        SystemClock.sleep(TestUtils.getSleepTime());// Let popup load
         SystemClock.sleep(TestUtils.getSleepTime());// Let popup load
         onView(withText(containsString(sortCriteria))).perform(click()); //Click sort by frequency
 
