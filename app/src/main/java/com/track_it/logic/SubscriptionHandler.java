@@ -67,6 +67,26 @@ public class SubscriptionHandler {
         this.tagHandler.removeUnusedTags();
     }
 
+    // Removes a subscription by ID from the database.
+    // Will throw an Exception if subscription could not be deleted from database
+    public void removeSubscriptionByID(int subscriptionID) throws RetrievalException {
+        this.tagHandler.removeSubTagsByID(subscriptionID); //Remove all tags first
+        this.tagHandler.removeUnusedTags(); // remove unused tags
+        this.subscriptionPersistence.removeSubscriptionByID(subscriptionID); // Remove sub from it database
+    }
+
+    // Edit a whole subscription, and save those changes to the database.
+    // This throws Exceptions if new data is invalid, subscriptionID is invalid, or the subscription can't be edited.
+    // Input Parameters:
+    //       subscriptionID  - The id of the subscription to change
+    //       subscriptionToEdit - The details that the subscription will be changed to.
+    public void editWholeSubscription(int subscriptionID, final SubscriptionObj newSubDetails) throws RetrievalException, SubscriptionException, SubscriptionTagException {
+        validateWholeSubscription(newSubDetails); // Validate the subscription
+        this.subscriptionPersistence.editSubscriptionByID(subscriptionID, newSubDetails); // save the edits to subscription persistence
+        this.tagHandler.changeSubTags(newSubDetails); // save the edits to subscription persistence
+        this.tagHandler.removeUnusedTags(); // remove unused tags
+    }
+
 
     //This is a function that simplifies the process of creating a tag list for a subscription.
     // String tag will automatically be turned into a list of tags, and be added to subscription.
@@ -141,8 +161,7 @@ public class SubscriptionHandler {
 
     // Validate the whole subscription.
     // Throws exception if object is invalid
-    public void validateWholeSubscription(final SubscriptionObj subscriptionToValidate) throws SubscriptionException, SubscriptionTagException
-    {
+    public void validateWholeSubscription(final SubscriptionObj subscriptionToValidate) throws SubscriptionException, SubscriptionTagException {
         validateName(subscriptionToValidate.getName());
         validateFrequency(subscriptionToValidate.getPaymentFrequency());
         validatePaymentAmount(subscriptionToValidate.getTotalPaymentInCents());
@@ -155,7 +174,7 @@ public class SubscriptionHandler {
             throw new SubscriptionTagException("Max of " + MAX_TAGS + " tags allowed");
         }
         for (SubscriptionTag currTag : tagsToValidate) {
-            tagHandler.validateTag( currTag);
+            tagHandler.validateTag(currTag);
         }
     }
 
@@ -174,7 +193,6 @@ public class SubscriptionHandler {
             throw new SubscriptionInvalidFrequencyException(inputName + " is not a valid frequency");
         }
     }
-
 
     // This validates the input Payment amount
     // Throw exceptions if invalid.
@@ -207,31 +225,6 @@ public class SubscriptionHandler {
             currSub.setTagList(tagHandler.getTagsForSubscription(currSub));
         }
         return listOFSubs;
-    }
-
-
-    // Removes a subscription by ID from the database.
-    // Will throw an Exception if subscription could not be deleted from database
-    public void removeSubscriptionByID(int subscriptionID) throws RetrievalException
-    {
-        this.tagHandler.removeSubTagsByID(subscriptionID); //Remove all tags first
-        this.tagHandler.removeUnusedTags(); // remove unused tags
-        this.subscriptionPersistence.removeSubscriptionByID(subscriptionID); // Remove sub from it database
-
-
-    }
-
-
-    // Edit a whole subscription, and save those changes to the database.
-    // This throws Exceptions if new data is invalid, subscriptionID is invalid, or the subscription can't be edited.
-    // Input Parameters:
-    //       subscriptionID  - The id of the subscription to change
-    //       subscriptionToEdit - The details that the subscription will be changed to.
-    public void editWholeSubscription(int subscriptionID, final SubscriptionObj newSubDetails) throws RetrievalException, SubscriptionException, SubscriptionTagException {
-        validateWholeSubscription(newSubDetails); // Validate the subscription
-        this.subscriptionPersistence.editSubscriptionByID(subscriptionID, newSubDetails); // save the edits to subscription persistence
-        this.tagHandler.changeSubTags(newSubDetails); // save the edits to subscription persistence
-        this.tagHandler.removeUnusedTags(); // remove unused tags
     }
 
 

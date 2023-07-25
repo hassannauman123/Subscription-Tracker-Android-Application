@@ -61,7 +61,7 @@
 
     <LinearLayout
         android:id="@+id/subscription_list"
-        android:layout_width="160dp"
+        android:layout_width="170dp"
         android:layout_height="86dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -75,7 +75,7 @@
         <include
 
             layout="@layout/frequency_menu"
-            android:layout_width="160dp"
+            android:layout_width="170dp"
             android:layout_height="200dp"
 
             />

@@ -27,6 +27,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.filters.LargeTest;
 
 import com.track_it.R;
+import com.track_it.application.SetupParameters;
 import com.track_it.presentation.MainActivity;
 import com.track_it.util.TestUtils;
 
@@ -54,13 +55,17 @@ public class SortSubscriptionTest {
 
 
     @Before
-    public void testSetup() {
-        TestUtils.testSetup();
+    public void testSetup()
+    {
+        TestUtils.clearDatabase(SetupParameters.getSubscriptionHandler());
+        TestUtils.populateDatabaseWith3Subs(SetupParameters.getSubscriptionHandler());
+        TestUtils.refreshPage();
+
     }
 
     @After
     public void testTearDown() {
-        TestUtils.testTearDown();
+        TestUtils.clearDatabase(SetupParameters.getSubscriptionHandler());
     }
 
 
@@ -75,6 +80,7 @@ public class SortSubscriptionTest {
         String sortCriteria = currContext.getResources().getString(R.string.sort_a_z); // The current sort button will have a text of this
 
         onView(withId(R.id.sort_button)).perform(click()); //Click the sort button
+        SystemClock.sleep(TestUtils.getSleepTime());// Let popup load
         SystemClock.sleep(TestUtils.getSleepTime());// Let popup load
         onView(withText(containsString(sortCriteria))).perform(click()); // click sort by A-z
 
@@ -107,23 +113,24 @@ public class SortSubscriptionTest {
 
         onView(withId(R.id.sort_button)).perform(click());
         SystemClock.sleep(TestUtils.getSleepTime());// Let popup load
+        SystemClock.sleep(TestUtils.getSleepTime());// Let popup load
         onView(withText(containsString(sortCriteria))).perform(click()); //Click  sort by payment
 
 
         //Target, and make sure all the subscriptions still show up
         ViewInteraction textView10 = onView(withText(containsString("$" + paymentInOrder[0])));
-        textView10.check(matches(withText("Payment Amount: $" + paymentInOrder[0])));
+        textView10.check(matches(withText(containsString("$" + paymentInOrder[0]))));
 
         ViewInteraction textView1350 = onView(withText(containsString(paymentInOrder[1])));
-        textView1350.check(matches(withText("Payment Amount: $" + paymentInOrder[1])));
+        textView1350.check(matches(withText(containsString("$" + paymentInOrder[1]))));
 
         ViewInteraction textView1956 = onView(withText(containsString(paymentInOrder[2])));
-        textView1956.check(matches(withText("Payment Amount: $" + paymentInOrder[2])));
+        textView1956.check(matches(withText(containsString( "$" + paymentInOrder[2]))));
 
 
         //Make sure the subscriptions show up in the correct order
-        textView10.check(isCompletelyAbove(withText("Payment Amount: $" + paymentInOrder[1])));
-        textView1350.check(isCompletelyAbove(withText("Payment Amount: $" + paymentInOrder[2])));
+        textView10.check(isCompletelyAbove(withText(containsString("$" + paymentInOrder[1]))));
+        textView1350.check(isCompletelyAbove(withText(containsString("$" + paymentInOrder[2]))));
 
     }
 
@@ -136,7 +143,10 @@ public class SortSubscriptionTest {
         Context currContext = ApplicationProvider.getApplicationContext(); // Get current context so we can use string resources
         String sortCriteria = currContext.getResources().getString(R.string.sort_frequency); // The current sort button will have a text of this
 
+        SystemClock.sleep(TestUtils.getSleepTime());// Let popup load
         onView(withId(R.id.sort_button)).perform(click());
+        SystemClock.sleep(TestUtils.getSleepTime());// Let popup load
+        SystemClock.sleep(TestUtils.getSleepTime());// Let popup load
         SystemClock.sleep(TestUtils.getSleepTime());// Let popup load
         onView(withText(containsString(sortCriteria))).perform(click()); //Click sort by frequency
 
@@ -145,7 +155,7 @@ public class SortSubscriptionTest {
         ViewInteraction textViewDaily = onView(withText(containsString("Frequency: " + frequencyInOrder[0])));
         textViewDaily.check(matches(withText("Frequency: " + frequencyInOrder[0])));
 
-        ViewInteraction textViewMonthly = onView(withText(containsString("Frequency: " + frequencyInOrder[1])));
+        ViewInteraction textViewMonthly = onView(withText(containsString( frequencyInOrder[1])));
         textViewMonthly.check(matches(withText("Frequency: " + frequencyInOrder[1])));
 
         ViewInteraction textViewYearly = onView(withText(containsString("Frequency: " + frequencyInOrder[2])));

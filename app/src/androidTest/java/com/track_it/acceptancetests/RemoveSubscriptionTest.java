@@ -21,6 +21,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.filters.LargeTest;
 
 import com.track_it.R;
+import com.track_it.application.SetupParameters;
 import com.track_it.presentation.MainActivity;
 import com.track_it.util.TestUtils;
 
@@ -49,15 +50,17 @@ public class RemoveSubscriptionTest {
     public ActivityScenarioRule<MainActivity> mActivityScenarioRule = new ActivityScenarioRule<>(MainActivity.class);
 
     @Before
-    public void testSetup() {
-        TestUtils.testSetup();
+    public void testSetup()
+    {
+        TestUtils.clearDatabase(SetupParameters.getSubscriptionHandler());
+        TestUtils.refreshPage();
+
     }
 
     @After
     public void testTearDown() {
-        TestUtils.testTearDown();
+        TestUtils.clearDatabase(SetupParameters.getSubscriptionHandler());
     }
-
 
 
 
@@ -72,6 +75,7 @@ public class RemoveSubscriptionTest {
 
         //Delete sub
         onView(withText("Name: " + originalName)).perform(click());
+        SystemClock.sleep(TestUtils.getSleepTime());
         onView(ViewMatchers.withId(R.id.details_delete_subscription)).perform(click()); // Click delete sub
         SystemClock.sleep(TestUtils.getSleepTime());// Let popup confirmation load
         onView(allOf(withId(android.R.id.button2), withText("Yes"))).perform(click());     //Click the yes button to confirm delete
