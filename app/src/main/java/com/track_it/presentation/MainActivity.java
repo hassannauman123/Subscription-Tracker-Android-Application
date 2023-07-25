@@ -93,7 +93,6 @@ public class MainActivity extends AppCompatActivity {
         setUpButtonsAndInput(); // Setup the input fields and buttons
         displayAllSubscriptions(); // Display all the subscriptions
         displaycost();//Display cost
-        updateCost();//update button
 
 
     }
@@ -114,6 +113,7 @@ public class MainActivity extends AppCompatActivity {
         tagFilterList.clear();  //Clear filter on restart
         enableDisplayFilterSwitch(false);
         displayAllSubscriptions(); // Display all the subs
+        displaycost();
     }
 
 
@@ -535,22 +535,6 @@ public class MainActivity extends AppCompatActivity {
         //TextView dailyCostTextView = findViewById(R.id.dailyCostTextView);
         //dailyCostTextView.setText(String.format("Daily Cost: $%.2f", dailyCost));
     }
-    private void updateCost() {
-        Button updateButton = findViewById(R.id.update_cost);
-        updateButton.setOnClickListener(new View.OnClickListener() {
-            //set the update button
-            @Override
-            public void onClick(View v) {
-
-                displaycost();
-            }
-        });
-
-
-
-    }
-
-
 
 
 }
