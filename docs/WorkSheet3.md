@@ -1,5 +1,4 @@
 
-
 ## What technical debt has been cleaned up
 
 
@@ -29,4 +28,4 @@ It was very difficult to get the acceptance test to properly select a dynamicall
 
 ## Velocity/teamwork  
 
-Our time estimate accuracy more or less stayed the same through out the two iterations. In both iterations the actual time spent was close to the estimate. In should be noted though, that for iteration 2 there were a lot more tasks that we did that were not recorded in our estimate. For instance, setting up the hsqldb and creating the integration tests was not counted as developer tasks, but took a lot of time. * Be sure to link to the velocity here. 
+Our time estimate accuracy more or less stayed the same through out the two iterations. In both iterations the actual time spent was close to the estimate. In should be noted though, that for iteration 2 there were a lot more tasks that we did not record in our estimate. For instance, setting up the hsqldb and creating the integration tests was not counted as developer tasks, but took a lot of time. * Be sure to link to the velocity here. 
