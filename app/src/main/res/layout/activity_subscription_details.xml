@@ -6,19 +6,32 @@
     android:layout_height="match_parent"
     tools:context=".presentation.SubscriptionDetailsActivity"
     android:background="@color/white"
+    android:id="@+id/activity_subscription_details"
     >
 
     <TextView
-        android:id="@+id/textView11"
+        android:id="@+id/textView13"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginBottom="280dp"
-        android:text="Frequency:"
+        android:layout_marginStart="36dp"
+        android:layout_marginBottom="472dp"
+        android:text="Name:  "
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <EditText
+        android:id="@+id/detail_subscription_amount"
+        android:layout_width="75dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="408dp"
+        android:ems="2"
+        android:inputType="numberDecimal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.008"
+        app:layout_constraintStart_toEndOf="@+id/textView12" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/parent_drop_menu"
@@ -26,7 +39,7 @@
         android:layout_width="153dp"
         android:layout_height="53dp"
         android:layout_marginEnd="80dp"
-        android:layout_marginBottom="268dp"
+        android:layout_marginBottom="316dp"
         android:hint=""
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -49,8 +62,8 @@
         android:id="@+id/textView12"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginBottom="368dp"
+        android:layout_marginStart="36dp"
+        android:layout_marginBottom="416dp"
         android:text="Payment Amount: $"
         android:textSize="20sp"
         android:textStyle="bold"
@@ -58,12 +71,51 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
-        android:id="@+id/textView13"
+        android:id="@+id/textView11"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginBottom="424dp"
-        android:text="Name:  "
+        android:layout_marginStart="36dp"
+        android:layout_marginBottom="328dp"
+        android:text="Frequency:"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <EditText
+        android:id="@+id/detail_subscription_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="40dp"
+        android:layout_marginBottom="460dp"
+        android:ems="10"
+        android:text=""
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.433"
+        app:layout_constraintStart_toEndOf="@+id/textView13" />
+
+    <EditText
+        android:id="@+id/tag_input"
+        android:layout_width="276dp"
+        android:layout_height="48dp"
+        android:layout_marginBottom="224dp"
+        android:ems="10"
+        android:hint="Add Tags"
+        android:inputType="text"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.863"
+        app:layout_constraintStart_toStartOf="parent" />
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="36dp"
+        android:layout_marginBottom="236dp"
+        android:text="Tags:  "
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -110,31 +162,6 @@
         app:layout_constraintHorizontal_bias="0.487"
         app:layout_constraintStart_toStartOf="parent" />
 
-
-    <EditText
-        android:id="@+id/detail_subscription_amount"
-        android:layout_width="75dp"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="360dp"
-        android:ems="2"
-        android:inputType="numberDecimal"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.04"
-        app:layout_constraintStart_toEndOf="@+id/textView12" />
-
-    <EditText
-        android:id="@+id/detail_subscription_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="40dp"
-        android:layout_marginBottom="412dp"
-        android:ems="10"
-        android:text=""
-        android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/textView13" />
 
     <Button
         android:id="@+id/go_home"

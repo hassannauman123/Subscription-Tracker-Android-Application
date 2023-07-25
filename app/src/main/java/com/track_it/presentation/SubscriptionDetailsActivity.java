@@ -11,7 +11,6 @@ import android.view.View;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,14 +18,13 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.textfield.TextInputLayout;
 import com.track_it.R;
+import com.track_it.application.SetupParameters;
 import com.track_it.domainobject.SubscriptionObj;
-import com.track_it.logic.exceptions.DataBaseException;
+import com.track_it.domainobject.SubscriptionTag;
+import com.track_it.logic.exceptions.RetrievalException;
 import com.track_it.logic.exceptions.SubscriptionException;
 import com.track_it.logic.SubscriptionHandler;
-import com.track_it.presentation.util.DecimalDigitsInputFilter;
-import com.track_it.presentation.util.FrequencyMenu;
-import com.track_it.presentation.util.SetupParameters;
-import com.track_it.presentation.util.SubscriptionInput;
+import com.track_it.logic.exceptions.SubscriptionTagException;
 
 
 //This is the activity java file for the edit description details page.
@@ -41,13 +39,15 @@ public class SubscriptionDetailsActivity extends AppCompatActivity {
     private boolean editMode = false; // Are we in edit mode? Determines whether the input can be edited, and behaviour of the edit/save button
 
     // Various color - We should probably put this in some type of shared resource location later
-    private final String  errorColor = "#ff0002"; //// error text color
-    private final String accomplishColor = "#8c1f7c"; // Accomplish text color
-    private final String saveButtonColor = "#57f2a0"; // what color the save button will be
-    private final String editButtonColor = "#6632a8";// what color the edit color button will be
 
-    private final String editableColor = "#555555"; // The color input will be when it is editable
-    private final String nonEditableColor = "#000000";  // The color input will be when it is uneditable
+
+    //Set by resource file
+    private String errorColor; // error text color
+    private String accomplishColor; // Accomplish text color
+    private String saveButtonColor; // what color the save button will be
+    private String editButtonColor; // what color the edit color button will be
+    private String editableColor; // The color input will be when it is editable
+    private String nonEditableColor;  // The color input will be when it is uneditable
 
 
     // Various targets for buttons, and text regions
@@ -60,6 +60,7 @@ public class SubscriptionDetailsActivity extends AppCompatActivity {
     private Button backButton;
     private Button deleteButton;
 
+    private EditText tagInput;
 
     //String constants, messages to display to user
     private static final String validEditMessage = "Subscription Edited!"; // if edit was successful
@@ -75,7 +76,6 @@ public class SubscriptionDetailsActivity extends AppCompatActivity {
     private boolean loadSub = false; // Were we able to load the subscription object using the info passed to this activity;
 
 
-
     private AutoCompleteTextView frequencyTarget;
     private TextInputLayout dropDownMenuParent;
 
@@ -86,38 +86,47 @@ public class SubscriptionDetailsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_subscription_details);
 
-        // Set the various targets and variables
+
+        setColors();
+
+        // Set the various global targets and variables
         setTargets();
 
-        //Set input
-        int maxLength = subHandler.getMaxNameLength();
-        nameTarget.setFilters( new InputFilter[] {new InputFilter.LengthFilter(maxLength)}); // Set max length of name
+        constrainInput(); // Set up some filters, to constrain what is allowable input from user
 
+        FrequencyMenu.initializeMenu(this, subHandler, frequencyTarget); //setup frequency menu
 
-        FrequencyMenu.initializeMenu(this, subHandler, frequencyTarget); //setup frquency menu
         enableInputChanges(editMode); // Disable editing sub details
 
         //Enable go back to home button
         enableGoBackButton();
 
-        //Try to get the loaded subscription from arguments passed to this activity
-        if ( getSubscription(subscriptionToDisplay)) // Make sure the subscription object was able to load
+        //Try to load the subscription from arguments passed to this activity
+        if (getSubscription(subscriptionToDisplay)) // Make sure the subscription object was able to load
         {
             //Only Enable delete and Edit buttons if we could load subscription
             enableDeleteAndEditButtons();
         }
 
-        // This physically constrains the user for what they can enter into the payment amount field ( How many digits before decimal, how many after)
-        EditText etText = findViewById(R.id.detail_subscription_amount);  // Target Payment amount input
-        etText.setFilters(new InputFilter[]{new DecimalDigitsInputFilter(MAX_PAYMENT_DECIMALS, MAX_DIGITS_BEFORE_DECIMAL)}); // Pass setFilters and array
+        TagColors.setTextWatcher(this, tagInput);
+
 
     }
 
 
+    //Set colors by resource file
+    private void setColors() {
+        errorColor = getResources().getString(R.color.error_color);
+        accomplishColor = getResources().getString(R.color.accomplish_color); // Accomplish text color
+        saveButtonColor = getResources().getString(R.color.save_button_color); // what color the save button will be
+        editButtonColor = getResources().getString(R.color.edit_button_color);// what color the edit color button will be
+        editableColor = getResources().getString(R.color.editable_color); // The color input will be when it is editable
+        nonEditableColor = getResources().getString(R.color.noneditable_color);  // The color input will be when it is uneditable
+    }
 
-    //Sets the private variable targets so they can be used through out the activity
-    private void setTargets()
-    {
+
+    //Sets the variable targets so they can be used through out the activity
+    private void setTargets() {
 
 
         // Get subscription handle
@@ -137,11 +146,29 @@ public class SubscriptionDetailsActivity extends AppCompatActivity {
         editButton = (Button) findViewById(R.id.details_edit_subscription);
         deleteButton = (Button) findViewById(R.id.details_delete_subscription);
 
+        //Get tag input target
+        tagInput = ((EditText) findViewById(R.id.tag_input));
+
 
     }
 
-    private void enableGoBackButton()
-    {
+
+    //This function will set up a few filters, constraining what the user is allowed to enter for input.
+    private void constrainInput() {
+
+        //Set input some restriction for name input
+        int maxLength = subHandler.getMaxNameLength();
+        nameTarget.setFilters(new InputFilter[]{new InputFilter.LengthFilter(maxLength)}); // Set max length of name
+
+        // This physically constrains the user for what they can enter into the payment amount field ( How many digits before decimal, how many after)
+        EditText etText = findViewById(R.id.detail_subscription_amount);  // Target Payment amount input
+        etText.setFilters(new InputFilter[]{new DecimalDigitsInputFilter(MAX_PAYMENT_DECIMALS, MAX_DIGITS_BEFORE_DECIMAL)}); // Pass setFilters and array
+
+
+    }
+
+
+    private void enableGoBackButton() {
         //Enable go back to home button
         backButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -154,16 +181,10 @@ public class SubscriptionDetailsActivity extends AppCompatActivity {
     }
 
 
-    private void enableDeleteAndEditButtons()
-    {
+    private void enableDeleteAndEditButtons() {
         deleteButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-
-                if ( !editMode)  // If we are not in edit mode, let the user delete it
-                {
-                    createDialog(subscriptionToDisplay.getID());
-                }
-
+                createDialog(subscriptionToDisplay.getID());
             }
         });
 
@@ -177,19 +198,14 @@ public class SubscriptionDetailsActivity extends AppCompatActivity {
     }
 
 
-
-
-
     //This will try to get the a subscription object from the logic layer, using the arguments passed to this activity via extras.
     // This function will return true if subscription could be retrieved, else returns false.
-    private boolean getSubscription(SubscriptionObj subscription)
-    {
+    private boolean getSubscription(SubscriptionObj subscription) {
 
         boolean loadedSub = false;
 
         Bundle extras = getIntent().getExtras();
-        if (extras != null)
-        {
+        if (extras != null) {
             int subscriptionID = extras.getInt("subscriptionID"); //Get subscriptionID
 
             try {
@@ -201,12 +217,10 @@ public class SubscriptionDetailsActivity extends AppCompatActivity {
             } catch (SubscriptionException e) // Failed to get subscription
             {
                 setGeneralError(e.getMessage(), errorColor);
-            }
-            catch (DataBaseException e) {
+            } catch (RetrievalException e) {
                 setGeneralError(e.getMessage(), errorColor);
             }
-        }
-        else  // Display an error letting the user know that there was an error getting subscription
+        } else  // Display an error letting the user know that there was an error getting subscription
         {
             setGeneralError("Invalid Selection for subscription", errorColor);
         }
@@ -217,8 +231,7 @@ public class SubscriptionDetailsActivity extends AppCompatActivity {
 
 
     //Enable and disable frequency dropdown menu based on boolean argument passed to this function
-    private void dropDownFrequencyMenuEnabled(boolean enable)
-    {
+    private void dropDownFrequencyMenuEnabled(boolean enable) {
 
         frequencyTarget.setEnabled(enable);
         dropDownMenuParent.setFocusableInTouchMode(enable);
@@ -226,15 +239,12 @@ public class SubscriptionDetailsActivity extends AppCompatActivity {
         frequencyTarget.setTextColor(getResources().getColor(R.color.black));
 
         //Change background color based on whether it is enabled or disabled
-        if ( enable) {
+        if (enable) {
             frequencyTarget.setBackgroundColor(getResources().getColor(R.color.white_grey));
-         }
-        else
-        {
+        } else {
             frequencyTarget.setBackgroundColor(getResources().getColor(R.color.white));
-         }
+        }
     }
-
 
 
     // This changes whether the input for subscription details can be edited by the user.
@@ -243,12 +253,11 @@ public class SubscriptionDetailsActivity extends AppCompatActivity {
     private void enableInputChanges(boolean inputBool) {
         nameTarget.setEnabled(inputBool);
         paymentAmountTarget.setEnabled(inputBool);
-
-
+        tagInput.setEnabled(inputBool);
+        tagInput.setTextColor(getResources().getColor(R.color.black));
 
         // Change color of input, and disable/enable drop down menu
-        if (inputBool)
-        {
+        if (inputBool) {
             nameTarget.setTextColor(Color.parseColor(editableColor));
             paymentAmountTarget.setTextColor(Color.parseColor(editableColor));
             dropDownFrequencyMenuEnabled(true);
@@ -265,8 +274,6 @@ public class SubscriptionDetailsActivity extends AppCompatActivity {
         if (editMode == false) {
             editButton.setBackgroundColor(Color.parseColor(editButtonColor));
             editButton.setText("Edit Subscription");
-
-
         } else {
             editButton.setBackgroundColor(Color.parseColor(saveButtonColor));
             editButton.setText("Save Changes");
@@ -274,36 +281,27 @@ public class SubscriptionDetailsActivity extends AppCompatActivity {
     }
 
     // This runs when a user clicks the edit \ Save changes button
-    private void editButton()
-    {
+    private void editButton() {
 
 
         //If we are not in edit mode, and the subscription has not already been deleted  -then switch to edit mode
-        if (editMode == false && !alreadyDeleted)
-        {
-            editMode = true; // change to edit mode
-            switchEditModes(editMode);
+        if (editMode == false && !alreadyDeleted) {
+            switchEditModes();
 
 
-        }
-        else if ( alreadyDeleted) // Else if the subscription has already been deleted
+        } else if (alreadyDeleted) // Else if the subscription has already been deleted
         {
             setGeneralError("Cannot edit subscription:\n Subscription has been deleted!", errorColor); // Display error message, letting user know subscription has aready beendeleted
 
-        }
-
-
-        else // Else we are in edit mode, and user is trying to save the changes.
+        } else // Else we are in edit mode, and user is trying to save the changes.
         {
             trySaveSubscriptionChanges(); //Will try to save user changes of the subscription details. Will display error if changes are invalid
         }
     }
 
 
-
     //Will try to save user changes of the subscription details. Will display error if changes are invalid
-    private void trySaveSubscriptionChanges()
-    {
+    private void trySaveSubscriptionChanges() {
 
         boolean valid = true;// Tells us if everything the user entered is valid
 
@@ -313,8 +311,7 @@ public class SubscriptionDetailsActivity extends AppCompatActivity {
 
             subHandler.validateFrequency(inputFrequency);
 
-        }
-        catch (SubscriptionException e)  //Catch - Frequency was not valid
+        } catch (SubscriptionException e)  //Catch - Frequency was not valid
         {
             // Display error
             valid = false;
@@ -324,16 +321,14 @@ public class SubscriptionDetailsActivity extends AppCompatActivity {
         }
 
 
-
         // Get the payment amount the user Enter
-        SubscriptionInput subInput = new SubscriptionInput(subHandler);
+        SubscriptionInput subInput = new SubscriptionInput();
         int inputPaymentAmount = 0;
 
-        try
-        {
+        try {
             inputPaymentAmount = subInput.getPaymentAmountInput(paymentAmountTarget); // This function throws exceptions if payment invalid
-        }
-        catch(SubscriptionException e) // Payment amount not valid
+            subHandler.validatePaymentAmount(inputPaymentAmount);
+        } catch (SubscriptionException e) // Payment amount not valid
         {
             // Display errors
             valid = false;
@@ -356,6 +351,20 @@ public class SubscriptionDetailsActivity extends AppCompatActivity {
 
         }
 
+        // Get the string the user entered for tags
+        String tagSting = tagInput.getText().toString().trim().toLowerCase(); // get string, and remove white spaces, and change to lowercase
+        try {
+            subHandler.setTags(subscriptionToDisplay, tagSting); // Set tags
+            subHandler.validateTagList(subscriptionToDisplay.getTagList()); //Validate tags
+
+        } catch (SubscriptionException | SubscriptionTagException e) // Catch - tags not valid
+        {
+            // Display errors
+            valid = false;
+            setGeneralError(e.getMessage(), errorColor);
+            generalErrorTarget.setVisibility(View.VISIBLE);
+
+        }
 
 
         // If everything was detected as valid, try to save the changed info
@@ -371,19 +380,18 @@ public class SubscriptionDetailsActivity extends AppCompatActivity {
                 subHandler.editWholeSubscription(subscriptionToDisplay.getID(), subscriptionToDisplay);
 
                 //Everything worked, so time to switch back to none-edit mode!
-                editMode = false;
-                switchEditModes(editMode);
+                switchEditModes();
 
-            } catch (SubscriptionException e)
-            {
-                //There was some error with saving changes
-                setGeneralError(e.getMessage(), errorColor);
-                generalErrorTarget.setVisibility(View.VISIBLE);
-            }
-            catch (DataBaseException e)  //Catch - Something wrong with databsae saving
+            } catch (SubscriptionException |
+                     SubscriptionTagException e)   //There was some error with the changes
             {
                 // Display error
-                 setGeneralError(e.getMessage(), errorColor);
+                setGeneralError(e.getMessage(), errorColor);
+                generalErrorTarget.setVisibility(View.VISIBLE);
+            } catch (RetrievalException e)  //Catch - Something wrong with database saving changes
+            {
+                // Display error
+                setGeneralError(e.getMessage(), errorColor);
                 generalErrorTarget.setVisibility(View.VISIBLE);
 
             }
@@ -395,7 +403,7 @@ public class SubscriptionDetailsActivity extends AppCompatActivity {
 
 
     //What runs when a subscription is successfully deleted
-    private void deleted(){
+    private void deleted() {
         //Display a toast message, and switch back to home screen
         Toast.makeText(this, successDeleteMessage, Toast.LENGTH_SHORT).show(); //Display "Subscription Deleted"
         setContentView(R.layout.activity_main); // Switch screen to display main page
@@ -404,26 +412,22 @@ public class SubscriptionDetailsActivity extends AppCompatActivity {
 
 
     //switch edit modes based on boolean input
-    private void switchEditModes(boolean editMode)
-    {
+    private void switchEditModes() {
+        editMode = !editMode;
 
-        if (editMode )  // Switch to edit mode
+        if (editMode)  // Switch to edit mode
         {
-
-            editMode = true; // change to edit mode
             enableInputChanges(true); // enable the inputs to be edited
             changeEditButton(); // toggle the edit button to change
 
-        }
-        else // Switch to non edit mode
+        } else // Switch to non edit mode
         {
-            //Everything worked, so time to switch back to none-edit mode!
-            editMode = editMode;
             enableInputChanges(editMode); // No longer allow inputs to be edited
             changeEditButton(); // Edit button changes back
             setGeneralError(validEditMessage, accomplishColor);
-
         }
+
+
     }
 
 
@@ -435,7 +439,7 @@ public class SubscriptionDetailsActivity extends AppCompatActivity {
         // Make a Yes button, meaning that the user does in fact want to delete the subscription
         builder.setNegativeButton("Yes", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
-                 try {
+                try {
 
                     subHandler.removeSubscriptionByID(subscriptionToDelete); // Attempt to delete the sub
                     alreadyDeleted = true;
@@ -472,13 +476,18 @@ public class SubscriptionDetailsActivity extends AppCompatActivity {
 
 
     //set what will show for the subscription information details in the various text fields
-    private void setDetails(SubscriptionObj subscriptionToDisplay)
-    {
+    private void setDetails(SubscriptionObj subscriptionToDisplay) {
         nameTarget.setText(subscriptionToDisplay.getName());
-        paymentAmountTarget.setText(subscriptionToDisplay.getPaymentDollars() + "." +  String.format("%02d", subscriptionToDisplay.getPaymentCents())  );
-        frequencyTarget.setText((subscriptionToDisplay.getPaymentFrequency()),false);
-    }
+        paymentAmountTarget.setText(subscriptionToDisplay.getPaymentDollars() + "." + String.format("%02d", subscriptionToDisplay.getPaymentCents()));
+        frequencyTarget.setText((subscriptionToDisplay.getPaymentFrequency()), false);
 
+        String allTags = "";
+        for (SubscriptionTag currTag : subscriptionToDisplay.getTagList()) {
+            allTags += currTag.getName() + " ";
+        }
+
+        TagColors.setTagColors(this, tagInput, allTags);
+    }
 
 
 }

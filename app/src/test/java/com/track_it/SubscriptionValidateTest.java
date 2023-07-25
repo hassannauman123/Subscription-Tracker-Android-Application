@@ -4,8 +4,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import com.track_it.logic.SubscriptionHandler;
-import com.track_it.persistence.fakes.FakeSubscriptionPersistenceDatabase;
-import com.track_it.presentation.util.SetupParameters;
+import com.track_it.application.SetupParameters;
 import com.track_it.util.TestUtils;
 
 import org.junit.Before;
@@ -22,11 +21,10 @@ public class SubscriptionValidateTest {
 
     //Setup a fake database each time
     @Before
-    public void setTestHandle()
-    {
+    public void setTestHandle() {
 
-         TestUtils.changeDatabase();
-         subHandle =  SetupParameters.getSubscriptionHandler();
+        TestUtils.changeDatabase();
+        subHandle = SetupParameters.getSubscriptionHandler();
 
     }
 
@@ -277,16 +275,14 @@ public class SubscriptionValidateTest {
 
         // Invalid data with correct frequency + char
         thrown = false;
-        inputFrequency = subHandle.getFrequencyNameList().get(0) +  "1";
+        inputFrequency = subHandle.getFrequencyNameList().get(0) + "1";
 
         try {
             subHandle.validateFrequency(inputFrequency);
         } catch (Exception e) {
             thrown = true;
         }
-        assertTrue("'"+ subHandle.getFrequencyNameList().get(0) + "1' was incorrectly accepted as valid payment frequency", thrown);
-
-
+        assertTrue("'" + subHandle.getFrequencyNameList().get(0) + "1' was incorrectly accepted as valid payment frequency", thrown);
 
 
         // Invalid data with correct frequency + blank character
@@ -298,7 +294,7 @@ public class SubscriptionValidateTest {
         } catch (Exception e) {
             thrown = true;
         }
-        assertTrue("'"+ subHandle.getFrequencyNameList().get(1) + " ' was incorrectly accepted as valid payment frequency", thrown);
+        assertTrue("'" + subHandle.getFrequencyNameList().get(1) + " ' was incorrectly accepted as valid payment frequency", thrown);
 
 
         // Invalid data with correct frequency + blank character
@@ -310,7 +306,7 @@ public class SubscriptionValidateTest {
         } catch (Exception e) {
             thrown = true;
         }
-        assertTrue("' "+ subHandle.getFrequencyNameList().get(1) + "' was incorrectly accepted as valid payment frequency", thrown);
+        assertTrue("' " + subHandle.getFrequencyNameList().get(1) + "' was incorrectly accepted as valid payment frequency", thrown);
 
 
         System.out.println("PASSED testing validatePaymentFrequency with invalid Data!");
@@ -329,25 +325,21 @@ public class SubscriptionValidateTest {
 
         // Invalid data with correct frequency + char
         thrown = false;
-        List<String> allowableFrequency= subHandle.getFrequencyNameList();
+        List<String> allowableFrequency = subHandle.getFrequencyNameList();
 
-        for (int i = 0; i < allowableFrequency.size(); i++)
-        {
+        for (int i = 0; i < allowableFrequency.size(); i++) {
             thrown = false;
             inputFrequency = allowableFrequency.get(i);
             try {
                 subHandle.validateFrequency(inputFrequency);
 
-            }
-            catch ( Exception e)
-            {
+            } catch (Exception e) {
                 System.out.println(e.getMessage());
                 thrown = true;
             }
 
-            assertTrue("validate frequency Test failed with input " + inputFrequency,!thrown);
+            assertTrue("validate frequency Test failed with input " + inputFrequency, !thrown);
         }
-
 
 
         System.out.println("PASSED testing validatePaymentFrequency with valid Data!");
@@ -398,7 +390,7 @@ public class SubscriptionValidateTest {
 
         // Payment too large
         thrown = false;
-        paymentAmount =  Integer.MAX_VALUE;
+        paymentAmount = Integer.MAX_VALUE;
         try {
             subHandle.validatePaymentAmount(paymentAmount);
         } catch (Exception e) {
@@ -408,7 +400,7 @@ public class SubscriptionValidateTest {
 
         // Payment too large
         thrown = false;
-        paymentAmount =  subHandle.getMaxPaymentTotal() + 1;
+        paymentAmount = subHandle.getMaxPaymentTotal() + 1;
         try {
             subHandle.validatePaymentAmount(paymentAmount);
         } catch (Exception e) {
@@ -419,11 +411,9 @@ public class SubscriptionValidateTest {
         System.out.println("PASSED testing validatePaymentAmount with invalid Data!");
 
 
-
-
         // Payment should be too large by exactly 1 cent!
         thrown = false;
-        paymentAmount =  9999;// should be like 9999
+        paymentAmount = 9999;// should be like 9999
         paymentAmount = paymentAmount * 100;
         paymentAmount += 100;
         try {
@@ -432,8 +422,7 @@ public class SubscriptionValidateTest {
         } catch (Exception e) {
             thrown = true;
         }
-        assertTrue( "PaymentAmount " + paymentAmount + " was said to be valid, when it was suppose to be invalid", thrown);
-
+        assertTrue("PaymentAmount " + paymentAmount + " was said to be valid, when it was suppose to be invalid", thrown);
 
 
         System.out.println("PASSED testing validatePaymentAmount with invalid Data!");
@@ -463,27 +452,26 @@ public class SubscriptionValidateTest {
 
         int maxPayment = subHandle.getMaxPaymentTotal();
         //Cycle through all correct payments
-       for ( int i = 1 ; i <=maxPayment; i++ )
-       {
+        for (int i = 1; i <= maxPayment; i++) {
 
-           thrown = false;
-           paymentAmount= i;
-           try {
-               subHandle.validatePaymentAmount(paymentAmount);
-           } catch (Exception e) {
+            thrown = false;
+            paymentAmount = i;
+            try {
+                subHandle.validatePaymentAmount(paymentAmount);
+            } catch (Exception e) {
 
-               System.out.println("Validate payment amount failed with input "+ i);
-               thrown = true;
-           }
+                System.out.println("Validate payment amount failed with input " + i);
+                thrown = true;
+            }
 
-           assertFalse(i + "should have been considered a valid payment amount", thrown);
+            assertFalse(i + "should have been considered a valid payment amount", thrown);
 
-       }
+        }
 
 
         // Payment should be valid (The exact max payment allowed)
         thrown = false;
-        paymentAmount =  9999; // should be like 9999
+        paymentAmount = 9999; // should be like 9999
         paymentAmount = paymentAmount * 100;
         paymentAmount += 99;
         try {
@@ -492,7 +480,7 @@ public class SubscriptionValidateTest {
         } catch (Exception e) {
             thrown = true;
         }
-        assertFalse(   "PaymentAmount " + paymentAmount + " was said to be invalid, when it was suppose to be valid", thrown);
+        assertFalse("PaymentAmount " + paymentAmount + " was said to be invalid, when it was suppose to be valid", thrown);
 
         System.out.println("PASSED testing validatePaymentAmount with valid Data!");
 

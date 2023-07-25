@@ -29,7 +29,7 @@ public class DBHelper {
 
             copyAssetsToDirectory(context, assetNames, dataDirectory);
 
-            com.track_it.application.Main.setDBPathName(dataDirectory.toString() + "/" + com.track_it.application.Main.getDBPathName());
+            Main.setDBPathName(dataDirectory.toString() + "/" + Main.getDBPathName());
 
         } catch (final IOException ioe) {
             System.out.println("Unable to access application data: " + ioe.getMessage());
