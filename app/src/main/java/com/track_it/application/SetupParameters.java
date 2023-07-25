@@ -42,6 +42,8 @@ public class SetupParameters {
     //Database used
     private static SubscriptionPersistence subscriptionPersistenceDatabase = Services.getSubscriptionPersistence();  // Database that we will use
     private static SubscriptionTagPersistence tagPersistenceDatabase = Services.getSubscriptionTagPersistence();  // Database that we will use
+    //private static SubscriptionTagPersistence tagPersistenceDatabase = new FakeSubscriptionTagPersistenceDB(); // Database that we will use
+
 
     //Singleton items
     private static SubscriptionHandler subHandler = null; // subscription handler

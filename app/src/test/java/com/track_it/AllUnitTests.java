@@ -13,7 +13,8 @@ import org.junit.runners.Suite;
         SubscriptionsAddEditRemoveTest.class,
         SubscriptionValidateTest.class,
         SubscriptionSortTest.class,
-        UnitTagTest.class
+        UnitTagTest.class,
+        SubscriptionFilterTest.class
 }
 )
 

@@ -1,8 +1,10 @@
 package com.track_it.util;
 
 import com.track_it.application.Main;
+
 import java.io.File;
 import java.io.IOException;
+
 import com.google.common.io.Files;
 import com.track_it.persistence.SubscriptionPersistence;
 import com.track_it.persistence.SubscriptionTagPersistence;
@@ -36,17 +38,16 @@ public class TestUtils {
                 File tempDB;
                 tempDB = TestUtils.copyDB();
                 final SubscriptionPersistence subPersistence = new SubscriptionPersistenceHSQLDB(tempDB.getAbsolutePath().replace(".script", ""), "false");
-                final SubscriptionTagPersistence subTagPersistence = new SubscriptionTagPersistenceHSQLDB(tempDB.getAbsolutePath().replace(".script", ""),"false") {
+                final SubscriptionTagPersistence subTagPersistence = new SubscriptionTagPersistenceHSQLDB(tempDB.getAbsolutePath().replace(".script", ""), "false") {
                 };
 
-                SetupParameters.initializeDatabase(subPersistence,subTagPersistence);
+                SetupParameters.initializeDatabase(subPersistence, subTagPersistence);
             } catch (IOException e) {
                 System.out.println(e.getMessage());
 
             }
         } else //Use fake Database
         {
-
             SetupParameters.initializeDatabase(new FakeSubscriptionPersistenceDB(), new FakeSubscriptionTagPersistenceDB());
         }
     }

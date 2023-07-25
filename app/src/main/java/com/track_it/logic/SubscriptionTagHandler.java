@@ -52,13 +52,6 @@ public class SubscriptionTagHandler {
         return this.subscriptionTagPersistence.getAllTags();
     }
 
-    public void validateTagString(String inputTagString) throws SubscriptionTagException {
-        String[] splitTagString = inputTagString.split(TAG_SPLIT_CRITERIA);
-
-        for (String currName : splitTagString) {
-            validateTagName(currName);
-        }
-    }
 
 
     public void validateTag(SubscriptionTag inputTag) throws SubscriptionTagException
@@ -80,6 +73,11 @@ public class SubscriptionTagHandler {
 
     public String getSplitCriteria() {
         return TAG_SPLIT_CRITERIA;
+    }
+
+    public int getMaxTagNameLength()
+    {
+        return MAX_NAME_TAG_LENGTH;
     }
 
 
