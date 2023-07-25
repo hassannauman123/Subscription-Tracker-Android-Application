@@ -1,4 +1,4 @@
-<com.google.android.material.textfield.TextInputLayout android:id="@+id/parent_drop_menu"
+<com.google.android.material.textfield.TextInputLayout android:id="@+id/parent_drop_menu2"
     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
     android:layout_width="0dp"
     android:layout_height="53dp"
@@ -10,7 +10,9 @@
     app:layout_constraintTop_toTopOf="@+id/textView11"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+
+    >
 
     <AutoCompleteTextView
         android:id="@+id/AutoComplete_drop_menu"
