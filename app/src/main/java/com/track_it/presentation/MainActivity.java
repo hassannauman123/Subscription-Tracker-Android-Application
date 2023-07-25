@@ -23,7 +23,6 @@ import com.track_it.logic.exceptions.RetrievalException;
 import com.track_it.logic.exceptions.SubscriptionException;
 import com.track_it.logic.exceptions.SubscriptionInvalidFrequencyException;
 import com.track_it.logic.totalcost.TotalCostCalculator;
-import com.track_it.presentation.util.SetupParameters;
 import com.track_it.logic.totalcost.SubscriptionCalculator;
 import com.track_it.persistence.utils.DBHelper;
 
@@ -528,7 +527,7 @@ public class MainActivity extends AppCompatActivity {
         yearlyCostTextView.setText(String.format("Yearly Cost: $%.2f", yearlyCost));
 
         TextView monthlyCostTextView = findViewById(R.id.monthlyCostTextView);
-        monthlyCostTextView.setText(String.format("Mounth Cost: $%.2f", monthlyCost));
+        monthlyCostTextView.setText(String.format("Monthly Cost: $%.2f", monthlyCost));
 
         //TextView weeklyCostTextView = findViewById(R.id.weeklyCostTextView);
         //weeklyCostTextView.setText(String.format("weekly Cost: $%.2f", weeklyCost));
