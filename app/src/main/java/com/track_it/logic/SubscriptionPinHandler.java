@@ -7,10 +7,7 @@ import java.util.List;
 
 public class SubscriptionPinHandler {
 
-
-    //3 functions add/remove/getAllPinnedSubObj
-
-    private FakeSubscriptionPinPersistenceDB pinnedSubfakeDB = new FakeSubscriptionPinPersistenceDB();
+    private final FakeSubscriptionPinPersistenceDB pinnedSubfakeDB = new FakeSubscriptionPinPersistenceDB();
 
 
     public void addPinnedSub(SubscriptionObj pinnedSub){

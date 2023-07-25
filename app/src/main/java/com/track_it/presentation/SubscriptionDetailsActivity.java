@@ -192,23 +192,23 @@ public class SubscriptionDetailsActivity extends AppCompatActivity {
     private void enablePinButton() {
         pinButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                //Go back to home page
                 changePinButton();
             }
         });
     }
 
+    //pinButton functionality
     private void changePinButton(){
-        if (pinnedSub == false){
+        if (pinnedSub == false){ //not pinned
             pinButton.setBackgroundColor(Color.parseColor(editButtonColor));
             pinButton.setText("Pin Subscription");
-            pinHandler.removePinnedSub(subscriptionToDisplay);
+            pinHandler.removePinnedSub(subscriptionToDisplay); //remove the current subscription from pin DB
             pinnedSub = true;
         }
-        else{
+        else{ //pin button clicked
             pinButton.setBackgroundColor(Color.parseColor(saveButtonColor));
             pinButton.setText("Pinned");
-            pinHandler.addPinnedSub(subscriptionToDisplay);
+            pinHandler.addPinnedSub(subscriptionToDisplay);//add the current subscription to pin DB
             pinnedSub = false;
         }
     }
