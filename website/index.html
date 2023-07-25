@@ -59,7 +59,12 @@
                                 **Add link to youtube video with demo voiceover**
                                 **Edit video on the right**
                             </p>
-                     
+                            <button class="btn btn-primary rounded-pill px-3 mb-2 mb-lg-0">
+                                <span class="d-flex align-items-center">
+                                <i class="bi bi-mic me-2"></i>
+                                <span class="small">Demo with voiceover</span>
+                        </span>
+                    </button>
                         </div>
                     </div>
                     <div class="col-lg-6">
@@ -99,14 +104,14 @@
 
                                     <!-- Feature item-->
                                     <div class="text-center">
-                                        <i class="bi-phone icon-feature text-gradient d-block mb-3"></i>
+                                        <i class="bi bi-plus-square-dotted icon-feature text-gradient d-block mb-3"></i>
                                         <h3 class="font-alt">Add</h3>
                                         <p class="text-muted text-muted-features mb-0">Easily add all the services you are currently subscribed to!</p>
                                     </div>
             
                                     <!-- Feature item-->
                                     <div class="text-center">
-                                        <i class="bi-camera icon-feature text-gradient d-block mb-3"></i>
+                                        <i class="bi bi-search icon-feature text-gradient d-block mb-3"></i>
                                         <h3 class="font-alt">Search</h3>
                                         <p class="text-muted text-muted-features mb-0">Subscribe to multiple services? Easily retrieve subscription details with the search option.</p>
                                     </div>
@@ -114,7 +119,7 @@
 
                                     <!-- Feature item-->
                                     <div class="text-center">
-                                        <i class="bi-gift icon-feature text-gradient d-block mb-3"></i>
+                                        <i class="bi-wallet icon-feature text-gradient d-block mb-3"></i>
                                         <h3 class="font-alt">Cost Overview</h3>
                                         <p class="text-muted text-muted-features mb-0">Trying to budget and manage your expenses? Easily view your total spending on subscriptions.</p>
                                     </div>
@@ -122,7 +127,7 @@
                   
                                     <!-- Feature item-->
                                     <div class="text-center">
-                                        <i class="bi-patch-check icon-feature text-gradient d-block mb-3"></i>
+                                        <i class="bi-pencil-square icon-feature text-gradient d-block mb-3"></i>
                                         <h3 class="font-alt">Manage</h3>
                                         <p class="text-muted text-muted-features mb-0">Notflix price went up again? Easily update it in the app!</p>
                                     </div>
@@ -149,7 +154,7 @@
                             <p class="lead fw-normal text-muted mb-5 mb-lg-0">
                             Many consumers have multiple subscriptions, membership fees and other recurring payments like Amazon Prime, Netflix, Costco, gym memberships, parking lot permits, etc. It is easy to forget about all of these recurring subscriptions, and to not be fully aware of all of their costs. Track-It will help them remember those subscriptions by combining all of that information into one place, allowing users to see a detailed overview of all of their recurring expenses and manage their subscriptions in one convenient app.
                             </p><br>
-                            <h3><i class="bi bi-currency-dollar me-2"></i>How our success will be measured</h3>
+                            <h3><i class="bi bi-rulers me-2"></i>How our success will be measured</h3>
                             <p class="lead fw-normal text-muted mb-5 mb-lg-0">
                             The subscription Tracker project will be considered a success if at least 40% of a specific target user (consumers with at least 4 paid subscriptions) who start using the system continue to use the system after 1 year, or we are able to generate $500,000+ from ad revenue per year.
                             </p>
@@ -163,20 +168,25 @@
                     <h2 class="display-4 lh-1 mb-4">
                         Postmortem
                     </h2>
-                    <h3><i class="bi bi-patch-question me-2"></i>What went right?</h3>
-                    <p class="lead fw-normal mb-5 mb-lg-0">
+                    <h3>What went right?</h3>
+                    <p class="lead fw-normal text-muted mb-5 mb-lg-0">
                         We successfully delivered a fully functioning app, including a functional database and adequate testing. We also did a great job at identifying key features for the app right at the start of the project. Only minor changes were made to the features we were wanting to implement. 
                         </p><br>
-                        <h3><i class="bi bi-patch-question me-2"></i>What went wrong?</h3>
-                        <p>
+                        <h3>What went wrong?</h3>
+                         <p class="lead fw-normal text-muted mb-5 mb-lg-0">
                         There was a clearly uneven workload distribution amongst the group members. This problem was identified and vocalized at the end of iteration 2. After these concerns were brought to light, we did find that overall teamwork, workload distribution and communication improved.  We also attempted to correct this by having group members assign themselves to an issue they are working on to avoid multiple people working on the same thing at once and to improve workload distribution. 
                         </p>
                         <br>
-                        <h3><i class="bi bi-patch-question me-2"></i>What did you learn about project development?</h3>
-                        <p>
-                        Add here
+                        <h3>What did you learn about project development?</h3>
+                         <p class="lead fw-normal text-muted mb-5 mb-lg-0">
+                        Communication is key. Had communication been the focus we likely could have accomplished a lot more than what we did, especially given we are a group of 6. Unfortunately, the importance of communication was overlooked for the majority of the project. Also scheduling time to meet up as a group should have occured on a more routine basis.
 
-                    </p>
+                        </p>
+                        <br>
+                        <h3>How did the project change from the initial iteration?</h3>
+                        <p class="lead fw-normal text-muted mb-5 mb-lg-0">
+                        We opted to eliminate the features that involved advertisements and components external to the app. These included the feature that would display advertisements and other subscriptions a user may be interested in based on services the user is already subscribed to. We felt these features would be excessively complex without adding enough value to justify the time required to implement them, give that the core functionality of the app doesn't involve these features. We opted to instead focus on the main features that provide the functionality of the app, and will introduce advertisements once we establish a solid user base. 
+                </p>
             </div>
         </section>
         <!-- App badge section-->
@@ -184,45 +194,31 @@
             <div class="container px-5">
                 <h2 class="text-center font-alt mb-4">Meet the Team!</h2>
                 <hr>
-                <div class="container feature-container">
-                    <div class="row">
-                        <div class="col-lg-2 col-md-5 text-center">
-                            <div>
+                <div class="feature-container text-center">
+                        <div class="text-center">
                                 <h3 class="font-alt">Breanna</h3>
-                                <p class="text-muted">Description</p>
-                            </div>
+                                <p class="text-muted">Web dev</p>
                         </div>
-                        <div class="col-lg-3 col-md-5 text-center">
-                            <div>
+                        <div class="text-center">
                                 <h3 class="font-alt">Bryce</h3>
-                                <p class="text-muted">Description</p>
-                            </div>
+                                <p class="text-muted">The full stack</p>
                         </div>
-                        <div class="col-lg-2 col-md-5 text-center">
-                            <div>
+                        <div class="text-center">
                                 <h3 class="font-alt">Hao</h3>
-                                <p class="text-muted">Description</p>
-                            </div>
+                                <p class="text-muted">Team member</p>
                         </div>
-                        <div class="col-lg-3 col-md-5 text-center">
-                            <div>
+                        <div class="text-center">
                                 <h3 class="font-alt">Hassan</h3>
-                                <p class="text-muted">Description</p>
-                            </div>
+                                <p class="text-muted">Team member</p>
                         </div>
-                        <div class="col-lg-2 col-md-5 text-center">
-                            <div>
+                        <div class="text-center">
                                 <h3 class="font-alt">Jiazhen</h3>
-                                <p class="text-muted">Description</p>
-                            </div>
+                                <p class="text-muted">Team member</p>
                         </div>
-                        <div class="col-lg-2 col-md-5 text-center">
-                            <div>
+                        <div class="text-center">
                                 <h3 class="font-alt">Will</h3>
-                                <p class="text-muted">Description</p>
-                            </div>
+                                <p class="text-muted">Admin guy</p>
                         </div>
-                    </div>
                 </div>
             </div>
         </section>
