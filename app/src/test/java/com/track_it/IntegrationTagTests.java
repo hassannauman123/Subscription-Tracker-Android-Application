@@ -50,7 +50,8 @@ public class IntegrationTagTests {
         String tag1  = "tag_1";
         String tag2  = "tag_2";
 
-        subHandle.setTags(newSubToAdd, tag1 + " " + tag2);
+
+        newSubToAdd.setTagList(subHandle.getTagHandler().stringToTags( tag1 + " " + tag2));
         subHandle.addSubscription(newSubToAdd);
 
 
@@ -86,7 +87,9 @@ public class IntegrationTagTests {
         String[] addTags = {"tag_one", "tag_two", "tag_3", "tag_4", "tag_5"};
 
 
-        subHandle.setTags(newSubToAdd, addTags[0] + " " + addTags[1]);
+
+        newSubToAdd.setTagList(subHandle.getTagHandler().stringToTags( addTags[0] + " " + addTags[1]));
+
         subHandle.addSubscription(newSubToAdd);
 
         //Create 1 sub with 3 tags
@@ -96,7 +99,7 @@ public class IntegrationTagTests {
 
 
         newSubToAdd = new SubscriptionObj("WareHouse", 300, subHandle.getFrequencyNameList().get(0));
-        subHandle.setTags(newSubToAdd, addTags[2] + " " + addTags[3] + " " + addTags[4]);
+        newSubToAdd.setTagList(subHandle.getTagHandler().stringToTags( addTags[2] + " " + addTags[3] + " " + addTags[4]));
         subHandle.addSubscription(newSubToAdd);
 
         // Get all tags from database
@@ -135,7 +138,9 @@ public class IntegrationTagTests {
 
         String[] addTags = {"tag_one", "tag_two"};
 
-        subHandle.setTags(newSubToAdd, addTags[0] + " " + addTags[1]);
+        newSubToAdd.setTagList(subHandle.getTagHandler().stringToTags( addTags[0] + " " + addTags[1]));
+
+
         subHandle.addSubscription(newSubToAdd);
 
         SubscriptionObj subReturnedFromDatabase = subHandle.getSubscriptionByID(newSubToAdd.getID());
@@ -167,7 +172,7 @@ public class IntegrationTagTests {
 
         // Add 1 too many tags to sub
         SubscriptionObj newSubToAdd = new SubscriptionObj("WareHouse", 300, subHandle.getFrequencyNameList().get(0));
-        subHandle.setTags(newSubToAdd,invalidTags );
+        newSubToAdd.setTagList(subHandle.getTagHandler().stringToTags( invalidTags));
 
 
         boolean exceptionThrown = false;

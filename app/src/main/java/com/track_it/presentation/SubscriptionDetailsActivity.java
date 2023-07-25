@@ -354,7 +354,8 @@ public class SubscriptionDetailsActivity extends AppCompatActivity {
         // Get the string the user entered for tags
         String tagSting = tagInput.getText().toString().trim().toLowerCase(); // get string, and remove white spaces, and change to lowercase
         try {
-            subHandler.setTags(subscriptionToDisplay, tagSting); // Set tags
+
+            subscriptionToDisplay.setTagList(subHandler.getTagHandler().stringToTags(tagSting));
             subHandler.validateTagList(subscriptionToDisplay.getTagList()); //Validate tags
 
         } catch (SubscriptionException | SubscriptionTagException e) // Catch - tags not valid

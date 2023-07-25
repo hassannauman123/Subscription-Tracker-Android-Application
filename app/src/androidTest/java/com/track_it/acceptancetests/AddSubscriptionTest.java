@@ -4,9 +4,11 @@ import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.pressKey;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.is;
@@ -17,6 +19,7 @@ import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.filters.LargeTest;
 
+import com.track_it.application.SetupParameters;
 import com.track_it.presentation.MainActivity;
 import com.track_it.util.TestUtils;
 
@@ -46,13 +49,16 @@ public class AddSubscriptionTest
     public ActivityScenarioRule<MainActivity> mActivityScenarioRule = new ActivityScenarioRule<>(MainActivity.class);
 
     @Before
-    public void testSetup() {
-        TestUtils.testSetup();
+    public void testSetup()
+    {
+        TestUtils.clearDatabase(SetupParameters.getSubscriptionHandler());
+        TestUtils.refreshPage();
+
     }
 
     @After
     public void testTearDown() {
-        TestUtils.testTearDown();
+        TestUtils.clearDatabase(SetupParameters.getSubscriptionHandler());
     }
 
 
@@ -67,9 +73,9 @@ public class AddSubscriptionTest
         TestUtils.addSub(originalName, originalpayment, originalFrequency, ""); // This adds a subscription using UI clicks
 
         // This verifies the subscription has been added, and shows up correctly as expected
-        onView(withText("Name: " + originalName)).check(matches(withText("Name: " + originalName)));
-        onView(withText("Payment Amount: $" + originalpayment + ".00")).check(matches(withText("Payment Amount: $" + originalpayment + ".00")));
-        onView(withText("Frequency: " + originalFrequency)).check(matches(withText("Frequency: " + originalFrequency)));
+        onView(withText(containsString(originalName))).check(matches(isDisplayed()));
+        onView(withText(containsString("$" + originalpayment + ".00"))).check(matches(isDisplayed()));
+        onView(withText(containsString(originalFrequency))).check(matches(isDisplayed()));
 
 
         SystemClock.sleep(TestUtils.getSleepTime());

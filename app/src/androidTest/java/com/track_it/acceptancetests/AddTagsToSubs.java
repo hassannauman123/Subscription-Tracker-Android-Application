@@ -23,6 +23,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.filters.LargeTest;
 
 import com.track_it.R;
+import com.track_it.application.SetupParameters;
 import com.track_it.presentation.MainActivity;
 import com.track_it.util.TestUtils;
 
@@ -53,13 +54,16 @@ public class AddTagsToSubs {
     public ActivityScenarioRule<MainActivity> mActivityScenarioRule = new ActivityScenarioRule<>(MainActivity.class);
 
     @Before
-    public void testSetup() {
-        TestUtils.testSetup();
+    public void testSetup()
+    {
+        TestUtils.clearDatabase(SetupParameters.getSubscriptionHandler());
+        TestUtils.refreshPage();
+
     }
 
     @After
     public void testTearDown() {
-        TestUtils.testTearDown();
+        TestUtils.clearDatabase(SetupParameters.getSubscriptionHandler());
     }
 
 
@@ -74,6 +78,8 @@ public class AddTagsToSubs {
 
         //Go to sub details
         onView(withText(containsString(originalName))).perform(click());
+        SystemClock.sleep(TestUtils.getSleepTime());
+
         SystemClock.sleep(TestUtils.getSleepTime());
 
         //Make sure tags show up
@@ -106,9 +112,13 @@ public class AddTagsToSubs {
         onView(withId(R.id.details_edit_subscription)).perform(click()); // Click save changes
         onView(withId(R.id.go_home)).perform(click()); // go home
 
+        SystemClock.sleep(TestUtils.getSleepTime());
 
         //Go back to sub details
         onView(withText(containsString(originalName))).perform(click());
+
+
+        SystemClock.sleep(TestUtils.getSleepTime());
 
         //Make sure new tags show up
         onView(withText(containsString(newTag1))).check(matches(isDisplayed()));

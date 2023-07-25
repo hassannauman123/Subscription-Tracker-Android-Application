@@ -102,5 +102,46 @@
         </LinearLayout>
     </ScrollView>
 
+    <TextView
+        android:id="@+id/yearlyCostTextView"
+        android:layout_width="149dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="219dp"
+        android:layout_marginBottom="81dp"
+        android:text="TextView" />
+
+    <TextView
+        android:id="@+id/monthlyCostTextView"
+        android:layout_width="153dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="37dp"
+        android:layout_marginBottom="81dp"
+        android:text="TextView" />
+
+    <Button
+        android:id="@+id/update_cost"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="163dp"
+        android:layout_marginBottom="0dp"
+        android:text="update" />
+
+    <Switch
+        android:id="@+id/fitler_match_any_switch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="70dp"
+        android:layout_marginEnd="26dp"
+        android:visibility="invisible"
+        android:text="Match any filter" />
+
 
 </RelativeLayout>

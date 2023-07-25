@@ -73,9 +73,11 @@
             <AndroidTestResultsTableState>
               <option name="preferredColumnWidths">
                 <map>
+                  <entry key="988b5c393153473058" value="120" />
                   <entry key="Copy_of_Pixel_XL_API_33" value="120" />
                   <entry key="Duration" value="90" />
                   <entry key="Tests" value="360" />
+                  <entry key="samsung&#10; SM-G955W" value="120" />
                 </map>
               </option>
             </AndroidTestResultsTableState>
@@ -86,9 +88,11 @@
             <AndroidTestResultsTableState>
               <option name="preferredColumnWidths">
                 <map>
+                  <entry key="988b5c393153473058" value="120" />
                   <entry key="Copy_of_Pixel_XL_API_33" value="120" />
                   <entry key="Duration" value="90" />
                   <entry key="Tests" value="360" />
+                  <entry key="samsung&#10; SM-G955W" value="120" />
                 </map>
               </option>
             </AndroidTestResultsTableState>
@@ -167,9 +171,11 @@
             <AndroidTestResultsTableState>
               <option name="preferredColumnWidths">
                 <map>
+                  <entry key="988b5c393153473058" value="120" />
                   <entry key="Copy_of_Pixel_XL_API_33" value="120" />
                   <entry key="Duration" value="90" />
                   <entry key="Tests" value="360" />
+                  <entry key="samsung&#10; SM-G955W" value="120" />
                 </map>
               </option>
             </AndroidTestResultsTableState>
@@ -180,10 +186,12 @@
             <AndroidTestResultsTableState>
               <option name="preferredColumnWidths">
                 <map>
+                  <entry key="988b5c393153473058" value="120" />
                   <entry key="Copy_of_Pixel_XL_API_33" value="120" />
                   <entry key="Duration" value="90" />
                   <entry key="Pixel_XL_API_33" value="120" />
                   <entry key="Tests" value="360" />
+                  <entry key="samsung&#10; SM-G955W" value="120" />
                 </map>
               </option>
             </AndroidTestResultsTableState>
@@ -194,9 +202,26 @@
             <AndroidTestResultsTableState>
               <option name="preferredColumnWidths">
                 <map>
+                  <entry key="988b5c393153473058" value="120" />
                   <entry key="Copy_of_Pixel_XL_API_33" value="120" />
                   <entry key="Duration" value="90" />
                   <entry key="Tests" value="360" />
+                  <entry key="samsung&#10; SM-G955W" value="120" />
+                </map>
+              </option>
+            </AndroidTestResultsTableState>
+          </value>
+        </entry>
+        <entry key="831118753">
+          <value>
+            <AndroidTestResultsTableState>
+              <option name="preferredColumnWidths">
+                <map>
+                  <entry key="988b5c393153473058" value="120" />
+                  <entry key="Copy_of_Pixel_XL_API_33" value="120" />
+                  <entry key="Duration" value="90" />
+                  <entry key="Tests" value="360" />
+                  <entry key="samsung&#10; SM-G955W" value="120" />
                 </map>
               </option>
             </AndroidTestResultsTableState>
@@ -252,6 +277,19 @@
                 <map>
                   <entry key="Duration" value="90" />
                   <entry key="Pixel_6_Pro_API_33" value="120" />
+                  <entry key="Tests" value="360" />
+                </map>
+              </option>
+            </AndroidTestResultsTableState>
+          </value>
+        </entry>
+        <entry key="1890878584">
+          <value>
+            <AndroidTestResultsTableState>
+              <option name="preferredColumnWidths">
+                <map>
+                  <entry key="Copy_of_Pixel_XL_API_33" value="120" />
+                  <entry key="Duration" value="90" />
                   <entry key="Tests" value="360" />
                 </map>
               </option>

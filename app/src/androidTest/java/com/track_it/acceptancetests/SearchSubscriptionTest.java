@@ -23,6 +23,7 @@ import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.filters.LargeTest;
 
+import com.track_it.application.SetupParameters;
 import com.track_it.presentation.MainActivity;
 import com.track_it.util.TestUtils;
 
@@ -59,13 +60,16 @@ public class SearchSubscriptionTest {
     public ActivityScenarioRule<MainActivity> mActivityScenarioRule = new ActivityScenarioRule<>(MainActivity.class);
 
     @Before
-    public void testSetup() {
-        TestUtils.testSetup();
+    public void testSetup()
+    {
+        TestUtils.clearDatabase(SetupParameters.getSubscriptionHandler());
+        TestUtils.refreshPage();
+
     }
 
     @After
     public void testTearDown() {
-        TestUtils.testTearDown();
+        TestUtils.clearDatabase(SetupParameters.getSubscriptionHandler());
     }
 
 
@@ -75,8 +79,9 @@ public class SearchSubscriptionTest {
 
         //Add both subscriptions
         TestUtils.addSub(originalName, originalPayment, originalFrequency, originalTag1 + " " + originalTag2); //Add sub 1
-        TestUtils.addSub(originalName2, originalPayment2, originalFrequency2, originalTag1 + " " + originalTag2); //Add sub 2
+        SystemClock.sleep(TestUtils.getSleepTime());
 
+        TestUtils.addSub(originalName2, originalPayment2, originalFrequency2, originalTag1 + " " + originalTag2); //Add sub 2
         SystemClock.sleep(TestUtils.getSleepTime());
 
 
@@ -89,6 +94,8 @@ public class SearchSubscriptionTest {
         ViewInteraction searchAutoComplete = onView(allOf(withClassName(is("android.widget.SearchView$SearchAutoComplete")))); // Get search input target
         searchAutoComplete.perform(click()); // click it
         searchAutoComplete.perform(replaceText(partialName), closeSoftKeyboard()); // put search string into into search input
+
+        SystemClock.sleep(TestUtils.getSleepTime());
 
 
         // Verify that the first sub shows up with the search applied
