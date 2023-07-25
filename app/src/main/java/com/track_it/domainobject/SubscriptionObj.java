@@ -16,8 +16,8 @@ public class SubscriptionObj {
     private String paymentFrequencyName; // - How often a payment happens.
     private List<SubscriptionTag> subscriptionTagList;
 
-    public SubscriptionObj(String inputName, int inputPayments, String inputPaymentFrequency) {
-
+    public SubscriptionObj(String inputName, int inputPayments, String inputPaymentFrequency)
+    {
         this.subscriptionTagList = new ArrayList<>();
         this.name = inputName;
         this.paymentInCents = inputPayments;

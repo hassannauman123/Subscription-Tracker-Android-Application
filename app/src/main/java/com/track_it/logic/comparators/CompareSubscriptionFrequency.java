@@ -17,6 +17,10 @@ public class CompareSubscriptionFrequency implements Comparator<SubscriptionObj>
         subhandler = SetupParameters.getSubscriptionHandler();
     }
 
+    public CompareSubscriptionFrequency(SubscriptionHandler inputSubHandler)
+    {
+        this.subhandler = inputSubHandler;
+    }
 
     @Override
     public int compare(SubscriptionObj left, SubscriptionObj right) {
