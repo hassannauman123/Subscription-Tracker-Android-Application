@@ -18,12 +18,12 @@ import com.track_it.domainobject.SubscriptionObj;
 import com.track_it.domainobject.SubscriptionTag;
 import com.track_it.logic.SubscriptionFilter;
 import com.track_it.logic.SubscriptionHandler;
+import com.track_it.logic.SubscriptionPinHandler;
 import com.track_it.logic.comparators.*;
 import com.track_it.logic.exceptions.RetrievalException;
 import com.track_it.logic.exceptions.SubscriptionException;
 import com.track_it.logic.exceptions.SubscriptionInvalidFrequencyException;
 import com.track_it.logic.totalcost.TotalCostCalculator;
-import com.track_it.presentation.util.SetupParameters;
 import com.track_it.logic.totalcost.SubscriptionCalculator;
 import com.track_it.persistence.utils.DBHelper;
 
@@ -78,6 +78,9 @@ public class MainActivity extends AppCompatActivity {
 
     private Switch filterSwitch;
 
+    private SubscriptionPinHandler pinHandler = new SubscriptionPinHandler();
+    private List<SubscriptionObj> pinnedSubs = new ArrayList<SubscriptionObj>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -91,11 +94,14 @@ public class MainActivity extends AppCompatActivity {
 
         setTargets(); //Set the targets for the global variables
         getSubList(); // Get list of subs from database, and store in listOfSubs
+        //call method here
         setUpButtonsAndInput(); // Setup the input fields and buttons
         displayAllSubscriptions(); // Display all the subscriptions
         displaycost();//Display cost
         updateCost();//update button
 
+        getPinnedSubs();
+//        sortPinnedSubs();
 
     }
 
@@ -136,6 +142,40 @@ public class MainActivity extends AppCompatActivity {
         filterSwitch = (Switch) this.findViewById(R.id.fitler_match_any_switch);
 
 
+    }
+
+//compare method that goes through listOfSubs,
+
+
+    private List<SubscriptionObj> matchedSubs = new ArrayList<SubscriptionObj>();
+
+    private void getPinnedSubs(){
+        pinnedSubs = pinHandler.getAllPinnedSub();
+    }
+
+    //comparing pinnedSub to ListOfSubs, find which are equal to each other, pull it out and save to matchedSubs
+    private void comparePinToSub(){
+        for(int i = 0; i<pinnedSubs.size(); i++){
+            for(int j = 0; j<listOfSubs.size(); j++){
+
+                if(pinnedSubs.get(i).getID() == listOfSubs.get(j).getID()){
+                    matchedSubs.add(pinnedSubs.get(i));
+                }
+            }
+
+        }
+    }
+
+    //compare matchedSubs with listOfSubs, if no match from matchSub, add it do matchSubs, then listOfSubs = matchSubs after sort it
+    private void sortPinnedSubs(){
+        for(int i = 0; i<matchedSubs.size(); i++){
+            for(int j = 0; j<listOfSubs.size(); j++){
+                if(matchedSubs.get(i).getID() != listOfSubs.get(j).getID()){
+                    matchedSubs.add(listOfSubs.get(i));
+                    listOfSubs = matchedSubs;
+                }
+            }
+        }
     }
 
 

@@ -2,6 +2,7 @@ package com.track_it.presentation;
 
 import static android.app.PendingIntent.getActivity;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.graphics.Color;
@@ -21,6 +22,7 @@ import com.track_it.R;
 import com.track_it.application.SetupParameters;
 import com.track_it.domainobject.SubscriptionObj;
 import com.track_it.domainobject.SubscriptionTag;
+import com.track_it.logic.SubscriptionPinHandler;
 import com.track_it.logic.exceptions.RetrievalException;
 import com.track_it.logic.exceptions.SubscriptionException;
 import com.track_it.logic.SubscriptionHandler;
@@ -37,6 +39,7 @@ public class SubscriptionDetailsActivity extends AppCompatActivity {
     private int MAX_DIGITS_BEFORE_DECIMAL; // Max payment amount in dollars (doesn't include cent count)
     private boolean alreadyDeleted = false; // Has the subscription been deleted during this session?
     private boolean editMode = false; // Are we in edit mode? Determines whether the input can be edited, and behaviour of the edit/save button
+    private boolean pinnedSub = false;
 
     // Various color - We should probably put this in some type of shared resource location later
 
@@ -59,6 +62,8 @@ public class SubscriptionDetailsActivity extends AppCompatActivity {
     private Button editButton;
     private Button backButton;
     private Button deleteButton;
+    private Button pinButton;
+
 
     private EditText tagInput;
 
@@ -100,12 +105,13 @@ public class SubscriptionDetailsActivity extends AppCompatActivity {
 
         //Enable go back to home button
         enableGoBackButton();
-
+        changePinButton();
         //Try to load the subscription from arguments passed to this activity
         if (getSubscription(subscriptionToDisplay)) // Make sure the subscription object was able to load
         {
             //Only Enable delete and Edit buttons if we could load subscription
             enableDeleteAndEditButtons();
+            enablePinButton();
         }
 
         TagColors.setTextWatcher(this, tagInput);
@@ -115,6 +121,7 @@ public class SubscriptionDetailsActivity extends AppCompatActivity {
 
 
     //Set colors by resource file
+    @SuppressLint("ResourceType")
     private void setColors() {
         errorColor = getResources().getString(R.color.error_color);
         accomplishColor = getResources().getString(R.color.accomplish_color); // Accomplish text color
@@ -145,7 +152,7 @@ public class SubscriptionDetailsActivity extends AppCompatActivity {
         backButton = (Button) findViewById(R.id.go_home);
         editButton = (Button) findViewById(R.id.details_edit_subscription);
         deleteButton = (Button) findViewById(R.id.details_delete_subscription);
-
+        pinButton = (Button) findViewById(R.id.pin_sub);
         //Get tag input target
         tagInput = ((EditText) findViewById(R.id.tag_input));
 
@@ -177,7 +184,33 @@ public class SubscriptionDetailsActivity extends AppCompatActivity {
                 finish();
             }
         });
+    }
 
+
+    private SubscriptionPinHandler pinHandler = new SubscriptionPinHandler();
+
+    private void enablePinButton() {
+        pinButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                //Go back to home page
+                changePinButton();
+            }
+        });
+    }
+
+    private void changePinButton(){
+        if (pinnedSub == false){
+            pinButton.setBackgroundColor(Color.parseColor(editButtonColor));
+            pinButton.setText("Pin Subscription");
+            pinHandler.removePinnedSub(subscriptionToDisplay);
+            pinnedSub = true;
+        }
+        else{
+            pinButton.setBackgroundColor(Color.parseColor(saveButtonColor));
+            pinButton.setText("Pinned");
+            pinHandler.addPinnedSub(subscriptionToDisplay);
+            pinnedSub = false;
+        }
     }
 
 
@@ -279,6 +312,9 @@ public class SubscriptionDetailsActivity extends AppCompatActivity {
             editButton.setText("Save Changes");
         }
     }
+
+
+
 
     // This runs when a user clicks the edit \ Save changes button
     private void editButton() {
