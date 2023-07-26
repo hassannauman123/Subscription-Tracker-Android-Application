@@ -8,12 +8,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-//This is fake database for tags. It implements the SubscriptionTagPersistence interface
+//This is a fake database for the tags. It implements the SubscriptionTagPersistence interface
 public class FakeSubscriptionTagPersistenceDB implements SubscriptionTagPersistence {
     private static List<SubscriptionTag> listOfTags = new ArrayList<SubscriptionTag>();
     private static List<int[]> tagSubAssociation = new ArrayList<int[]>();
-    private static int SUB_ID = 0;
-    private static int TAG_ID = 1;
+    private static final int SUB_ID_INDEX = 0; //The index of the subID for an array in tagSubAssociation
+    private static final int TAG_ID_INDEX = 1; //The index of the tagID for an array in tagSubAssociation
 
 
     private static int nextTagID = 0; // Do not ever reduce this number, even when removing from database!
@@ -47,7 +47,7 @@ public class FakeSubscriptionTagPersistenceDB implements SubscriptionTagPersiste
         for (int i = 0; i < tagSubAssociation.size(); i++) {
             int[] currTagAssoc = tagSubAssociation.get(i);
 
-            if (currTagAssoc[SUB_ID] == inputSub.getID()) {
+            if (currTagAssoc[SUB_ID_INDEX] == inputSub.getID()) {
                 tagSubAssociation.remove(currTagAssoc);
                 i--;
             }
@@ -61,8 +61,8 @@ public class FakeSubscriptionTagPersistenceDB implements SubscriptionTagPersiste
 
                 addTagToPersistence(currTag); // Add to database if it wasn't already there
                 int newAssociation[] = new int[2];
-                newAssociation[SUB_ID] = inputSub.getID();
-                newAssociation[TAG_ID] = currTag.getID();
+                newAssociation[SUB_ID_INDEX] = inputSub.getID();
+                newAssociation[TAG_ID_INDEX] = currTag.getID();
                 tagSubAssociation.add(newAssociation);
             }
         }
@@ -74,7 +74,7 @@ public class FakeSubscriptionTagPersistenceDB implements SubscriptionTagPersiste
         boolean associationAlreadyExists = false;
 
         for (int[] currAssociation : tagSubAssociation) {
-            if (currAssociation[SUB_ID] == inputSubID && currAssociation[TAG_ID] == inputTagID) {
+            if (currAssociation[SUB_ID_INDEX] == inputSubID && currAssociation[TAG_ID_INDEX] == inputTagID) {
                 associationAlreadyExists = true;
             }
         }
@@ -100,7 +100,7 @@ public class FakeSubscriptionTagPersistenceDB implements SubscriptionTagPersiste
         boolean foundInAssociation = false;
 
         for (int[] currAssoc : tagSubAssociation) {
-            if (currAssoc[TAG_ID] == inputTag.getID()) {
+            if (currAssoc[TAG_ID_INDEX] == inputTag.getID()) {
                 foundInAssociation = true;
             }
         }
@@ -129,24 +129,21 @@ public class FakeSubscriptionTagPersistenceDB implements SubscriptionTagPersiste
         List<SubscriptionTag> allTagsForSub = new ArrayList<SubscriptionTag>();
 
         for (int[] currAssociation : tagSubAssociation) {
-            if (currAssociation[SUB_ID] == inputSub.getID()) //There is a tag associated with this sub
+            if (currAssociation[SUB_ID_INDEX] == inputSub.getID()) //There is a tag associated with this sub
             {
 
                 // Find the tag that is associated with the sub, and add it to return list
                 for (SubscriptionTag currTag : listOfTags) {
-                    if (currTag.getID() == currAssociation[TAG_ID]) {
+                    if (currTag.getID() == currAssociation[TAG_ID_INDEX]) {
                         //Return a copy, to make sure the object in database can't be modified elsewhere
                         SubscriptionTag tagToReturn = new SubscriptionTag(currTag.getName());
                         tagToReturn.setID(currTag.getID());
 
                         allTagsForSub.add(tagToReturn);
-
                     }
                 }
-
             }
         }
-
         return allTagsForSub;
     }
 
@@ -154,14 +151,10 @@ public class FakeSubscriptionTagPersistenceDB implements SubscriptionTagPersiste
 
         for (int i = 0; i < tagSubAssociation.size(); i++) {
             int[] currAssociation = tagSubAssociation.get(i);
-            if (currAssociation[SUB_ID] == subID) {
+            if (currAssociation[SUB_ID_INDEX] == subID) {
                 tagSubAssociation.remove(currAssociation);
                 i--;
             }
         }
-
-
     }
-
-
 }

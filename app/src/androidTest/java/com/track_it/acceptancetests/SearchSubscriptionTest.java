@@ -93,6 +93,7 @@ public class SearchSubscriptionTest {
 
         ViewInteraction searchAutoComplete = onView(allOf(withClassName(is("android.widget.SearchView$SearchAutoComplete")))); // Get search input target
         searchAutoComplete.perform(click()); // click it
+        SystemClock.sleep(TestUtils.getSleepTime());
         searchAutoComplete.perform(replaceText(partialName), closeSoftKeyboard()); // put search string into into search input
 
         SystemClock.sleep(TestUtils.getSleepTime());

@@ -33,15 +33,14 @@ public class FakeSubscriptionPersistenceDB implements SubscriptionPersistence {
 
         ArrayList<SubscriptionObj> returnListOfSubscriptions = new ArrayList<SubscriptionObj>();
 
-        //Go through the DataBase, and create fill the return arrayList with all the subscriptions in the database
-        for (int i = 0; i < subscriptionDB.size(); i++) {
+        //Go through the DataBase,  and fill the return arrayList with all the subscriptions in the database
+        for (int i = 0; i < subscriptionDB.size(); i++)
+        {
             SubscriptionObj copyOfSubscription = subscriptionDB.get(i).copy(); // Copy the sub so the calling function can't illegally modify our fake database
             returnListOfSubscriptions.add(copyOfSubscription);
-
         }
 
         return returnListOfSubscriptions;
-
     }
 
 
