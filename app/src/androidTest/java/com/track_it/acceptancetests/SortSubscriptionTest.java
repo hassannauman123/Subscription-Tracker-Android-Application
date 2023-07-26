@@ -77,13 +77,14 @@ public class SortSubscriptionTest {
         Collections.sort(nameList); // sort that list alphabetically
 
         Context currContext = ApplicationProvider.getApplicationContext(); // Get current context so we can use string resources
-        String sortCriteria = currContext.getResources().getString(R.string.sort_a_z); // The current sort button will have a text of this
-
-        onView(withId(R.id.sort_button)).perform(click()); //Click the sort button
         SystemClock.sleep(TestUtils.getSleepTime());// Let popup load
+        String sortCriteria = currContext.getResources().getString(R.string.sort_a_z); // The current sort button will have a text of this
+        SystemClock.sleep(TestUtils.getSleepTime());// Let popup load
+        onView(withId(R.id.sort_button)).perform(click()); //Click the sort button
         SystemClock.sleep(TestUtils.getSleepTime());// Let popup load
         onView(withText(containsString(sortCriteria))).perform(click()); // click sort by A-z
 
+        SystemClock.sleep(TestUtils.getSleepTime());// Let changes load
         //Target and make sure all the subscriptions still show up
         ViewInteraction textViewAmazon = onView(withText(containsString("Name: " + nameList.get(0))));
         textViewAmazon.check(matches(withText("Name: " + nameList.get(0))));
@@ -109,6 +110,8 @@ public class SortSubscriptionTest {
         String[] paymentInOrder = TestUtils.getStringPayments(); // Get all the existing payment amount for subscriptions in order
 
         Context currContext = ApplicationProvider.getApplicationContext(); // Get current context so we can use string resources
+        SystemClock.sleep(TestUtils.getSleepTime());// Let popup load
+        SystemClock.sleep(TestUtils.getSleepTime());// Let popup load
         String sortCriteria = currContext.getResources().getString(R.string.sort_payment); // The current sort button will have a text of this
 
         onView(withId(R.id.sort_button)).perform(click());
@@ -141,12 +144,11 @@ public class SortSubscriptionTest {
         String[] frequencyInOrder = TestUtils.getFrequencyInOrder();
 
         Context currContext = ApplicationProvider.getApplicationContext(); // Get current context so we can use string resources
+        SystemClock.sleep(TestUtils.getSleepTime());// Let popup load
         String sortCriteria = currContext.getResources().getString(R.string.sort_frequency); // The current sort button will have a text of this
 
         SystemClock.sleep(TestUtils.getSleepTime());// Let popup load
         onView(withId(R.id.sort_button)).perform(click());
-        SystemClock.sleep(TestUtils.getSleepTime());// Let popup load
-        SystemClock.sleep(TestUtils.getSleepTime());// Let popup load
         SystemClock.sleep(TestUtils.getSleepTime());// Let popup load
         onView(withText(containsString(sortCriteria))).perform(click()); //Click sort by frequency
 

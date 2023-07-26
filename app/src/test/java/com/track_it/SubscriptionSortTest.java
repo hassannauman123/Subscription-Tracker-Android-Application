@@ -8,8 +8,7 @@ import com.track_it.logic.comparators.CompareSubscriptionPayment;
 import com.track_it.logic.SubscriptionHandler;
 import com.track_it.logic.frequencies.Frequency;
 import com.track_it.application.SetupParameters;
-import com.track_it.util.FillDatabase;
-import com.track_it.util.TestUtils;
+ import com.track_it.util.TestUtils;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -30,19 +29,15 @@ public class SubscriptionSortTest {
     public void setTestHandle() {
 
         TestUtils.changeDatabase();
-
         subHandle = SetupParameters.getSubscriptionHandler();
-        FillDatabase.fillDataBase(subHandle);  //Create some subs,  and add them to Database
+        TestUtils.create10Sub(subHandle);  //Create 10  subs, so we can test sortng them
         listOfSubs = subHandle.getAllSubscriptions(); // Get subscriptions from database
-
     }
-
 
     @Test
     public void testSortByName() {
 
         Collections.sort(listOfSubs, new CompareSubscriptionName()); //Sort by name
-
 
         for (int i = 0; i < listOfSubs.size() - 1; i++) {
 
@@ -58,7 +53,6 @@ public class SubscriptionSortTest {
 
     @Test
     public void testSortByPayment() {
-
 
         Collections.sort(listOfSubs, new CompareSubscriptionPayment()); //Sort by payment amount
 

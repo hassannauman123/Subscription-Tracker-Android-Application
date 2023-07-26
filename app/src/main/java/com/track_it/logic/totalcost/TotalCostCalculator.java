@@ -1,15 +1,21 @@
 package com.track_it.logic.totalcost;
 
 import com.track_it.domainobject.SubscriptionObj;
+
 import java.util.List;
+
+
+//  Note*
+// This class was written by tian but the changes he made were copied and pasted here with his permission because the branch he is working on
+// is a behind our develop branch by 2 months and it causes issues with our project when he merges.
 
 public class TotalCostCalculator implements SubscriptionCalculator {
 
-    double totalCost = 0;
-    private double yearlyCost = 0;
-    private double weeklyCost = 0;
-    private double monthlyCost = 0;
-    private double dailyCost = 0;
+    int totalCost = 0;
+    private int yearlyCost = 0;
+    private int weeklyCost = 0;
+    private int monthlyCost = 0;
+    private int dailyCost = 0;
     private final List<SubscriptionObj> listOfSubs;
 
     public TotalCostCalculator(List<SubscriptionObj> listOfSubs) {
@@ -21,7 +27,8 @@ public class TotalCostCalculator implements SubscriptionCalculator {
     public void cost(List<SubscriptionObj> listOfSubs) {
         for (SubscriptionObj subscription : listOfSubs) {
             //get cost and paymentPeriod from db
-            double subscriptionCost = subscription.getPaymentDollars();
+            double subscriptionCost = subscription.getTotalPaymentInCents();
+
             String paymentPeriod = subscription.getPaymentFrequency();
             //calculate the cost
 
@@ -42,25 +49,44 @@ public class TotalCostCalculator implements SubscriptionCalculator {
         weeklyCost = totalCost / 52;
         monthlyCost = totalCost / 12;
         yearlyCost = totalCost;
+
     }
-    //return the cost
+
+    //return the cost in decimals and integers
     @Override
-    public double getYearlyCost() {
-        return yearlyCost;
+    public int getYearlyCost() {
+        return yearlyCost / 100;
+    }
+
+    public int getYearlyCostInCents() {
+        return yearlyCost % 100;
     }
 
     @Override
-    public double getWeeklyCost() {
-        return weeklyCost;
+    public int getWeeklyCost() {
+        return weeklyCost / 100;
+    }
+
+    public int getWeeklyCostInCents() {
+        return weeklyCost % 100;
     }
 
     @Override
-    public double getMonthlyCost() {
-        return monthlyCost;
+    public int getMonthlyCost() {
+        return monthlyCost / 100;
     }
 
+    public int getMonthlyCostInCents() {
+        return monthlyCost - (monthlyCost / 100) * 100;
+    }
+
+
     @Override
-    public double getDailyCost() {
-        return dailyCost;
+    public int getDailyCost() {
+        return dailyCost / 100;
+    }
+
+    public int getDailyCostInCents() {
+        return dailyCost - (dailyCost / 100) * 100;
     }
 }

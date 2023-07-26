@@ -23,7 +23,6 @@ import com.track_it.logic.exceptions.RetrievalException;
 import com.track_it.logic.exceptions.SubscriptionException;
 import com.track_it.logic.exceptions.SubscriptionInvalidFrequencyException;
 import com.track_it.logic.totalcost.TotalCostCalculator;
-import com.track_it.presentation.util.SetupParameters;
 import com.track_it.logic.totalcost.SubscriptionCalculator;
 import com.track_it.persistence.utils.DBHelper;
 
@@ -49,7 +48,7 @@ import java.util.List;
 //
 //  Currently it displays all subscriptions in a scrollable list, and has a add subscription button.
 //  Clicking on any subscription should open a new page that allows you to edit or delete the sub.
-//  It also has sort and search input, to filter and sort the subscriptions.
+//  It also has sort and search input, to filter the subs by tags, and sort the subscriptions.
 //
 
 
@@ -76,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
 
     private boolean filterAny = false; // Should we show subscriptions that match any filter ( default is to only show ones that match all filters)
 
-    private Switch filterSwitch;
+    private Switch filterSwitch; //Toggle the filter behaviour
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,7 +93,6 @@ public class MainActivity extends AppCompatActivity {
         setUpButtonsAndInput(); // Setup the input fields and buttons
         displayAllSubscriptions(); // Display all the subscriptions
         displaycost();//Display cost
-        updateCost();//update button
 
 
     }
@@ -107,14 +105,14 @@ public class MainActivity extends AppCompatActivity {
         getSubList(); //Get a new list of subs ( in case any subs were added, deleted, or modified)
 
         View current = getCurrentFocus();
-        if (current != null)  //Reset focus
-        {
-            current.clearFocus();
+        if (current != null) {
+            current.clearFocus(); //Reset focus
         }
 
         tagFilterList.clear();  //Clear filter on restart
         enableDisplayFilterSwitch(false);
         displayAllSubscriptions(); // Display all the subs
+        displaycost();
     }
 
 
@@ -234,8 +232,7 @@ public class MainActivity extends AppCompatActivity {
 
                 //Close the keyboard
                 View current = getCurrentFocus();
-                if (current != null)  //Reset focus
-                {
+                if (current != null) {
                     InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(current.getWindowToken(), 0);
 
@@ -244,7 +241,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            public boolean onQueryTextChange(String newText) //What happens when user type and other char into search bar
+            public boolean onQueryTextChange(String newText) //What happens when user types in another char in the search bar
             {
 
                 displayAllSubscriptions();  //Display all subs (It will filter based on input from user)
@@ -254,7 +251,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    //Enable the sort and fitler input - Allows user to sort or filter subscriptions
+    //Enable the sort and filter input - Allows user to sort or filter subscriptions
     private void enableSortFilterInput() {
 
 
@@ -424,9 +421,7 @@ public class MainActivity extends AppCompatActivity {
             if (filterAny)  // filterAny means to display subscription that has as ANY matching filter tag
             {
                 passFilter = subFilter.checkIfSubHasAnyMatchingTags(inputSub, tagFilterList); //Check if the subscription has at least one of the tags in tagFilter
-            }
-            else
-            {
+            } else {
                 passFilter = subFilter.checkIfSuHasAllTags(inputSub, tagFilterList); // Check if the sub has ALL tags
             }
         }
@@ -509,6 +504,11 @@ public class MainActivity extends AppCompatActivity {
         });
 
     }
+
+
+    //  Note*
+    // This method was written by tian but the changes he made were copied and pasted here with his permission because the branch he is working on
+    // is a behind our develop branch by 2 months and it causes issues with our project when he merges.
     private void displaycost() {
         SubscriptionCalculator costCalculator = new TotalCostCalculator(listOfSubs);
 
@@ -517,41 +517,33 @@ public class MainActivity extends AppCompatActivity {
 
         costCalculator.cost(listOfSubs);
 
-        double yearlyCost = costCalculator.getYearlyCost();
-        double weeklyCost = costCalculator.getWeeklyCost();
-        double dailyCost = costCalculator.getDailyCost();
-        double monthlyCost = costCalculator.getMonthlyCost();
+        int yearlyCost = costCalculator.getYearlyCost();
+        int yearlyCostIncents = costCalculator.getYearlyCostInCents();
+
+        int monthlyCost = costCalculator.getMonthlyCost();
+        int monthlyCostIncents = costCalculator.getMonthlyCostInCents();
+
+
+        // let int to string
+        String strYearlyCost = String.valueOf(yearlyCost);
+        String strYearlyCostIncents = String.valueOf(yearlyCostIncents);
+        String strMothlyCost = String.valueOf(monthlyCost);
+        String strMothlyCostCostIncents = String.valueOf(monthlyCostIncents);
+
+        //get the result
+        String displayYear = "Yearly Cost: $" + strYearlyCost + "." + strYearlyCostIncents;
+        String displayMothly = "Monthly Cost: $" + strMothlyCost + "." + strMothlyCostCostIncents;
+
 
         //show cost
-
         TextView yearlyCostTextView = findViewById(R.id.yearlyCostTextView);
-        yearlyCostTextView.setText(String.format("Yearly Cost: $%.2f", yearlyCost));
+        yearlyCostTextView.setText(displayYear);
 
         TextView monthlyCostTextView = findViewById(R.id.monthlyCostTextView);
-        monthlyCostTextView.setText(String.format("Mounth Cost: $%.2f", monthlyCost));
-
-        //TextView weeklyCostTextView = findViewById(R.id.weeklyCostTextView);
-        //weeklyCostTextView.setText(String.format("weekly Cost: $%.2f", weeklyCost));
-
-        //TextView dailyCostTextView = findViewById(R.id.dailyCostTextView);
-        //dailyCostTextView.setText(String.format("Daily Cost: $%.2f", dailyCost));
-    }
-    private void updateCost() {
-        Button updateButton = findViewById(R.id.update_cost);
-        updateButton.setOnClickListener(new View.OnClickListener() {
-            //set the update button
-            @Override
-            public void onClick(View v) {
-
-                displaycost();
-            }
-        });
-
+        monthlyCostTextView.setText(displayMothly);
 
 
     }
-
-
 
 
 }
