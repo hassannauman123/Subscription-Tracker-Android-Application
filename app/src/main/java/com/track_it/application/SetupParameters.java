@@ -86,7 +86,6 @@ public class SetupParameters {
 
         ArrayList<Frequency> returnList = new ArrayList<Frequency>();
 
-
         returnList.add(new DailyFrequency());
         returnList.add(new WeeklyFrequency());
         returnList.add(new BiWeekly());
