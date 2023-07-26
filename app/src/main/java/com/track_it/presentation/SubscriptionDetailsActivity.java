@@ -63,6 +63,7 @@ public class SubscriptionDetailsActivity extends AppCompatActivity {
     private Button addTagButton;
 
     //String constants, messages to display to user
+    private static final String tagInputHint = "Add Tags";
     private static final String validEditMessage = "Subscription Edited!"; // if edit was successful
     private static final String successDeleteMessage = "Subscription Deleted!";  // if delete was successful
     private static final String alreadyDeletedMessage = "Subscription has already been Deleted!"; // what to show if user tries to delete twice
@@ -114,6 +115,7 @@ public class SubscriptionDetailsActivity extends AppCompatActivity {
         }
 
         TagColors.setTextWatcher(this, tagInput);
+
 
     }
 
@@ -276,17 +278,19 @@ public class SubscriptionDetailsActivity extends AppCompatActivity {
         addTagButton.setEnabled(inputBool);
 
 
-        // Change color of input, and disable/enable drop down menu
+        // Change color of input, and disable/enable drop down menu, and change if tag input is visible
         if (inputBool) {
             nameTarget.setTextColor(Color.parseColor(editableColor));
             paymentAmountTarget.setTextColor(Color.parseColor(editableColor));
             dropDownFrequencyMenuEnabled(true);
             addTagButton.setVisibility(View.VISIBLE); //Make add tag button visible
+            tagInput.setHint(tagInputHint);
         } else {
             nameTarget.setTextColor(Color.parseColor(nonEditableColor));
             paymentAmountTarget.setTextColor(Color.parseColor(nonEditableColor));
             dropDownFrequencyMenuEnabled(false);
             addTagButton.setVisibility(View.INVISIBLE); //Make add tag button invisible
+            tagInput.setHint("");
         }
 
     }

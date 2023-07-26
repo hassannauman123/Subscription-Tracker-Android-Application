@@ -35,9 +35,7 @@ public class SubscriptionHandler {
 
     private final List<Frequency> frequencyList;
     private final SubscriptionPersistence subscriptionPersistence; //Database Handler
-
     private final int MAX_TAGS;
-
     private final SubscriptionTagHandler tagHandler;
 
     public SubscriptionHandler(int inputMinNameLen, int inputMaxNameLen, int inputMinPayment, int inputMaxPayment, String inputAllowableChars, int inputMaxTags, List<Frequency> inputAllowableFrequencies, SubscriptionTagHandler inputTagHandler, SubscriptionPersistence inputDB) {

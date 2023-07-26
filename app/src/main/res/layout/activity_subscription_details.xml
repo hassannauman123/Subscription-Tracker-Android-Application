@@ -25,7 +25,7 @@
         android:id="@+id/detail_subscription_amount"
         android:layout_width="80dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="408dp"
+        android:layout_marginBottom="391dp"
         android:ems="2"
         android:inputType="numberDecimal"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -38,12 +38,10 @@
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
         android:layout_width="167dp"
         android:layout_height="55dp"
-        android:layout_marginEnd="80dp"
-        android:layout_marginBottom="316dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginBottom="314dp"
         android:hint=""
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toEndOf="@+id/textView11">
 
         <AutoCompleteTextView
@@ -63,7 +61,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="36dp"
-        android:layout_marginBottom="416dp"
+        android:layout_marginBottom="400dp"
         android:text="Payment Amount: $"
         android:textSize="20sp"
         android:textStyle="bold"
@@ -96,21 +94,22 @@
         app:layout_constraintHorizontal_bias="0.433"
         app:layout_constraintStart_toEndOf="@+id/textView13" />
 
+
     <EditText
         android:id="@+id/tag_input"
-        android:layout_width="276dp"
+        android:layout_width="260dp"
         android:layout_height="48dp"
-        android:layout_marginBottom="224dp"
+        android:layout_marginBottom="228dp"
         android:ems="10"
         android:hint="Add Tags"
         android:inputType="text"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.863"
-        app:layout_constraintStart_toStartOf="parent" />
 
+
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/textView6" />
 
     <TextView
+        android:id="@+id/textView6"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="36dp"
@@ -155,7 +154,7 @@
         android:id="@+id/add_existing_tag"
         android:layout_width="60dp"
         android:layout_height="39dp"
-        android:layout_marginStart="332dp"
+        android:layout_marginStart="295dp"
         android:layout_marginBottom="184dp"
         android:padding="1dp"
         android:text="Add Existing Tag"

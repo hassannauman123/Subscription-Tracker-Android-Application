@@ -100,13 +100,11 @@ public class UnitTagTest {
     }
 
 
-
     //Test adding tags
     @Test
-    public void addTagsTest()
-    {
+    public void addTagsTest() {
         String tags = "tag1";
-        List <SubscriptionTag> tagsAdded = tagHandler.stringToTags(tags);
+        List<SubscriptionTag> tagsAdded = tagHandler.stringToTags(tags);
         SubscriptionTag tagAdded = tagsAdded.get(0);
 
 
@@ -123,7 +121,7 @@ public class UnitTagTest {
 
         assertTrue("FAILED addTagsTest: Added " + tagsAdded.size() + " tags but got back " + returnedTags.size(), returnedTags.size() == tagsAdded.size());
 
-        assertTrue("FAILED addTagsTest: Insert a tag with name " + tagAdded + " but got back a tag with name " +returnedTags.get(0), tagAdded.getName().equals(returnedTags.get(0).getName()));
+        assertTrue("FAILED addTagsTest: Insert a tag with name " + tagAdded + " but got back a tag with name " + returnedTags.get(0), tagAdded.getName().equals(returnedTags.get(0).getName()));
 
 
         System.out.println("PASSED: addTagsTest");

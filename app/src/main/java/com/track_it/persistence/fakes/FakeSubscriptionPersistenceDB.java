@@ -15,7 +15,6 @@ public class FakeSubscriptionPersistenceDB implements SubscriptionPersistence {
 
     // A static Arraylist to hold subscriptions.
     private static ArrayList<SubscriptionObj> subscriptionDB = new ArrayList<SubscriptionObj>(); // Create a static ArrayList that hold subscription Objects
-
     private static int databaseCount = 0; // A unique number for the Subscription ID's (Do not ever reduce this number, even when deleting from database)
 
 
@@ -26,7 +25,6 @@ public class FakeSubscriptionPersistenceDB implements SubscriptionPersistence {
         subscriptionDB.add(inputSubscription); // ADD to database
         databaseCount++;
     }
-
 
 
     // Gets all the subscriptions in the database
@@ -51,7 +49,6 @@ public class FakeSubscriptionPersistenceDB implements SubscriptionPersistence {
     @Override
     public void editSubscriptionByID(int subscriptionID, SubscriptionObj newDetails) throws RetrievalException {
         SubscriptionObj subscriptonToUpdate = null;
-
 
         //Find the subscription to edit
         for (int i = 0; i < subscriptionDB.size(); i++) {

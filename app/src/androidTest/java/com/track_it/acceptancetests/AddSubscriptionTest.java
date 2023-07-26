@@ -33,8 +33,7 @@ import org.junit.runner.RunWith;
 @LargeTest
 @RunWith(AndroidJUnit4.class)
 
-public class AddSubscriptionTest
-{
+public class AddSubscriptionTest {
 
 
     //Details for a subscription to be added
@@ -49,8 +48,7 @@ public class AddSubscriptionTest
     public ActivityScenarioRule<MainActivity> mActivityScenarioRule = new ActivityScenarioRule<>(MainActivity.class);
 
     @Before
-    public void testSetup()
-    {
+    public void testSetup() {
         TestUtils.clearDatabase(SetupParameters.getSubscriptionHandler());
         TestUtils.refreshPage();
 
@@ -60,7 +58,6 @@ public class AddSubscriptionTest
     public void testTearDown() {
         TestUtils.clearDatabase(SetupParameters.getSubscriptionHandler());
     }
-
 
 
     //Test adding as subscription.
@@ -84,7 +81,6 @@ public class AddSubscriptionTest
 
 
     }
-
 
 
 }

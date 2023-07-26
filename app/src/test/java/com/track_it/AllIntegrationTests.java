@@ -15,7 +15,8 @@ import org.junit.runners.Suite;
         SubscriptionValidateTest.class,
         SubscriptionSortTest.class,
         IntegrationTagTests.class,
-        SubscriptionFilterTest.class
+        SubscriptionFilterTest.class,
+        TestSubscriptionCalculator.class
 }
 )
 

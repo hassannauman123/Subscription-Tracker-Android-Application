@@ -35,9 +35,12 @@ public class TagColors {
 
             //You have to have this dead code here, as abstract methods onTextChanged and afterTextChanged must be defined
             @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after){}
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
 
 
         });
@@ -60,11 +63,10 @@ public class TagColors {
         int index = 0;
         for (String currTagName : getSplit) {
 
-            if ( ! currTagName.trim().equals("")) // Only add the word if it is not blank
+            if (!currTagName.trim().equals("")) // Only add the word if it is not blank
             {
                 allTagsName += "<span style='background:" + tagColorList[index % tagColorList.length] + "';>" + currTagName + "</span>"; // Each tag has a different color
-                if (index + 1 < getSplit.length)
-                {
+                if (index + 1 < getSplit.length) {
                     allTagsName += " "; // Add a space between all words, except the last
                 }
             }
@@ -72,7 +74,7 @@ public class TagColors {
         }
 
 
-        //If the last characterss of the original string were blank spaces before, add them back now
+        //If the last characters of the original string were blank spaces before, add them back now
         int endSpaceItr = input.length() - 1;
         while (endSpaceItr >= 0 && input.charAt(endSpaceItr) == ' ') {
             allTagsName += " ";

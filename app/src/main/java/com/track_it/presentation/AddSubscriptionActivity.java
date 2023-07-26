@@ -56,13 +56,10 @@ public class AddSubscriptionActivity extends AppCompatActivity {
     private boolean successTry; // used by the clickedAddSubscriptionButton function, to keep track of if all the input is valid
 
 
-    private Context mainContext = this;
+    private Context mainContext = this; // We need to pass that context this to some helper classes
     private AutoCompleteTextView frequencyTarget; //Input for the frequency
-    private TextInputLayout dropDownMenuParent;  //Parent of the frequency targets
+    private TextInputLayout dropDownMenuParent;  //Parent of frequencyTarget
 
-    private List<SubscriptionTag> allTags; //List of all tags that already exist
-    private List<SubscriptionTag> enteredTags; // list of tags that the user has entered so far
-    private List<SubscriptionTag> addTagOptionList; //List of tags that
 
     private AddTagMenu tagMenu;
 
@@ -83,38 +80,6 @@ public class AddSubscriptionActivity extends AppCompatActivity {
     }
 
 
-    //Set the button behavior for the popup filter options
-    private void setFilterPopButtonBehavior(AlertDialog.Builder builder, boolean[] checkedArray, List<SubscriptionTag> addTagOptionList) {
-
-
-        //What happens if the apply button is clicked
-        builder.setPositiveButton(getResources().getString(R.string.apply_filter_confirmation), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-
-                String tagEnteredByUser = tagInput.getText().toString();
-
-                String totalTagsToadd = "";
-                for (int i = 0; i < checkedArray.length; i++) {
-                    if (checkedArray[i]) {
-                        if (!tagEnteredByUser.contains(addTagOptionList.get(i).getName())) {
-                            totalTagsToadd += addTagOptionList.get(i).getName() + " ";
-                        }
-                    } else {
-                        tagEnteredByUser = tagEnteredByUser.replace(addTagOptionList.get(i).getName(), "");
-                    }
-                }
-
-                totalTagsToadd = tagEnteredByUser + " " + totalTagsToadd;
-                tagInput.setText(totalTagsToadd);
-
-            }
-        });
-
-
-    }
-
-
     //Set the global variable targets
     private void setTargets() {
         // Set the add subscription button
@@ -123,6 +88,8 @@ public class AddSubscriptionActivity extends AppCompatActivity {
         //Back button target
         backTarget = (Button) findViewById(R.id.go_home);
 
+        //Class to create existing tag popup
+        tagMenu = new AddTagMenu();
 
         //Frequency menu targets
         frequencyTarget = findViewById(R.id.AutoComplete_drop_menu);
@@ -139,12 +106,10 @@ public class AddSubscriptionActivity extends AppCompatActivity {
         nameError = ((TextView) findViewById(R.id.input_subscription_name_error)); // where to display name errors
         frequencyError = ((TextView) findViewById(R.id.input_frequency_error)); // where to display name errors
         tagError = ((TextView) findViewById(R.id.tag_input_error));
+
         //Get tag input target
         tagInput = ((EditText) findViewById(R.id.tag_input));
         addExistingTagButton = ((Button) findViewById(R.id.add_existing_tag));
-
-        //Class to create existing tag popup
-        tagMenu = new AddTagMenu();
 
     }
 
