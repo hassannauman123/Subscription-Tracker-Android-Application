@@ -8,8 +8,7 @@ import com.track_it.logic.comparators.CompareSubscriptionPayment;
 import com.track_it.logic.SubscriptionHandler;
 import com.track_it.logic.frequencies.Frequency;
 import com.track_it.application.SetupParameters;
-import com.track_it.util.FillDatabase;
-import com.track_it.util.TestUtils;
+ import com.track_it.util.TestUtils;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -32,7 +31,7 @@ public class SubscriptionSortTest {
         TestUtils.changeDatabase();
 
         subHandle = SetupParameters.getSubscriptionHandler();
-        FillDatabase.fillDataBase(subHandle);  //Create some subs,  and add them to Database
+        TestUtils.create10Sub(subHandle);  //Create some subs,  and add them to Database
         listOfSubs = subHandle.getAllSubscriptions(); // Get subscriptions from database
 
     }

@@ -2,6 +2,9 @@ package com.track_it.presentation;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
@@ -16,10 +19,14 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.track_it.R;
 import com.track_it.application.SetupParameters;
 import com.track_it.domainobject.SubscriptionObj;
+import com.track_it.domainobject.SubscriptionTag;
 import com.track_it.logic.SubscriptionHandler;
 import com.track_it.logic.exceptions.RetrievalException;
 import com.track_it.logic.exceptions.SubscriptionException;
 import com.track_it.logic.exceptions.SubscriptionTagException;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 // This class handles the presentation of the add subscription page for the app.
@@ -44,12 +51,20 @@ public class AddSubscriptionActivity extends AppCompatActivity {
 
     private EditText tagInput;
 
+    private Button addExistingTagButton;
 
     private boolean successTry; // used by the clickedAddSubscriptionButton function, to keep track of if all the input is valid
 
 
+    private Context mainContext = this;
     private AutoCompleteTextView frequencyTarget; //Input for the frequency
     private TextInputLayout dropDownMenuParent;  //Parent of the frequency targets
+
+    private List<SubscriptionTag> allTags; //List of all tags that already exist
+    private List<SubscriptionTag> enteredTags; // list of tags that the user has entered so far
+    private List<SubscriptionTag> addTagOptionList; //List of tags that
+
+    private AddTagMenu tagMenu;
 
 
     @Override
@@ -64,6 +79,39 @@ public class AddSubscriptionActivity extends AppCompatActivity {
         FrequencyMenu.initializeMenu(this, subHandler, frequencyTarget); // Enable drop down menu
         setButtonActions(); //Set what happens when buttons are clicked
         TagColors.setTextWatcher(this, tagInput); // Set the tag box such that it displays seperated words in different color
+
+    }
+
+
+    //Set the button behavior for the popup filter options
+    private void setFilterPopButtonBehavior(AlertDialog.Builder builder, boolean[] checkedArray, List<SubscriptionTag> addTagOptionList) {
+
+
+        //What happens if the apply button is clicked
+        builder.setPositiveButton(getResources().getString(R.string.apply_filter_confirmation), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                String tagEnteredByUser = tagInput.getText().toString();
+
+                String totalTagsToadd = "";
+                for (int i = 0; i < checkedArray.length; i++) {
+                    if (checkedArray[i]) {
+                        if (!tagEnteredByUser.contains(addTagOptionList.get(i).getName())) {
+                            totalTagsToadd += addTagOptionList.get(i).getName() + " ";
+                        }
+                    } else {
+                        tagEnteredByUser = tagEnteredByUser.replace(addTagOptionList.get(i).getName(), "");
+                    }
+                }
+
+                totalTagsToadd = tagEnteredByUser + " " + totalTagsToadd;
+                tagInput.setText(totalTagsToadd);
+
+            }
+        });
+
+
     }
 
 
@@ -93,6 +141,10 @@ public class AddSubscriptionActivity extends AppCompatActivity {
         tagError = ((TextView) findViewById(R.id.tag_input_error));
         //Get tag input target
         tagInput = ((EditText) findViewById(R.id.tag_input));
+        addExistingTagButton = ((Button) findViewById(R.id.add_existing_tag));
+
+        //Class to create existing tag popup
+        tagMenu = new AddTagMenu();
 
     }
 
@@ -135,6 +187,17 @@ public class AddSubscriptionActivity extends AppCompatActivity {
             }
         });
 
+
+        //Set what happens when user clicks add existing tags buttn
+        addExistingTagButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+
+                tagMenu.showAddTagsMenu(mainContext, subHandler, tagInput);
+
+
+            }
+        });
+
     }
 
 
@@ -167,8 +230,10 @@ public class AddSubscriptionActivity extends AppCompatActivity {
         try {
             //Get tag input from user
             String getTagInput = tagInput.getText().toString().toLowerCase().trim().toLowerCase();
-            newSubscription.setTagList(subHandler.getTagHandler().stringToTags(getTagInput)); // Set tags based on user input
-            subHandler.validateTagList(newSubscription.getTagList()); // Try to validate tag list
+            subHandler.setTags(newSubscription, getTagInput); // Try to set tags based on input from user
+            subHandler.validateTagList(newSubscription.getTagList()); // Try to set tags based on input from user
+            tagError.setText("");
+            tagError.setVisibility(View.INVISIBLE);
 
         } catch (SubscriptionException | SubscriptionTagException e) {
 

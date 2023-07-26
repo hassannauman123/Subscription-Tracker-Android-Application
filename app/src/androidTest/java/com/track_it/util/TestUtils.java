@@ -43,7 +43,7 @@ public class TestUtils {
     private static boolean useRealDatabase = false; //Should we use real database? - Default false means use fakeDataBase
 
 
-    private static final int SLEEP_TIME = 300;
+    private static final int SLEEP_TIME = 600;
 
 
     //The parameters we used to create the subs

@@ -150,6 +150,19 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:visibility="invisible" />
 
+
+    <Button
+        android:id="@+id/add_existing_tag"
+        android:layout_width="60dp"
+        android:layout_height="39dp"
+        android:layout_marginStart="332dp"
+        android:layout_marginBottom="184dp"
+        android:padding="1dp"
+        android:text="Add Existing Tag"
+        android:textSize="8sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
     <Button
         android:id="@+id/details_edit_subscription"
         android:layout_width="167dp"

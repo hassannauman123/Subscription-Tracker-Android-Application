@@ -64,7 +64,7 @@ public class SubscriptionTagPersistenceHSQLDB implements SubscriptionTagPersiste
          } catch (final SQLException e) {
             Log.e("Connect SQL", e.getMessage() + e.getSQLState());
             e.printStackTrace();
-            throw new RetrievalException(e.getMessage());
+            throw new RetrievalException("Unable to change tags of subscription");
         }
 
     }
@@ -89,7 +89,7 @@ public class SubscriptionTagPersistenceHSQLDB implements SubscriptionTagPersiste
         } catch (final SQLException e) {
             Log.e("Connect SQL", e.getMessage() + e.getSQLState());
             e.printStackTrace();
-            throw new RetrievalException(e.getMessage());
+            throw new RetrievalException("Unable to get all tags");
         }
 
         return listAllTags;
@@ -111,7 +111,7 @@ public class SubscriptionTagPersistenceHSQLDB implements SubscriptionTagPersiste
         } catch (final SQLException e) {
             Log.e("Connect SQL", e.getMessage() + e.getSQLState());
             e.printStackTrace();
-            throw new RetrievalException(e.getMessage());
+            throw new RetrievalException("Unable to change a subscriptions tags");
         }
 
     }
@@ -128,7 +128,8 @@ public class SubscriptionTagPersistenceHSQLDB implements SubscriptionTagPersiste
         } catch (final SQLException e) {
             Log.e("Connect SQL", e.getMessage() + e.getSQLState());
             e.printStackTrace();
-            throw new RetrievalException(e.getMessage());
+            throw new RetrievalException("Unable to remove unused tags");
+
         }
     }
 
@@ -154,7 +155,7 @@ public class SubscriptionTagPersistenceHSQLDB implements SubscriptionTagPersiste
         } catch (final SQLException e) {
             Log.e("Connect SQL", e.getMessage() + e.getSQLState());
             e.printStackTrace();
-            throw new RetrievalException(e.getMessage());
+            throw new RetrievalException("Unable to get tags for a subscription");
         }
 
         return listOfTagsForSub;
@@ -172,7 +173,7 @@ public class SubscriptionTagPersistenceHSQLDB implements SubscriptionTagPersiste
          } catch (final SQLException e) {
             Log.e("Connect SQL", e.getMessage() + e.getSQLState());
             e.printStackTrace();
-            throw new RetrievalException(e.getMessage());
+            throw new RetrievalException("Unable to remove a subscriptions tags");
         }
 
     }
@@ -206,7 +207,7 @@ public class SubscriptionTagPersistenceHSQLDB implements SubscriptionTagPersiste
             } catch (final SQLException e) {
                 Log.e("Connect SQL", e.getMessage() + e.getSQLState());
                 e.printStackTrace();
-                throw new RetrievalException(e.getMessage());
+                throw new RetrievalException("Unable save a tag");
             }
         } else // Else set it's id by the value in database
         {
