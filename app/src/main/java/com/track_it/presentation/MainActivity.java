@@ -48,7 +48,7 @@ import java.util.List;
 //
 //  Currently it displays all subscriptions in a scrollable list, and has a add subscription button.
 //  Clicking on any subscription should open a new page that allows you to edit or delete the sub.
-//  It also has sort and search input, to filter and sort the subscriptions.
+//  It also has sort and search input, to filter the subs by tags, and sort the subscriptions.
 //
 
 
@@ -75,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
 
     private boolean filterAny = false; // Should we show subscriptions that match any filter ( default is to only show ones that match all filters)
 
-    private Switch filterSwitch;
+    private Switch filterSwitch; //Toggle the filter behaviour
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -253,7 +253,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    //Enable the sort and fitler input - Allows user to sort or filter subscriptions
+    //Enable the sort and filter input - Allows user to sort or filter subscriptions
     private void enableSortFilterInput() {
 
 
@@ -423,9 +423,7 @@ public class MainActivity extends AppCompatActivity {
             if (filterAny)  // filterAny means to display subscription that has as ANY matching filter tag
             {
                 passFilter = subFilter.checkIfSubHasAnyMatchingTags(inputSub, tagFilterList); //Check if the subscription has at least one of the tags in tagFilter
-            }
-            else
-            {
+            } else {
                 passFilter = subFilter.checkIfSuHasAllTags(inputSub, tagFilterList); // Check if the sub has ALL tags
             }
         }
@@ -508,6 +506,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
     }
+
     private void displaycost() {
         SubscriptionCalculator costCalculator = new TotalCostCalculator(listOfSubs);
 

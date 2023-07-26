@@ -19,7 +19,7 @@ import java.util.List;
 
 // This class handles the presentation of the add subscription page for the app.
 public class AddTagMenu {
-    private List<SubscriptionTag> allTags; //List of all tags that already exist
+    private List<SubscriptionTag> allTags; //List of all tags that already exist in the system
     private List<SubscriptionTag> enteredTags; // list of tags that the user has entered so far
 
 
