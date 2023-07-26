@@ -505,6 +505,10 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+
+    //  Note*
+    // This method was written by tian but the changes he made were copied and pasted here with his permission because the branch he is working on
+    // is a behind our develop branch by 2 months and it causes issues with our project when he merges.
     private void displaycost() {
         SubscriptionCalculator costCalculator = new TotalCostCalculator(listOfSubs);
 
@@ -513,24 +517,32 @@ public class MainActivity extends AppCompatActivity {
 
         costCalculator.cost(listOfSubs);
 
-        double yearlyCost = costCalculator.getYearlyCost();
-        double weeklyCost = costCalculator.getWeeklyCost();
-        double dailyCost = costCalculator.getDailyCost();
-        double monthlyCost = costCalculator.getMonthlyCost();
+        int yearlyCost = costCalculator.getYearlyCost();
+        int yearlyCostIncents = costCalculator.getYearlyCostInCents();
+
+        int monthlyCost = costCalculator.getMonthlyCost();
+        int monthlyCostIncents = costCalculator.getMonthlyCostInCents();
+
+
+        // let int to string
+        String strYearlyCost = String.valueOf(yearlyCost);
+        String strYearlyCostIncents = String.valueOf(yearlyCostIncents);
+        String strMothlyCost = String.valueOf(monthlyCost);
+        String strMothlyCostCostIncents = String.valueOf(monthlyCostIncents);
+
+        //get the result
+        String displayYear = "Yearly Cost: $" + strYearlyCost + "." + strYearlyCostIncents;
+        String displayMothly = "Monthly Cost: $" + strMothlyCost + "." + strMothlyCostCostIncents;
+
 
         //show cost
-
         TextView yearlyCostTextView = findViewById(R.id.yearlyCostTextView);
-        yearlyCostTextView.setText(String.format("Yearly Cost: $%.2f", yearlyCost));
+        yearlyCostTextView.setText(displayYear);
 
         TextView monthlyCostTextView = findViewById(R.id.monthlyCostTextView);
-        monthlyCostTextView.setText(String.format("Monthly Cost: $%.2f", monthlyCost));
+        monthlyCostTextView.setText(displayMothly);
 
-        //TextView weeklyCostTextView = findViewById(R.id.weeklyCostTextView);
-        //weeklyCostTextView.setText(String.format("weekly Cost: $%.2f", weeklyCost));
 
-        //TextView dailyCostTextView = findViewById(R.id.dailyCostTextView);
-        //dailyCostTextView.setText(String.format("Daily Cost: $%.2f", dailyCost));
     }
 
 

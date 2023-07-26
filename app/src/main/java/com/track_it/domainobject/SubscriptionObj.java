@@ -43,7 +43,7 @@ public class SubscriptionObj {
 
     }
 
-    // Create and return a  copy of this object
+    // Create and return a copy of this object
     public SubscriptionObj copy() {
         SubscriptionObj copyOfSubscription = new SubscriptionObj(this.name, this.paymentInCents, this.paymentFrequencyName);
         copyOfSubscription.setID(this.getID());
