@@ -28,9 +28,6 @@ public class FakeSubscriptionPersistenceDB implements SubscriptionPersistence {
     }
 
 
-    public static ArrayList<SubscriptionObj> getSubscriptionDB() {
-        return subscriptionDB;
-    }
 
     // Gets all the subscriptions in the database
     @Override

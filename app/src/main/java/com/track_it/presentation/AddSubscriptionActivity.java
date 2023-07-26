@@ -167,8 +167,8 @@ public class AddSubscriptionActivity extends AppCompatActivity {
         try {
             //Get tag input from user
             String getTagInput = tagInput.getText().toString().toLowerCase().trim().toLowerCase();
-            newSubscription.setTagList(subHandler.getTagHandler().stringToTags(getTagInput)); // Set tags based on user input
-            subHandler.validateTagList(newSubscription.getTagList()); // Try to validate tag list
+            subHandler.setTags(newSubscription, getTagInput); // Try to set tags based on input from user
+            subHandler.validateTagList(newSubscription.getTagList()); // Try to set tags based on input from user
 
         } catch (SubscriptionException | SubscriptionTagException e) {
 
