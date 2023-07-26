@@ -5,11 +5,11 @@ import java.util.List;
 
 public class TotalCostCalculator implements SubscriptionCalculator {
 
-    double totalCost = 0;
-    private double yearlyCost = 0;
-    private double weeklyCost = 0;
-    private double monthlyCost = 0;
-    private double dailyCost = 0;
+    int totalCost = 0;
+    private int yearlyCost = 0;
+    private int weeklyCost = 0;
+    private int monthlyCost = 0;
+    private int dailyCost = 0;
     private final List<SubscriptionObj> listOfSubs;
 
     public TotalCostCalculator(List<SubscriptionObj> listOfSubs) {
@@ -21,7 +21,8 @@ public class TotalCostCalculator implements SubscriptionCalculator {
     public void cost(List<SubscriptionObj> listOfSubs) {
         for (SubscriptionObj subscription : listOfSubs) {
             //get cost and paymentPeriod from db
-            double subscriptionCost = subscription.getPaymentDollars();
+            double subscriptionCost = subscription.getTotalPaymentInCents();
+
             String paymentPeriod = subscription.getPaymentFrequency();
             //calculate the cost
 
@@ -30,9 +31,9 @@ public class TotalCostCalculator implements SubscriptionCalculator {
             } else if (paymentPeriod.equals("monthly")) {
                 totalCost += subscriptionCost * 12;
             } else if (paymentPeriod.equals("weekly")) {
-                totalCost += subscriptionCost * 52;
+                totalCost += subscriptionCost * 52 ;
             } else if (paymentPeriod.equals("bi-weekly")) {
-                totalCost += subscriptionCost * 26;
+                totalCost += subscriptionCost * 26 ;
             } else if (paymentPeriod.equals("yearly")) {
                 totalCost += subscriptionCost;
             }
@@ -42,25 +43,39 @@ public class TotalCostCalculator implements SubscriptionCalculator {
         weeklyCost = totalCost / 52;
         monthlyCost = totalCost / 12;
         yearlyCost = totalCost;
+
     }
-    //return the cost
+    //return the cost in decimals and integers
     @Override
-    public double getYearlyCost() {
-        return yearlyCost;
+    public int getYearlyCost() {
+        return yearlyCost/ 100;
+    }
+    public int getYearlyCostInCents() {
+        return yearlyCost % 100;
     }
 
     @Override
-    public double getWeeklyCost() {
-        return weeklyCost;
+    public int getWeeklyCost() {
+        return weeklyCost/ 100;
+    }
+    public int getWeeklyCostInCents() {
+        return weeklyCost % 100;
     }
 
     @Override
-    public double getMonthlyCost() {
-        return monthlyCost;
+    public int getMonthlyCost() {
+        return monthlyCost/ 100;
+    }
+    public int getMonthlyCostInCents() {
+        return monthlyCost - ( monthlyCost/ 100) *100;
     }
 
+
     @Override
-    public double getDailyCost() {
-        return dailyCost;
+    public int getDailyCost() {
+        return dailyCost/ 100;
+    }
+    public int getDailyCostInCents() {
+        return dailyCost - ( dailyCost/ 100) *100;
     }
 }

@@ -23,7 +23,7 @@ public class AddTagMenu {
     private List<SubscriptionTag> enteredTags; // list of tags that the user has entered so far
 
 
-    //This is what the user will see when they click filter list by tags.
+    //This is what the user will see when they add existing tags button.
     //This is a pop up with each tag having a check box, and 2 buttons (apply and clear).
     public void showAddTagsMenu(Context context, SubscriptionHandler subHandler, EditText tagInput) {
 
@@ -51,7 +51,7 @@ public class AddTagMenu {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle("Add Existing Tags");
 
-        //Set up the filter options as a series of check boxes for the user to click
+        //Set up the add tags options as a series of check boxes for the user to click
         builder.setMultiChoiceItems(tagNameArray, checkedArray, new DialogInterface.OnMultiChoiceClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which, boolean isChecked) {
@@ -64,7 +64,7 @@ public class AddTagMenu {
     }
 
 
-    //Set the button behavior for the popup filter options
+    //Set the button behavior for the popup tags options
     private void setAddTagsBehavior(AlertDialog.Builder builder, boolean[] checkedArray, List<SubscriptionTag> addTagOptionList, EditText tagInput) {
 
 
@@ -75,11 +75,11 @@ public class AddTagMenu {
 
                 String tagsEnteredByUser = tagInput.getText().toString(); // What the user has enter for tax
 
-                String totalTagsToShow = ""; // What we will change the text to
+                String totalTagsToShow = ""; // What we will change the input tag text box to
 
                 // Iterate through the check boxes.
                 // If the user has checked it, then add it to totalTagsToShow ( if it wasn't already in tagsEnteredByUser),
-                // else try to remove it from tagsEnteredByUser. Combine the two strings at end
+                // else try to remove it from tagsEnteredByUser. Combine the two strings at end to get final result.
 
                 for (int i = 0; i < checkedArray.length; i++) {
                     if (checkedArray[i])  //Is the checked box checked?
@@ -98,8 +98,6 @@ public class AddTagMenu {
 
             }
         });
-
-
     }
 }
 

@@ -105,8 +105,7 @@ public class MainActivity extends AppCompatActivity {
         getSubList(); //Get a new list of subs ( in case any subs were added, deleted, or modified)
 
         View current = getCurrentFocus();
-        if (current != null)
-        {
+        if (current != null) {
             current.clearFocus(); //Reset focus
         }
 
@@ -233,8 +232,7 @@ public class MainActivity extends AppCompatActivity {
 
                 //Close the keyboard
                 View current = getCurrentFocus();
-                if (current != null)
-                {
+                if (current != null) {
                     InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(current.getWindowToken(), 0);
 
