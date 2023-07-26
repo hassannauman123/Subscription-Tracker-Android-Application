@@ -19,17 +19,15 @@
         android:id="@+id/input_subscription_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="1dp"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="2dp"
         android:ems="10"
         android:hint="Name"
         android:inputType="text"
-        app:layout_constraintStart_toStartOf="@+id/guideline2"
-        app:layout_constraintTop_toBottomOf="@+id/textView2"
 
 
-        />
-
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView2" />
 
     <EditText
         android:id="@+id/tag_input"
@@ -115,11 +113,10 @@
         android:id="@+id/textView4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="1dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginStart="16dp"
         android:text="Payment Amount"
-        app:layout_constraintStart_toStartOf="@+id/input_payment_amount"
-        app:layout_constraintTop_toBottomOf="@+id/input_subscription_name" />
+        app:layout_constraintBottom_toTopOf="@+id/input_payment_amount"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/input_subscription_name_error"
@@ -140,23 +137,23 @@
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="1dp"
-        android:layout_marginTop="89dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="88dp"
         android:text="Add Subscription Name"
-        app:layout_constraintStart_toStartOf="@+id/guideline2"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
         android:id="@+id/input_payment_amount"
         android:layout_width="123dp"
         android:layout_height="54dp"
-        android:layout_marginStart="1dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="192dp"
         android:ems="10"
         android:hint="Cost"
         android:inputType="numberDecimal"
-        app:layout_constraintStart_toStartOf="@+id/guideline2"
-        app:layout_constraintTop_toTopOf="@+id/textView4" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/input_frequency_error"

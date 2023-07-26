@@ -73,6 +73,7 @@ public class RemoveSubscriptionTest {
         SystemClock.sleep(TestUtils.getSleepTime());
 
 
+
         //Delete sub
         onView(withText("Name: " + originalName)).perform(click());
         SystemClock.sleep(TestUtils.getSleepTime());
