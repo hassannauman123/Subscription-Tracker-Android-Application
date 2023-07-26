@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-//This is fake database for tags. It implements that SubscriptionTagPersistence
+//This is fake database for tags. It implements the SubscriptionTagPersistence interface
 public class FakeSubscriptionTagPersistenceDB implements SubscriptionTagPersistence {
     private static List<SubscriptionTag> listOfTags = new ArrayList<SubscriptionTag>();
     private static List<int[]> tagSubAssociation = new ArrayList<int[]>();
@@ -37,7 +37,6 @@ public class FakeSubscriptionTagPersistenceDB implements SubscriptionTagPersiste
                 found = true;
             }
         }
-
         return found;
     }
 
@@ -67,7 +66,6 @@ public class FakeSubscriptionTagPersistenceDB implements SubscriptionTagPersiste
                 tagSubAssociation.add(newAssociation);
             }
         }
-
 
 
     }

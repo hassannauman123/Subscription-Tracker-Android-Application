@@ -59,7 +59,7 @@ public class SubscriptionPersistenceHSQLDB implements SubscriptionPersistence {
 
     @Override
     // return a list of all subscriptions in the database
-    public List<SubscriptionObj> getAllSubscriptions() {
+    public List<SubscriptionObj> getAllSubscriptions() throws RetrievalException {
         final List<SubscriptionObj> AllSubscriptions = new ArrayList<>();
 
         try (final Connection c = connect()) {
