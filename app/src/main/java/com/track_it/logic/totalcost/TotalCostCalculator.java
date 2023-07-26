@@ -1,7 +1,13 @@
 package com.track_it.logic.totalcost;
 
 import com.track_it.domainobject.SubscriptionObj;
+
 import java.util.List;
+
+
+//  Note*
+// This class was written by tian but the changes he made were copied and pasted here with his permission because the branch he is working on
+// is a behind our develop branch by 2 months and it causes issues with our project when he merges.
 
 public class TotalCostCalculator implements SubscriptionCalculator {
 
@@ -31,9 +37,9 @@ public class TotalCostCalculator implements SubscriptionCalculator {
             } else if (paymentPeriod.equals("monthly")) {
                 totalCost += subscriptionCost * 12;
             } else if (paymentPeriod.equals("weekly")) {
-                totalCost += subscriptionCost * 52 ;
+                totalCost += subscriptionCost * 52;
             } else if (paymentPeriod.equals("bi-weekly")) {
-                totalCost += subscriptionCost * 26 ;
+                totalCost += subscriptionCost * 26;
             } else if (paymentPeriod.equals("yearly")) {
                 totalCost += subscriptionCost;
             }
@@ -45,37 +51,42 @@ public class TotalCostCalculator implements SubscriptionCalculator {
         yearlyCost = totalCost;
 
     }
+
     //return the cost in decimals and integers
     @Override
     public int getYearlyCost() {
-        return yearlyCost/ 100;
+        return yearlyCost / 100;
     }
+
     public int getYearlyCostInCents() {
         return yearlyCost % 100;
     }
 
     @Override
     public int getWeeklyCost() {
-        return weeklyCost/ 100;
+        return weeklyCost / 100;
     }
+
     public int getWeeklyCostInCents() {
         return weeklyCost % 100;
     }
 
     @Override
     public int getMonthlyCost() {
-        return monthlyCost/ 100;
+        return monthlyCost / 100;
     }
+
     public int getMonthlyCostInCents() {
-        return monthlyCost - ( monthlyCost/ 100) *100;
+        return monthlyCost - (monthlyCost / 100) * 100;
     }
 
 
     @Override
     public int getDailyCost() {
-        return dailyCost/ 100;
+        return dailyCost / 100;
     }
+
     public int getDailyCostInCents() {
-        return dailyCost - ( dailyCost/ 100) *100;
+        return dailyCost - (dailyCost / 100) * 100;
     }
 }

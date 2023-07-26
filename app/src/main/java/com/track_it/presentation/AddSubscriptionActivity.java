@@ -114,11 +114,6 @@ public class AddSubscriptionActivity extends AppCompatActivity {
     }
 
 
-
-
-
-
-
     //Constrain what a user can enter for input
     private void constrainUserInput() {
 

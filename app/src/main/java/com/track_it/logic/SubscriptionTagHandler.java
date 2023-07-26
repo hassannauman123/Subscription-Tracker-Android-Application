@@ -53,9 +53,7 @@ public class SubscriptionTagHandler {
     }
 
 
-
-    public void validateTag(SubscriptionTag inputTag) throws SubscriptionTagException
-    {
+    public void validateTag(SubscriptionTag inputTag) throws SubscriptionTagException {
         validateTagName(inputTag.getName());
     }
 
@@ -75,8 +73,7 @@ public class SubscriptionTagHandler {
         return TAG_SPLIT_CRITERIA;
     }
 
-    public int getMaxTagNameLength()
-    {
+    public int getMaxTagNameLength() {
         return MAX_NAME_TAG_LENGTH;
     }
 

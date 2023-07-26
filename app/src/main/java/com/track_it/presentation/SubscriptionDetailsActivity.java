@@ -117,7 +117,6 @@ public class SubscriptionDetailsActivity extends AppCompatActivity {
         TagColors.setTextWatcher(this, tagInput);
 
 
-
     }
 
 

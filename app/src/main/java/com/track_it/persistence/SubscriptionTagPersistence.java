@@ -5,24 +5,22 @@ import com.track_it.domainobject.SubscriptionTag;
 
 import java.util.List;
 
-public interface SubscriptionTagPersistence
-{
+public interface SubscriptionTagPersistence {
 
 
-    void addTagToPersistence(SubscriptionTag insertTag);
+    void addTagToPersistence(SubscriptionTag insertTag); // Add tags to database
 
-    void changeSubscriptionTags(SubscriptionObj inputSub);
-
-
-     List<SubscriptionTag> getTagsForSubscription(SubscriptionObj inputSub);
+    void changeSubscriptionTags(SubscriptionObj inputSub); // Change the tags that a subscription has
 
 
-    List<SubscriptionTag>  getAllTags();
+    List<SubscriptionTag> getTagsForSubscription(SubscriptionObj inputSub); // Get tags for a subscription
 
-    void removeAllTagsBySubID(int subID);
 
-     void removeUnusedTags();
+    List<SubscriptionTag> getAllTags(); //Get all tags from database
 
+    void removeAllTagsBySubID(int subID); //Remove all tags from a subscription
+
+    void removeUnusedTags(); //Remove all tags that are not associated with a subscription
 
 
 }

@@ -29,19 +29,15 @@ public class SubscriptionSortTest {
     public void setTestHandle() {
 
         TestUtils.changeDatabase();
-
         subHandle = SetupParameters.getSubscriptionHandler();
-        TestUtils.create10Sub(subHandle);  //Create some subs,  and add them to Database
+        TestUtils.create10Sub(subHandle);  //Create 10  subs, so we can test sortng them
         listOfSubs = subHandle.getAllSubscriptions(); // Get subscriptions from database
-
     }
-
 
     @Test
     public void testSortByName() {
 
         Collections.sort(listOfSubs, new CompareSubscriptionName()); //Sort by name
-
 
         for (int i = 0; i < listOfSubs.size() - 1; i++) {
 
@@ -57,7 +53,6 @@ public class SubscriptionSortTest {
 
     @Test
     public void testSortByPayment() {
-
 
         Collections.sort(listOfSubs, new CompareSubscriptionPayment()); //Sort by payment amount
 
