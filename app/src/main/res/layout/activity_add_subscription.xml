@@ -50,13 +50,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
 
-        android:layout_marginBottom="252dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginBottom="208dp"
         android:text=""
+
         android:textColor="#CD1313"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.189"
-        app:layout_constraintStart_toEndOf="@+id/tag_input"
+        app:layout_constraintStart_toStartOf="parent"
         tools:visibility="invisible" />
 
     <LinearLayout
@@ -209,6 +209,18 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         tools:visibility="invisible" />
+
+    <Button
+        android:id="@+id/add_existing_tag"
+        android:layout_width="73dp"
+        android:layout_height="38dp"
+        android:layout_marginStart="252dp"
+        android:layout_marginBottom="240dp"
+        android:padding="1dp"
+        android:text="Add Existing Tag"
+        android:textSize="8sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
