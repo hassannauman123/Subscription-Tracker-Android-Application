@@ -1,6 +1,8 @@
 ## What technical debt has been cleaned up
 
+We had originally created a class to fill the database with random data prior to executing tests. This was instead replaced by filling the database with hard coded data. This eliminated the problem of having non-deterministic tests as now the tests are repeated with the same data each time rather than a new random set of subscription data each time the tests are run. We categorized this as prudent and inadvertent as we were trying to create proper tests but we lacked the knowledge that tests should be deterministic and be designed to use the same data each time instead of using randomly created data.
 
+Commit where changes were made: https://code.cs.umanitoba.ca/3350-summer2023/ghostdevs-7/-/blob/develop/app/src/test/java/com/track_it/util/FillDatabase.java#L1
 
 ## What technical debt did you leave?  
 
