@@ -72,7 +72,7 @@ public class TagColors {
         }
 
 
-        //If the last characterss of the original string were blank spaces before, add them back now
+        //If the last characters of the original string were blank spaces before, add them back now
         int endSpaceItr = input.length() - 1;
         while (endSpaceItr >= 0 && input.charAt(endSpaceItr) == ' ') {
             allTagsName += " ";
