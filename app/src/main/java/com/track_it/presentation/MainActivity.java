@@ -105,9 +105,9 @@ public class MainActivity extends AppCompatActivity {
         getSubList(); //Get a new list of subs ( in case any subs were added, deleted, or modified)
 
         View current = getCurrentFocus();
-        if (current != null)  //Reset focus
+        if (current != null)
         {
-            current.clearFocus();
+            current.clearFocus(); //Reset focus
         }
 
         tagFilterList.clear();  //Clear filter on restart
@@ -233,7 +233,7 @@ public class MainActivity extends AppCompatActivity {
 
                 //Close the keyboard
                 View current = getCurrentFocus();
-                if (current != null)  //Reset focus
+                if (current != null)
                 {
                     InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(current.getWindowToken(), 0);
@@ -243,7 +243,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            public boolean onQueryTextChange(String newText) //What happens when user type and other char into search bar
+            public boolean onQueryTextChange(String newText) //What happens when user types in another char in the search bar
             {
 
                 displayAllSubscriptions();  //Display all subs (It will filter based on input from user)
