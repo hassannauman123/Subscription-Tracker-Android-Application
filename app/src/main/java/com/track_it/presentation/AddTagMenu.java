@@ -49,7 +49,7 @@ public class AddTagMenu {
 
         //Create builder
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setTitle("Add existing Filter");
+        builder.setTitle("Add Existing Tags");
 
         //Set up the filter options as a series of check boxes for the user to click
         builder.setMultiChoiceItems(tagNameArray, checkedArray, new DialogInterface.OnMultiChoiceClickListener() {
