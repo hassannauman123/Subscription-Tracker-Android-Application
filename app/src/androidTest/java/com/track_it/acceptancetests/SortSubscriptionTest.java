@@ -111,11 +111,9 @@ public class SortSubscriptionTest {
 
         Context currContext = ApplicationProvider.getApplicationContext(); // Get current context so we can use string resources
         SystemClock.sleep(TestUtils.getSleepTime());// Let popup load
-        SystemClock.sleep(TestUtils.getSleepTime());// Let popup load
         String sortCriteria = currContext.getResources().getString(R.string.sort_payment); // The current sort button will have a text of this
 
         onView(withId(R.id.sort_button)).perform(click());
-        SystemClock.sleep(TestUtils.getSleepTime());// Let popup load
         SystemClock.sleep(TestUtils.getSleepTime());// Let popup load
         onView(withText(containsString(sortCriteria))).perform(click()); //Click  sort by payment
 

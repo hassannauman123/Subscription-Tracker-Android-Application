@@ -94,6 +94,7 @@ public class FilterByTagsTest {
 
         //Filter by tags
         onView(withId(R.id.sort_button)).perform(click());
+        SystemClock.sleep(TestUtils.getSleepTime()); //Let popup load
         onView(withText(containsString(filterButtonName))).perform(click()); // click filter button option
         SystemClock.sleep(TestUtils.getSleepTime()); // Wait for menu to load
         onView(withText(containsString(originalTag1))).perform(click()); // Check filter to use

@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.track_it.R;
 import com.track_it.domainobject.SubscriptionTag;
 import com.track_it.logic.SubscriptionHandler;
+import com.track_it.logic.SubscriptionTagHandler;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,8 +24,8 @@ public class AddTagMenu {
     private List<SubscriptionTag> enteredTags; // list of tags that the user has entered so far
 
 
-    //This is what the user will see when they add existing tags button.
-    //This is a pop up with each tag having a check box, and 2 buttons (apply and clear).
+    //This is what the user will see when they click the add existing tag button.
+    //This is a pop up with each tag having a check box, and apply button.
     public void showAddTagsMenu(Context context, SubscriptionHandler subHandler, EditText tagInput) {
 
 
@@ -35,7 +36,7 @@ public class AddTagMenu {
         boolean checkedArray[] = new boolean[allTags.size()];
         final String[] tagNameArray = new String[allTags.size()];
 
-        //Construct the boolean array and string array that the builder ues to construct check boxes
+        //Construct the boolean array and string array that the builder uses to construct check boxes
         for (int i = 0; i < allTags.size(); i++) {
             for (int j = 0; j < enteredTags.size(); j++) {
                 if (allTags.get(i).getName().equals(enteredTags.get(j).getName())) {
@@ -58,13 +59,13 @@ public class AddTagMenu {
             }
         });
 
-        setAddTagsBehavior(builder, checkedArray, allTags, tagInput); //Set what happens when user clicks check boxes and buttons
+        setAddTagsBehavior(builder, checkedArray, allTags, tagInput, subHandler); //Set what happens when user clicks check boxes and buttons
         builder.show();
     }
 
 
     //Set the button behavior for the popup tags options
-    private void setAddTagsBehavior(AlertDialog.Builder builder, boolean[] checkedArray, List<SubscriptionTag> addTagOptionList, EditText tagInput) {
+    private void setAddTagsBehavior(AlertDialog.Builder builder, boolean[] checkedArray, List<SubscriptionTag> addTagOptionList, EditText tagInput, SubscriptionHandler subHandler) {
 
 
         //What happens if the apply button is clicked
@@ -72,18 +73,27 @@ public class AddTagMenu {
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
-                String tagsEnteredByUser = tagInput.getText().toString().trim(); // What the user has enter for text
+                String tagsEnteredByUser = tagInput.getText().toString().trim(); // What the user has entered into tag text box
+                String[] splitTagsUserEntered = tagsEnteredByUser.split(subHandler.getTagHandler().getSplitCriteria()); // split up user text into discrete tag names
 
                 String totalTagsToShow = " "; // What we will change the input tag text box to
 
                 // Iterate through the check boxes.
                 // If the user has checked it, then add it to totalTagsToShow ( if it wasn't already in tagsEnteredByUser),
-                // else try to remove it from tagsEnteredByUser. Combine the two strings at end to get final result.
+                // else try to remove it from tagsEnteredByUser. Combine the two strings at end to get final result, which will be displayed in tag input box.
 
                 for (int i = 0; i < checkedArray.length; i++) {
                     if (checkedArray[i])  //Is the checked box checked?
                     {
-                        if (!tagsEnteredByUser.contains(addTagOptionList.get(i).getName()))  //Only add tag if it has not already been entered by user
+                        //Check if tag was already entered by user
+                        boolean tagAlreadyEntered = false;
+                        for (int splitIndex = 0; splitIndex < splitTagsUserEntered.length; splitIndex++) {
+                            if (splitTagsUserEntered[splitIndex].equals(addTagOptionList.get(i).getName())) {
+                                tagAlreadyEntered = true;
+                            }
+                        }
+
+                        if (!tagAlreadyEntered)  //Only add tag if it has not already been entered by user
                         {
                             totalTagsToShow += addTagOptionList.get(i).getName() + " "; // Add it
                         }
@@ -93,7 +103,8 @@ public class AddTagMenu {
                 }
 
                 totalTagsToShow = tagsEnteredByUser + totalTagsToShow;
-                tagInput.setText(totalTagsToShow.trim() + " "); //Display the tags
+
+                tagInput.setText(totalTagsToShow.trim() + " "); //Display the tags in the tag input text box
 
             }
         });

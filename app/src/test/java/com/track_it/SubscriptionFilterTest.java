@@ -50,7 +50,7 @@ public class SubscriptionFilterTest {
         tagList1.add(tag1);
         tagList1.add(tag2);
 
-        SubscriptionObj sub1 = new SubscriptionObj("name", 22,"daily");
+        SubscriptionObj sub1 = new SubscriptionObj("name", 22, "daily");
         sub1.setTagList(tagList1);
 
 
@@ -60,7 +60,7 @@ public class SubscriptionFilterTest {
         tagList2.add(tag3);
         tagList2.add(tag2);
 
-        SubscriptionObj sub2 = new SubscriptionObj("name", 22,"daily");
+        SubscriptionObj sub2 = new SubscriptionObj("name", 22, "daily");
         sub2.setTagList(tagList2);
 
         List<SubscriptionTag> tagsCheck = new ArrayList<SubscriptionTag>();

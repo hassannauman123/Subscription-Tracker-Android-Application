@@ -52,10 +52,13 @@ public class SubscriptionTagPersistenceHSQLDB implements SubscriptionTagPersiste
     public void changeSubscriptionTags(SubscriptionObj inputSub) {
         try (Connection connection = connect()) {
 
+
+            //Remove old tags from subscription
             final PreparedStatement statement = connection.prepareStatement("DELETE from SUBSCRIPTIONS_TAGS where SUBSCRIPTIONS_TAGS.subscription_id = ?");
             statement.setInt(1, inputSub.getID());
             statement.executeUpdate();
 
+            // Add updated list of tags to subscription
             for (SubscriptionTag insertTag : inputSub.getTagList()) {
                 addTagToPersistence(insertTag);
                 associateTagWithSubscription(inputSub, insertTag);
@@ -266,7 +269,7 @@ public class SubscriptionTagPersistenceHSQLDB implements SubscriptionTagPersiste
         } catch (final SQLException e) {
             Log.e("Connect SQL", e.getMessage() + e.getSQLState());
             e.printStackTrace();
-            throw new RetrievalException(e.getMessage());
+            throw new RetrievalException("Can't determine if tag already exists");
         }
 
 

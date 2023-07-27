@@ -87,8 +87,10 @@ public class SearchSubscriptionTest {
 
         onView(withContentDescription("Search")).perform(click()); // Click search button
 
-
-        SystemClock.sleep(TestUtils.getSleepTime()); // We need this here to allow the search widget to load,
+        // Sorry for the long wait - this part is really flaky
+        SystemClock.sleep(TestUtils.getSleepTime());
+        SystemClock.sleep(TestUtils.getSleepTime());
+        SystemClock.sleep(TestUtils.getSleepTime());
         SystemClock.sleep(TestUtils.getSleepTime());
 
         ViewInteraction searchAutoComplete = onView(allOf(withClassName(is("android.widget.SearchView$SearchAutoComplete")))); // Get search input target

@@ -124,12 +124,10 @@ public class AddSubscriptionActivity extends AppCompatActivity {
         //limit what the user can enter for name
         int maxLength = subHandler.getMaxNameLength();
         nameInput.setFilters(new InputFilter[]{new InputFilter.LengthFilter(maxLength)}); // Set max length the user can enter for input
-
-
     }
 
 
-    //  Set What happens when buttons are clicked
+    //  Set what happens when buttons are clicked
     private void setButtonActions() {
 
 
@@ -153,7 +151,7 @@ public class AddSubscriptionActivity extends AppCompatActivity {
         });
 
 
-        //Set what happens when user clicks add existing tags buttn
+        //Set what happens when user clicks add existing tags button
         addExistingTagButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
 
@@ -300,10 +298,7 @@ public class AddSubscriptionActivity extends AppCompatActivity {
 
         // Make all the input uneditable
         nameInput.setEnabled(false);
-
         paymentAmount.setEnabled(false);
-
-
     }
 
 }
