@@ -192,12 +192,12 @@
         android:id="@+id/pin_sub"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="260dp"
-        android:layout_marginEnd="240dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="280dp"
         android:background="@android:color/white"
         android:text="Pin Subscription"
         android:textColor="@android:color/white"
-        android:textSize="12sp"
+        android:textSize="10sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
