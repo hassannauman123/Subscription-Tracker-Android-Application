@@ -98,7 +98,8 @@ public class AddTagMenu {
                             totalTagsToShow += addTagOptionList.get(i).getName() + " "; // Add it
                         }
                     } else {
-                        tagsEnteredByUser = tagsEnteredByUser.replace(addTagOptionList.get(i).getName(), ""); //Else try to remove it
+                        String regexTarget = "\\b" + addTagOptionList.get(i).getName()  +  "\\b";
+                        tagsEnteredByUser = tagsEnteredByUser.replaceAll(regexTarget, ""); //Else try to remove it
                     }
                 }
 

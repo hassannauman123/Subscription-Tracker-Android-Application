@@ -113,6 +113,7 @@ public class SortSubscriptionTest {
         SystemClock.sleep(TestUtils.getSleepTime());// Let popup load
         String sortCriteria = currContext.getResources().getString(R.string.sort_payment); // The current sort button will have a text of this
 
+        SystemClock.sleep(TestUtils.getSleepTime());// Let popup load
         onView(withId(R.id.sort_button)).perform(click());
         SystemClock.sleep(TestUtils.getSleepTime());// Let popup load
         onView(withText(containsString(sortCriteria))).perform(click()); //Click  sort by payment
