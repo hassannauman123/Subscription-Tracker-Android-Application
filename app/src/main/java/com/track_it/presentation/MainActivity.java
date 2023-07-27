@@ -507,8 +507,8 @@ public class MainActivity extends AppCompatActivity {
 
 
     //  Note*
-    // This method was written by tian but the changes he made were copied and pasted here with his permission because the branch he is working on
-    // is a behind our develop branch by 2 months and it causes issues with our project when he merges.
+    // This method was written by tian but the changes he made were copied and pasted here with his permission because the branch he was working on
+    // was behind develop, and caused a few issues when merged.
     private void displaycost() {
         SubscriptionCalculator costCalculator = new TotalCostCalculator(listOfSubs);
 

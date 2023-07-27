@@ -3,9 +3,10 @@ import com.track_it.domainobject.SubscriptionObj;
 import java.util.List;
 
 
+
 //  Note*
-// This interface was written by tian but the changes he made were copied and pasted here with his permission because the branch he is working on
-// is a behind our develop branch by 2 months and it causes issues with our project when he merges.
+// This interface was written by tian but the changes he made were copied and pasted here with his permission because the branch he was working on
+// was behind the develop branch, and it caused some conflict issues when it was merged.
 
 public interface SubscriptionCalculator {
     //calculator the cost
