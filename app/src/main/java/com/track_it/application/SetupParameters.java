@@ -43,9 +43,9 @@ public class SetupParameters {
     private static SubscriptionPersistence subscriptionPersistenceDatabase = Services.getSubscriptionPersistence();  // Database that we will use
     private static SubscriptionTagPersistence tagPersistenceDatabase = Services.getSubscriptionTagPersistence();  // Database that we will use
 
+
     //Singleton items
     private static SubscriptionHandler subHandler = null; // subscription handler
-
     private static SubscriptionTagHandler tagHandler = null; // subscription handler
 
 
@@ -83,7 +83,6 @@ public class SetupParameters {
     private static List<Frequency> InitFrequency() {
 
         ArrayList<Frequency> returnList = new ArrayList<Frequency>();
-
 
         returnList.add(new DailyFrequency());
         returnList.add(new WeeklyFrequency());

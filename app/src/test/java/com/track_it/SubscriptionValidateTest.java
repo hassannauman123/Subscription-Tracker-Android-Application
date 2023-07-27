@@ -161,11 +161,11 @@ public class SubscriptionValidateTest {
 
 
         for (int i = 0; i < subHandle.getMaxNameLength() - 3; i++) {
-            char newChar = allowChars.charAt((int) (Math.random() * allowChars.length()));
+            char newChar = allowChars.charAt(i % allowChars.length());
 
             while (newChar == ' ') // The last letter of  name cannot be a space!!!
             {
-                newChar = allowChars.charAt((int) (Math.random() * allowChars.length()));
+                newChar = allowChars.charAt((int) (i % allowChars.length()));
             }
 
             inputName = inputName + newChar;

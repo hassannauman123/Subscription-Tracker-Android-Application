@@ -2,6 +2,9 @@ package com.track_it.presentation;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
@@ -16,10 +19,14 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.track_it.R;
 import com.track_it.application.SetupParameters;
 import com.track_it.domainobject.SubscriptionObj;
+import com.track_it.domainobject.SubscriptionTag;
 import com.track_it.logic.SubscriptionHandler;
 import com.track_it.logic.exceptions.RetrievalException;
 import com.track_it.logic.exceptions.SubscriptionException;
 import com.track_it.logic.exceptions.SubscriptionTagException;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 // This class handles the presentation of the add subscription page for the app.
@@ -44,12 +51,17 @@ public class AddSubscriptionActivity extends AppCompatActivity {
 
     private EditText tagInput;
 
+    private Button addExistingTagButton;
 
     private boolean successTry; // used by the clickedAddSubscriptionButton function, to keep track of if all the input is valid
 
 
+    private Context mainContext = this; // We need to pass that context this to some helper classes
     private AutoCompleteTextView frequencyTarget; //Input for the frequency
-    private TextInputLayout dropDownMenuParent;  //Parent of the frequency targets
+    private TextInputLayout dropDownMenuParent;  //Parent of frequencyTarget
+
+
+    private AddTagMenu tagMenu;
 
 
     @Override
@@ -64,6 +76,7 @@ public class AddSubscriptionActivity extends AppCompatActivity {
         FrequencyMenu.initializeMenu(this, subHandler, frequencyTarget); // Enable drop down menu
         setButtonActions(); //Set what happens when buttons are clicked
         TagColors.setTextWatcher(this, tagInput); // Set the tag box such that it displays seperated words in different color
+
     }
 
 
@@ -75,6 +88,8 @@ public class AddSubscriptionActivity extends AppCompatActivity {
         //Back button target
         backTarget = (Button) findViewById(R.id.go_home);
 
+        //Class to create existing tag popup
+        tagMenu = new AddTagMenu();
 
         //Frequency menu targets
         frequencyTarget = findViewById(R.id.AutoComplete_drop_menu);
@@ -91,8 +106,10 @@ public class AddSubscriptionActivity extends AppCompatActivity {
         nameError = ((TextView) findViewById(R.id.input_subscription_name_error)); // where to display name errors
         frequencyError = ((TextView) findViewById(R.id.input_frequency_error)); // where to display name errors
         tagError = ((TextView) findViewById(R.id.tag_input_error));
+
         //Get tag input target
         tagInput = ((EditText) findViewById(R.id.tag_input));
+        addExistingTagButton = ((Button) findViewById(R.id.add_existing_tag));
 
     }
 
@@ -135,6 +152,17 @@ public class AddSubscriptionActivity extends AppCompatActivity {
             }
         });
 
+
+        //Set what happens when user clicks add existing tags buttn
+        addExistingTagButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+
+                tagMenu.showAddTagsMenu(mainContext, subHandler, tagInput);
+
+
+            }
+        });
+
     }
 
 
@@ -167,8 +195,10 @@ public class AddSubscriptionActivity extends AppCompatActivity {
         try {
             //Get tag input from user
             String getTagInput = tagInput.getText().toString().toLowerCase().trim().toLowerCase();
-            newSubscription.setTagList(subHandler.getTagHandler().stringToTags(getTagInput)); // Set tags based on user input
-            subHandler.validateTagList(newSubscription.getTagList()); // Try to validate tag list
+            subHandler.setTags(newSubscription, getTagInput); // Try to set tags based on input from user
+            subHandler.validateTagList(newSubscription.getTagList()); // Try to set tags based on input from user
+            tagError.setText("");
+            tagError.setVisibility(View.INVISIBLE);
 
         } catch (SubscriptionException | SubscriptionTagException e) {
 

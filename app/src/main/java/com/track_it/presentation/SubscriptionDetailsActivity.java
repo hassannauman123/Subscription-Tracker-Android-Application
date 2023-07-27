@@ -4,6 +4,7 @@ import static android.app.PendingIntent.getActivity;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -41,10 +42,7 @@ public class SubscriptionDetailsActivity extends AppCompatActivity {
     private boolean editMode = false; // Are we in edit mode? Determines whether the input can be edited, and behaviour of the edit/save button
     private boolean pinnedSub = false;
 
-    // Various color - We should probably put this in some type of shared resource location later
-
-
-    //Set by resource file
+    //Various colors - Set by resource file
     private String errorColor; // error text color
     private String accomplishColor; // Accomplish text color
     private String saveButtonColor; // what color the save button will be
@@ -67,7 +65,10 @@ public class SubscriptionDetailsActivity extends AppCompatActivity {
 
     private EditText tagInput;
 
+    private Button addTagButton;
+
     //String constants, messages to display to user
+    private static final String tagInputHint = "Add Tags";
     private static final String validEditMessage = "Subscription Edited!"; // if edit was successful
     private static final String successDeleteMessage = "Subscription Deleted!";  // if delete was successful
     private static final String alreadyDeletedMessage = "Subscription has already been Deleted!"; // what to show if user tries to delete twice
@@ -80,9 +81,12 @@ public class SubscriptionDetailsActivity extends AppCompatActivity {
 
     private boolean loadSub = false; // Were we able to load the subscription object using the info passed to this activity;
 
-
     private AutoCompleteTextView frequencyTarget;
     private TextInputLayout dropDownMenuParent;
+
+
+    private AddTagMenu tagMenu;
+    private Context mainContext = this; // You need to pass this context to some helper classes
 
 
     @Override
@@ -99,9 +103,11 @@ public class SubscriptionDetailsActivity extends AppCompatActivity {
 
         constrainInput(); // Set up some filters, to constrain what is allowable input from user
 
+        setUpAddTagMenu(); // Set up and initialize the add tags menu (will show if user clicks add existing tags button)
+
         FrequencyMenu.initializeMenu(this, subHandler, frequencyTarget); //setup frequency menu
 
-        enableInputChanges(editMode); // Disable editing sub details
+        enableInputChanges(editMode); // Disable editing sub details at the start
 
         //Enable go back to home button
         enableGoBackButton();
@@ -117,6 +123,18 @@ public class SubscriptionDetailsActivity extends AppCompatActivity {
         TagColors.setTextWatcher(this, tagInput);
 
 
+    }
+
+
+    private void setUpAddTagMenu() {
+
+        //Set what happens when user clicks add existing tags buttn
+        addTagButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+
+                tagMenu.showAddTagsMenu(mainContext, subHandler, tagInput);
+            }
+        });
     }
 
 
@@ -139,6 +157,7 @@ public class SubscriptionDetailsActivity extends AppCompatActivity {
         // Get subscription handle
         subHandler = SetupParameters.getSubscriptionHandler();
         MAX_DIGITS_BEFORE_DECIMAL = SubscriptionInput.NumDigits(subHandler.getMaxPaymentDollars());
+        tagMenu = new AddTagMenu(); // Set tag menu
 
         //Frequency drop menu
         frequencyTarget = findViewById(R.id.AutoComplete_drop_menu);
@@ -155,6 +174,7 @@ public class SubscriptionDetailsActivity extends AppCompatActivity {
         pinButton = (Button) findViewById(R.id.pin_sub);
         //Get tag input target
         tagInput = ((EditText) findViewById(R.id.tag_input));
+        addTagButton = (Button) findViewById(R.id.add_existing_tag);
 
 
     }
@@ -288,16 +308,22 @@ public class SubscriptionDetailsActivity extends AppCompatActivity {
         paymentAmountTarget.setEnabled(inputBool);
         tagInput.setEnabled(inputBool);
         tagInput.setTextColor(getResources().getColor(R.color.black));
+        addTagButton.setEnabled(inputBool);
 
-        // Change color of input, and disable/enable drop down menu
+
+        // Change color of input, and disable/enable drop down menu, and change if tag input is visible
         if (inputBool) {
             nameTarget.setTextColor(Color.parseColor(editableColor));
             paymentAmountTarget.setTextColor(Color.parseColor(editableColor));
             dropDownFrequencyMenuEnabled(true);
+            addTagButton.setVisibility(View.VISIBLE); //Make add tag button visible
+            tagInput.setHint(tagInputHint);
         } else {
             nameTarget.setTextColor(Color.parseColor(nonEditableColor));
             paymentAmountTarget.setTextColor(Color.parseColor(nonEditableColor));
             dropDownFrequencyMenuEnabled(false);
+            addTagButton.setVisibility(View.INVISIBLE); //Make add tag button invisible
+            tagInput.setHint("");
         }
 
     }

@@ -59,7 +59,7 @@ public class SubscriptionPersistenceHSQLDB implements SubscriptionPersistence {
 
     @Override
     // return a list of all subscriptions in the database
-    public List<SubscriptionObj> getAllSubscriptions() {
+    public List<SubscriptionObj> getAllSubscriptions() throws RetrievalException {
         final List<SubscriptionObj> AllSubscriptions = new ArrayList<>();
 
         try (final Connection c = connect()) {
@@ -78,7 +78,7 @@ public class SubscriptionPersistenceHSQLDB implements SubscriptionPersistence {
         } catch (final SQLException e) {
             Log.e("Connect SQL", e.getMessage() + e.getSQLState());
             e.printStackTrace();
-            throw new RetrievalException(e.getMessage());
+            throw new RetrievalException("Unable to get all subscriptions");
         }
 
 
@@ -113,7 +113,7 @@ public class SubscriptionPersistenceHSQLDB implements SubscriptionPersistence {
         } catch (final SQLException e) {
             Log.e("Connect SQL", e.getMessage() + e.getSQLState());
             e.printStackTrace();
-            throw new RetrievalException(e.getMessage());
+            throw new RetrievalException("Unable to edit subscription");
         }
 
     }
@@ -142,7 +142,7 @@ public class SubscriptionPersistenceHSQLDB implements SubscriptionPersistence {
         } catch (final SQLException e) {
             Log.e("Connect SQL", e.getMessage() + e.getSQLState());
             e.printStackTrace();
-            throw new RetrievalException(e.getMessage());
+            throw new RetrievalException("unable to save subscription ");
 
         }
 
@@ -170,7 +170,7 @@ public class SubscriptionPersistenceHSQLDB implements SubscriptionPersistence {
         } catch (final SQLException e) {
             Log.e("Connect SQL", e.getMessage() + e.getSQLState());
             e.printStackTrace();
-            throw new RetrievalException(e.getMessage());
+            throw new RetrievalException("Unable to remove subscription");
         }
     }
 
@@ -199,7 +199,7 @@ public class SubscriptionPersistenceHSQLDB implements SubscriptionPersistence {
         } catch (final SQLException e) {
             Log.e("Connect SQL", e.getMessage() + e.getSQLState());
             e.printStackTrace();
-            throw new RetrievalException(e.getMessage());
+            throw new RetrievalException("Unable to retrieve subscription");
 
         }
     }
@@ -224,7 +224,7 @@ public class SubscriptionPersistenceHSQLDB implements SubscriptionPersistence {
         } catch (final SQLException e) {
             Log.e("Connect SQL", e.getMessage() + e.getSQLState());
             e.printStackTrace();
-            throw new RetrievalException(e.getMessage());
+            throw new RetrievalException("Error with checking if subscription exists");
         }
     }
 

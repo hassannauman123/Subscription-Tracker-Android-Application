@@ -16,6 +16,7 @@ import static org.hamcrest.Matchers.is;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.SystemClock;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
@@ -33,6 +34,7 @@ import com.track_it.presentation.MainActivity;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
+import org.junit.Test;
 
 import java.io.File;
 import java.util.List;
@@ -43,7 +45,7 @@ public class TestUtils {
     private static boolean useRealDatabase = false; //Should we use real database? - Default false means use fakeDataBase
 
 
-    private static final int SLEEP_TIME = 300;
+    private static final int SLEEP_TIME = 600;
 
 
     //The parameters we used to create the subs
@@ -66,7 +68,7 @@ public class TestUtils {
     }
 
 
-    // Remove all subs in the database
+    // Remove all existing subs
     public static void clearDatabase(SubscriptionHandler subHandler)
     {
 
@@ -128,8 +130,11 @@ public class TestUtils {
     // Commonly used function. This adds a subscription to the database, starting from the home page, and then goes back to home page.
     public static void addSub(String subName, String subPaymentAmount, String subFrequency, String subTags) {
 
-        onView(withId(R.id.add_subscription_button)).perform(click()); // Click add sub - Starting from home page
 
+        SystemClock.sleep(TestUtils.getSleepTime());
+        onView(withId(R.id.add_subscription_button)).perform(click()); // Click add sub - Starting from home page
+        SystemClock.sleep(TestUtils.getSleepTime()); //Wait for page to load
+        SystemClock.sleep(TestUtils.getSleepTime());
         onView(withId(R.id.input_subscription_name)).perform(replaceText(subName)); // Give name
         onView(withId(R.id.input_payment_amount)).perform(replaceText(subPaymentAmount)); // Give payment
         onView(withId(R.id.subscription_list)).perform(click()); // Click frequency
@@ -137,6 +142,7 @@ public class TestUtils {
         onView(withId(R.id.tag_input)).perform(replaceText(subTags)); // Give Tags
 
         onView(withId(R.id.submit_sub_button)).perform(click()); // Click add, and go back to home back
+        SystemClock.sleep(TestUtils.getSleepTime());
 
     }
 

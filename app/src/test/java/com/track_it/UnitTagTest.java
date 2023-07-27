@@ -6,12 +6,14 @@ import com.track_it.domainobject.SubscriptionObj;
 import com.track_it.domainobject.SubscriptionTag;
 import com.track_it.logic.SubscriptionFilter;
 import com.track_it.logic.SubscriptionHandler;
+import com.track_it.logic.SubscriptionTagHandler;
 import com.track_it.logic.exceptions.SubscriptionTagException;
 import com.track_it.persistence.SubscriptionPersistence;
 import com.track_it.persistence.SubscriptionTagPersistence;
 import com.track_it.persistence.hsqldb.SubscriptionPersistenceHSQLDB;
 import com.track_it.util.TestUtils;
 
+import org.hsqldb.lib.Set;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
@@ -36,6 +38,9 @@ public class UnitTagTest {
     private SubscriptionTagPersistence tagDBMock;
     private SubscriptionPersistence subDBMock;
 
+
+    private SubscriptionTagHandler tagHandler;
+
     //Setup a fake database each time
     @Before
     public void setTestHandle() {
@@ -46,6 +51,7 @@ public class UnitTagTest {
         //Inject mocked database
         SetupParameters.initializeDatabase(subDBMock, tagDBMock);
         subHandle = SetupParameters.getSubscriptionHandler();
+        tagHandler = subHandle.getTagHandler();
 
     }
 
@@ -91,6 +97,34 @@ public class UnitTagTest {
 
         System.out.println("PASSED: addSubWithTagsTest test ");
 
+    }
+
+
+    //Test adding tags
+    @Test
+    public void addTagsTest() {
+        String tags = "tag1";
+        List<SubscriptionTag> tagsAdded = tagHandler.stringToTags(tags);
+        SubscriptionTag tagAdded = tagsAdded.get(0);
+
+
+        //Set mock rules
+        when(tagDBMock.getAllTags()).thenReturn(tagsAdded);
+
+        tagHandler.addTag(tagAdded);
+        List<SubscriptionTag> returnedTags = tagHandler.getAllSubTags();
+
+        //Capture arguments and make sure they are correct
+        ArgumentCaptor<SubscriptionTag> argument = ArgumentCaptor.forClass(SubscriptionTag.class);
+        verify(tagDBMock).addTagToPersistence(argument.capture());
+        when(tagDBMock.getAllTags()).thenReturn(tagsAdded);
+
+        assertTrue("FAILED addTagsTest: Added " + tagsAdded.size() + " tags but got back " + returnedTags.size(), returnedTags.size() == tagsAdded.size());
+
+        assertTrue("FAILED addTagsTest: Insert a tag with name " + tagAdded + " but got back a tag with name " + returnedTags.get(0), tagAdded.getName().equals(returnedTags.get(0).getName()));
+
+
+        System.out.println("PASSED: addTagsTest");
     }
 
     @Test
