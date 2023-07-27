@@ -35,7 +35,7 @@ public class AddTagMenu {
         boolean checkedArray[] = new boolean[allTags.size()];
         final String[] tagNameArray = new String[allTags.size()];
 
-        //Construct the boolean array and string array that builder needs
+        //Construct the boolean array and string array that the builder ues to construct check boxes
         for (int i = 0; i < allTags.size(); i++) {
             for (int j = 0; j < enteredTags.size(); j++) {
                 if (allTags.get(i).getName().equals(enteredTags.get(j).getName())) {
@@ -43,7 +43,6 @@ public class AddTagMenu {
                 }
             }
             tagNameArray[i] = allTags.get(i).getName();
-
         }
 
 
@@ -73,9 +72,9 @@ public class AddTagMenu {
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
-                String tagsEnteredByUser = tagInput.getText().toString(); // What the user has enter for tax
+                String tagsEnteredByUser = tagInput.getText().toString().trim(); // What the user has enter for text
 
-                String totalTagsToShow = ""; // What we will change the input tag text box to
+                String totalTagsToShow = " "; // What we will change the input tag text box to
 
                 // Iterate through the check boxes.
                 // If the user has checked it, then add it to totalTagsToShow ( if it wasn't already in tagsEnteredByUser),
@@ -93,8 +92,8 @@ public class AddTagMenu {
                     }
                 }
 
-                totalTagsToShow = tagsEnteredByUser + " " + totalTagsToShow;
-                tagInput.setText(totalTagsToShow); //Display that tags
+                totalTagsToShow = tagsEnteredByUser + totalTagsToShow;
+                tagInput.setText(totalTagsToShow.trim() + " "); //Display the tags
 
             }
         });
