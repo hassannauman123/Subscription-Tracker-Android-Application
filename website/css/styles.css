@@ -8025,6 +8025,12 @@ textarea.form-control-lg {
   margin-right: auto;
 }
 
+.custom1
+{
+	
+	margin-right: 2em;
+}
+
 .text-decoration-none {
   text-decoration: none !important;
 }
