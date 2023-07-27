@@ -148,16 +148,16 @@ public class MainActivity extends AppCompatActivity {
 
     private List<SubscriptionObj> matchedSubs = new ArrayList<SubscriptionObj>();
 
-    private void getPinnedSubs(){
+    private void getPinnedSubs() {
         pinnedSubs = pinHandler.getAllPinnedSub();
     }
 
     //comparing pinnedSub to ListOfSubs, find which are equal to each other, pull it out and save to matchedSubs
-    private void comparePinToSub(){
-        for(int i = 0; i<pinnedSubs.size(); i++){
-            for(int j = 0; j<listOfSubs.size(); j++){
+    private void comparePinToSub() {
+        for (int i = 0; i < pinnedSubs.size(); i++) {
+            for (int j = 0; j < listOfSubs.size(); j++) {
 
-                if(pinnedSubs.get(i).getID() == listOfSubs.get(j).getID()){
+                if (pinnedSubs.get(i).getID() == listOfSubs.get(j).getID()) {
                     matchedSubs.add(pinnedSubs.get(i));
                 }
             }
@@ -166,10 +166,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     //compare matchedSubs with listOfSubs, if no match from matchSub, add it do matchSubs, then listOfSubs = matchSubs after sort it
-    private void sortPinnedSubs(){
-        for(int i = 0; i<matchedSubs.size(); i++){
-            for(int j = 0; j<listOfSubs.size(); j++){
-                if(matchedSubs.get(i).getID() != listOfSubs.get(j).getID()){
+    private void sortPinnedSubs() {
+        for (int i = 0; i < matchedSubs.size(); i++) {
+            for (int j = 0; j < listOfSubs.size(); j++) {
+                if (matchedSubs.get(i).getID() != listOfSubs.get(j).getID()) {
                     matchedSubs.add(listOfSubs.get(i));
                     listOfSubs = matchedSubs;
                 }

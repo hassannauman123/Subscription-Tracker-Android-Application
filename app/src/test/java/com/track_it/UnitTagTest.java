@@ -43,7 +43,8 @@ public class UnitTagTest {
 
     //Setup a fake database each time
     @Before
-    public void setTestHandle() {
+    public void setTestHandle()
+    {
         //Mock the databases
         tagDBMock = mock(SubscriptionTagPersistence.class);
         subDBMock = mock(SubscriptionPersistence.class);
@@ -52,7 +53,6 @@ public class UnitTagTest {
         SetupParameters.initializeDatabase(subDBMock, tagDBMock);
         subHandle = SetupParameters.getSubscriptionHandler();
         tagHandler = subHandle.getTagHandler();
-
     }
 
 

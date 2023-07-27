@@ -45,7 +45,7 @@ public class TestUtils {
     private static boolean useRealDatabase = false; //Should we use real database? - Default false means use fakeDataBase
 
 
-    private static final int SLEEP_TIME = 600;
+    private static final int SLEEP_TIME = 600; // How long should we sleep for. If a test fails trying up this time, or adding more sleep commands between perform actions.
 
 
     //The parameters we used to create the subs

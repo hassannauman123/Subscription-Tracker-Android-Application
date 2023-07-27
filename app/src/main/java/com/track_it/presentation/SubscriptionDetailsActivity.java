@@ -128,7 +128,7 @@ public class SubscriptionDetailsActivity extends AppCompatActivity {
 
     private void setUpAddTagMenu() {
 
-        //Set what happens when user clicks add existing tags buttn
+        //Set what happens when user clicks add existing tags button
         addTagButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
 
@@ -218,14 +218,13 @@ public class SubscriptionDetailsActivity extends AppCompatActivity {
     }
 
     //pinButton functionality
-    private void changePinButton(){
-        if (pinnedSub == false){ //not pinned
+    private void changePinButton() {
+        if (pinnedSub == false) { //not pinned
             pinButton.setBackgroundColor(Color.parseColor(editButtonColor));
             pinButton.setText("Pin Subscription");
             pinHandler.removePinnedSub(subscriptionToDisplay); //remove the current subscription from pin DB
             pinnedSub = true;
-        }
-        else{ //pin button clicked
+        } else { //pin button clicked
             pinButton.setBackgroundColor(Color.parseColor(saveButtonColor));
             pinButton.setText("Pinned");
             pinHandler.addPinnedSub(subscriptionToDisplay);//add the current subscription to pin DB
@@ -330,7 +329,7 @@ public class SubscriptionDetailsActivity extends AppCompatActivity {
 
     // Toggle the edit sub button from edit to save changes (or vice versa)
     private void changeEditButton() {
-        if (editMode == false) {
+        if (!editMode) {
             editButton.setBackgroundColor(Color.parseColor(editButtonColor));
             editButton.setText("Edit Subscription");
         } else {
@@ -340,14 +339,12 @@ public class SubscriptionDetailsActivity extends AppCompatActivity {
     }
 
 
-
-
     // This runs when a user clicks the edit \ Save changes button
     private void editButton() {
 
 
         //If we are not in edit mode, and the subscription has not already been deleted  -then switch to edit mode
-        if (editMode == false && !alreadyDeleted) {
+        if ( !editMode && !alreadyDeleted) {
             switchEditModes();
 
 

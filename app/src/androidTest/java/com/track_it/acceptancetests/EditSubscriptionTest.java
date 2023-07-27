@@ -77,6 +77,7 @@ public class EditSubscriptionTest {
         onView(withText("Name: " + originalName)).perform(click()); // Click on sub in main
 
 
+        SystemClock.sleep(TestUtils.getSleepTime()); //Wait for details page to load
         //New details that we will try to save
         String newName = "Tinker town";
         String newPaymentAmount = "394.46";

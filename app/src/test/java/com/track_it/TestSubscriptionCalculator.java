@@ -14,8 +14,8 @@ import com.track_it.logic.totalcost.TotalCostCalculator;
 
 
 //  Note*
-// This class was written by tian but the changes he made were copied and pasted here with his permission because there were
-// some conflicts with the  develop branch when merged.
+// This class was written by tian but was copied and pasted here with his permission because there were
+// some conflicts with the develop branch when merged.
 public class TestSubscriptionCalculator {
     private List<SubscriptionObj> listOfSubs;
     private SubscriptionCalculator costCalculator;

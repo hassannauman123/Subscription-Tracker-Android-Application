@@ -10,7 +10,7 @@ import java.util.List;
 public class SubscriptionFilter {
 
 
-    //This function will check if inputSub has any of the tags in list inputTags.
+    //This function will check if inputSub has ANY of the tags in  filterTags.
     // Returns true if subscription has at least 1 of the tags in inputTags list, else returns false
     public boolean checkIfSubHasAnyMatchingTags(SubscriptionObj inputSub, List<SubscriptionTag> filterTags) {
         boolean hasTags = false;
@@ -23,6 +23,7 @@ public class SubscriptionFilter {
                 if (currSubTag.getName().equals(currTag.getName())) // Check if tags are the same
                 {
                     hasTags = true; // This sub has at least one tag from inputTags
+                    //I would like to add a break here...
                 }
             }
         }
@@ -30,8 +31,8 @@ public class SubscriptionFilter {
     }
 
 
-    //This function will check if inputSub has all of the tags in the list inputTags.
-    // Returns true if all filterTags have a match in inputSub .
+    //This function will check if inputSub has all of the tags in the filterTags.
+    // Returns true if all filterTags have a match in inputSub, else returns false.
     public boolean checkIfSuHasAllTags(SubscriptionObj inputSub, List<SubscriptionTag> filterTags) {
 
         boolean hasAllTags = true; // Does the subscription have all the filterTags?
@@ -44,7 +45,6 @@ public class SubscriptionFilter {
             {
                 if (currFilterTag.getName().equals(currSubTag.getName())) {
                     currFilterHasMatch = true; //  the currFilterTag has a match
-
                 }
             }
             hasAllTags = hasAllTags && currFilterHasMatch;

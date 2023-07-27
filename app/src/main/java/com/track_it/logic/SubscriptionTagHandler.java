@@ -78,6 +78,8 @@ public class SubscriptionTagHandler {
     }
 
 
+
+    //Convert a string to a list of subscription tags
     public List<SubscriptionTag> stringToTags(String inputTagString) throws SubscriptionTagException {
         List<SubscriptionTag> tagList = new ArrayList<SubscriptionTag>();
         String splitTagString[] = inputTagString.split(TAG_SPLIT_CRITERIA);
@@ -88,7 +90,7 @@ public class SubscriptionTagHandler {
             {
                 validateTagName(newTag);
 
-                //Check if that tag has already been added ot list (this prevents to identical tags from being added to list)
+                //Check if that tag has already been added to list (this prevents identical tags from being added to list)
                 boolean tagAlreadyAdded = false;
                 for (SubscriptionTag currTag : tagList) {
                     if (currTag.getName().equals(newTag)) {
